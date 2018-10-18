@@ -16,7 +16,7 @@
 
     <meta property="og:type" content="article">
 <meta property="og:title" content="First Blog">
-<meta property="og:url" content="http://yoursite.com/2018/10/18/First Blog/index.html">
+<meta property="og:url" content="https://fffeiya.github.io/2018/10/18/First Blog/index.html">
 <meta property="og:site_name" content="FFFeiya">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://ws1.sinaimg.cn/large/006wbS1kly1fwcnazxmi4j30to0totfk.jpg">
@@ -163,14 +163,21 @@
 <div class="comments">
     <h3 class="title is-4">Comments</h3>
     
-<div id="disqus_thread">
-    
-    <div class="notification is-danger">
-        You forgot to set the <code>shortname</code> for Disqus. Please set it in <code>_config.yml</code>.
-    </div>
-    
-    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-</div>
+<div id="valine-thread"></div>
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src='//unpkg.com/valine/dist/Valine.min.js'></script>
+<script>
+    new Valine({
+        el: '#valine-thread' ,
+        notify: false,
+        verify: false,
+        app_id: '',
+        app_key: '',
+        placeholder: '评论'
+    });
+</script>
+
+
 </div>
 
     </div>

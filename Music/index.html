@@ -17,7 +17,7 @@
     <meta name="description" content="そんなふうに 地球は回ってる">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Music">
-<meta property="og:url" content="http://yoursite.com/Music/index.html">
+<meta property="og:url" content="https://fffeiya.github.io/Music/index.html">
 <meta property="og:site_name" content="FFFeiya">
 <meta property="og:description" content="そんなふうに 地球は回ってる">
 <meta property="og:locale" content="zh-CN">
@@ -152,14 +152,21 @@
 <div class="comments">
     <h3 class="title is-4">Comments</h3>
     
-<div id="disqus_thread">
-    
-    <div class="notification is-danger">
-        You forgot to set the <code>shortname</code> for Disqus. Please set it in <code>_config.yml</code>.
-    </div>
-    
-    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-</div>
+<div id="valine-thread"></div>
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src='//unpkg.com/valine/dist/Valine.min.js'></script>
+<script>
+    new Valine({
+        el: '#valine-thread' ,
+        notify: false,
+        verify: false,
+        app_id: '',
+        app_key: '',
+        placeholder: '评论'
+    });
+</script>
+
+
 </div>
 
     </div>
