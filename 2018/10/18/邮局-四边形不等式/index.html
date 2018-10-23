@@ -2,7 +2,7 @@
 <html class="has-navbar-fixed-top">
 <head>
     <meta charset="utf-8">
-<title>邮局:四边形不等式 - FFFeiya</title>
+<title>邮局-四边形不等式 - FFFeiya</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.css">
@@ -16,15 +16,15 @@
 
     <meta name="description" content="题目描述一些村庄建在一条笔直的高速公路边上，我们用一条坐标轴来描述这条公路，每个村庄的坐标都是整数，没有两个村庄的坐标相同。两个村庄的距离定义为坐标之差的绝对值。我们需要在某些村庄建立邮局。使每个村庄使用与它距离最近的邮局，建立邮局的原则是：所有村庄到各自使用的邮局的距离总和最小。数据规模：1&amp;lt;=村庄数&amp;lt;=1600, 1&amp;lt;=邮局数&amp;lt;=200, 1&amp;lt;=村庄坐标&amp;lt;">
 <meta property="og:type" content="article">
-<meta property="og:title" content="邮局:四边形不等式">
-<meta property="og:url" content="https://fffeiya.github.io/2018/10/19/邮局-四边形不等式/index.html">
+<meta property="og:title" content="邮局-四边形不等式">
+<meta property="og:url" content="https://fffeiya.github.io/2018/10/18/邮局-四边形不等式/index.html">
 <meta property="og:site_name" content="FFFeiya">
 <meta property="og:description" content="题目描述一些村庄建在一条笔直的高速公路边上，我们用一条坐标轴来描述这条公路，每个村庄的坐标都是整数，没有两个村庄的坐标相同。两个村庄的距离定义为坐标之差的绝对值。我们需要在某些村庄建立邮局。使每个村庄使用与它距离最近的邮局，建立邮局的原则是：所有村庄到各自使用的邮局的距离总和最小。数据规模：1&amp;lt;=村庄数&amp;lt;=1600, 1&amp;lt;=邮局数&amp;lt;=200, 1&amp;lt;=村庄坐标&amp;lt;">
 <meta property="og:locale" content="jp">
 <meta property="og:image" content="https://ws1.sinaimg.cn/large/006wbS1kly1fwdtf5990uj30xc0jhtjm.jpg">
-<meta property="og:updated_time" content="2018-10-19T13:36:40.384Z">
+<meta property="og:updated_time" content="2018-10-23T10:48:58.208Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="邮局:四边形不等式">
+<meta name="twitter:title" content="邮局-四边形不等式">
 <meta name="twitter:description" content="题目描述一些村庄建在一条笔直的高速公路边上，我们用一条坐标轴来描述这条公路，每个村庄的坐标都是整数，没有两个村庄的坐标相同。两个村庄的距离定义为坐标之差的绝对值。我们需要在某些村庄建立邮局。使每个村庄使用与它距离最近的邮局，建立邮局的原则是：所有村庄到各自使用的邮局的距离总和最小。数据规模：1&amp;lt;=村庄数&amp;lt;=1600, 1&amp;lt;=邮局数&amp;lt;=200, 1&amp;lt;=村庄坐标&amp;lt;">
 <meta name="twitter:image" content="https://ws1.sinaimg.cn/large/006wbS1kly1fwdtf5990uj30xc0jhtjm.jpg">
 
@@ -124,33 +124,33 @@
     <article class="article content gallery" itemscope itemprop="blogPost">
     <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
         
-            邮局:四边形不等式
+            邮局-四边形不等式
         
     </h1>
     <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
         <span class="column is-narrow">
-            <time datetime="2018-10-19T11:58:31.000Z" itemprop="datePublished">Oct 19 2018</time>
+            <time datetime="2018-10-18T12:50:22.000Z" itemprop="datePublished">Oct 18 2018</time>
         </span>
         
         
         <span class="column is-narrow">
             
             
-            9 minutes 読む (約 1312 語)
+            9 minutes 読む (約 1345 語)
         </span>
         
     </div>
     <div class="article-entry is-size-6-mobile" itemprop="articleBody">
     
-        <p><img src="https://ws1.sinaimg.cn/large/006wbS1kly1fwdtf5990uj30xc0jhtjm.jpg" alt=""></p>
+        <p><img src="https://ws1.sinaimg.cn/large/006wbS1kly1fwdtf5990uj30xc0jhtjm.jpg" alt="https://ws1.sinaimg.cn/large/006wbS1kly1fwdtf5990uj30xc0jhtjm.jpg"></p>
 <h4 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h4><p>一些村庄建在一条笔直的高速公路边上，我们用一条坐标轴来描述这条公路，每个村庄的坐标都是整数，没有两个村庄的坐标相同。两个村庄的距离定义为坐标之差的绝对值。我们需要在某些村庄建立邮局。使每个村庄使用与它距离最近的邮局，建立邮局的原则是：所有村庄到各自使用的邮局的距离总和最小。数据规模：1&lt;=村庄数&lt;=1600, 1&lt;=邮局数&lt;=200, 1&lt;=村庄坐标&lt;=maxlongint</p>
 <a id="more"></a>
 <h4 id="输入"><a href="#输入" class="headerlink" title="输入"></a>输入</h4><p>2行</p>
-<p>第一行:n m {表示有n个村庄，建立m个邮局} </p>
+<p>第一行:n m {表示有n个村庄，建立m个邮局}</p>
 <p>第二行:a1 a2 a3 .. an {表示n个村庄的坐标}</p>
 <h4 id="输出"><a href="#输出" class="headerlink" title="输出"></a>输出</h4><p>1行第一行:l 个整数{表示最小距离总和}</p>
 <h4 id="样例输入"><a href="#样例输入" class="headerlink" title="样例输入"></a>样例输入</h4><blockquote>
-<p>10 5 </p>
+<p>10 5</p>
 <p>1 2 3 6 7 9 11 22 44 50</p>
 </blockquote>
 <h4 id="样例输出"><a href="#样例输出" class="headerlink" title="样例输出"></a>样例输出</h4><blockquote>
@@ -160,10 +160,10 @@
 <p>可以这样考虑：</p>
 <p>给定一个区间,假设我们要建一个邮局,那么一定是在这个序列的中点,所以我们可以先预处理出序列区间[i,j]之间的距离</p>
 <p>一个邮局的最短距离记录为sum[i][j],然后用f[i][j]表示到i个村庄建立j个邮局的最短距离和,那么就有状态转移方程:</p>
-<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">f[i][j]=min(f[i][j],f[k][j-1]+sum[k+1][i]);</span><br></pre></td></tr></table></figure>
+<figure class="highlight cpp hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">f[i][j]=min(f[i][j],f[k][j<span class="hljs-number">-1</span>]+sum[k+<span class="hljs-number">1</span>][i]);</span><br></pre></td></tr></table></figure>
 <p>这样，代码就好写了。</p>
-<p>但是——这个数据，用O(n<sup>3</sup>) 的普通DP算法显然无法通过。</p>
-<p>O(n<sup>3</sup>) 代码如下：</p>
+<p>但是——这个数据，用O(n3) 的普通DP算法显然无法通过。</p>
+<p>O(n3) 代码如下：</p>
 <figure class="highlight cpp hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> <span class="hljs-built_in">std</span>;</span><br><span class="line"> </span><br><span class="line"><span class="hljs-keyword">int</span> n,m;</span><br><span class="line"><span class="hljs-keyword">int</span> a[<span class="hljs-number">1666</span>];</span><br><span class="line"><span class="hljs-keyword">long</span> <span class="hljs-keyword">long</span> sum[<span class="hljs-number">1666</span>]<span class="hljs-number">1666</span>];</span><br><span class="line"><span class="hljs-keyword">long</span> <span class="hljs-keyword">long</span> f[<span class="hljs-number">1666</span>][<span class="hljs-number">222</span>];</span><br><span class="line"><span class="hljs-comment">//f[i][j]表示前i个村庄设j个邮局</span></span><br><span class="line"><span class="hljs-comment">//sum[i][j]表示在第i个村庄到第j个村庄设一个邮局的路程</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-keyword">void</span>)</span></span>&#123;</span><br><span class="line">    <span class="hljs-built_in">cin</span>&gt;&gt;n&gt;&gt;m;</span><br><span class="line">    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i=<span class="hljs-number">1</span>;i&lt;=n;i++) <span class="hljs-built_in">cin</span>&gt;&gt;a[i];</span><br><span class="line">    sort(a+<span class="hljs-number">1</span>,a+n+<span class="hljs-number">1</span>);</span><br><span class="line">    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i=<span class="hljs-number">1</span>;i&lt;=n;i++)&#123;</span><br><span class="line">        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> j=i;j&lt;=n;j++)&#123;</span><br><span class="line">            sum[i][j]=dis(i,j);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="hljs-built_in">memset</span>(f,<span class="hljs-number">0x3f</span>,<span class="hljs-keyword">sizeof</span>(f));</span><br><span class="line">    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i=<span class="hljs-number">1</span>;i&lt;=n;i++)&#123;</span><br><span class="line">        f[i][<span class="hljs-number">1</span>]=sum[<span class="hljs-number">1</span>][i];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i=<span class="hljs-number">1</span>;i&lt;=n;i++)&#123;</span><br><span class="line">        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> j=<span class="hljs-number">2</span>;j&lt;=min(i,m);j++)&#123;</span><br><span class="line">            <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> k=j<span class="hljs-number">-1</span>;k&lt;=i<span class="hljs-number">-1</span>;k++)&#123;</span><br><span class="line">                f[i][j]=min(f[i][j],f[k][j<span class="hljs-number">-1</span>]+sum[k+<span class="hljs-number">1</span>][i]);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="hljs-built_in">cout</span>&lt;&lt;f[n][m]&lt;&lt;<span class="hljs-built_in">endl</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>这东西肯定过不了啊~</p>
 <p>那怎么办？”四边形不等式！”</p>
@@ -181,11 +181,12 @@
 <p>再就是要证明”决策单调”</p>
 <p>（以下一段文字来自<a href="https://blog.csdn.net/noiau/article/details/72514812" target="_blank" rel="noopener">这里</a> ）</p>
 <blockquote>
-<p>如果我们用s[i][j]表示dp[i][j]取得最优解的时候k的位置的话 </p>
-<p>如果我们用s[i][j]表示dp[i][j]取得最优解的时候k的位置的话 </p>
-<p>那么我们要证明如下结论的成立性： </p>
-<p>s[i][j-1]&lt;=s[i][j]&lt;=s[i+1][j] </p>
-<p>s[i][j-1]&lt;=s[i][j]&lt;=s[i+1][j]<br>对于s[i][j-1]&lt;=s[i][j]来说，我们先令dp[i][j-1]取得最优解的时候的k值为y，然后令除了最优值以外的其他值可以为x，这里我们由于要讨论单调性，所以让x小于y，即x&lt;=y&lt;=j-1&lt; j </p>
+<p>如果我们用s[i][j]表示dp[i][j]取得最优解的时候k的位置的话</p>
+<p>如果我们用s[i][j]表示dp[i][j]取得最优解的时候k的位置的话</p>
+<p>那么我们要证明如下结论的成立性：</p>
+<p>s[i][j-1]&lt;=s[i][j]&lt;=s[i+1][j]</p>
+<p>s[i][j-1]&lt;=s[i][j]&lt;=s[i+1][j]</p>
+<p>s[i][j-1]&lt;=s[i][j]&lt;=s[i+1][j]<br>对于s[i][j-1]&lt;=s[i][j]来说，我们先令dp[i][j-1]取得最优解的时候的k值为y，然后令除了最优值以外的其他值可以为x，这里我们由于要讨论单调性，所以让x小于y，即x&lt;=y&lt;=j-1&lt; j</p>
 </blockquote>
 <p>这里的证明更为繁琐，在实际应用中，我们可以写出O(n3)后，自己跑一边是否决策单调，不是就输出”false”就行了。</p>
 <p>在这道题中，我们要注意三点：</p>
@@ -215,7 +216,9 @@
     
     
     <div class="columns is-mobile is-multiline article-nav">
-        <span class="column is-12-mobile is-half-desktop is-hidden-mobile article-nav-prev">
+        <span class="column is-12-mobile is-half-desktop  article-nav-prev">
+            
+            <a href="/2018/10/23/Splay基本操作-ft-指针/">Splay基本操作[ft.指针]</a>
             
         </span>
         <span class="column is-12-mobile is-half-desktop  article-nav-next">

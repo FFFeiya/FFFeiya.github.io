@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html class="has-navbar-fixed-top">
+<head>
+    <meta charset="utf-8">
+<title>Splay基本操作[ft.指针] - FFFeiya</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.css">
+
+
+<meta name="description" content="そんなふうに 地球は回ってる">
+
+
+
+
+
+    <meta name="description" content="[怎么用C++自带的指针写数据结构？] [不会……那就快点学！不要颓！]">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Splay基本操作[ft.指针]">
+<meta property="og:url" content="https://fffeiya.github.io/2018/10/23/Splay基本操作-ft-指针/index.html">
+<meta property="og:site_name" content="FFFeiya">
+<meta property="og:description" content="[怎么用C++自带的指针写数据结构？] [不会……那就快点学！不要颓！]">
+<meta property="og:locale" content="jp">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006wbS1kly1fwicm679l4j30xc0j1n6t.jpg">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006wbS1kly1fwicqic3gzj317t0l9whs.jpg">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006wbS1kly1fwi5plvaihj30zo0gc780.jpg">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006wbS1kly1fwi7sgao7wj30zo0gcjug.jpg">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006wbS1kly1fwi9o4zqr9j30zo0gcwg1.jpg">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006wbS1kly1fwifq8frdcj30zo0gc74x.jpg">
+<meta property="og:updated_time" content="2018-10-23T13:20:34.838Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Splay基本操作[ft.指针]">
+<meta name="twitter:description" content="[怎么用C++自带的指针写数据结构？] [不会……那就快点学！不要颓！]">
+<meta name="twitter:image" content="https://ws1.sinaimg.cn/large/006wbS1kly1fwicm679l4j30xc0j1n6t.jpg">
+
+
+
+
+
+<link rel="icon" href="/images/favicon.png">
+
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Ovo|Source+Code+Pro">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
+
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/css/lightgallery.min.css">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/css/justifiedGallery.min.css">
+
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atom-one-light.min.css">
+
+<link rel="stylesheet" href="/css/style.css">
+
+<script defer src="//use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+
+
+    
+    
+    
+    
+    
+    
+
+    
+
+
+<link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
+<link rel="stylesheet" href="/fa-brands/css/fa-brands.min.css">
+<link rel="stylesheet" href="/fa-regular/css/fa-regular.min.css">
+<link rel="stylesheet" href="/fa-solid/css/fa-solid.min.css">
+<link rel="stylesheet" href="/fontawesome/css/fontawesome.min.css">
+<link rel="stylesheet" href="/fontawesome-all/css/fontawesome-all.css">
+
+</head>
+<body>
+    
+<nav class="navbar is-transparent is-fixed-top navbar-main" role="navigation" aria-label="main navigation">
+    <div class="container">
+        <div class="navbar-brand">
+            <a class="navbar-item navbar-logo" href="/">
+                
+                    
+                    <img src="https://ws1.sinaimg.cn/large/006wbS1kly1fwcnazxmi4j30to0totfk.jpg" alt="" height="28">
+                    
+                
+            </a>
+            <div class="navbar-burger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+        
+        <div class="navbar-menu navbar-start">
+            
+            <a class="navbar-item "
+               href="/archives">Archives</a>
+            
+            <a class="navbar-item "
+               href="/Music">Music</a>
+            
+            <a class="navbar-item "
+               href="/About">About</a>
+            
+        </div>
+        
+        <div class="navbar-menu navbar-end">
+            
+            <a class="navbar-item search" title="検索" href="javascript:;">
+                <i class="fas fa-search"></i>
+            </a>
+            
+            
+            
+            <a class="navbar-item" title="Friend" href="/Friends">
+                
+                <i class="fa fa-link"></i>
+                
+            </a>
+               
+            
+        </div>
+    </div>
+</nav>
+
+    <section class="section">
+    <div class="container">
+    <article class="article content gallery" itemscope itemprop="blogPost">
+    <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
+        
+            Splay基本操作[ft.指针]
+        
+    </h1>
+    <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
+        <span class="column is-narrow">
+            <time datetime="2018-10-23T05:08:23.000Z" itemprop="datePublished">Oct 23 2018</time>
+        </span>
+        
+        
+        <span class="column is-narrow">
+            
+            
+            22 minutes 読む (約 3344 語)
+        </span>
+        
+    </div>
+    <div class="article-entry is-size-6-mobile" itemprop="articleBody">
+    
+        <p><img src="https://ws1.sinaimg.cn/large/006wbS1kly1fwicm679l4j30xc0j1n6t.jpg" alt=""></p>
+<p>[怎么用C++自带的指针写数据结构？]</p>
+<p>[不会……那就快点学！不要颓！]</p>
+<a id="more"></a>
+<h4 id="第一次用指针完成高级数据结构の-Splay"><a href="#第一次用指针完成高级数据结构の-Splay" class="headerlink" title="第一次用指针完成高级数据结构の[Splay]"></a>第一次用指针完成高级数据结构の[Splay]</h4><h5 id="Splay食用须知"><a href="#Splay食用须知" class="headerlink" title="Splay食用须知"></a>Splay食用须知</h5><p>首先，我们要理解什么是Splay树。Splay树是一棵二叉搜索树：二叉搜索树，用LJ的话讲，就是“左边比它小，右边比他大”。我们考虑这样一棵树，树上的任意一个节点满足“他的左子树上的每一个节点的值都比该节点的值小，他的右子树上的每一个节点的值都比该节点的值大”。就像这样：</p>
+<p><img src="https://ws1.sinaimg.cn/large/006wbS1kly1fwicqic3gzj317t0l9whs.jpg" alt=""></p>
+<p>如果这棵二叉搜索树是完全二叉树的话，很显然，查找一个值的时间是O(logn)。但是万一数据使这棵树被构造成一条链的话(例如最小的元素为根节点，次小的元素是它的左节点，以此类推)，查询一个值的时间复杂度会退化为O(n)，你就会获得0分的好成绩。</p>
+<p>那么Splay树如何解决这个问题呢？旋转！每一次操作都旋转！<del>跳跃！闭着眼！</del>把节点旋转到根！在这里，我们把将某一个节点旋转到另一个位置，并且使这棵树保留原来的性质的操作，称为Splay。旋转降低复杂度(玄学)，对OIer来讲是无须证明，只要记住就好了，(<a href="https://blog.csdn.net/le_ballon_rouge/article/details/49741985" target="_blank" rel="noopener">如果你一定要看证明</a>，你会回来的)。可以感性理解一下，每次操作改变一次结构，被查询频率高的条目会更靠近树根，时间有多有少，平均下来复杂度就会比较低（另外，Splay操作是单旋还是双旋也会影响到复杂度）。</p>
+<h5 id="成员变量"><a href="#成员变量" class="headerlink" title="成员变量"></a>成员变量</h5><p>我们先考虑Splay树上每一个点应该包含这几个成员变量：<br><figure class="highlight cpp hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">node</span>&#123;</span></span><br><span class="line"><span class="hljs-keyword">public</span>:</span><br><span class="line">	<span class="hljs-keyword">int</span> val,cnt,siz;</span><br><span class="line">	node* fth;</span><br><span class="line">	node* son[<span class="hljs-number">2</span>];</span><br><span class="line">	node(<span class="hljs-keyword">int</span> v=<span class="hljs-number">0</span>,node *f=<span class="hljs-literal">NULL</span>)&#123;</span><br><span class="line">	    val=v;fth=f;</span><br><span class="line">	    son[<span class="hljs-number">0</span>]=son[<span class="hljs-number">1</span>]=<span class="hljs-literal">NULL</span>;</span><br><span class="line">	    cnt=siz=<span class="hljs-number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>val:该点的值   cnt:值为该点的值的个数   siz:包括该点与其左右子树的大小</p>
+<p>fth:<del>爸爸</del>指向该点的父节点的指针   son:指向该点的左右子节点的指针([0]左[1]右)</p>
+<h5 id="Rotate-单旋"><a href="#Rotate-单旋" class="headerlink" title="Rotate[单旋]"></a>Rotate[单旋]</h5><p>现在我们考虑将一个点旋转到它的父节点的位置:我们称其为Rotate。左子节点旋转到父节点称为右旋，右子节点旋转到父节点称为左旋。</p>
+<p><img src="https://ws1.sinaimg.cn/large/006wbS1kly1fwi5plvaihj30zo0gc780.jpg" alt=""></p>
+<p>在看Rotate的具体步骤之前，我们先介绍这个函数：</p>
+<figure class="highlight cpp hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">sn</span><span class="hljs-params">(<span class="hljs-keyword">void</span>)</span></span>&#123;</span><br><span class="line">    <span class="hljs-keyword">return</span> (fth-&gt;son[<span class="hljs-number">1</span>]==<span class="hljs-keyword">this</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>(注:这个函数是node这个类的成员函数，this是指向自己的指针，可以删去，下面的Rotate函数和Splay函数同理，不清楚可以看文章最后的全代码)</p>
+<p>这个函数Sn可以方便地判断this是其父节点的哪个儿子，并返回该儿子的下标。</p>
+<figure class="highlight cpp hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">rotate</span><span class="hljs-params">(<span class="hljs-keyword">void</span>)</span></span>&#123;</span><br><span class="line">	node *y=<span class="hljs-keyword">this</span>-&gt;fth;</span><br><span class="line">	<span class="hljs-keyword">bool</span> a=<span class="hljs-keyword">this</span>-&gt;sn();</span><br><span class="line">	y-&gt;son[a]=<span class="hljs-keyword">this</span>-&gt;son[!a];</span><br><span class="line">	<span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>-&gt;son[!a]!=<span class="hljs-literal">NULL</span>) </span><br><span class="line">		<span class="hljs-keyword">this</span>-&gt;son[!a]-&gt;fth=y;</span><br><span class="line">	<span class="hljs-keyword">this</span>-&gt;fth=y-&gt;fth;</span><br><span class="line">	<span class="hljs-keyword">if</span> (y-&gt;fth!=<span class="hljs-literal">NULL</span>) </span><br><span class="line">		y-&gt;fth-&gt;son[y-&gt;sn()]=<span class="hljs-keyword">this</span>;</span><br><span class="line">	<span class="hljs-keyword">this</span>-&gt;son[!a]=y;</span><br><span class="line">	y-&gt;fth=<span class="hljs-keyword">this</span>;</span><br><span class="line">	y-&gt;updata(),<span class="hljs-keyword">this</span>-&gt;updata();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其中注意，我们可以通过Sn()这个函数判断this是它父节点的哪一个子节点，以此来判断是左旋还是右旋，就不用累赘地写两个函数了。</p>
+<p>这样，我们就完成单旋了。单旋Splay就是对某一个节点疯狂做单旋直到它变到目标位置。在多年(<del>我考了十八年NOIP了，连复赛的机子都没摸到过</del>)OI学习中，我们可以感觉到，做事不·能太暴力，单旋Splay是不能彻底改变树的结构的，(稍微卡一卡就咕咕)，于是我们引入了：“双旋Splay”，来彻底做到玄学复杂度。</p>
+<h5 id="Splay-双旋"><a href="#Splay-双旋" class="headerlink" title="Splay[双旋]"></a>Splay[双旋]</h5><p><img src="https://ws1.sinaimg.cn/large/006wbS1kly1fwi7sgao7wj30zo0gcjug.jpg" alt=""></p>
+<p><img src="https://ws1.sinaimg.cn/large/006wbS1kly1fwi9o4zqr9j30zo0gcwg1.jpg" alt=""></p>
+<p>我们先观察上面的两张图，这次我们要考虑x(this)节点的父亲节点和祖父节点，分别命名为P，Q。如果x和p是同一种子节点(左/右子节点)，执行Zig-Zig操作，将x旋转到Q的位置，反之，执行Zig-Zag操作，将x旋转到Q的位置。这样子旋转两次直到x被旋转到目标节点——这就是双旋Splay。每次做两个Rotate操作，但是要注意的是，如果x与目标节点的深度只差1时，只用执行一次Rotate操作就可以了。(这样就可以保证复杂度的玄学了！)</p>
+<p>Zig-Zig操作：先旋转P节点，再旋转X节点；</p>
+<p>Zig-Zag操作：旋转两次X节点。</p>
+<figure class="highlight cpp hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">splay</span><span class="hljs-params">(node* y=<span class="hljs-literal">NULL</span>)</span></span>&#123;</span><br><span class="line">	<span class="hljs-keyword">while</span>(<span class="hljs-keyword">this</span>-&gt;fth!=y)&#123;</span><br><span class="line">		<span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>-&gt;fth==<span class="hljs-literal">NULL</span>) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;</span><br><span class="line">		node *p=<span class="hljs-keyword">this</span>-&gt;fth;</span><br><span class="line">		<span class="hljs-keyword">if</span> (p-&gt;fth==y || p-&gt;fth==<span class="hljs-literal">NULL</span>)&#123;</span><br><span class="line">			<span class="hljs-keyword">this</span>-&gt;rotate();</span><br><span class="line">			<span class="hljs-keyword">continue</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		node *q=p-&gt;fth;</span><br><span class="line">		<span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>-&gt;sn()!=p-&gt;sn())&#123;</span><br><span class="line">			<span class="hljs-keyword">this</span>-&gt;rotate(); <span class="hljs-keyword">this</span>-&gt;rotate();</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="hljs-keyword">else</span>&#123;</span><br><span class="line">			p-&gt;rotate(); <span class="hljs-keyword">this</span>-&gt;rotate();</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>(这里我们考虑返回Bool值，在x转不到目标节点的情况能做出判断，<del>用处不大</del>) </p>
+<p>这样子，我们的类-Node就打好了！这样就完成了一个Splay的框架。</p>
+<h5 id="类Node的完整代码"><a href="#类Node的完整代码" class="headerlink" title="类Node的完整代码"></a>类Node的完整代码</h5><figure class="highlight cpp hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">node</span>&#123;</span></span><br><span class="line"><span class="hljs-keyword">public</span>:</span><br><span class="line">	<span class="hljs-keyword">int</span> val,cnt,siz;</span><br><span class="line">	node* fth;</span><br><span class="line">	node* son[<span class="hljs-number">2</span>];</span><br><span class="line">    node(<span class="hljs-keyword">int</span> v=<span class="hljs-number">0</span>,node *f=<span class="hljs-literal">NULL</span>)&#123;</span><br><span class="line">        val=v;fth=f;</span><br><span class="line">        son[<span class="hljs-number">0</span>]=son[<span class="hljs-number">1</span>]=<span class="hljs-literal">NULL</span>;</span><br><span class="line">        cnt=siz=<span class="hljs-number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="hljs-keyword">private</span>:</span><br><span class="line">	<span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">sn</span><span class="hljs-params">(<span class="hljs-keyword">void</span>)</span></span>&#123;</span><br><span class="line">    	<span class="hljs-keyword">return</span> (fth-&gt;son[<span class="hljs-number">1</span>]==<span class="hljs-keyword">this</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">rotate</span><span class="hljs-params">(<span class="hljs-keyword">void</span>)</span></span>&#123;</span><br><span class="line">		node *y=<span class="hljs-keyword">this</span>-&gt;fth;</span><br><span class="line">		<span class="hljs-keyword">bool</span> a=<span class="hljs-keyword">this</span>-&gt;sn();</span><br><span class="line">		y-&gt;son[a]=<span class="hljs-keyword">this</span>-&gt;son[!a];</span><br><span class="line">		<span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>-&gt;son[!a]!=<span class="hljs-literal">NULL</span>) </span><br><span class="line">			<span class="hljs-keyword">this</span>-&gt;son[!a]-&gt;fth=y;</span><br><span class="line">		<span class="hljs-keyword">this</span>-&gt;fth=y-&gt;fth;</span><br><span class="line">		<span class="hljs-keyword">if</span> (y-&gt;fth!=<span class="hljs-literal">NULL</span>) </span><br><span class="line">			y-&gt;fth-&gt;son[y-&gt;sn()]=<span class="hljs-keyword">this</span>;</span><br><span class="line">		<span class="hljs-keyword">this</span>-&gt;son[!a]=y;</span><br><span class="line">		y-&gt;fth=<span class="hljs-keyword">this</span>;</span><br><span class="line">	&#125;</span><br><span class="line"><span class="hljs-keyword">public</span>:</span><br><span class="line">	<span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">splay</span><span class="hljs-params">(node* y=<span class="hljs-literal">NULL</span>)</span></span>&#123;</span><br><span class="line">		<span class="hljs-keyword">while</span>(<span class="hljs-keyword">this</span>-&gt;fth!=y)&#123;</span><br><span class="line">			<span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>-&gt;fth==<span class="hljs-literal">NULL</span>) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;</span><br><span class="line">			node *p=<span class="hljs-keyword">this</span>-&gt;fth;</span><br><span class="line">			<span class="hljs-keyword">if</span> (p-&gt;fth==y || p-&gt;fth==<span class="hljs-literal">NULL</span>)&#123;</span><br><span class="line">				<span class="hljs-keyword">this</span>-&gt;rotate();</span><br><span class="line">				<span class="hljs-keyword">continue</span>;</span><br><span class="line">			&#125;</span><br><span class="line">			node *q=p-&gt;fth;</span><br><span class="line">			<span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>-&gt;sn()!=p-&gt;sn())&#123;</span><br><span class="line">				<span class="hljs-keyword">this</span>-&gt;rotate(); <span class="hljs-keyword">this</span>-&gt;rotate();</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="hljs-keyword">else</span>&#123;</span><br><span class="line">				p-&gt;rotate(); <span class="hljs-keyword">this</span>-&gt;rotate();</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h5 id="Insert-插入"><a href="#Insert-插入" class="headerlink" title="Insert[插入]"></a>Insert[插入]</h5><p>[在一个二叉搜索树中如何插入一个新的节点？]</p>
+<p>[找到你的归宿，一层一层剥开。]</p>
+<p>对于一个Splay树，我们只记录他的根节点，由root指针指向。所以做什么操作，都要从源头开始。从根出发，如果比根大，就往根的右子树里找，如果比根小，就往根的左子树找。</p>
+<p>在树状结构中，这样的查找是不是让人很想用递归实现啊？</p>
+<figure class="highlight cpp hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">void</span> _insert(<span class="hljs-keyword">int</span> v,node *p,node *f)&#123;</span><br><span class="line">	<span class="hljs-keyword">if</span> (p==<span class="hljs-literal">NULL</span>)&#123;</span><br><span class="line">		p=<span class="hljs-keyword">new</span> node(v,f);</span><br><span class="line">		p-&gt;splay(); root=p;</span><br><span class="line">		<span class="hljs-keyword">return</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="hljs-keyword">if</span> (v==p-&gt;val)&#123;</span><br><span class="line">		p-&gt;cnt++;</span><br><span class="line">		<span class="hljs-keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">	<span class="hljs-keyword">if</span> (v&lt;p-&gt;val) _insert(v,p-&gt;son[<span class="hljs-number">0</span>],p);</span><br><span class="line">	<span class="hljs-keyword">if</span> (v&gt;p-&gt;val) _insert(v,p-&gt;son[<span class="hljs-number">1</span>],p);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>但是其实可以用循环实现哦~这样子调用函数，传入多个参数，又慢又丑陋，不如这样写:</p>
+<figure class="highlight cpp hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">insert</span><span class="hljs-params">(<span class="hljs-keyword">int</span> v)</span></span>&#123;</span><br><span class="line">	<span class="hljs-keyword">if</span> (root==<span class="hljs-literal">NULL</span>) root=<span class="hljs-keyword">new</span> node(v,<span class="hljs-literal">NULL</span>);</span><br><span class="line">	<span class="hljs-keyword">for</span> (node *t=root;;t=t-&gt;son[v&gt;=t-&gt;val])&#123;</span><br><span class="line">		<span class="hljs-keyword">if</span>(t-&gt;val==v)&#123;</span><br><span class="line">			root=t; t-&gt;cnt++;</span><br><span class="line">			t-&gt;splay();</span><br><span class="line">			<span class="hljs-keyword">return</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="hljs-keyword">if</span> (t-&gt;son[v&gt;=t-&gt;val]==<span class="hljs-literal">NULL</span>)&#123;</span><br><span class="line">			t-&gt;son[v&gt;=t-&gt;val]=<span class="hljs-keyword">new</span> node(v,t);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果原有该值的点，则直接cnt++，如果没有，则new一个新的点再cnt++。</p>
+<p>(不管怎么样，操作中都要Splay操作结点)</p>
+<h5 id="Find-查找"><a href="#Find-查找" class="headerlink" title="Find[查找]"></a>Find[查找]</h5><p>从root往下找，走向son[v&gt;t-&gt;val]——当v大于当前节点的val时，返回1：走向右子树；当v小于当前节点的val时，返回0：走向左子树。</p>
+<figure class="highlight cpp hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function">node* <span class="hljs-title">find</span><span class="hljs-params">(<span class="hljs-keyword">int</span> v)</span></span>&#123;</span><br><span class="line">	<span class="hljs-keyword">for</span>(node* t=root;t;t=t-&gt;son[v&gt;t-&gt;val])&#123;</span><br><span class="line">		<span class="hljs-keyword">if</span>(t-&gt;val==v)&#123;</span><br><span class="line">			t-&gt;splay();</span><br><span class="line">			root=t;</span><br><span class="line">			<span class="hljs-keyword">return</span> t;</span><br><span class="line">		&#125; </span><br><span class="line">	&#125;</span><br><span class="line">	<span class="hljs-keyword">return</span> <span class="hljs-literal">NULL</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="Erase-删除"><a href="#Erase-删除" class="headerlink" title="Erase[删除]"></a>Erase[删除]</h5><p>先Splay要删去的节点——好，现在我们要删去的节点在根节点上。</p>
+<p>接下来，在他的左子树中找到最大的那个节点，（如果没有左子树的话就直接删去根节点就行了），将那个节点Splay到根节点的右子节点，那么此时这个节点是没有右子树的——将根节点的左子树指向这个节点，干脆利落地删除根节点，删除操作完成！</p>
+<p><img src="https://ws1.sinaimg.cn/large/006wbS1kly1fwifq8frdcj30zo0gc74x.jpg" alt=""></p>
+<h5 id="size-子树大小"><a href="#size-子树大小" class="headerlink" title="size[子树大小]"></a>size[子树大小]</h5><p>在这里，我们在node类中引入updata函数，在Rotate操作中将改变的size值更新。</p>
+<figure class="highlight cpp hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">updata</span><span class="hljs-params">(<span class="hljs-keyword">void</span>)</span></span>&#123;</span><br><span class="line">	siz=(son[<span class="hljs-number">0</span>]?son[<span class="hljs-number">0</span>]-&gt;siz:<span class="hljs-number">0</span>)</span><br><span class="line">		+(son[<span class="hljs-number">1</span>]?son[<span class="hljs-number">1</span>]-&gt;siz:<span class="hljs-number">0</span>)+cnt;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这是改变后的Rotate操作：</p>
+<figure class="highlight cpp hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">rotate</span><span class="hljs-params">(<span class="hljs-keyword">void</span>)</span></span>&#123;</span><br><span class="line">	node *y=<span class="hljs-keyword">this</span>-&gt;fth;</span><br><span class="line">	<span class="hljs-keyword">bool</span> a=<span class="hljs-keyword">this</span>-&gt;sn();</span><br><span class="line">	y-&gt;son[a]=<span class="hljs-keyword">this</span>-&gt;son[!a];</span><br><span class="line">	<span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>-&gt;son[!a]!=<span class="hljs-literal">NULL</span>) </span><br><span class="line">		<span class="hljs-keyword">this</span>-&gt;son[!a]-&gt;fth=y;</span><br><span class="line">	<span class="hljs-keyword">this</span>-&gt;fth=y-&gt;fth;</span><br><span class="line">	<span class="hljs-keyword">if</span> (y-&gt;fth!=<span class="hljs-literal">NULL</span>) </span><br><span class="line">		y-&gt;fth-&gt;son[y-&gt;sn()]=<span class="hljs-keyword">this</span>;</span><br><span class="line">	<span class="hljs-keyword">this</span>-&gt;son[!a]=y;</span><br><span class="line">	y-&gt;fth=<span class="hljs-keyword">this</span>;</span><br><span class="line">	y-&gt;updata(),<span class="hljs-keyword">this</span>-&gt;updata();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>那么返回一个节点及其子树的Size就非常简单了。</p>
+<figure class="highlight cpp hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">size</span><span class="hljs-params">(<span class="hljs-keyword">void</span>)</span></span>&#123;</span><br><span class="line">	<span class="hljs-keyword">return</span> root-&gt;siz;</span><br><span class="line">&#125;</span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">size</span><span class="hljs-params">(node* x)</span></span>&#123;</span><br><span class="line">	<span class="hljs-keyword">return</span> x-&gt;siz;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>#####Kth[第K大数]</p>
+<p>如果K在根节点的cnt区间内，则返回根节点;</p>
+<p>如果K在左子树区间内，递归处理左子树;</p>
+<p>如果K在右子树区间内，将在之后的递归中加入当前左子树和根节点的值，递归处理右子树。</p>
+<p>递归处理，简单明了。</p>
+<figure class="highlight cpp hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">kth</span><span class="hljs-params">(<span class="hljs-keyword">int</span> key)</span></span>&#123;</span><br><span class="line">	<span class="hljs-keyword">int</span> cnt=<span class="hljs-number">0</span>;</span><br><span class="line">	<span class="hljs-keyword">if</span> (key&gt;root-&gt;siz) <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;</span><br><span class="line">	<span class="hljs-keyword">for</span> (node* i=root;i;)&#123;</span><br><span class="line">		<span class="hljs-keyword">int</span> lcnt=(i-&gt;son[<span class="hljs-number">0</span>])?i-&gt;son[<span class="hljs-number">0</span>]-&gt;siz:<span class="hljs-number">0</span>;</span><br><span class="line">		<span class="hljs-keyword">int</span> mcnt=i-&gt;cnt;</span><br><span class="line">		<span class="hljs-keyword">if</span> (cnt+lcnt&lt;key &amp;&amp; cnt+lcnt+mcnt&gt;=key)&#123;</span><br><span class="line">			i-&gt;splay();</span><br><span class="line">			<span class="hljs-keyword">return</span>  i-&gt;val;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="hljs-keyword">if</span> (cnt+lcnt&gt;=key) i=i-&gt;son[<span class="hljs-number">0</span>];</span><br><span class="line">		<span class="hljs-keyword">if</span> (key&gt;cnt+lcnt+mcnt)&#123;</span><br><span class="line">			cnt+=lcnt+mcnt;</span><br><span class="line">			i=i-&gt;son[<span class="hljs-number">1</span>];</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="Next-前驱-后继"><a href="#Next-前驱-后继" class="headerlink" title="Next[前驱/后继]"></a>Next[前驱/后继]</h5><p>找前驱，在该节点的左子树中向右子树找，找出左子树中最大的节点。</p>
+<p>找前驱，在该节点的右子树中向左子树找，找出右子树中最小的节点。</p>
+<figure class="highlight cpp hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function">node* <span class="hljs-title">next</span><span class="hljs-params">(node* x,<span class="hljs-keyword">int</span> s)</span></span>&#123; <span class="hljs-comment">//s=0表示前驱，s=1表示后继 </span></span><br><span class="line">	node* t=x-&gt;son[s];</span><br><span class="line">	<span class="hljs-keyword">if</span> (!t) <span class="hljs-keyword">return</span> <span class="hljs-literal">NULL</span>;</span><br><span class="line">	<span class="hljs-keyword">while</span> (t-&gt;son[s^<span class="hljs-number">1</span>]) t=t-&gt;son[s^<span class="hljs-number">1</span>];</span><br><span class="line">	t-&gt;splay();</span><br><span class="line">	<span class="hljs-keyword">return</span> t;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>与Find函数结合，可以先找到该节点，再进行Next操作。</p>
+<figure class="highlight cpp hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">next</span><span class="hljs-params">(<span class="hljs-keyword">int</span> ix,<span class="hljs-keyword">int</span> s)</span></span>&#123; <span class="hljs-comment">//s=0表示前驱，s=1表示后继</span></span><br><span class="line">	node* x=find(ix);</span><br><span class="line">	node* t=x-&gt;son[s];</span><br><span class="line">	<span class="hljs-keyword">if</span> (!t) <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;</span><br><span class="line">	<span class="hljs-keyword">while</span> (t-&gt;son[s^<span class="hljs-number">1</span>]) t=t-&gt;son[s^<span class="hljs-number">1</span>];</span><br><span class="line">	<span class="hljs-keyword">return</span> t-&gt;val;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="Main-主程序"><a href="#Main-主程序" class="headerlink" title="Main[主程序]"></a>Main[主程序]</h5><p>这样，我们的Splay就支持了以下操作：</p>
+<ul>
+<li>Erase</li>
+</ul>
+<ul>
+<li>Insert</li>
+</ul>
+<ul>
+<li>Find</li>
+<li>Size</li>
+<li>Kth</li>
+<li>Next</li>
+</ul>
+<figure class="highlight cpp hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">int</span> n,tmp,z;</span><br><span class="line"><span class="hljs-built_in">string</span> s;</span><br><span class="line">Splay tr;</span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-keyword">void</span>)</span></span>&#123;</span><br><span class="line">	<span class="hljs-keyword">for</span>(;;)&#123;</span><br><span class="line">		<span class="hljs-built_in">cin</span>&gt;&gt;s;</span><br><span class="line">		<span class="hljs-keyword">if</span> (s==<span class="hljs-string">"erase"</span>)&#123;</span><br><span class="line">			<span class="hljs-built_in">cin</span>&gt;&gt;tmp;</span><br><span class="line">			tr.erase(tmp);</span><br><span class="line">			tr.print();</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="hljs-keyword">if</span> (s==<span class="hljs-string">"insert"</span>)&#123;</span><br><span class="line">			<span class="hljs-built_in">cin</span>&gt;&gt;tmp;</span><br><span class="line">			tr._insert(tmp,tr.root,<span class="hljs-literal">NULL</span>);</span><br><span class="line">			tr.print();</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="hljs-keyword">if</span> (s==<span class="hljs-string">"find"</span>)&#123;</span><br><span class="line">			<span class="hljs-built_in">cin</span>&gt;&gt;tmp;</span><br><span class="line">			<span class="hljs-keyword">if</span> (tr.find(tmp)) <span class="hljs-built_in">cout</span>&lt;&lt;<span class="hljs-string">"true\n"</span>;</span><br><span class="line">			<span class="hljs-keyword">else</span> <span class="hljs-built_in">cout</span>&lt;&lt;<span class="hljs-string">"false\n"</span>;</span><br><span class="line">			tr.print();</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="hljs-keyword">if</span> (s==<span class="hljs-string">"size"</span>)&#123;</span><br><span class="line">			<span class="hljs-built_in">cout</span>&lt;&lt;tr.size()&lt;&lt;<span class="hljs-built_in">endl</span>;</span><br><span class="line">			tr.print();</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="hljs-keyword">if</span> (s==<span class="hljs-string">"kth"</span>)&#123;</span><br><span class="line">			<span class="hljs-built_in">cin</span>&gt;&gt;tmp;</span><br><span class="line">			<span class="hljs-built_in">cout</span>&lt;&lt;tr.kth(tmp)&lt;&lt;<span class="hljs-built_in">endl</span>;</span><br><span class="line">			tr.print();</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="hljs-keyword">if</span> (s==<span class="hljs-string">"next"</span>)&#123;</span><br><span class="line">			<span class="hljs-built_in">cin</span>&gt;&gt;tmp&gt;&gt;z;</span><br><span class="line">			<span class="hljs-built_in">cout</span>&lt;&lt;tr.next(tmp,z)&lt;&lt;<span class="hljs-built_in">endl</span>;</span><br><span class="line">			tr.print();</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="hljs-keyword">if</span> (s==<span class="hljs-string">"exit"</span>)&#123;</span><br><span class="line">			<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="完整程序"><a href="#完整程序" class="headerlink" title="完整程序"></a>完整程序</h5><figure class="highlight cpp hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;bits/stdc++.h&gt;//祈福无Bug</span></span></span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> <span class="hljs-built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">node</span>&#123;</span></span><br><span class="line"><span class="hljs-keyword">public</span>:</span><br><span class="line">	<span class="hljs-keyword">int</span> val,cnt,siz;</span><br><span class="line">	node* fth;</span><br><span class="line">	node* son[<span class="hljs-number">2</span>];</span><br><span class="line">    node(<span class="hljs-keyword">int</span> v=<span class="hljs-number">0</span>,node *f=<span class="hljs-literal">NULL</span>)&#123;</span><br><span class="line">        val=v;fth=f;</span><br><span class="line">        son[<span class="hljs-number">0</span>]=son[<span class="hljs-number">1</span>]=<span class="hljs-literal">NULL</span>;</span><br><span class="line">        cnt=siz=<span class="hljs-number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="hljs-keyword">private</span>:</span><br><span class="line">	<span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">sn</span><span class="hljs-params">(<span class="hljs-keyword">void</span>)</span></span>&#123;</span><br><span class="line">    	<span class="hljs-keyword">return</span> (fth-&gt;son[<span class="hljs-number">1</span>]==<span class="hljs-keyword">this</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">updata</span><span class="hljs-params">(<span class="hljs-keyword">void</span>)</span></span>&#123;</span><br><span class="line">		siz=(son[<span class="hljs-number">0</span>]?son[<span class="hljs-number">0</span>]-&gt;siz:<span class="hljs-number">0</span>)</span><br><span class="line">			+(son[<span class="hljs-number">1</span>]?son[<span class="hljs-number">1</span>]-&gt;siz:<span class="hljs-number">0</span>)+cnt;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">rotate</span><span class="hljs-params">(<span class="hljs-keyword">void</span>)</span></span>&#123;</span><br><span class="line">		node *y=<span class="hljs-keyword">this</span>-&gt;fth;</span><br><span class="line">		<span class="hljs-keyword">bool</span> a=<span class="hljs-keyword">this</span>-&gt;sn();</span><br><span class="line">		y-&gt;son[a]=<span class="hljs-keyword">this</span>-&gt;son[!a];</span><br><span class="line">		<span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>-&gt;son[!a]!=<span class="hljs-literal">NULL</span>) </span><br><span class="line">			<span class="hljs-keyword">this</span>-&gt;son[!a]-&gt;fth=y;</span><br><span class="line">		<span class="hljs-keyword">this</span>-&gt;fth=y-&gt;fth;</span><br><span class="line">		<span class="hljs-keyword">if</span> (y-&gt;fth!=<span class="hljs-literal">NULL</span>) </span><br><span class="line">			y-&gt;fth-&gt;son[y-&gt;sn()]=<span class="hljs-keyword">this</span>;</span><br><span class="line">		<span class="hljs-keyword">this</span>-&gt;son[!a]=y;</span><br><span class="line">		y-&gt;fth=<span class="hljs-keyword">this</span>;</span><br><span class="line">		y-&gt;updata(),<span class="hljs-keyword">this</span>-&gt;updata();</span><br><span class="line">	&#125;</span><br><span class="line"><span class="hljs-keyword">public</span>:</span><br><span class="line">	<span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">splay</span><span class="hljs-params">(node* y=<span class="hljs-literal">NULL</span>)</span></span>&#123;</span><br><span class="line">		<span class="hljs-keyword">while</span>(<span class="hljs-keyword">this</span>-&gt;fth!=y)&#123;</span><br><span class="line">			<span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>-&gt;fth==<span class="hljs-literal">NULL</span>) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;</span><br><span class="line">			node *p=<span class="hljs-keyword">this</span>-&gt;fth;</span><br><span class="line">			<span class="hljs-keyword">if</span> (p-&gt;fth==y || p-&gt;fth==<span class="hljs-literal">NULL</span>)&#123;</span><br><span class="line">				<span class="hljs-keyword">this</span>-&gt;rotate();</span><br><span class="line">				<span class="hljs-keyword">continue</span>;</span><br><span class="line">			&#125;</span><br><span class="line">			node *q=p-&gt;fth;</span><br><span class="line">			<span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>-&gt;sn()!=p-&gt;sn())&#123;</span><br><span class="line">				<span class="hljs-keyword">this</span>-&gt;rotate(); <span class="hljs-keyword">this</span>-&gt;rotate();</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="hljs-keyword">else</span>&#123;</span><br><span class="line">				p-&gt;rotate(); <span class="hljs-keyword">this</span>-&gt;rotate();</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">Splay</span>&#123;</span></span><br><span class="line">	node *root;</span><br><span class="line">	Splay(node *p=<span class="hljs-literal">NULL</span>)&#123;</span><br><span class="line">		root=<span class="hljs-literal">NULL</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">size</span><span class="hljs-params">(<span class="hljs-keyword">void</span>)</span></span>&#123;</span><br><span class="line">		<span class="hljs-keyword">return</span> root-&gt;siz;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">size</span><span class="hljs-params">(node* x)</span></span>&#123;</span><br><span class="line">		<span class="hljs-keyword">return</span> x-&gt;siz;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="hljs-keyword">void</span> _print(node *x)&#123;</span><br><span class="line">		<span class="hljs-keyword">if</span> (x==<span class="hljs-literal">NULL</span>) <span class="hljs-keyword">return</span>;</span><br><span class="line">		<span class="hljs-built_in">cout</span>&lt;&lt;x-&gt;val&lt;&lt;<span class="hljs-string">" "</span>;</span><br><span class="line">		<span class="hljs-keyword">if</span> (x-&gt;son[<span class="hljs-number">0</span>]!=<span class="hljs-literal">NULL</span>) <span class="hljs-built_in">cout</span>&lt;&lt;<span class="hljs-string">"Left:"</span>&lt;&lt;x-&gt;son[<span class="hljs-number">0</span>]-&gt;val&lt;&lt;<span class="hljs-string">" "</span>;</span><br><span class="line">		<span class="hljs-keyword">else</span> <span class="hljs-built_in">cout</span>&lt;&lt;<span class="hljs-string">"Left:NULL "</span>;</span><br><span class="line">		<span class="hljs-keyword">if</span> (x-&gt;son[<span class="hljs-number">1</span>]!=<span class="hljs-literal">NULL</span>) <span class="hljs-built_in">cout</span>&lt;&lt;<span class="hljs-string">"Right:"</span>&lt;&lt;x-&gt;son[<span class="hljs-number">1</span>]-&gt;val&lt;&lt;<span class="hljs-string">" "</span>;</span><br><span class="line">		<span class="hljs-keyword">else</span> <span class="hljs-built_in">cout</span>&lt;&lt;<span class="hljs-string">"Right:NULL "</span>;</span><br><span class="line">		<span class="hljs-built_in">cout</span>&lt;&lt;<span class="hljs-string">"\n"</span>;</span><br><span class="line">		_print(x-&gt;son[<span class="hljs-number">0</span>]);_print(x-&gt;son[<span class="hljs-number">1</span>]);</span><br><span class="line">		</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">print</span><span class="hljs-params">(<span class="hljs-keyword">void</span>)</span></span>&#123;</span><br><span class="line">		_print(root);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">insert</span><span class="hljs-params">(<span class="hljs-keyword">int</span> v=<span class="hljs-number">0</span>)</span></span>&#123;</span><br><span class="line">		<span class="hljs-keyword">if</span> (root==<span class="hljs-literal">NULL</span>) root=<span class="hljs-keyword">new</span> node(v,<span class="hljs-literal">NULL</span>);</span><br><span class="line">		<span class="hljs-keyword">for</span> (node *t=root;;t=t-&gt;son[v&gt;=t-&gt;val])&#123;</span><br><span class="line">			<span class="hljs-keyword">if</span>(t-&gt;val==v)&#123;</span><br><span class="line">				root=t; t-&gt;cnt++;</span><br><span class="line">				t-&gt;splay();</span><br><span class="line">				<span class="hljs-keyword">return</span>;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="hljs-keyword">if</span> (t-&gt;son[v&gt;=t-&gt;val]==<span class="hljs-literal">NULL</span>)&#123;</span><br><span class="line">				t-&gt;son[v&gt;=t-&gt;val]=<span class="hljs-keyword">new</span> node(v,t);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="hljs-keyword">void</span> _insert(<span class="hljs-keyword">int</span> v,node *p,node *f)&#123;</span><br><span class="line">		<span class="hljs-keyword">if</span> (p==<span class="hljs-literal">NULL</span>)&#123;</span><br><span class="line">			p=<span class="hljs-keyword">new</span> node(v,f);</span><br><span class="line">			p-&gt;splay(); root=p;</span><br><span class="line">			<span class="hljs-keyword">return</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="hljs-keyword">if</span> (v&lt;p-&gt;val) _insert(v,p-&gt;son[<span class="hljs-number">0</span>],p);</span><br><span class="line">		<span class="hljs-keyword">if</span> (v==p-&gt;val)&#123;</span><br><span class="line">			p-&gt;cnt++;</span><br><span class="line">			<span class="hljs-keyword">return</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="hljs-keyword">if</span> (v&gt;p-&gt;val) _insert(v,p-&gt;son[<span class="hljs-number">1</span>],p);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="hljs-function">node* <span class="hljs-title">find</span><span class="hljs-params">(<span class="hljs-keyword">int</span> v)</span></span>&#123;</span><br><span class="line">		<span class="hljs-keyword">for</span>(node* t=root;t;t=t-&gt;son[v&gt;t-&gt;val])&#123;</span><br><span class="line">			<span class="hljs-keyword">if</span>(t-&gt;val==v)&#123;</span><br><span class="line">				t-&gt;splay();</span><br><span class="line">				root=t;</span><br><span class="line">				<span class="hljs-keyword">return</span> t;</span><br><span class="line">			&#125; </span><br><span class="line">		&#125;</span><br><span class="line">		<span class="hljs-keyword">return</span> <span class="hljs-literal">NULL</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">erase</span><span class="hljs-params">(<span class="hljs-keyword">int</span> v,<span class="hljs-keyword">int</span> cnt=<span class="hljs-number">1</span>)</span></span>&#123;</span><br><span class="line">		node *t=find(v);</span><br><span class="line">		<span class="hljs-keyword">if</span> (t==<span class="hljs-literal">NULL</span>)&#123;</span><br><span class="line">			<span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;</span><br><span class="line">		&#125; </span><br><span class="line">		<span class="hljs-keyword">if</span> (t-&gt;cnt&gt;cnt)&#123;</span><br><span class="line">			t-&gt;cnt-=cnt;</span><br><span class="line">			<span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="hljs-keyword">if</span> (t-&gt;son[<span class="hljs-number">0</span>]==<span class="hljs-literal">NULL</span>)&#123;</span><br><span class="line">			root=t-&gt;son[<span class="hljs-number">1</span>];</span><br><span class="line">			<span class="hljs-keyword">if</span> (root!=<span class="hljs-literal">NULL</span>) root-&gt;fth=<span class="hljs-literal">NULL</span>;</span><br><span class="line">			<span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		node *p=t-&gt;son[<span class="hljs-number">0</span>];</span><br><span class="line">		<span class="hljs-keyword">while</span>(p-&gt;son[<span class="hljs-number">1</span>]!=<span class="hljs-literal">NULL</span>) p=p-&gt;son[<span class="hljs-number">1</span>];</span><br><span class="line">		p-&gt;splay(t);</span><br><span class="line">		root=p; root-&gt;fth=<span class="hljs-literal">NULL</span>;</span><br><span class="line">		p-&gt;son[<span class="hljs-number">1</span>]=t-&gt;son[<span class="hljs-number">1</span>];</span><br><span class="line">		<span class="hljs-keyword">if</span> (p-&gt;son[<span class="hljs-number">1</span>]!=<span class="hljs-literal">NULL</span>) p-&gt;son[<span class="hljs-number">1</span>]-&gt;fth=p;</span><br><span class="line">		<span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">kth</span><span class="hljs-params">(<span class="hljs-keyword">int</span> key)</span></span>&#123;</span><br><span class="line">		<span class="hljs-keyword">int</span> cnt=<span class="hljs-number">0</span>;</span><br><span class="line">		<span class="hljs-keyword">if</span> (key&gt;root-&gt;siz) <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;</span><br><span class="line">		<span class="hljs-keyword">for</span> (node* i=root;i;)&#123;</span><br><span class="line">			<span class="hljs-keyword">int</span> lcnt=(i-&gt;son[<span class="hljs-number">0</span>])?i-&gt;son[<span class="hljs-number">0</span>]-&gt;siz:<span class="hljs-number">0</span>;</span><br><span class="line">			<span class="hljs-keyword">int</span> mcnt=i-&gt;cnt;</span><br><span class="line">			<span class="hljs-keyword">if</span> (cnt+lcnt&lt;key &amp;&amp; cnt+lcnt+mcnt&gt;=key)&#123;</span><br><span class="line">				i-&gt;splay();</span><br><span class="line">				<span class="hljs-keyword">return</span>  i-&gt;val;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="hljs-keyword">if</span> (cnt+lcnt&gt;=key) i=i-&gt;son[<span class="hljs-number">0</span>];</span><br><span class="line">			<span class="hljs-keyword">if</span> (key&gt;cnt+lcnt+mcnt)&#123;</span><br><span class="line">				cnt+=lcnt+mcnt;</span><br><span class="line">				i=i-&gt;son[<span class="hljs-number">1</span>];</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="hljs-function">node* <span class="hljs-title">next</span><span class="hljs-params">(node* x,<span class="hljs-keyword">int</span> s)</span></span>&#123; <span class="hljs-comment">//s=0表示前驱，s=1表示后继 </span></span><br><span class="line">		node* t=x-&gt;son[s];</span><br><span class="line">		<span class="hljs-keyword">if</span> (!t) <span class="hljs-keyword">return</span> <span class="hljs-literal">NULL</span>;</span><br><span class="line">		<span class="hljs-keyword">while</span> (t-&gt;son[s^<span class="hljs-number">1</span>]) t=t-&gt;son[s^<span class="hljs-number">1</span>];</span><br><span class="line">		t-&gt;splay();</span><br><span class="line">		<span class="hljs-keyword">return</span> t;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">next</span><span class="hljs-params">(<span class="hljs-keyword">int</span> ix,<span class="hljs-keyword">int</span> s)</span></span>&#123; <span class="hljs-comment">//s=0表示前驱，s=1表示后继</span></span><br><span class="line">		node* x=find(ix);</span><br><span class="line">		node* t=x-&gt;son[s];</span><br><span class="line">		<span class="hljs-keyword">if</span> (!t) <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;</span><br><span class="line">		<span class="hljs-keyword">while</span> (t-&gt;son[s^<span class="hljs-number">1</span>]) t=t-&gt;son[s^<span class="hljs-number">1</span>];</span><br><span class="line">		<span class="hljs-keyword">return</span> t-&gt;val;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">int</span> n,tmp,z;</span><br><span class="line"><span class="hljs-built_in">string</span> s;</span><br><span class="line">Splay tr;</span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-keyword">void</span>)</span></span>&#123;</span><br><span class="line">	<span class="hljs-keyword">for</span>(;;)&#123;</span><br><span class="line">		<span class="hljs-built_in">cin</span>&gt;&gt;s;</span><br><span class="line">		<span class="hljs-keyword">if</span> (s==<span class="hljs-string">"erase"</span>)&#123;</span><br><span class="line">			<span class="hljs-built_in">cin</span>&gt;&gt;tmp;</span><br><span class="line">			tr.erase(tmp);</span><br><span class="line">			tr.print();</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="hljs-keyword">if</span> (s==<span class="hljs-string">"insert"</span>)&#123;</span><br><span class="line">			<span class="hljs-built_in">cin</span>&gt;&gt;tmp;</span><br><span class="line">			tr._insert(tmp,tr.root,<span class="hljs-literal">NULL</span>);</span><br><span class="line">			tr.print();</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="hljs-keyword">if</span> (s==<span class="hljs-string">"find"</span>)&#123;</span><br><span class="line">			<span class="hljs-built_in">cin</span>&gt;&gt;tmp;</span><br><span class="line">			<span class="hljs-keyword">if</span> (tr.find(tmp)) <span class="hljs-built_in">cout</span>&lt;&lt;<span class="hljs-string">"true\n"</span>;</span><br><span class="line">			<span class="hljs-keyword">else</span> <span class="hljs-built_in">cout</span>&lt;&lt;<span class="hljs-string">"false\n"</span>;</span><br><span class="line">			tr.print();</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="hljs-keyword">if</span> (s==<span class="hljs-string">"size"</span>)&#123;</span><br><span class="line">			<span class="hljs-built_in">cout</span>&lt;&lt;tr.size()&lt;&lt;<span class="hljs-built_in">endl</span>;</span><br><span class="line">			tr.print();</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="hljs-keyword">if</span> (s==<span class="hljs-string">"kth"</span>)&#123;</span><br><span class="line">			<span class="hljs-built_in">cin</span>&gt;&gt;tmp;</span><br><span class="line">			<span class="hljs-built_in">cout</span>&lt;&lt;tr.kth(tmp)&lt;&lt;<span class="hljs-built_in">endl</span>;</span><br><span class="line">			tr.print();</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="hljs-keyword">if</span> (s==<span class="hljs-string">"next"</span>)&#123;</span><br><span class="line">			<span class="hljs-built_in">cin</span>&gt;&gt;tmp&gt;&gt;z;</span><br><span class="line">			<span class="hljs-built_in">cout</span>&lt;&lt;tr.next(tmp,z)&lt;&lt;<span class="hljs-built_in">endl</span>;</span><br><span class="line">			tr.print();</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="hljs-keyword">if</span> (s==<span class="hljs-string">"exit"</span>)&#123;</span><br><span class="line">			<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>下一篇文章:Splay区间操作[ft.指针]，过<del>几</del>天会咕咕咕地更新哦。</p>
+
+    
+    </div>
+    
+    
+    <div class="columns is-mobile is-multiline article-nav">
+        <span class="column is-12-mobile is-half-desktop is-hidden-mobile article-nav-prev">
+            
+        </span>
+        <span class="column is-12-mobile is-half-desktop  article-nav-next">
+            
+            <a href="/2018/10/18/邮局-四边形不等式/">邮局-四边形不等式</a>
+            
+        </span>
+    </div>
+    
+</article>
+
+--
+
+
+<div class="comments">
+    <h3 class="title is-4">コメント</h3>
+    
+<div id="lv-container" data-id="city" data-uid="MTAyMC80MDM3MC8xNjg5Nw==">
+    <script type="text/javascript">
+        (function(d, s) {
+            var j, e = d.getElementsByTagName(s)[0];
+
+            if (typeof LivereTower === 'function') { return; }
+
+            j = d.createElement(s);
+            j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+            j.async = true;
+
+            e.parentNode.insertBefore(j, e);
+        })(document, 'script');
+    </script>
+    <noscript> Please activate JavaScript for write a comment in LiveRe</noscript>
+</div>
+
+
+</div>
+
+
+    </div>
+</section>
+    <footer class="footer">
+    <div class="container">
+        <div class="columns content">
+            <div class="column is-narrow has-text-centered">
+                &copy; 2018 FFFeiya&nbsp;
+                Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> & <a
+                        href="http://github.com/ppoffice/hexo-theme-minos">Minos</a>
+            </div>
+            <div class="column is-hidden-mobile"></div>
+
+            
+            <div class="column is-narrow">
+                <div class="columns is-mobile is-multiline is-centered">
+                
+                    
+                <a class="column is-narrow has-text-black" title="GitHub" href="https://github.com/ppoffice/hexo-theme-minos">
+                    
+                    GitHub
+                    
+                </a>
+                
+                </div>
+            </div>
+            
+            
+        </div>
+    </div>
+</footer>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script>
+
+<!-- test if the browser is outdated -->
+<div id="outdated">
+    <h6>Your browser is out-of-date!</h6>
+    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" href="http://outdatedbrowser.com/">Update my browser now </a></p>
+    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
+</div>
+<script src="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // plugin function, place inside DOM ready function
+        outdatedBrowser({
+            bgColor: '#f25648',
+            color: '#ffffff',
+            lowerThan: 'flex'
+        })
+    });
+</script>
+
+<script>
+    window.FontAwesomeConfig = {
+        searchPseudoElements: true
+    }
+    moment.locale("jp");
+</script>
+
+
+    
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<script>
+    MathJax.Hub.Config({
+        "HTML-CSS": {matchFontHeight: false},
+        SVG: {matchFontHeight: false},
+        CommonHTML: {matchFontHeight: false}
+    });
+</script>
+
+    
+    
+<script src="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/js/lightgallery-all.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/js/jquery.justifiedGallery.min.js"></script>
+<script>
+    (function ($) {
+        $(document).ready(function () {
+            if (typeof($.fn.lightGallery) === 'function') {
+                $('.article.gallery').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof($.fn.justifiedGallery) === 'function') {
+                $('.justified-gallery').justifiedGallery();
+            }
+        });
+    })(jQuery);
+</script>
+
+    
+    
+
+    
+
+
+<script src="/js/script.js"></script>
+
+    
+    <div class="searchbox ins-search">
+    <div class="searchbox-mask"></div>
+    <div class="searchbox-container ins-search-container">
+        <div class="searchbox-input-wrapper">
+            <input type="text" class="searchbox-input ins-search-input" placeholder="サイト検索" />
+            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="searchbox-result-wrapper ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: '記事',
+                PAGES: 'ページ',
+                CATEGORIES: 'カテゴリー',
+                TAGS: 'タグ',
+                UNTITLED: '(無題)',
+            },
+            CONTENT_URL: '/content.json',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+<script src="/js/insight.js"></script>
+    
+</body>
+</html>
