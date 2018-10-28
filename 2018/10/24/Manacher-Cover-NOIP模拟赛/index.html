@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html class="has-navbar-fixed-top">
+<head>
+    <meta charset="utf-8">
+<title>Manacher[Cover.NOIP模拟赛] - FFFeiya</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.css">
+
+
+<meta name="description" content="そんなふうに 地球は回ってる">
+
+
+
+
+
+    <meta name="description" content="[我们这里还有鱼] Problem B. 序列对于一个长度为偶数的序列 a1,a2,a3,…,an， 定义这个序列为好的序列，当且仅当  a1 + an = a2 + an−1 = a3 + an-2 = ……  定义一个对序列的翻滚操作，使所有元素向前移一个位置，第一个元素移到最后的位置。 现在小 A 有一个长度为偶数的序列 b1,b2,b3,…,b3，他想知道至少需要翻滚多少次才能使这个序列">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Manacher[Cover.NOIP模拟赛]">
+<meta property="og:url" content="https://fffeiya.github.io/2018/10/24/Manacher-Cover-NOIP模拟赛/index.html">
+<meta property="og:site_name" content="FFFeiya">
+<meta property="og:description" content="[我们这里还有鱼] Problem B. 序列对于一个长度为偶数的序列 a1,a2,a3,…,an， 定义这个序列为好的序列，当且仅当  a1 + an = a2 + an−1 = a3 + an-2 = ……  定义一个对序列的翻滚操作，使所有元素向前移一个位置，第一个元素移到最后的位置。 现在小 A 有一个长度为偶数的序列 b1,b2,b3,…,b3，他想知道至少需要翻滚多少次才能使这个序列">
+<meta property="og:locale" content="jp">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006wbS1kly1fwkcjlblw0j30xc0o2114.jpg">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006wbS1kly1fwo560goh1j30d707v3z7.jpg">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006wbS1kly1fwo8vn7svej30xs0audg7.jpg">
+<meta property="og:updated_time" content="2018-10-28T13:31:20.486Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Manacher[Cover.NOIP模拟赛]">
+<meta name="twitter:description" content="[我们这里还有鱼] Problem B. 序列对于一个长度为偶数的序列 a1,a2,a3,…,an， 定义这个序列为好的序列，当且仅当  a1 + an = a2 + an−1 = a3 + an-2 = ……  定义一个对序列的翻滚操作，使所有元素向前移一个位置，第一个元素移到最后的位置。 现在小 A 有一个长度为偶数的序列 b1,b2,b3,…,b3，他想知道至少需要翻滚多少次才能使这个序列">
+<meta name="twitter:image" content="https://ws1.sinaimg.cn/large/006wbS1kly1fwkcjlblw0j30xc0o2114.jpg">
+
+
+
+
+
+<link rel="icon" href="/images/favicon.png">
+
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Ovo|Source+Code+Pro">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
+
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/css/lightgallery.min.css">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/css/justifiedGallery.min.css">
+
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atom-one-light.min.css">
+
+<link rel="stylesheet" href="/css/style.css">
+
+<script defer src="//use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+
+
+    
+    
+    
+    
+    
+    
+
+    
+
+
+<link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
+<link rel="stylesheet" href="/fa-brands/css/fa-brands.min.css">
+<link rel="stylesheet" href="/fa-regular/css/fa-regular.min.css">
+<link rel="stylesheet" href="/fa-solid/css/fa-solid.min.css">
+<link rel="stylesheet" href="/fontawesome/css/fontawesome.min.css">
+<link rel="stylesheet" href="/fontawesome-all/css/fontawesome-all.css">
+
+</head>
+<body>
+    
+<nav class="navbar is-transparent is-fixed-top navbar-main" role="navigation" aria-label="main navigation">
+    <div class="container">
+        <div class="navbar-brand">
+            <a class="navbar-item navbar-logo" href="/">
+                
+                    
+                    <img src="https://ws1.sinaimg.cn/large/006wbS1kly1fwcnazxmi4j30to0totfk.jpg" alt="" height="28">
+                    
+                
+            </a>
+            <div class="navbar-burger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+        
+        <div class="navbar-menu navbar-start">
+            
+            <a class="navbar-item "
+               href="/archives">Archives</a>
+            
+            <a class="navbar-item "
+               href="/Music">Music</a>
+            
+            <a class="navbar-item "
+               href="/About">About</a>
+            
+        </div>
+        
+        <div class="navbar-menu navbar-end">
+            
+            <a class="navbar-item search" title="検索" href="javascript:;">
+                <i class="fas fa-search"></i>
+            </a>
+            
+            
+            
+            <a class="navbar-item" title="Friend" href="/Friends">
+                
+                <i class="fa fa-link"></i>
+                
+            </a>
+               
+            
+        </div>
+    </div>
+</nav>
+
+    <section class="section">
+    <div class="container">
+    <article class="article content gallery" itemscope itemprop="blogPost">
+    <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
+        
+            Manacher[Cover.NOIP模拟赛]
+        
+    </h1>
+    <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
+        <span class="column is-narrow">
+            <time datetime="2018-10-24T13:08:21.000Z" itemprop="datePublished">Oct 24 2018</time>
+        </span>
+        
+        
+        <span class="column is-narrow">
+            
+            
+            15 minutes 読む (約 2204 語)
+        </span>
+        
+    </div>
+    <div class="article-entry is-size-6-mobile" itemprop="articleBody">
+    
+        <p><img src="https://ws1.sinaimg.cn/large/006wbS1kly1fwkcjlblw0j30xc0o2114.jpg" alt=""></p>
+<h4 id="我们这里还有鱼-Problem-B-序列"><a href="#我们这里还有鱼-Problem-B-序列" class="headerlink" title="[我们这里还有鱼] Problem B. 序列"></a>[我们这里还有鱼] Problem B. 序列</h4><p>对于一个长度为偶数的序列 a<sub>1</sub>,a<sub>2</sub>,a<sub>3</sub>,…,a<sub>n</sub>， 定义这个序列为好的序列，当且仅当 </p>
+<p>a<sub>1</sub> + a<sub>n</sub> = a<sub>2</sub> + a<sub>n−1</sub> = a<sub>3</sub> + a<sub>n-2</sub> = ……</p>
+<p> 定义一个对序列的翻滚操作，使所有元素向前移一个位置，第一个元素移到最后的位置。 现在小 A 有一个长度为偶数的序列 b<sub>1</sub>,b<sub>2</sub>,b<sub>3</sub>,…,b<sub>3</sub>，他想知道至少需要翻滚多少次才能使这个序列 成为好的序列。 </p>
+<a id="more"></a>
+<p>马拉车是什么？</p>
+<p><img src="https://ws1.sinaimg.cn/large/006wbS1kly1fwo560goh1j30d707v3z7.jpg" alt=""></p>
+<p><del>(大误)</del> </p>
+<p>Manacher’s Algorithm，是一个叫做Manacher的人发明的一种线性求字符串最长回文子串的方法。</p>
+<p>#####Manacher’s Algorithm</p>
+<p>现在我们有两种回文串的类型：CABAC &amp; CABBAC，那么怎么处理呢？如果分类讨论的话太丑陋，一个好的算法就应该<del>男女通吃</del>。我们考虑在每两个字符中插入一个’#’，这样的话就成了#C#A#B#A#C# &amp; #C#A#B#B#A#C#，我们可以发现，这两个字串都是一种类型的了：从某一个字符向两边对称。再考虑这个字串的长度，因为在每个字符的右边加了一个’#’，又在字符串末尾加了一个’#’，所以有 S<sub>处理后字符串</sub>=S<sub>原字符串</sub>*2+1。</p>
+<p>我们在暴力找回文子串的时候，是枚举当每个字符为一个回文子串的中心，再向两边暴力拓展。在这里我们可以把每一个以第i个字符为中心的最长回文子串的半径记为P[i] (我们考虑半径就是(Len+1)/2 ,反推则回文子串长度为2*P[i]-1)</p>
+<p>接下来我们考虑一个问题，ABCBABCBA这个字符串，我把它的P数组记录下来：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">i</th>
+<th style="text-align:center">0</th>
+<th style="text-align:center">1</th>
+<th style="text-align:center">2</th>
+<th style="text-align:center">3</th>
+<th style="text-align:center">4</th>
+<th style="text-align:center">5</th>
+<th style="text-align:center">6</th>
+<th style="text-align:center">7</th>
+<th style="text-align:center">8</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">P[i]</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">3</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">5</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">3</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">1</td>
+</tr>
+</tbody>
+</table>
+<p>我们先考虑P[2]，P[2]的最长回文子串为：ABCBA。我们再考虑P[6]，P[6]的最长回文子串也为：ABCBA。排除巧合的可能，<del>真相只有一个</del>，这一定有什么原因在里面。我们考虑第4位，不难发现，由第4位拓展出的回文子串覆盖了0~8位字符。那么，0~3位和5~8位应该是完全对称的！所以我们算到在第4位后面的字符的时候，它的初始P[i]就应该是对称回去的P值！</p>
+<p>接下来我们考虑怎么实现这个对称优化：我们维护两个值，mx，id。mx表示算到现在之前的回文子串所覆盖到的最右点，id表示覆盖到该最右点的子串的中心点。在计算某一个字位的P值时，我们先看一下该字位是否在之前的回文子串所覆盖的范围内，如果在，则该P值先赋为对称过去的那个点的P值。但是，我们还得注意，对称过去的P值有可能会超出了id所在回文子串的覆盖范围。碰到这种情况，只需要在P[id*2-i]和mx-i取min值就行了。另外当当前字位不在mx范围内，不妨先把半径设为1，表示目前可知最大回文就是它本身。赋完初值后，接下来再暴力向外拓展就行了。</p>
+<figure class="highlight cpp hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">if</span> (mx&gt;i) p[i]=min(p[id*<span class="hljs-number">2</span>-i],mx-i);</span><br><span class="line"><span class="hljs-keyword">else</span> p[i]=<span class="hljs-number">1</span>;</span><br><span class="line"><span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> j=i+p[i];j&lt;s.size();j++)&#123;</span><br><span class="line">	<span class="hljs-keyword">if</span> (j&gt;mx) mx=j,id=i;</span><br><span class="line">	<span class="hljs-keyword">if</span> (s[j]==s[<span class="hljs-number">2</span>*i-j]) p[i]++;</span><br><span class="line">	<span class="hljs-keyword">else</span> <span class="hljs-keyword">break</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>现在我们知道了字符串每一位的P值，我要是想知道以某一位(一般来讲是求最大位)为中心的回文子串在原串中的起始位置呢？</p>
+<p>我们考虑一下，字符串是”%QXQ”这种情况。现在我们知道的P值，是以”#%#Q#X#Q#”为基础的。考虑’X’位，它的半径是4，在处理后的字串中位置是5。当我们用该位置减去(半径/2)(半径中原字符和’#’数量相等)，就得到了在回文子串前一位的字符’%’的位置。我们可以发现，前面的原字符和’#’数量也等，于是也要除以2。于是我们得到了这样的公式（设处理后字符的位置为$W_0$）：W<sub>原字符</sub>=(W_0+1-P[W_0])/2 (要注意字符串开头标号是0哦)</p>
+<p>这样我们得到了以下代码：</p>
+<figure class="highlight cpp hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;bits/stdc++.h&gt;//祈福无Bug</span></span></span><br><span class="line"><span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> N 100005</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> <span class="hljs-built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-built_in">string</span> <span class="hljs-title">change</span><span class="hljs-params">(<span class="hljs-built_in">string</span> &amp;s)</span></span>&#123;</span><br><span class="line">	<span class="hljs-built_in">string</span> ans=<span class="hljs-string">"#"</span>;</span><br><span class="line">	<span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i=<span class="hljs-number">0</span>;i&lt;s.size();i++)&#123;</span><br><span class="line">		ans.push_back(s[i]);</span><br><span class="line">		ans.push_back(<span class="hljs-string">'#'</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="hljs-keyword">return</span> ans;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="hljs-built_in">string</span> str;</span><br><span class="line"><span class="hljs-keyword">int</span> p[N];</span><br><span class="line"><span class="hljs-keyword">int</span> mx,id;</span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">manacher</span><span class="hljs-params">(<span class="hljs-built_in">string</span> &amp;s)</span></span>&#123;</span><br><span class="line">	<span class="hljs-keyword">int</span> ans=<span class="hljs-number">0</span>;mx=<span class="hljs-number">0</span>;</span><br><span class="line">	<span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i=<span class="hljs-number">0</span>;i&lt;s.size();i++)&#123;</span><br><span class="line">		<span class="hljs-keyword">if</span> (mx&gt;i) p[i]=min(p[id*<span class="hljs-number">2</span>-i],mx-i);</span><br><span class="line">		<span class="hljs-keyword">else</span> p[i]=<span class="hljs-number">1</span>;</span><br><span class="line">		<span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> j=i+p[i];j&lt;s.size();j++)&#123;</span><br><span class="line">			<span class="hljs-keyword">if</span> (j&gt;mx) mx=j,id=i;</span><br><span class="line">			<span class="hljs-keyword">if</span> (s[j]==s[<span class="hljs-number">2</span>*i-j]) p[i]++;</span><br><span class="line">			<span class="hljs-keyword">else</span> <span class="hljs-keyword">break</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		ans=max(ans,p[i]);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="hljs-keyword">return</span> ans<span class="hljs-number">-1</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-keyword">void</span>)</span></span>&#123;</span><br><span class="line">	<span class="hljs-built_in">cin</span>&gt;&gt;str;</span><br><span class="line">	str=change(str);</span><br><span class="line">	<span class="hljs-built_in">cout</span>&lt;&lt;manacher(str)&lt;&lt;<span class="hljs-built_in">endl</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们考虑他的复杂度，这个算法求解就是一个对mx更新的过程，对mx的更新是线性的，所以考虑复杂度为$O(n)$。</p>
+<h5 id="对马拉车算法的应用-在模拟赛中是马翻车"><a href="#对马拉车算法的应用-在模拟赛中是马翻车" class="headerlink" title="对马拉车算法的应用(在模拟赛中是马翻车)"></a>对马拉车算法的应用<del>(在模拟赛中是马翻车)</del></h5><blockquote>
+<h3 id="Problem-B-序列"><a href="#Problem-B-序列" class="headerlink" title="Problem B. 序列"></a>Problem B. 序列</h3><h5 id="输入文件：-sequence-in"><a href="#输入文件：-sequence-in" class="headerlink" title="输入文件： sequence.in"></a>输入文件： sequence.in</h5><h5 id="输出文件：-sequence-out"><a href="#输出文件：-sequence-out" class="headerlink" title="输出文件： sequence.out"></a>输出文件： sequence.out</h5><h5 id="时间限制：-1-秒"><a href="#时间限制：-1-秒" class="headerlink" title="时间限制： 1 秒"></a>时间限制： 1 秒</h5><h5 id="内存限制：-512-MiB"><a href="#内存限制：-512-MiB" class="headerlink" title="内存限制： 512 MiB"></a>内存限制： 512 MiB</h5><h5 id="题目描述："><a href="#题目描述：" class="headerlink" title="题目描述："></a>题目描述：</h5><p>对于一个长度为偶数的序列 a1, a2, a3, . . . , an，定义这个序列为好的序列，当且仅当 a1 + an = a2 + an−1 = a3 + an−2 = . . . = a n2+ a n2 +1。定义一个对序列的翻滚操作，使所有元素向前移一个位置，第一个元素移到最后的位置。现在小 A 有一个长度为偶数的序列 b1, b2, b3, . . . , bn，他想知道至少需要翻滚多少次才能使这个序列成为好的序列。</p>
+<h5 id="输入："><a href="#输入：" class="headerlink" title="输入："></a>输入：</h5><p>第一行一个整数 n 表示序列的长度，保证 n 为一个偶数。第二行 n 个正整数，第 i 个数表示 bi。</p>
+<h5 id="输出："><a href="#输出：" class="headerlink" title="输出："></a>输出：</h5><p>如果有解，输出一个正整数，表示最少需要翻滚多少次才能使这个序列成为好的序列。如果没有解，输出 IMPOSSIBLE。</p>
+<h5 id="样例输入："><a href="#样例输入：" class="headerlink" title="样例输入："></a>样例输入：</h5><p>6</p>
+<p>2 8 7 9 1 3</p>
+<h5 id="样例输出："><a href="#样例输出：" class="headerlink" title="样例输出："></a>样例输出：</h5><p>1</p>
+<h5 id="限制："><a href="#限制：" class="headerlink" title="限制："></a>限制：</h5><p>对于 30% 的数据，n ≤ 1000。</p>
+<p>对于 60% 的数据，n ≤ 200000。</p>
+<p>对于 100% 的数据，n ≤ 1000000，bi ≤ 1000000。</p>
+</blockquote>
+<p><del>咋一看这道题，非常棘手，但是在经过我两个小时的仔细思考后，我还是觉得非常棘手。</del><br>我们可以观察一下样例，对成功变化过的样例相邻两数做差。</p>
+<p><img src="https://ws1.sinaimg.cn/large/006wbS1kly1fwo8vn7svej30xs0audg7.jpg" alt=""></p>
+<p>我们发现了什么！回……回文子串！</p>
+<p>对于任意这个数列中相对的任意两组数，我们把他设为 a b B A，a+A=b+B，进行简单的移位后，我们得到a-b=B-A，两两相邻的数相减，就可以得到一个回！文！数！列！所以求差后的如果能得到回文序列的序列，就是”好的序列”！</p>
+<p>接下来我们考虑进行马拉车了。考虑一个有解的数列，它一定是由两个”好的序列”构成的。假设一个”好的序列”，将它的最后一位移到第一位，第一位与原第二位相加还是符合原数列的标准，所以第一位和第二位可以构成一个”好的序列”。再把后面的数移上来……以此类推。</p>
+<p>那么接下来我们的任务就是找到两个刚好填满空间的回文序列，并且使前一个序列尽可能小。 我们考虑回文序列为数组b，原序列为数组a。</p>
+<figure class="highlight cpp hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">b[i]=a[i<span class="hljs-number">-1</span>]-a[i];</span><br></pre></td></tr></table></figure>
+<p>于是从前往后枚举，判断每一位作为前一个回文序列的中心，写下以下代码：</p>
+<figure class="highlight cpp hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">if</span> (p[i]==i &amp;&amp; p[n/<span class="hljs-number">2</span>+i]==n/<span class="hljs-number">2</span>-i+<span class="hljs-number">1</span>)&#123;</span><br><span class="line">		<span class="hljs-built_in">printf</span>(<span class="hljs-string">"%d\n"</span>,i<span class="hljs-number">-1</span>);</span><br><span class="line">		<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+<p>其中计算i对应的另外一个序列的中心的位置很容易算错……</p>
+<p>完整代码以下：</p>
+<figure class="highlight cpp hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;bits/stdc++.h&gt;//祈福无Bug</span></span></span><br><span class="line"><span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> N 1000005</span></span><br><span class="line"><span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> INF 10000005</span></span><br><span class="line"><span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> min(x,y) ((x&lt;y)?(x):(y))</span></span><br><span class="line"><span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> max(x,y) ((x&gt;y)?(x):(y))</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> <span class="hljs-built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">int</span> n;</span><br><span class="line"><span class="hljs-keyword">int</span> a[N],b[N],p[N];</span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">read</span><span class="hljs-params">(<span class="hljs-keyword">int</span> &amp;x)</span></span>&#123;</span><br><span class="line">	<span class="hljs-keyword">char</span> c;</span><br><span class="line">	<span class="hljs-keyword">while</span>((c=getchar())&lt;<span class="hljs-string">'0'</span> || c&gt;<span class="hljs-string">'9'</span>);</span><br><span class="line">	x=c-<span class="hljs-string">'0'</span>;</span><br><span class="line">	<span class="hljs-keyword">while</span>((c=getchar())&gt;=<span class="hljs-string">'0'</span> &amp;&amp; c&lt;=<span class="hljs-string">'9'</span>)</span><br><span class="line">		x=x*<span class="hljs-number">10</span>+c-<span class="hljs-string">'0'</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-keyword">void</span>)</span></span>&#123;</span><br><span class="line">	<span class="hljs-comment">//freopen("sequence8.in","r",stdin);</span></span><br><span class="line">	read(n);</span><br><span class="line">	<span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i=<span class="hljs-number">1</span>;i&lt;=n;i++) read(a[i]);</span><br><span class="line">	a[<span class="hljs-number">0</span>]=a[n];</span><br><span class="line">	<span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i=<span class="hljs-number">1</span>;i&lt;=n;i++) b[i]=a[i<span class="hljs-number">-1</span>]-a[i];</span><br><span class="line">	b[<span class="hljs-number">0</span>]=INF;b[n+<span class="hljs-number">1</span>]=-INF;</span><br><span class="line">	</span><br><span class="line">	<span class="hljs-keyword">int</span> mx=<span class="hljs-number">1</span>,id=p[<span class="hljs-number">1</span>]=<span class="hljs-number">1</span>;</span><br><span class="line">	<span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i=<span class="hljs-number">2</span>;i&lt;=n;i++)&#123;</span><br><span class="line">		<span class="hljs-keyword">if</span> (i&lt;=mx) p[i]=min(p[id*<span class="hljs-number">2</span>-i],mx-i+<span class="hljs-number">1</span>);</span><br><span class="line">		<span class="hljs-keyword">else</span> p[i]=<span class="hljs-number">1</span>;</span><br><span class="line">		<span class="hljs-keyword">while</span> (b[i+p[i]]==b[i-p[i]] &amp;&amp; i+p[i]&lt;=n) p[i]++;</span><br><span class="line">		<span class="hljs-keyword">if</span> (mx&lt;i+p[i]<span class="hljs-number">-1</span>) mx=i+p[i]<span class="hljs-number">-1</span>,id=i;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i=<span class="hljs-number">1</span>;i&lt;=n;i++)&#123;</span><br><span class="line">		<span class="hljs-keyword">if</span> (p[i]==i &amp;&amp; p[n/<span class="hljs-number">2</span>+i]==n/<span class="hljs-number">2</span>-i+<span class="hljs-number">1</span>)&#123;</span><br><span class="line">			<span class="hljs-built_in">printf</span>(<span class="hljs-string">"%d\n"</span>,i<span class="hljs-number">-1</span>);</span><br><span class="line">			<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="hljs-built_in">printf</span>(<span class="hljs-string">"IMPOSSIBLE\n"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><del>咕咕咕！QXQ快找彩蛋！</del> </p>
+
+    
+    </div>
+    
+    
+    <div class="columns is-mobile is-multiline article-nav">
+        <span class="column is-12-mobile is-half-desktop is-hidden-mobile article-nav-prev">
+            
+        </span>
+        <span class="column is-12-mobile is-half-desktop  article-nav-next">
+            
+            <a href="/2018/10/24/Splay基本操作-ft-指针/">Splay基本操作[ft.指针]</a>
+            
+        </span>
+    </div>
+    
+</article>
+
+--
+
+
+<div class="comments">
+    <h3 class="title is-4">コメント</h3>
+    
+<div id="lv-container" data-id="city" data-uid="MTAyMC80MDM3MC8xNjg5Nw==">
+    <script type="text/javascript">
+        (function(d, s) {
+            var j, e = d.getElementsByTagName(s)[0];
+
+            if (typeof LivereTower === 'function') { return; }
+
+            j = d.createElement(s);
+            j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+            j.async = true;
+
+            e.parentNode.insertBefore(j, e);
+        })(document, 'script');
+    </script>
+    <noscript> Please activate JavaScript for write a comment in LiveRe</noscript>
+</div>
+
+
+</div>
+
+
+    </div>
+</section>
+    <footer class="footer">
+    <div class="container">
+        <div class="columns content">
+            <div class="column is-narrow has-text-centered">
+                &copy; 2018 FFFeiya&nbsp;
+                Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> & <a
+                        href="http://github.com/ppoffice/hexo-theme-minos">Minos</a>
+            </div>
+            <div class="column is-hidden-mobile"></div>
+
+            
+            <div class="column is-narrow">
+                <div class="columns is-mobile is-multiline is-centered">
+                
+                    
+                <a class="column is-narrow has-text-black" title="GitHub" href="https://github.com/ppoffice/hexo-theme-minos">
+                    
+                    GitHub
+                    
+                </a>
+                
+                </div>
+            </div>
+            
+            
+        </div>
+    </div>
+</footer>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script>
+
+<!-- test if the browser is outdated -->
+<div id="outdated">
+    <h6>Your browser is out-of-date!</h6>
+    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" href="http://outdatedbrowser.com/">Update my browser now </a></p>
+    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
+</div>
+<script src="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // plugin function, place inside DOM ready function
+        outdatedBrowser({
+            bgColor: '#f25648',
+            color: '#ffffff',
+            lowerThan: 'flex'
+        })
+    });
+</script>
+
+<script>
+    window.FontAwesomeConfig = {
+        searchPseudoElements: true
+    }
+    moment.locale("jp");
+</script>
+
+
+    
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<script>
+    MathJax.Hub.Config({
+        "HTML-CSS": {matchFontHeight: false},
+        SVG: {matchFontHeight: false},
+        CommonHTML: {matchFontHeight: false}
+    });
+</script>
+
+    
+    
+<script src="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/js/lightgallery-all.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/js/jquery.justifiedGallery.min.js"></script>
+<script>
+    (function ($) {
+        $(document).ready(function () {
+            if (typeof($.fn.lightGallery) === 'function') {
+                $('.article.gallery').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof($.fn.justifiedGallery) === 'function') {
+                $('.justified-gallery').justifiedGallery();
+            }
+        });
+    })(jQuery);
+</script>
+
+    
+    
+
+    
+
+
+<script src="/js/script.js"></script>
+
+    
+    <div class="searchbox ins-search">
+    <div class="searchbox-mask"></div>
+    <div class="searchbox-container ins-search-container">
+        <div class="searchbox-input-wrapper">
+            <input type="text" class="searchbox-input ins-search-input" placeholder="サイト検索" />
+            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="searchbox-result-wrapper ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: '記事',
+                PAGES: 'ページ',
+                CATEGORIES: 'カテゴリー',
+                TAGS: 'タグ',
+                UNTITLED: '(無題)',
+            },
+            CONTENT_URL: '/content.json',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+<script src="/js/insight.js"></script>
+    
+    {% if theme.canvas_nest %}
+      <script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+    {% endif %}
+</body>
+</html>
