@@ -2,10 +2,34 @@
 <html class="has-navbar-fixed-top">
 <head>
     <meta charset="utf-8">
-<title>Cubase Midi轨与乐器轨 - FFFeiya</title>
+<title>【Cubase】Midi轨和乐器轨 - FFFeiya</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.css">
+
+<!-- MathJax support -->
+<!-- MathJax support -->
+<style>.MathJax{outline:0;}</style>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  showProcessingMessages: false,
+  messageStyle: "none",
+  extensions: ["tex2jax.js"],
+  jax: ["input/TeX", "output/HTML-CSS"],
+  tex2jax: {
+    inlineMath:  [ ["$", "$"] ],
+    displayMath: [ ["$$","$$"] ],
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre','code','a'],
+    ignoreClass:"comment-content"
+  },
+  "HTML-CSS": {
+    availableFonts: ["STIX","TeX"],
+    showMathMenu: false
+  }
+});
+MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+</script>
+<script src="https://cdn.bootcss.com/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
 
 <meta name="description" content="そんなふうに 地球は回ってる">
@@ -14,16 +38,22 @@
 
 
 
-    <meta property="og:type" content="website">
-<meta property="og:title" content="Cubase Midi轨与乐器轨">
+    <meta name="description" content="Midi轨和乐器轨到底有什么区别呢？  在Cubase中，我们右键单击图示红框处，会弹出下面这个选项条：  我们看最上面三个选项，音频轨道不难猜出，是添加音频文件的。 我们按下F11后，打开了VST乐器界面。  我在这里选择挂载了一个Kontact 5，这是一个支持多轨道的乐器。 挂载了乐器之后，Cubase就会自动提示是否要为该乐器创建一个Midi轨。我们点创建就行了。 [未完]">
+<meta property="og:type" content="website">
+<meta property="og:title" content="【Cubase】Midi轨和乐器轨">
 <meta property="og:url" content="https://fffeiya.github.io/Music/Cubase/index.html">
 <meta property="og:site_name" content="FFFeiya">
+<meta property="og:description" content="Midi轨和乐器轨到底有什么区别呢？  在Cubase中，我们右键单击图示红框处，会弹出下面这个选项条：  我们看最上面三个选项，音频轨道不难猜出，是添加音频文件的。 我们按下F11后，打开了VST乐器界面。  我在这里选择挂载了一个Kontact 5，这是一个支持多轨道的乐器。 挂载了乐器之后，Cubase就会自动提示是否要为该乐器创建一个Midi轨。我们点创建就行了。 [未完]">
 <meta property="og:locale" content="jp">
-<meta property="og:image" content="https://ws1.sinaimg.cn/large/006wbS1kly1fwj9wvo22uj30hs0blacd.jpg">
-<meta property="og:updated_time" content="2018-10-24T06:00:11.301Z">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006wbS1kly1fwor2q1hwjj30xc0inaxt.jpg">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006wbS1kly1fworhhcmz8j31hc0scdjo.jpg">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006wbS1kly1fworc5dy9bj307o0fx77m.jpg">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006wbS1kly1fwp0uoxvp0j30cx08faar.jpg">
+<meta property="og:updated_time" content="2018-10-29T05:24:15.196Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Cubase Midi轨与乐器轨">
-<meta name="twitter:image" content="https://ws1.sinaimg.cn/large/006wbS1kly1fwj9wvo22uj30hs0blacd.jpg">
+<meta name="twitter:title" content="【Cubase】Midi轨和乐器轨">
+<meta name="twitter:description" content="Midi轨和乐器轨到底有什么区别呢？  在Cubase中，我们右键单击图示红框处，会弹出下面这个选项条：  我们看最上面三个选项，音频轨道不难猜出，是添加音频文件的。 我们按下F11后，打开了VST乐器界面。  我在这里选择挂载了一个Kontact 5，这是一个支持多轨道的乐器。 挂载了乐器之后，Cubase就会自动提示是否要为该乐器创建一个Midi轨。我们点创建就行了。 [未完]">
+<meta name="twitter:image" content="https://ws1.sinaimg.cn/large/006wbS1kly1fwor2q1hwjj30xc0inaxt.jpg">
 
 
 
@@ -121,25 +151,35 @@
     <article class="article content gallery" itemscope itemprop="blogPost">
     <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
         
-            Cubase Midi轨与乐器轨
+            【Cubase】Midi轨和乐器轨
         
     </h1>
     <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
         <span class="column is-narrow">
-            <time datetime="2018-10-24T05:57:50.000Z" itemprop="datePublished">Oct 24 2018</time>
+            <time datetime="2018-10-18T12:50:22.000Z" itemprop="datePublished">Oct 18 2018</time>
         </span>
         
         
         <span class="column is-narrow">
             
             
-            a few seconds 読む (約 13 語)
+            a minute 読む (約 205 語)
         </span>
         
     </div>
     <div class="article-entry is-size-6-mobile" itemprop="articleBody">
     
-        <p><img src="https://ws1.sinaimg.cn/large/006wbS1kly1fwj9wvo22uj30hs0blacd.jpg" alt=""></p>
+        <p><img src="https://ws1.sinaimg.cn/large/006wbS1kly1fwor2q1hwjj30xc0inaxt.jpg" alt=""></p>
+<p>Midi轨和乐器轨到底有什么区别呢？</p>
+<p><img src="https://ws1.sinaimg.cn/large/006wbS1kly1fworhhcmz8j31hc0scdjo.jpg" alt=""></p>
+<p>在Cubase中，我们右键单击图示红框处，会弹出下面这个选项条：</p>
+<p><img src="https://ws1.sinaimg.cn/large/006wbS1kly1fworc5dy9bj307o0fx77m.jpg" alt=""></p>
+<p>我们看最上面三个选项，音频轨道不难猜出，是添加音频文件的。</p>
+<p>我们按下F11后，打开了VST乐器界面。</p>
+<p><img src="https://ws1.sinaimg.cn/large/006wbS1kly1fwp0uoxvp0j30cx08faar.jpg" alt=""></p>
+<p>我在这里选择挂载了一个Kontact 5，这是一个支持多轨道的乐器。</p>
+<p>挂载了乐器之后，Cubase就会自动提示是否要为该乐器创建一个Midi轨。我们点创建就行了。</p>
+<p>[未完]</p>
 
     
     </div>

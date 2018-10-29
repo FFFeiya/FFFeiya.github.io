@@ -7,6 +7,30 @@
 
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.css">
 
+<!-- MathJax support -->
+<!-- MathJax support -->
+<style>.MathJax{outline:0;}</style>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  showProcessingMessages: false,
+  messageStyle: "none",
+  extensions: ["tex2jax.js"],
+  jax: ["input/TeX", "output/HTML-CSS"],
+  tex2jax: {
+    inlineMath:  [ ["$", "$"] ],
+    displayMath: [ ["$$","$$"] ],
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre','code','a'],
+    ignoreClass:"comment-content"
+  },
+  "HTML-CSS": {
+    availableFonts: ["STIX","TeX"],
+    showMathMenu: false
+  }
+});
+MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+</script>
+<script src="https://cdn.bootcss.com/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
 
 <meta name="description" content="そんなふうに 地球は回ってる">
 
@@ -17,14 +41,14 @@
     <meta name="description" content="[我们这里还有鱼] Problem B. 序列对于一个长度为偶数的序列 a1,a2,a3,…,an， 定义这个序列为好的序列，当且仅当  a1 + an = a2 + an−1 = a3 + an-2 = ……  定义一个对序列的翻滚操作，使所有元素向前移一个位置，第一个元素移到最后的位置。 现在小 A 有一个长度为偶数的序列 b1,b2,b3,…,b3，他想知道至少需要翻滚多少次才能使这个序列">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Manacher[Cover.NOIP模拟赛]">
-<meta property="og:url" content="https://fffeiya.github.io/2018/10/24/Manacher-Cover-NOIP模拟赛/index.html">
+<meta property="og:url" content="https://fffeiya.github.io/2018/10/28/Manacher-Cover-NOIP模拟赛/index.html">
 <meta property="og:site_name" content="FFFeiya">
 <meta property="og:description" content="[我们这里还有鱼] Problem B. 序列对于一个长度为偶数的序列 a1,a2,a3,…,an， 定义这个序列为好的序列，当且仅当  a1 + an = a2 + an−1 = a3 + an-2 = ……  定义一个对序列的翻滚操作，使所有元素向前移一个位置，第一个元素移到最后的位置。 现在小 A 有一个长度为偶数的序列 b1,b2,b3,…,b3，他想知道至少需要翻滚多少次才能使这个序列">
 <meta property="og:locale" content="jp">
 <meta property="og:image" content="https://ws1.sinaimg.cn/large/006wbS1kly1fwkcjlblw0j30xc0o2114.jpg">
 <meta property="og:image" content="https://ws1.sinaimg.cn/large/006wbS1kly1fwo560goh1j30d707v3z7.jpg">
 <meta property="og:image" content="https://ws1.sinaimg.cn/large/006wbS1kly1fwo8vn7svej30xs0audg7.jpg">
-<meta property="og:updated_time" content="2018-10-28T23:17:31.431Z">
+<meta property="og:updated_time" content="2018-10-29T04:26:42.081Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Manacher[Cover.NOIP模拟赛]">
 <meta name="twitter:description" content="[我们这里还有鱼] Problem B. 序列对于一个长度为偶数的序列 a1,a2,a3,…,an， 定义这个序列为好的序列，当且仅当  a1 + an = a2 + an−1 = a3 + an-2 = ……  定义一个对序列的翻滚操作，使所有元素向前移一个位置，第一个元素移到最后的位置。 现在小 A 有一个长度为偶数的序列 b1,b2,b3,…,b3，他想知道至少需要翻滚多少次才能使这个序列">
@@ -131,7 +155,7 @@
     </h1>
     <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
         <span class="column is-narrow">
-            <time datetime="2018-10-24T13:08:21.000Z" itemprop="datePublished">Oct 24 2018</time>
+            <time datetime="2018-10-28T03:11:11.000Z" itemprop="datePublished">Oct 28 2018</time>
         </span>
         
         
@@ -155,7 +179,7 @@
 <p>Manacher’s Algorithm，是一个叫做Manacher的人发明的一种线性求字符串最长回文子串的方法。</p>
 <p>#####Manacher’s Algorithm</p>
 <p>现在我们有两种回文串的类型：CABAC &amp; CABBAC，那么怎么处理呢？如果分类讨论的话太丑陋，一个好的算法就应该<del>男女通吃</del>。我们考虑在每两个字符中插入一个’#’，这样的话就成了#C#A#B#A#C# &amp; #C#A#B#B#A#C#，我们可以发现，这两个字串都是一种类型的了：从某一个字符向两边对称。再考虑这个字串的长度，因为在每个字符的右边加了一个’#’，又在字符串末尾加了一个’#’，所以有 S<sub>处理后字符串</sub>=S<sub>原字符串</sub>*2+1。</p>
-<p>我们在暴力找回文子串的时候，是枚举当每个字符为一个回文子串的中心，再向两边暴力拓展。在这里我们可以把每一个以第i个字符为中心的最长回文子串的半径记为P[i] (我们考虑半径就是(Len+1)/2 ,反推则回文子串长度为2*P[i]-1)</p>
+<p>我们在暴力找回文子串的时候，是枚举当每个字符为一个回文子串的中心，再向两边暴力拓展。在这里我们可以把每一个以第i个字符为中心的最长回文子串的半径记为P[i] (我们考虑半径就是$(Len+1)/2$ ,反推则回文子串长度为$2*P[i]-1$)</p>
 <p>接下来我们考虑一个问题，ABCBABCBA这个字符串，我把它的P数组记录下来：</p>
 <table>
 <thead>

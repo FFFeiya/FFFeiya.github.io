@@ -7,6 +7,30 @@
 
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.css">
 
+<!-- MathJax support -->
+<!-- MathJax support -->
+<style>.MathJax{outline:0;}</style>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  showProcessingMessages: false,
+  messageStyle: "none",
+  extensions: ["tex2jax.js"],
+  jax: ["input/TeX", "output/HTML-CSS"],
+  tex2jax: {
+    inlineMath:  [ ["$", "$"] ],
+    displayMath: [ ["$$","$$"] ],
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre','code','a'],
+    ignoreClass:"comment-content"
+  },
+  "HTML-CSS": {
+    availableFonts: ["STIX","TeX"],
+    showMathMenu: false
+  }
+});
+MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+</script>
+<script src="https://cdn.bootcss.com/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
 
 <meta name="description" content="そんなふうに 地球は回ってる">
 
@@ -125,9 +149,9 @@
             <div class="articles">
             
                 <div class="article content>">
-                    <time class="is-text-small" datetime="2018-10-24T13:08:21.000Z" itemprop="datePublished">
-                        Oct 24</time>
-                    <h6 class="title is-6"><a href="/2018/10/24/Manacher-Cover-NOIP模拟赛/">Manacher[Cover.NOIP模拟赛]</a></h6>
+                    <time class="is-text-small" datetime="2018-10-28T03:11:11.000Z" itemprop="datePublished">
+                        Oct 28</time>
+                    <h6 class="title is-6"><a href="/2018/10/28/Manacher-Cover-NOIP模拟赛/">Manacher[Cover.NOIP模拟赛]</a></h6>
                 </div>
             
                 <div class="article content>">
