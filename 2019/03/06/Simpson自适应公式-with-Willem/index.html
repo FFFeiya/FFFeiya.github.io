@@ -49,7 +49,7 @@ MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
 <meta property="og:image" content="https://ws1.sinaimg.cn/large/0072Lfvtly1g0tc9gaf9kj30sg0sg759.jpg">
 <meta property="og:image" content="https://ws1.sinaimg.cn/large/0072Lfvtly1g0tdafq4lvg30ki0a0khr.gif">
 <meta property="og:image" content="http://acm.hdu.edu.cn/data/images/C61-1005-1.JPG">
-<meta property="og:updated_time" content="2019-03-06T13:02:12.989Z">
+<meta property="og:updated_time" content="2019-03-06T13:27:24.901Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Simpson自适应公式[with.Willem]">
 <meta name="twitter:description" content="向Willem爷学习了Simpson自适应公式。">
@@ -163,7 +163,7 @@ MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
         <span class="column is-narrow">
             
             
-            5 minutes 読む (約 751 語)
+            5 minutes 読む (約 750 語)
         </span>
         
     </div>
@@ -177,7 +177,7 @@ MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
 <p>例如该函数的积分记作$$\int_a^b {f(x)} \,{\rm d}x​$$。</p>
 <p>如何求这个函数的积分呢？Simpson自适应公式就是其中的一种方法。</p>
 <p>Simpson公式就是将复杂的函数 $f(x)​$ 近似拟合成二次函数，再通过二次函数算积分的方法对于$f(x)​$的积分进行估算。下面这个就是Simpson公式。</p>
-<p>$$\int_a^b {f(x)} \,{\rm d}x≈\frac {(b−a)<em>(f(a)+f(b)+4</em>f(\frac{a+b}{2}))} {6}​$$</p>
+<p>$$\int_a^b {f(x)} \,{\rm d}x\approx\frac {(b−a)<em>(f(a)+f(b)+4</em>f(\frac{a+b}{2}))} {6}$$</p>
 <p>但是这个公式算出来的只是一个近似值。题目要求精度怎么办？</p>
 <p><strong>自适应</strong>就是求积分时能够自动控制切割的区间大小和长度，使精度能满足要求。</p>
 <p>来看这行代码：</p>
