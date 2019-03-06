@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html class="has-navbar-fixed-top">
+<head>
+    <meta charset="utf-8">
+<title>Simpson自适应公式[with.Willem] - FFFeiya</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.css">
+
+<!-- MathJax support -->
+<!-- MathJax support -->
+<style>.MathJax{outline:0;}</style>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  showProcessingMessages: false,
+  messageStyle: "none",
+  extensions: ["tex2jax.js"],
+  jax: ["input/TeX", "output/HTML-CSS"],
+  tex2jax: {
+    inlineMath:  [ ["$", "$"] ],
+    displayMath: [ ["$$","$$"] ],
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre','code','a'],
+    ignoreClass:"comment-content"
+  },
+  "HTML-CSS": {
+    availableFonts: ["STIX","TeX"],
+    showMathMenu: false
+  }
+});
+MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+</script>
+<script src="https://cdn.bootcss.com/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+<meta name="description" content="そんなふうに 地球は回ってる">
+
+
+
+
+
+    <meta name="description" content="向Willem爷学习了Simpson自适应公式。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Simpson自适应公式[with.Willem]">
+<meta property="og:url" content="https://fffeiya.github.io/2019/03/06/Simpson自适应公式-with-Willem/index.html">
+<meta property="og:site_name" content="FFFeiya">
+<meta property="og:description" content="向Willem爷学习了Simpson自适应公式。">
+<meta property="og:locale" content="jp">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/0072Lfvtly1g0tbkpn18kj30m50dg7lp.jpg">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/0072Lfvtly1g0tc9gaf9kj30sg0sg759.jpg">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/0072Lfvtly1g0tdafq4lvg30ki0a0khr.gif">
+<meta property="og:image" content="http://acm.hdu.edu.cn/data/images/C61-1005-1.JPG">
+<meta property="og:updated_time" content="2019-03-06T13:02:12.989Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Simpson自适应公式[with.Willem]">
+<meta name="twitter:description" content="向Willem爷学习了Simpson自适应公式。">
+<meta name="twitter:image" content="https://ws1.sinaimg.cn/large/0072Lfvtly1g0tbkpn18kj30m50dg7lp.jpg">
+
+
+
+
+
+<link rel="icon" href="/images/favicon.png">
+
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Ovo|Source+Code+Pro">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
+
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/css/lightgallery.min.css">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/css/justifiedGallery.min.css">
+
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atom-one-light.min.css">
+
+<link rel="stylesheet" href="/css/style.css">
+
+<script defer src="//use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+
+
+    
+    
+    
+    
+    
+    
+
+    
+
+
+<link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
+<link rel="stylesheet" href="/fa-brands/css/fa-brands.min.css">
+<link rel="stylesheet" href="/fa-regular/css/fa-regular.min.css">
+<link rel="stylesheet" href="/fa-solid/css/fa-solid.min.css">
+<link rel="stylesheet" href="/fontawesome/css/fontawesome.min.css">
+<link rel="stylesheet" href="/fontawesome-all/css/fontawesome-all.css">
+
+</head>
+<body>
+    
+<nav class="navbar is-transparent is-fixed-top navbar-main" role="navigation" aria-label="main navigation">
+    <div class="container">
+        <div class="navbar-brand">
+            <a class="navbar-item navbar-logo" href="/">
+                
+                    
+                    <img src="https://ws1.sinaimg.cn/large/006wbS1kly1fwcnazxmi4j30to0totfk.jpg" alt="" height="28">
+                    
+                
+            </a>
+            <div class="navbar-burger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+        
+        <div class="navbar-menu navbar-start">
+            
+            <a class="navbar-item "
+               href="/archives">Archives</a>
+            
+            <a class="navbar-item "
+               href="/Music">Music</a>
+            
+            <a class="navbar-item "
+               href="/About">About</a>
+            
+        </div>
+        
+        <div class="navbar-menu navbar-end">
+            
+            <a class="navbar-item search" title="検索" href="javascript:;">
+                <i class="fas fa-search"></i>
+            </a>
+            
+            
+            
+            <a class="navbar-item" title="Friend" href="/Friends">
+                
+                <i class="fa fa-link"></i>
+                
+            </a>
+               
+            
+        </div>
+    </div>
+</nav>
+
+    <section class="section">
+    <div class="container">
+    <article class="article content gallery" itemscope itemprop="blogPost">
+    <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
+        
+            Simpson自适应公式[with.Willem]
+        
+    </h1>
+    <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
+        <span class="column is-narrow">
+            <time datetime="2019-03-06T11:49:54.000Z" itemprop="datePublished">Mar 6 2019</time>
+        </span>
+        
+        
+        <span class="column is-narrow">
+            
+            
+            5 minutes 読む (約 751 語)
+        </span>
+        
+    </div>
+    <div class="article-entry is-size-6-mobile" itemprop="articleBody">
+    
+        <p><img src="https://ws1.sinaimg.cn/large/0072Lfvtly1g0tbkpn18kj30m50dg7lp.jpg" alt=""></p>
+<p>向Willem爷学习了Simpson自适应公式。</p>
+<a id="more"></a>
+<p>先是做 <a href="https://www.luogu.org/problemnew/show/P4273" target="_blank" rel="noopener">[NOI2004]降雨量</a> 这题，看到题解里面说可以使用Simpson自适应公式，于是向Willem爷了解了一下。膜膜Willem大爷。</p>
+<p>先说积分：积分（integral）的几何意义是函数的曲线上 $x​$ 的一段区间与 $x​$ 轴围成的<strong>曲边梯形</strong>的面积。<img src="https://ws1.sinaimg.cn/large/0072Lfvtly1g0tc9gaf9kj30sg0sg759.jpg" alt=""></p>
+<p>例如该函数的积分记作$$\int_a^b {f(x)} \,{\rm d}x​$$。</p>
+<p>如何求这个函数的积分呢？Simpson自适应公式就是其中的一种方法。</p>
+<p>Simpson公式就是将复杂的函数 $f(x)​$ 近似拟合成二次函数，再通过二次函数算积分的方法对于$f(x)​$的积分进行估算。下面这个就是Simpson公式。</p>
+<p>$$\int_a^b {f(x)} \,{\rm d}x≈\frac {(b−a)<em>(f(a)+f(b)+4</em>f(\frac{a+b}{2}))} {6}​$$</p>
+<p>但是这个公式算出来的只是一个近似值。题目要求精度怎么办？</p>
+<p><strong>自适应</strong>就是求积分时能够自动控制切割的区间大小和长度，使精度能满足要求。</p>
+<p>来看这行代码：</p>
+<figure class="highlight cpp hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">double</span> <span class="hljs-title">asr</span><span class="hljs-params">(<span class="hljs-keyword">double</span> l,<span class="hljs-keyword">double</span> r,<span class="hljs-keyword">double</span> v)</span></span>&#123;</span><br><span class="line">	<span class="hljs-keyword">double</span> mid=(l+r)/<span class="hljs-number">2</span>,lv=simpson(l,mid),rv=simpson(mid,r);</span><br><span class="line">	<span class="hljs-keyword">if</span> (<span class="hljs-built_in">fabs</span>(v-(lv+rv))&lt;eps) <span class="hljs-keyword">return</span> lv+rv;</span><br><span class="line">	<span class="hljs-keyword">else</span> <span class="hljs-keyword">return</span> asr(l,mid,lv)+asr(mid,r,rv);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>通过二分的方法来进行精度的保证——在可控的时间内计算出正确的近似值。</p>
+<p>来看洛谷的模板：<a href="https://www.luogu.org/problemnew/show/P4525" target="_blank" rel="noopener">[模板]自适应辛普森法</a></p>
+<p>代码也很短：</p>
+<figure class="highlight cpp hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> eps 1e-12</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> <span class="hljs-built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">double</span> a,b,c,d,L,R;</span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">double</span> <span class="hljs-title">f</span><span class="hljs-params">(<span class="hljs-keyword">double</span> x)</span></span>&#123;</span><br><span class="line">	<span class="hljs-keyword">return</span> (c*x+d)/(a*x+b);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">double</span> <span class="hljs-title">simpson</span><span class="hljs-params">(<span class="hljs-keyword">double</span> l,<span class="hljs-keyword">double</span> r)</span></span>&#123;</span><br><span class="line">	<span class="hljs-keyword">return</span> (r-l)*(f(r)+f(l)+<span class="hljs-number">4</span>*f((l+r)/<span class="hljs-number">2</span>))/<span class="hljs-number">6</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">double</span> <span class="hljs-title">asr</span><span class="hljs-params">(<span class="hljs-keyword">double</span> l,<span class="hljs-keyword">double</span> r,<span class="hljs-keyword">double</span> v)</span></span>&#123;</span><br><span class="line">	<span class="hljs-keyword">double</span> mid=(l+r)/<span class="hljs-number">2</span>,lv=simpson(l,mid),rv=simpson(mid,r);</span><br><span class="line">	<span class="hljs-keyword">if</span> (<span class="hljs-built_in">fabs</span>(v-(lv+rv))&lt;eps) <span class="hljs-keyword">return</span> lv+rv;</span><br><span class="line">	<span class="hljs-keyword">else</span> <span class="hljs-keyword">return</span> asr(l,mid,lv)+asr(mid,r,rv);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-keyword">void</span>)</span></span>&#123;</span><br><span class="line">	<span class="hljs-built_in">scanf</span>(<span class="hljs-string">"%lf%lf%lf%lf%lf%lf"</span>,&amp;a,&amp;b,&amp;c,&amp;d,&amp;L,&amp;R);</span><br><span class="line">	<span class="hljs-built_in">printf</span>(<span class="hljs-string">"%.6lf\n"</span>,asr(L,R,simpson(L,R)));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>洛谷还有另外一个模板题：<a href="https://www.luogu.org/problemnew/show/P4526" target="_blank" rel="noopener">[模板]自适应辛普森法2</a></p>
+<p>$\int_0^\infty {f(x)}\,{\rm d}x​$   ($f(x)=x^{\frac{a}{x}-x}​$)</p>
+<p>这题没有上界——上界是无穷大。怎么办？</p>
+<p>我们来看一下这个$f(x)​$：</p>
+<p><img src="https://ws1.sinaimg.cn/large/0072Lfvtly1g0tdafq4lvg30ki0a0khr.gif" alt=""></p>
+<p>不难发现，$f(x)$如果将$x$取大，其函数值均为$0$。</p>
+<p>那么这道题的策略就是取一个较大的上界，再用Simpson自适应公式求解。</p>
+<figure class="highlight cpp hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> eps 1e-10</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> <span class="hljs-built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">double</span> a;</span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">double</span> <span class="hljs-title">f</span><span class="hljs-params">(<span class="hljs-keyword">double</span> x)</span></span>&#123;</span><br><span class="line">	<span class="hljs-keyword">return</span> <span class="hljs-built_in">pow</span>(x,a/x-x);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">double</span> <span class="hljs-title">simpson</span><span class="hljs-params">(<span class="hljs-keyword">double</span> l,<span class="hljs-keyword">double</span> r)</span></span>&#123;</span><br><span class="line">	<span class="hljs-keyword">return</span> (r-l)*(f(l)+f(r)+<span class="hljs-number">4</span>*f((l+r)/<span class="hljs-number">2</span>))/<span class="hljs-number">6</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">double</span> <span class="hljs-title">asr</span><span class="hljs-params">(<span class="hljs-keyword">double</span> l,<span class="hljs-keyword">double</span> r,<span class="hljs-keyword">double</span> v)</span></span>&#123;</span><br><span class="line">	<span class="hljs-keyword">double</span> mid=(l+r)/<span class="hljs-number">2</span>,lv=simpson(l,mid),rv=simpson(mid,r);</span><br><span class="line">	<span class="hljs-keyword">if</span> (<span class="hljs-built_in">fabs</span>(lv+rv-v)&lt;eps) <span class="hljs-keyword">return</span> lv+rv;</span><br><span class="line">	<span class="hljs-keyword">return</span> asr(l,mid,lv)+asr(mid,r,rv);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-keyword">void</span>)</span></span>&#123;</span><br><span class="line">	<span class="hljs-built_in">scanf</span>(<span class="hljs-string">"%lf"</span>,&amp;a);</span><br><span class="line">	<span class="hljs-keyword">if</span> (a&lt;<span class="hljs-number">0</span>)&#123;</span><br><span class="line">		<span class="hljs-built_in">puts</span>(<span class="hljs-string">"orz"</span>);</span><br><span class="line">	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;&#125;</span><br><span class="line">	<span class="hljs-built_in">printf</span>(<span class="hljs-string">"%.5f"</span>,asr(eps,<span class="hljs-number">30</span>,simpson(eps,<span class="hljs-number">30</span>)));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>再来看一道利用Simpson自适应公式的基础题：<a href="http://acm.hdu.edu.cn/showproblem.php?pid=1724" target="_blank" rel="noopener">[HDU]Ellipse</a></p>
+<p>大致题目如下：</p>
+<blockquote>
+<p>Math is important!! Many students failed in 2+2’s mathematical test, so let’s AC this problem to mourn for our lost youth..<br>Look this sample picture:</p>
+<p><img src="http://acm.hdu.edu.cn/data/images/C61-1005-1.JPG" alt=""></p>
+<p>A ellipses in the plane and center in point O. the L,R lines will be vertical through the X-axis. The problem is calculating the blue intersection area. But calculating the intersection area is dull, so I have turn to you, a talent of programmer. Your task is tell me the result of calculations.(defined PI=3.14159265 , The area of an ellipse A=PI<em>a</em>b )  </p>
+</blockquote>
+<p>利用椭圆公式，就可以写出要积分的$f(x)$。</p>
+<figure class="highlight cpp hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> eps 1e-8</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> <span class="hljs-built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">int</span> N;</span><br><span class="line"><span class="hljs-keyword">double</span> a,b,L,R;</span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">double</span> <span class="hljs-title">f</span><span class="hljs-params">(<span class="hljs-keyword">double</span> x)</span></span>&#123;</span><br><span class="line">	<span class="hljs-keyword">return</span> <span class="hljs-built_in">sqrt</span>((a*a*b*b-b*b*x*x)/(a*a))*<span class="hljs-number">2</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">double</span> <span class="hljs-title">simpson</span><span class="hljs-params">(<span class="hljs-keyword">double</span> l,<span class="hljs-keyword">double</span> r)</span></span>&#123;</span><br><span class="line">	<span class="hljs-keyword">return</span> (r-l)*(f(l)+f(r)+<span class="hljs-number">4</span>*f((l+r)/<span class="hljs-number">2</span>))/<span class="hljs-number">6</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">double</span> <span class="hljs-title">asr</span><span class="hljs-params">(<span class="hljs-keyword">double</span> l,<span class="hljs-keyword">double</span> r,<span class="hljs-keyword">double</span> v)</span></span>&#123;</span><br><span class="line">	<span class="hljs-keyword">double</span> mid=(l+r)/<span class="hljs-number">2</span>,lv=simpson(l,mid),rv=simpson(mid,r);</span><br><span class="line">	<span class="hljs-keyword">if</span> (<span class="hljs-built_in">fabs</span>(lv+rv-v)&lt;eps) <span class="hljs-keyword">return</span> lv+rv;</span><br><span class="line">	<span class="hljs-keyword">else</span> <span class="hljs-keyword">return</span> asr(l,mid,lv)+asr(mid,r,rv);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-keyword">void</span>)</span></span>&#123;</span><br><span class="line">	<span class="hljs-built_in">scanf</span>(<span class="hljs-string">"%d"</span>,&amp;N);</span><br><span class="line">	<span class="hljs-keyword">while</span> (N--)&#123;</span><br><span class="line">		<span class="hljs-built_in">scanf</span>(<span class="hljs-string">"%lf%lf%lf%lf"</span>,&amp;a,&amp;b,&amp;L,&amp;R);</span><br><span class="line">		<span class="hljs-built_in">printf</span>(<span class="hljs-string">"%.3f\n"</span>,asr(L,R,simpson(L,R)));</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这些大致就是Simpson自适应公式的基础内容，感谢Willem大爷的谆谆教诲。</p>
+<p>感谢！</p>
+
+    
+    </div>
+    
+    
+    <div class="columns is-mobile is-multiline article-nav">
+        <span class="column is-12-mobile is-half-desktop is-hidden-mobile article-nav-prev">
+            
+        </span>
+        <span class="column is-12-mobile is-half-desktop  article-nav-next">
+            
+            <a href="/2019/02/26/共抬头遥看烟火绚烂-Temp/">共抬头遥看烟火绚烂[Temp]</a>
+            
+        </span>
+    </div>
+    
+</article>
+
+--
+
+
+<div class="comments">
+    <h3 class="title is-4">コメント</h3>
+    
+<div id="lv-container" data-id="city" data-uid="MTAyMC80MDM3MC8xNjg5Nw==">
+    <script type="text/javascript">
+        (function(d, s) {
+            var j, e = d.getElementsByTagName(s)[0];
+
+            if (typeof LivereTower === 'function') { return; }
+
+            j = d.createElement(s);
+            j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+            j.async = true;
+
+            e.parentNode.insertBefore(j, e);
+        })(document, 'script');
+    </script>
+    <noscript> Please activate JavaScript for write a comment in LiveRe</noscript>
+</div>
+
+
+</div>
+
+
+    </div>
+</section>
+    <footer class="footer">
+    <div class="container">
+        <div class="columns content">
+            <div class="column is-narrow has-text-centered">
+                &copy; 2019 FFFeiya&nbsp;
+                Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> & <a
+                        href="http://github.com/ppoffice/hexo-theme-minos">Minos</a>
+            </div>
+            <div class="column is-hidden-mobile"></div>
+
+            
+            <div class="column is-narrow">
+                <div class="columns is-mobile is-multiline is-centered">
+                
+                    
+                <a class="column is-narrow has-text-black" title="GitHub" href="https://github.com/ppoffice/hexo-theme-minos">
+                    
+                    GitHub
+                    
+                </a>
+                
+                </div>
+            </div>
+            
+            
+        </div>
+    </div>
+</footer>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script>
+
+<!-- test if the browser is outdated -->
+<div id="outdated">
+    <h6>Your browser is out-of-date!</h6>
+    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" href="http://outdatedbrowser.com/">Update my browser now </a></p>
+    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
+</div>
+<script src="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // plugin function, place inside DOM ready function
+        outdatedBrowser({
+            bgColor: '#f25648',
+            color: '#ffffff',
+            lowerThan: 'flex'
+        })
+    });
+</script>
+
+<script>
+    window.FontAwesomeConfig = {
+        searchPseudoElements: true
+    }
+    moment.locale("jp");
+</script>
+
+
+    
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<script>
+    MathJax.Hub.Config({
+        "HTML-CSS": {matchFontHeight: false},
+        SVG: {matchFontHeight: false},
+        CommonHTML: {matchFontHeight: false}
+    });
+</script>
+
+    
+    
+<script src="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/js/lightgallery-all.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/js/jquery.justifiedGallery.min.js"></script>
+<script>
+    (function ($) {
+        $(document).ready(function () {
+            if (typeof($.fn.lightGallery) === 'function') {
+                $('.article.gallery').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof($.fn.justifiedGallery) === 'function') {
+                $('.justified-gallery').justifiedGallery();
+            }
+        });
+    })(jQuery);
+</script>
+
+    
+    
+
+    
+
+
+<script src="/js/script.js"></script>
+
+    
+    <div class="searchbox ins-search">
+    <div class="searchbox-mask"></div>
+    <div class="searchbox-container ins-search-container">
+        <div class="searchbox-input-wrapper">
+            <input type="text" class="searchbox-input ins-search-input" placeholder="サイト検索" />
+            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="searchbox-result-wrapper ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: '記事',
+                PAGES: 'ページ',
+                CATEGORIES: 'カテゴリー',
+                TAGS: 'タグ',
+                UNTITLED: '(無題)',
+            },
+            CONTENT_URL: '/content.json',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+<script src="/js/insight.js"></script>
+    
+    <script type="text/javascript"
+    color="0,0,0" opacity='0.3' zIndex="-2" count="80" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+</body>
+</html>
