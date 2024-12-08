@@ -1,0 +1,7 @@
+http://example.com/about/index-1.html
+http://example.com/about/index.html
+http://example.com/tags/index.html
+http://example.com/categories/index.html
+http://example.com/archives/index.html
+http://example.com/2024/12/08/hello-world/
+http://example.com/
