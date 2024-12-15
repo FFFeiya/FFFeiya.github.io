@@ -1,34 +1,59 @@
+/* 设置 hero 区域的全屏高度和居中布局 */
 .hero {
-    height: calc(100vh - 56px);
+    height: calc(100vh - 56px); /* 视口高度减去导航栏高度 */
     display: grid;
     place-items: center;
+    /*background: linear-gradient(135deg, #fff, #fff);*/ /* 添加渐变背景 */
+    color: #fff; /* 默认字体颜色为白色 */
+    overflow: hidden; /* 避免动画超出边界 */
 }
 
+/* 设置 group 的动画和透明度 */
 .hero .group {
     width: 100%;
+    text-align: center; /* 文本居中 */
+    opacity: 0; /* 初始透明度 */
+    transform: translateY(50px); /* 初始位置向下偏移 */
+    animation: fadeInUp 1s ease-out forwards; /* 上升淡入动画 */
 }
 
+/* subtitle 样式 */
 .hero .sub {
-    text-transform: uppercase;
-    font-size: 24px;
-    color: var(--black-4);
-    font-weight: 100;
+    text-transform: uppercase; /* 转换为大写 */
+    font-size: 72px; /* 字体大小 */
+    font-weight: 100; /* 字体细度 */
+    color: var(--black-4, rgba(255, 255, 255, 0.7)); /* 半透明白色 */
     margin: 0;
-    transition: font-size 0.5s;
+    animation: fadeInUp 1.2s ease-out forwards; /* 动画延时 */
 }
 
+/* large 标题样式 */
 .hero .large {
-    font-size: 128px;
-    color: var(--black-2);
+    font-size: 128px; /* 大字体 */
+    font-weight: bold; /* 加粗 */
+    color: var(--black-2, rgba(255, 255, 255, 1)); /* 纯白 */
     margin: 0;
-    transition: font-size 0.5s;
+    animation: fadeInUp 1.4s ease-out forwards; /* 动画延时 */
 }
 
+/* 响应式处理：小屏幕时缩小字体 */
 @media screen and (max-width: 800px) {
     .hero .sub {
         font-size: 16px;
     }
     .hero .large {
         font-size: 84px;
+    }
+}
+
+/* 动画定义：淡入并上移 */
+@keyframes fadeInUp {
+    0% {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
     }
 }
