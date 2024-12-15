@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head prefix="og: https://ogp.me/ns#">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  
+  <title>How to Convert a p5.js Game into Java (JavaFX) - FFFeiya</title>
+  
+    <link rel="shortcut icon" href="/favicon.ico">
+  
+  
+    <link rel='manifest' href='/manifest.json'>
+  
+
+  
+  
+  
+  <meta property="og:title" content="How to Convert a p5.js Game into Java (JavaFX) - FFFeiya" />
+  
+  <meta property="og:type" content="article" />
+  
+  <meta property="og:url" content="http://example.com/2024/12/08/How%20to%20Convert%20a%20p5.js%20Game%20into%20Java%20(JavaFX)/index.html" />
+  
+  <meta property="og:image" content="/favicon.png" />
+  
+  <meta property="og:article:published_time" content="2024-12-08T02:00:00.000Z" />
+  
+  <meta property="og:article:author" content="FFFeiya" />
+  
+  
+
+  
+<link rel="stylesheet" href="/css/var.css">
+
+  
+<link rel="stylesheet" href="/css/main.css">
+
+  
+<link rel="stylesheet" href="/css/typography.css">
+
+  
+<link rel="stylesheet" href="/css/code-highlighting.css">
+
+  
+<link rel="stylesheet" href="/css/components.css">
+
+  
+<link rel="stylesheet" href="/css/nav.css">
+
+  
+<link rel="stylesheet" href="/css/paginator.css">
+
+  
+<link rel="stylesheet" href="/css/footer.css">
+
+  
+<link rel="stylesheet" href="/css/post-list.css">
+
+  
+  
+<link rel="stylesheet" href="/css/rainbow-banner.css">
+
+  
+  
+  
+<link rel="stylesheet" href="/css/toc.css">
+
+  
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/post.css">
+
+  
+  
+  
+  
+  
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+    <body
+        data-color-scheme="auto"
+        data-uppercase-categories="true"
+        
+        data-rainbow-banner="true"
+        data-rainbow-banner-shown="auto"
+        data-rainbow-banner-month="6"
+        data-rainbow-banner-colors="#e50000,#ff8d00,#ffee00,#008121,#004cff,#760188"
+        
+        data-config-root="/"
+        
+        data-toc="true"
+        data-toc-max-depth="2"
+        
+        
+    >
+        <nav id="theme-nav">
+    <div class="inner">
+        <a class="title" href="/">Blog</a>
+        <div class="nav-arrow"></div>
+        <div class="nav-items">
+            <a class="nav-item nav-item-home" href="/">Home</a>
+            
+            
+            <a class="nav-item" href="/archives">Archives</a>
+            
+            
+            
+            <a class="nav-item" href="/friends">Friends</a>
+            
+            
+            
+            <a class="nav-item" href="/projects">Projects</a>
+            
+            
+            
+            <a class="nav-item" href="/about">About</a>
+            
+            
+            
+            <a class="nav-item nav-item-github nav-item-icon" href="https://github.com/FFFeiya" target="_blank" aria-label="GitHub">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-discord nav-item-icon" href="https://discord.gg" target="_blank" aria-label="Discord">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-search nav-item-icon" href="/search" target="_blank" aria-label="Search">&nbsp;</a>
+            
+            
+        </div>
+    </div>
+</nav>
+        
+<article class="post">
+    <div class="meta">
+        
+        <div class="categories text-uppercase">
+        
+            <a href="/categories/Programming/">Programming</a>
+        
+        </div>
+        
+
+        
+        <div class="date" id="date">
+            <span>December</span>
+            <span>8,</span>
+            <span>2024</span>
+        </div>
+        
+
+        <h1 class="title">How to Convert a p5.js Game into Java (JavaFX)</h1>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="content">
+        <p>If you’ve previously built an interactive game with p5.js and now want to port it to a Java-based desktop application, you might be wondering where to start. This article walks through the process of converting a complex p5.js planetary fleet battle simulation into a JavaFX version. We’ll discuss key differences between p5.js and JavaFX, show how to replace p5.js global functions with JavaFX application logic, and highlight various code translation techniques.</p>
+<h4 id="Prerequisites"><a href="#Prerequisites" class="headerlink" title="Prerequisites"></a>Prerequisites</h4><p>Before we begin, ensure the following setup:</p>
+<ul>
+<li><strong>JDK Installed:</strong> Make sure you have a JDK installed and properly configured.</li>
+<li><strong>JavaFX SDK Installed:</strong> Download and integrate the JavaFX SDK. You’ll need to add JavaFX libraries (like <code>javafx.controls</code>, <code>javafx.graphics</code>) to your project’s classpath.</li>
+<li><strong>IntelliJ IDEA Community or other IDE:</strong> We’ll use IntelliJ IDEA Community as our reference environment. Configure your project to include the JavaFX SDK and set VM arguments such as:<figure class="highlight stylus"><table><tr><td class="code"><pre><code class="hljs stylus"><span class="hljs-attr">--module-path</span> <span class="hljs-string">&quot;path/to/javafx-sdk/lib&quot;</span> <span class="hljs-attr">--add-modules</span>=javafx<span class="hljs-selector-class">.controls</span>,javafx.fxml<br></code></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="Framework-Conversion-p5-js-vs-JavaFX"><a href="#Framework-Conversion-p5-js-vs-JavaFX" class="headerlink" title="Framework Conversion: p5.js vs. JavaFX"></a>Framework Conversion: p5.js vs. JavaFX</h4><p><strong>p5.js Approach:</strong><br>In p5.js, you rely on global functions like <code>setup()</code>, <code>draw()</code>, <code>mousePressed()</code>, <code>keyPressed()</code>, etc. The environment calls these automatically. You also get a global <code>createCanvas(...)</code> function that sets up the drawing surface, and <code>draw()</code> is called repeatedly at a given frame rate.</p>
+<p><strong>JavaFX Approach:</strong><br>In JavaFX, we don’t have a global drawing loop by default. Instead:</p>
+<ul>
+<li>We start from the <code>Application</code> class’s <code>start()</code> method to create a <code>Canvas</code> and <code>GraphicsContext</code>.</li>
+<li>We use an <code>AnimationTimer</code> to implement the equivalent of <code>draw()</code>. The timer’s <code>handle(long now)</code> method is called once per frame, allowing you to update and redraw your scene.</li>
+<li>Event handlers on the <code>Scene</code> manage keyboard, mouse, and scroll events—replacing <code>mousePressed()</code>, <code>keyPressed()</code>, and <code>mouseWheel()</code> from p5.js.</li>
+</ul>
+<p>For example, where p5.js uses <code>createCanvas(1200, 900)</code>, JavaFX code might look like:</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><code class="hljs java"><span class="hljs-type">Canvas</span> <span class="hljs-variable">canvas</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Canvas</span>(<span class="hljs-number">1200</span>, <span class="hljs-number">900</span>);<br><span class="hljs-type">GraphicsContext</span> <span class="hljs-variable">gc</span> <span class="hljs-operator">=</span> canvas.getGraphicsContext2D();<br></code></pre></td></tr></table></figure>
+<p>Then, to simulate <code>draw()</code>, we set up:</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">new</span> <span class="hljs-title class_">AnimationTimer</span>() &#123;<br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">handle</span><span class="hljs-params">(<span class="hljs-type">long</span> now)</span> &#123;<br>        <span class="hljs-comment">// The equivalent of draw()</span><br>        <span class="hljs-comment">// Update game state and call drawing methods here</span><br>    &#125;<br>&#125;.start();<br></code></pre></td></tr></table></figure>
+
+<p>Mouse and keyboard events are added to the <code>Scene</code>:</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><code class="hljs java">scene.setOnMousePressed(e -&gt; &#123;<br>    <span class="hljs-comment">// Handle mouse click, equivalent to mousePressed()</span><br>&#125;);<br>scene.setOnKeyPressed(e -&gt; &#123;<br>    <span class="hljs-comment">// Handle keyboard input, equivalent to keyPressed()</span><br>&#125;);<br>scene.setOnScroll(e -&gt; &#123;<br>    <span class="hljs-comment">// Handle mouse wheel, equivalent to mouseWheel()</span><br>&#125;);<br></code></pre></td></tr></table></figure>
+
+<h4 id="Translating-Drawing-Functions"><a href="#Translating-Drawing-Functions" class="headerlink" title="Translating Drawing Functions"></a>Translating Drawing Functions</h4><p>p5.js provides drawing commands like <code>ellipse(x, y, w, h)</code> or <code>text(txt, x, y)</code> which are drawn with the center-based coordinate system. JavaFX, however, often uses top-left coordinates. Also, p5.js <code>fill()</code> and <code>stroke()</code> carry over drawing styles, while JavaFX <code>GraphicsContext</code> methods explicitly set fill and stroke before drawing.</p>
+<ul>
+<li><p><strong>ellipse(x, y, w, h)</strong> in p5.js is centered at <code>(x, y)</code>. In JavaFX:</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><code class="hljs java">gc.fillOval(x - w/<span class="hljs-number">2</span>, y - h/<span class="hljs-number">2</span>, w, h);<br></code></pre></td></tr></table></figure>
+</li>
+<li><p><strong>rect(x, y, w, h)</strong> in p5.js is also often center-based if you’ve set <code>rectMode(CENTER)</code>, but by default it’s top-left. JavaFX similarly draws from top-left:</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><code class="hljs java">gc.fillRect(x, y, w, h);<br></code></pre></td></tr></table></figure>
+</li>
+<li><p><strong>line(x1, y1, x2, y2)</strong> in JavaFX:</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><code class="hljs java">gc.strokeLine(x1, y1, x2, y2);<br></code></pre></td></tr></table></figure>
+</li>
+<li><p><strong>text(txt, x, y)</strong>: In p5.js, <code>text()</code> is centered or aligned based on <code>textAlign()</code>. In JavaFX, <code>fillText()</code> defaults to top-left. Adjust your coordinates or use <code>gc.setTextAlign(TextAlignment.CENTER)</code>:</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><code class="hljs java">gc.fillText(txt, x, y);<br></code></pre></td></tr></table></figure>
+</li>
+<li><p><strong>push()&#x2F;pop()</strong> in p5.js helps save and restore drawing states (like transformations). JavaFX doesn’t have a direct equivalent. For complex transformations, you might manage your own transformations or simply recalculate coordinates without relying on stack-based transformations.</p>
+</li>
+</ul>
+<p>For complex shapes where p5.js uses <code>beginShape()</code>, <code>vertex()</code>, <code>endShape()</code>, you can store your points in an array and use <code>gc.strokePolyline(...)</code> or <code>gc.fillPolygon(...)</code> in JavaFX.</p>
+<h4 id="Data-Structures-and-Architecture"><a href="#Data-Structures-and-Architecture" class="headerlink" title="Data Structures and Architecture"></a>Data Structures and Architecture</h4><p>The original p5.js code may have relied heavily on global variables and arrays. In Java, it’s cleaner and more maintainable to encapsulate data into classes and use <code>ArrayList</code> instead of raw arrays. This also helps when converting modal dialogs, buttons, and other components into nested classes.</p>
+<p>For instance, where you previously wrote:</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">let</span> ships = [];<br></code></pre></td></tr></table></figure>
+<p>you now have:</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><code class="hljs java">ArrayList&lt;Ship&gt; ships = <span class="hljs-keyword">new</span> <span class="hljs-title class_">ArrayList</span>&lt;&gt;();<br></code></pre></td></tr></table></figure>
+<p>and <code>Ship</code> becomes a dedicated class with attributes and methods.</p>
+<p>We also might encapsulate GUI elements like <code>Button</code> or <code>Modal</code> into inner classes for cleanliness and organization.</p>
+<h4 id="Handling-Events"><a href="#Handling-Events" class="headerlink" title="Handling Events"></a>Handling Events</h4><p>p5.js global event functions like <code>mousePressed()</code> or <code>keyPressed()</code> are straightforward. In JavaFX, you set event listeners on the <code>Scene</code> or <code>Canvas</code>:</p>
+<ul>
+<li><p><strong>mousePressed()</strong> equivalent:</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><code class="hljs java">scene.setOnMousePressed(e -&gt; &#123;<br>    <span class="hljs-type">double</span> <span class="hljs-variable">mx</span> <span class="hljs-operator">=</span> e.getX();<br>    <span class="hljs-type">double</span> <span class="hljs-variable">my</span> <span class="hljs-operator">=</span> e.getY();<br>    <span class="hljs-comment">// handle mouse pressed logic</span><br>&#125;);<br></code></pre></td></tr></table></figure>
+</li>
+<li><p><strong>keyPressed()</strong> equivalent:</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><code class="hljs java">scene.setOnKeyPressed(e -&gt; &#123;<br>    <span class="hljs-type">KeyCode</span> <span class="hljs-variable">code</span> <span class="hljs-operator">=</span> e.getCode();<br>    <span class="hljs-comment">// handle key pressed logic</span><br>&#125;);<br></code></pre></td></tr></table></figure>
+</li>
+<li><p><strong>mouseWheel()</strong> equivalent:</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><code class="hljs java">scene.setOnScroll(e -&gt; &#123;<br>    <span class="hljs-type">double</span> <span class="hljs-variable">deltaY</span> <span class="hljs-operator">=</span> e.getDeltaY();<br>    <span class="hljs-comment">// handle mouse wheel logic</span><br>&#125;);<br></code></pre></td></tr></table></figure></li>
+</ul>
+<p>For continuous key states (similar to <code>keyIsDown()</code> in p5.js), maintain a boolean array or a <code>Set&lt;KeyCode&gt;</code> in <code>keyPressed</code> and <code>keyReleased</code> events.</p>
+<h4 id="Mathematical-Differences"><a href="#Mathematical-Differences" class="headerlink" title="Mathematical Differences"></a>Mathematical Differences</h4><ul>
+<li><strong>random(1)</strong> in p5.js can be replaced by <code>Math.random()</code> in Java, which returns a double between 0 and 1.</li>
+<li><strong>radians()</strong> can be replaced by <code>Math.toRadians()</code>.</li>
+<li>p5.js constants like <code>TWO_PI</code> can be defined as <code>double TWO_PI = 2 * Math.PI;</code>.</li>
+</ul>
+<p>For <code>map()</code> function, which p5.js uses to re-map a value from one range to another, implement a custom method:</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><code class="hljs java"><span class="hljs-type">double</span> <span class="hljs-title function_">mapValue</span><span class="hljs-params">(<span class="hljs-type">double</span> value, <span class="hljs-type">double</span> start1, <span class="hljs-type">double</span> stop1, <span class="hljs-type">double</span> start2, <span class="hljs-type">double</span> stop2)</span> &#123;<br>    <span class="hljs-keyword">return</span> start2 + (stop2 - start2) * ((value - start1) / (stop1 - start1));<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h4 id="Alerts-and-Cursor-Changes"><a href="#Alerts-and-Cursor-Changes" class="headerlink" title="Alerts and Cursor Changes"></a>Alerts and Cursor Changes</h4><ul>
+<li><strong>alert()</strong> in p5.js might just show a browser popup. In JavaFX, you can either use <code>System.out.println()</code> or create a simple <code>Alert</code> dialog.</li>
+<li>p5.js <code>cursor(HAND)</code> can be translated to <code>scene.setCursor(Cursor.HAND)</code> in JavaFX.</li>
+</ul>
+<p>If you previously used <code>window.location.reload()</code> in p5.js, you don’t have such a function in JavaFX. A suitable replacement might be <code>System.exit(0)</code> to terminate the application, or reinitialize your states to simulate a “restart.”</p>
+<h4 id="Final-Thoughts"><a href="#Final-Thoughts" class="headerlink" title="Final Thoughts"></a>Final Thoughts</h4><p>The key idea is to replace each p5.js global function and variable with a structured JavaFX approach. The <code>draw()</code> loop maps naturally to an <code>AnimationTimer</code>, <code>setup()</code> logic goes into <code>start()</code> or an initialization method, and event handling transitions from global functions to scene event listeners.</p>
+<p>Where p5.js draws instantly and automatically, JavaFX requires you to call drawing methods on a <code>GraphicsContext</code> at each frame. State is maintained as class fields rather than global variables. Complex shapes and transitions require more manual math and array handling, but the result is a robust, object-oriented Java application.</p>
+<p>You can check the final Java code provided above as an example. It takes the original p5.js game (which included planet rotation, fleet formation, equipment selection, and red point enemy attacks) and ports it into a JavaFX environment. Every function and global variable from p5.js now lives in a structured Java class, event handlers replicate the behavior of <code>mousePressed()</code> and <code>keyPressed()</code>, and drawing routines carefully translate ellipses, rectangles, lines, and text.</p>
+<p>This approach gives you a powerful and flexible desktop version of your original web-based p5.js game, leveraging the strengths of Java’s strong typing, richer libraries, and performance.</p>
+
+    </div>
+
+    
+    <div class="about">
+        <h1>About this Post</h1>
+        <div class="details">
+            <p>This post is written by FFFeiya, licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc/4.0">CC BY-NC 4.0</a>.</p>
+        </div>
+        
+        <p class="tags">
+            
+            <i class="icon"></i>
+            <a href="/tags/p5-js/" class="tag">#p5.js</a><a href="/tags/JavaFX/" class="tag">#JavaFX</a>
+        </p>
+        
+    </div>
+    
+
+    <div class="container post-prev-next">
+        
+        <a href="/2024/12/08/Building%20a%20Dynamic%20Planetary%20Battle%20System/" class="next">
+            <div>
+                <div class="text">
+                    <p class="label">Next</p>
+                    <h3 class="title">Space Visualization with p5.js: Building a Dynamic Planetary Battle System</h3>
+                </div>
+            </div>
+        </a>
+        
+        <a class="prev"></a>
+    </div>
+
+    
+        
+        
+    
+</article>
+
+        <footer>
+    <div class="inner">
+        <div class="links">
+            
+            <div class="group">
+                <h2 class="title">Blog</h2>
+                
+                <a href="/" class="item">Blog</a>
+                
+                <a href="/archives" class="item">Archives</a>
+                
+                <a href="/tags" class="item">Tags</a>
+                
+                <a href="/categories" class="item">Categories</a>
+                
+                <a href="/friends" class="item">Friends</a>
+                
+                <a href="/projects" class="item">Projects</a>
+                
+                <a href="/about" class="item">About</a>
+                
+            </div>
+            
+            <div class="group">
+                <h2 class="title">Projects</h2>
+                
+                <a target="_blank" rel="noopener" href="https://space.bilibili.com/86921782" class="item">VIDEOS</a>
+                
+            </div>
+            
+            <div class="group">
+                <h2 class="title">Me</h2>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/FFFeiya" class="item">GitHub</a>
+                
+                <a href="mailto:ya5henpai@163.com" class="item">Email</a>
+                
+                <a target="_blank" rel="noopener" href="https://bgm.tv/user/fffeiya" class="item">Bangumi</a>
+                
+                <a target="_blank" rel="noopener" href="https://www.pixiv.net/users/26980321" class="item">pixiv</a>
+                
+                <a target="_blank" rel="noopener" href="https://space.bilibili.com/86921782" class="item">Bilibili</a>
+                
+            </div>
+            
+        </div>
+        <span>&copy; 2024 FFFeiya<br>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> </span>
+        
+        
+            <br>
+            <div class="color-scheme-toggle" role="radiogroup" id="theme-color-scheme-toggle">
+                <label>
+                    <input type="radio" value="light">
+                    <span>Light</span>
+                </label>
+                <label>
+                    <input type="radio" value="dark">
+                    <span>Dark</span>
+                </label>
+                <label>
+                    <input type="radio" value="auto">
+                    <span>Auto</span>
+                </label>
+            </div>
+        
+    </div>
+</footer>
+
+
+        
+<script src="/js/main.js"></script>
+
+        
+        
+        
+
+        
+        <script src="https://unpkg.com/scrollreveal"></script>
+        <script>
+            window.addEventListener('load', () => {
+                ScrollReveal({ delay: 250, reset: true, easing: 'cubic-bezier(0, 0, 0, 1)' })
+                ScrollReveal().reveal('.post-list-item .cover-img img')
+                ScrollReveal().reveal('.post-list-item, .card, .content p img, .content .block-large img', { distance: '60px', origin: 'bottom', duration: 800 })
+            })
+        </script>
+        
+    </body>
+</html>
