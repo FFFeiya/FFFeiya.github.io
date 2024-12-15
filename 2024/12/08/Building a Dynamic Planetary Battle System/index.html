@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head prefix="og: https://ogp.me/ns#">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  
+  <title>Space Visualization with p5.js: Building a Dynamic Planetary Battle System - FFFeiya</title>
+  
+    <link rel="shortcut icon" href="/favicon.ico">
+  
+  
+    <link rel='manifest' href='/manifest.json'>
+  
+
+  
+  
+  
+  <meta property="og:title" content="Space Visualization with p5.js: Building a Dynamic Planetary Battle System - FFFeiya" />
+  
+  <meta property="og:type" content="article" />
+  
+  <meta property="og:url" content="http://example.com/2024/12/08/Building%20a%20Dynamic%20Planetary%20Battle%20System/index.html" />
+  
+  <meta property="og:image" content="/favicon.png" />
+  
+  <meta property="og:article:published_time" content="2024-12-08T02:00:00.000Z" />
+  
+  <meta property="og:article:author" content="FFFeiya" />
+  
+  
+
+  
+<link rel="stylesheet" href="/css/var.css">
+
+  
+<link rel="stylesheet" href="/css/main.css">
+
+  
+<link rel="stylesheet" href="/css/typography.css">
+
+  
+<link rel="stylesheet" href="/css/code-highlighting.css">
+
+  
+<link rel="stylesheet" href="/css/components.css">
+
+  
+<link rel="stylesheet" href="/css/nav.css">
+
+  
+<link rel="stylesheet" href="/css/paginator.css">
+
+  
+<link rel="stylesheet" href="/css/footer.css">
+
+  
+<link rel="stylesheet" href="/css/post-list.css">
+
+  
+  
+<link rel="stylesheet" href="/css/rainbow-banner.css">
+
+  
+  
+  
+<link rel="stylesheet" href="/css/toc.css">
+
+  
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/post.css">
+
+  
+  
+  
+  
+  
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+    <body
+        data-color-scheme="auto"
+        data-uppercase-categories="true"
+        
+        data-rainbow-banner="true"
+        data-rainbow-banner-shown="auto"
+        data-rainbow-banner-month="6"
+        data-rainbow-banner-colors="#e50000,#ff8d00,#ffee00,#008121,#004cff,#760188"
+        
+        data-config-root="/"
+        
+        data-toc="true"
+        data-toc-max-depth="2"
+        
+        
+    >
+        <nav id="theme-nav">
+    <div class="inner">
+        <a class="title" href="/">Blog</a>
+        <div class="nav-arrow"></div>
+        <div class="nav-items">
+            <a class="nav-item nav-item-home" href="/">Home</a>
+            
+            
+            <a class="nav-item" href="/archives">Archives</a>
+            
+            
+            
+            <a class="nav-item" href="/friends">Friends</a>
+            
+            
+            
+            <a class="nav-item" href="/projects">Projects</a>
+            
+            
+            
+            <a class="nav-item" href="/about">About</a>
+            
+            
+            
+            <a class="nav-item nav-item-github nav-item-icon" href="https://github.com/FFFeiya" target="_blank" aria-label="GitHub">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-discord nav-item-icon" href="https://discord.gg" target="_blank" aria-label="Discord">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-search nav-item-icon" href="/search" target="_blank" aria-label="Search">&nbsp;</a>
+            
+            
+        </div>
+    </div>
+</nav>
+        
+<article class="post">
+    <div class="meta">
+        
+        <div class="categories text-uppercase">
+        
+            <a href="/categories/Programming/">Programming</a>
+        
+        </div>
+        
+
+        
+        <div class="date" id="date">
+            <span>December</span>
+            <span>8,</span>
+            <span>2024</span>
+        </div>
+        
+
+        <h1 class="title">Space Visualization with p5.js: Building a Dynamic Planetary Battle System</h1>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="content">
+        <p>Welcome to an in-depth exploration of creating a dynamic 3D planetary battle system using p5.js! Whether you’re a budding game developer or a curious enthusiast eager to understand the blend of mathematics and graphics in game design, this guide will illuminate how to craft a visually captivating planet with latitude and longitude lines, render satellites orbiting in three-dimensional space, and visualize their attack ranges—all through the magic of two-dimensional projection.</p>
+<h2 id="Table-of-Contents"><a href="#Table-of-Contents" class="headerlink" title="Table of Contents"></a>Table of Contents</h2><ul>
+<li><a href="#table-of-contents">Table of Contents</a></li>
+<li><a href="#introduction">Introduction</a></li>
+<li><a href="#creating-the-planet-with-latitude-and-longitude-lines">Creating the Planet with Latitude and Longitude Lines</a><ul>
+<li><a href="#defining-the-planet">Defining the Planet</a></li>
+<li><a href="#drawing-the-sphere">Drawing the Sphere</a></li>
+<li><a href="#latitude-and-longitude-lines">Latitude and Longitude Lines</a></li>
+</ul>
+</li>
+<li><a href="#projecting-3d-space-onto-a-2d-canvas">Projecting 3D Space onto a 2D Canvas</a><ul>
+<li><a href="#understanding-projection">Understanding Projection</a></li>
+<li><a href="#applying-quaternions-for-rotation">Applying Quaternions for Rotation</a></li>
+</ul>
+</li>
+<li><a href="#drawing-satellite-orbits-with-occlusion-and-perspective">Drawing Satellite Orbits with Occlusion and Perspective</a><ul>
+<li><a href="#defining-satellite-orbits">Defining Satellite Orbits</a></li>
+<li><a href="#rendering-orbits">Rendering Orbits</a></li>
+<li><a href="#occlusion-and-visibility">Occlusion and Visibility</a></li>
+<li><a href="#perspective-and-depth">Perspective and Depth</a></li>
+</ul>
+</li>
+<li><a href="#calculating-and-displaying-satellite-attack-ranges">Calculating and Displaying Satellite Attack Ranges</a><ul>
+<li><a href="#defining-attack-range">Defining Attack Range</a></li>
+<li><a href="#calculating-the-range">Calculating the Range</a></li>
+<li><a href="#rendering-the-attack-range">Rendering the Attack Range</a></li>
+</ul>
+</li>
+<li><a href="#conclusion">Conclusion</a></li>
+</ul>
+<hr>
+<h2 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h2><p>In the realm of game development, creating immersive and visually appealing environments is paramount. One fascinating aspect is the simulation of three-dimensional (3D) spaces within a two-dimensional (2D) canvas—a technique widely used in game engines and graphics programming. This blog delves into a p5.js implementation that brings to life a planet adorned with latitude and longitude lines, satellites orbiting it, and dynamic attack ranges—all rendered seamlessly on a 2D screen.</p>
+<p>By leveraging mathematical concepts like quaternions for rotation and vector projections for depth perception, we can achieve a realistic and interactive 3D experience. Let’s embark on this journey to unravel the intricacies behind each component.</p>
+<hr>
+<h2 id="Creating-the-Planet-with-Latitude-and-Longitude-Lines"><a href="#Creating-the-Planet-with-Latitude-and-Longitude-Lines" class="headerlink" title="Creating the Planet with Latitude and Longitude Lines"></a>Creating the Planet with Latitude and Longitude Lines</h2><p>At the heart of our visualization lies the planet, a sphere defined by its radius and mass. To enhance realism, we overlay it with latitude and longitude lines, mimicking Earth’s geographical framework.</p>
+<h3 id="Defining-the-Planet"><a href="#Defining-the-Planet" class="headerlink" title="Defining the Planet"></a>Defining the Planet</h3><p>The planet is characterized by several parameters:</p>
+<ul>
+<li><strong>Radius (<code>radius</code>)</strong>: Determines the size of the planet on the canvas.</li>
+<li><strong>Mass (<code>planetMass</code>)</strong>: Influences gravitational calculations, essential for satellite orbits.</li>
+<li><strong>Rotation (<code>rotationAngle</code>)</strong>: Simulates the planet’s spin, adding dynamism to the scene.</li>
+</ul>
+<h3 id="Drawing-the-Sphere"><a href="#Drawing-the-Sphere" class="headerlink" title="Drawing the Sphere"></a>Drawing the Sphere</h3><p>In p5.js, a sphere can be represented by drawing multiple circles (latitude) and lines (longitude). Here’s how the code accomplishes this:</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">function</span> <span class="hljs-title function_">drawBattle</span>(<span class="hljs-params"></span>) &#123;<br>  rotationAngle = (rotationAngle + currentLevel.<span class="hljs-property">planetRotationSpeed</span>) % <span class="hljs-variable constant_">TWO_PI</span>; <span class="hljs-comment">// Planet&#x27;s rotation</span><br><br>  <span class="hljs-comment">// Draw the planet</span><br>  <span class="hljs-title function_">push</span>();<br>  <span class="hljs-title function_">translate</span>(centerX, centerY);<br>  <span class="hljs-title function_">stroke</span>(<span class="hljs-number">0</span>);<br>  <span class="hljs-title function_">ellipse</span>(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, radius * <span class="hljs-number">2</span>); <span class="hljs-comment">// Base circle representing the planet</span><br><br>  <span class="hljs-comment">// Draw latitude and longitude lines</span><br>  <span class="hljs-title function_">drawLatitudeLines</span>();<br>  <span class="hljs-title function_">drawLongitudeLines</span>();<br>  <span class="hljs-title function_">pop</span>();<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="Latitude-and-Longitude-Lines"><a href="#Latitude-and-Longitude-Lines" class="headerlink" title="Latitude and Longitude Lines"></a>Latitude and Longitude Lines</h3><p><strong>Latitude lines</strong> are horizontal circles that run parallel to the equator, while <strong>longitude lines</strong> are vertical lines that converge at the poles. To simulate these:</p>
+<ol>
+<li><strong>Latitude Lines</strong>: Loop through various latitudes (e.g., every 20 degrees) and draw ellipses adjusted for the planet’s rotation.</li>
+<li><strong>Longitude Lines</strong>: Loop through various longitudes (e.g., every 20 degrees) and draw lines that bend according to the planet’s spherical shape.</li>
+</ol>
+<p>The rotation of the planet is handled using quaternions (discussed later), ensuring smooth and realistic spinning.</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">function</span> <span class="hljs-title function_">drawLatitudeLines</span>(<span class="hljs-params"></span>) &#123;<br>  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> lat = -<span class="hljs-number">80</span>; lat &lt;= <span class="hljs-number">80</span>; lat += <span class="hljs-number">20</span>) &#123;<br>    <span class="hljs-title function_">beginShape</span>();<br>    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> lon = <span class="hljs-number">0</span>; lon &lt;= <span class="hljs-number">360</span>; lon += <span class="hljs-number">5</span>) &#123;<br>      <span class="hljs-comment">// Calculate 3D coordinates</span><br>      <span class="hljs-keyword">let</span> latRadian = <span class="hljs-title function_">radians</span>(lat);<br>      <span class="hljs-keyword">let</span> lonRadian = <span class="hljs-title function_">radians</span>(lon);<br>      <span class="hljs-keyword">let</span> x0 = radius * <span class="hljs-title function_">cos</span>(latRadian) * <span class="hljs-title function_">cos</span>(lonRadian);<br>      <span class="hljs-keyword">let</span> y0 = radius * <span class="hljs-title function_">sin</span>(latRadian);<br>      <span class="hljs-keyword">let</span> z0 = radius * <span class="hljs-title function_">cos</span>(latRadian) * <span class="hljs-title function_">sin</span>(lonRadian);<br><br>      <span class="hljs-comment">// Rotate point based on planet&#x27;s rotation</span><br>      <span class="hljs-keyword">let</span> rotatedPoint = <span class="hljs-title function_">rotateVectorByQuaternion</span>(&#123; <span class="hljs-attr">x</span>: x0, <span class="hljs-attr">y</span>: y0, <span class="hljs-attr">z</span>: z0 &#125;, planetRotationQuat);<br><br>      <span class="hljs-comment">// Project to 2D</span><br>      <span class="hljs-keyword">let</span> x = rotatedPoint.<span class="hljs-property">x</span>;<br>      <span class="hljs-keyword">let</span> y = rotatedPoint.<span class="hljs-property">y</span>;<br>      <span class="hljs-keyword">let</span> z = rotatedPoint.<span class="hljs-property">z</span>;<br><br>      <span class="hljs-comment">// Adjust transparency based on depth</span><br>      <span class="hljs-keyword">let</span> alphaValue = <span class="hljs-title function_">map</span>(x, -radius, radius, <span class="hljs-number">255</span>, <span class="hljs-number">50</span>);<br>      <span class="hljs-title function_">stroke</span>(<span class="hljs-number">200</span>, alphaValue);<br><br>      <span class="hljs-title function_">vertex</span>(z, -y); <span class="hljs-comment">// 2D projection: z-axis to x, y-axis remains</span><br>    &#125;<br>    <span class="hljs-title function_">endShape</span>();<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><strong>Key Concepts:</strong></p>
+<ul>
+<li><strong>3D Coordinates</strong>: Each point on the sphere is calculated using spherical coordinates, transformed into Cartesian coordinates (<code>x0</code>, <code>y0</code>, <code>z0</code>).</li>
+<li><strong>Rotation</strong>: The planet’s rotation is applied to these points using quaternions, allowing for smooth and continuous spinning without the pitfalls of Euler angles (like gimbal lock).</li>
+<li><strong>Projection</strong>: The rotated 3D points are projected onto the 2D canvas by mapping the <code>z-axis</code> to the horizontal <code>x-axis</code> and the <code>y-axis</code> to the vertical <code>y-axis</code>.</li>
+<li><strong>Transparency</strong>: Points further from the viewer (based on the <code>x</code> value) appear darker, enhancing the depth perception.</li>
+</ul>
+<hr>
+<h2 id="Projecting-3D-Space-onto-a-2D-Canvas"><a href="#Projecting-3D-Space-onto-a-2D-Canvas" class="headerlink" title="Projecting 3D Space onto a 2D Canvas"></a>Projecting 3D Space onto a 2D Canvas</h2><p>Rendering 3D objects on a 2D screen involves projecting their spatial coordinates onto a flat plane. This process is pivotal for creating the illusion of depth and perspective.</p>
+<h3 id="Understanding-Projection"><a href="#Understanding-Projection" class="headerlink" title="Understanding Projection"></a>Understanding Projection</h3><p><strong>Projection</strong> transforms 3D coordinates <code>(x, y, z)</code> into 2D coordinates <code>(screenX, screenY)</code>. In our implementation:</p>
+<ul>
+<li><strong>Orthographic Projection</strong>: A simple form where depth (<code>z</code>) affects the <code>x</code> coordinate’s placement, but there’s no scaling based on distance (i.e., objects don’t appear smaller as they move away).</li>
+</ul>
+<p>The formula used:</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">let</span> screenX = centerX + z;<br><span class="hljs-keyword">let</span> screenY = centerY - y;<br></code></pre></td></tr></table></figure>
+
+<p>Here, the <code>z-axis</code> directly influences the horizontal placement (<code>screenX</code>), while the <code>y-axis</code> affects the vertical placement (<code>screenY</code>). This mapping ensures that objects with higher <code>z</code> values appear further to the right, simulating depth.</p>
+<h3 id="Applying-Quaternions-for-Rotation"><a href="#Applying-Quaternions-for-Rotation" class="headerlink" title="Applying Quaternions for Rotation"></a>Applying Quaternions for Rotation</h3><p>Quaternions are mathematical constructs that represent rotations in 3D space without suffering from gimbal lock—a common issue with Euler angles where rotational axes can become misaligned.</p>
+<p><strong>Quaternion Rotation Process:</strong></p>
+<ol>
+<li><strong>Define Rotation Axis and Angle</strong>: Specify the axis around which to rotate and the angle of rotation.</li>
+<li><strong>Create Rotation Quaternion</strong>: Construct a quaternion representing this rotation.</li>
+<li><strong>Apply Rotation</strong>: Multiply the point’s vector by the rotation quaternion to obtain the rotated vector.</li>
+</ol>
+<p><strong>Code Snippet:</strong></p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">function</span> <span class="hljs-title function_">rotateQuaternion</span>(<span class="hljs-params">q, axis, angle</span>) &#123;<br>  <span class="hljs-keyword">let</span> halfAngle = angle / <span class="hljs-number">2</span>;<br>  <span class="hljs-keyword">let</span> s = <span class="hljs-title function_">sin</span>(halfAngle);<br>  <span class="hljs-keyword">let</span> rotationQuat = &#123;<br>    <span class="hljs-attr">x</span>: axis.<span class="hljs-property">x</span> * s,<br>    <span class="hljs-attr">y</span>: axis.<span class="hljs-property">y</span> * s,<br>    <span class="hljs-attr">z</span>: axis.<span class="hljs-property">z</span> * s,<br>    <span class="hljs-attr">w</span>: <span class="hljs-title function_">cos</span>(halfAngle)<br>  &#125;;<br>  <span class="hljs-keyword">return</span> <span class="hljs-title function_">multiplyQuaternions</span>(q, rotationQuat);<br>&#125;<br><br><span class="hljs-keyword">function</span> <span class="hljs-title function_">rotateVectorByQuaternion</span>(<span class="hljs-params">v, q</span>) &#123;<br>  <span class="hljs-keyword">let</span> qConjugate = &#123; <span class="hljs-attr">x</span>: -q.<span class="hljs-property">x</span>, <span class="hljs-attr">y</span>: -q.<span class="hljs-property">y</span>, <span class="hljs-attr">z</span>: -q.<span class="hljs-property">z</span>, <span class="hljs-attr">w</span>: q.<span class="hljs-property">w</span> &#125;;<br>  <span class="hljs-keyword">let</span> qv = &#123; <span class="hljs-attr">x</span>: v.<span class="hljs-property">x</span>, <span class="hljs-attr">y</span>: v.<span class="hljs-property">y</span>, <span class="hljs-attr">z</span>: v.<span class="hljs-property">z</span>, <span class="hljs-attr">w</span>: <span class="hljs-number">0</span> &#125;;<br>  <span class="hljs-keyword">let</span> resultQuat = <span class="hljs-title function_">multiplyQuaternions</span>(<span class="hljs-title function_">multiplyQuaternions</span>(q, qv), qConjugate);<br>  <span class="hljs-keyword">return</span> &#123; <span class="hljs-attr">x</span>: resultQuat.<span class="hljs-property">x</span>, <span class="hljs-attr">y</span>: resultQuat.<span class="hljs-property">y</span>, <span class="hljs-attr">z</span>: resultQuat.<span class="hljs-property">z</span> &#125;;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><strong>Benefits of Using Quaternions:</strong></p>
+<ul>
+<li><strong>Smooth Rotations</strong>: Enables continuous and fluid spinning of the planet.</li>
+<li><strong>Avoids Gimbal Lock</strong>: Maintains consistent rotational axes, crucial for multi-axis rotations.</li>
+</ul>
+<hr>
+<h2 id="Drawing-Satellite-Orbits-with-Occlusion-and-Perspective"><a href="#Drawing-Satellite-Orbits-with-Occlusion-and-Perspective" class="headerlink" title="Drawing Satellite Orbits with Occlusion and Perspective"></a>Drawing Satellite Orbits with Occlusion and Perspective</h2><p>Satellites orbiting the planet add layers of complexity and interactivity. Visualizing their paths involves not just drawing circles but accounting for their three-dimensional trajectories and interactions with the planet’s surface.</p>
+<h3 id="Defining-Satellite-Orbits"><a href="#Defining-Satellite-Orbits" class="headerlink" title="Defining Satellite Orbits"></a>Defining Satellite Orbits</h3><p>Each satellite has:</p>
+<ul>
+<li><strong>Orbit Radius (<code>orbitRadius</code>)</strong>: Distance from the planet’s center.</li>
+<li><strong>Orbit Quaternion (<code>orbitQuat</code>)</strong>: Represents the orientation of the orbit in 3D space.</li>
+<li><strong>Satellite Angle (<code>satelliteAngle</code>)</strong>: Current position along the orbit.</li>
+<li><strong>Orbital Speed (<code>orbitalSpeed</code>)</strong>: Determines how fast the satellite moves.</li>
+</ul>
+<h3 id="Rendering-Orbits"><a href="#Rendering-Orbits" class="headerlink" title="Rendering Orbits"></a>Rendering Orbits</h3><p>To depict satellite orbits:</p>
+<ol>
+<li><strong>Calculate Orbit Path</strong>: Use the orbit’s quaternion to determine its orientation in space.</li>
+<li><strong>Draw the Path</strong>: Iterate through angles (0° to 360°) to plot the orbit’s trajectory, adjusting for occlusion.</li>
+<li><strong>Handle Occlusion</strong>: Determine if parts of the orbit are behind the planet, rendering them invisible or with reduced opacity.</li>
+</ol>
+<p><strong>Code Snippet:</strong></p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">function</span> <span class="hljs-title function_">drawOrbitAndSatellite</span>(<span class="hljs-params">satellite, satellitePositions3D</span>) &#123;<br>  <span class="hljs-keyword">let</span> orbitRadius = satellite.<span class="hljs-property">orbitRadius</span> + radius;<br>  <span class="hljs-keyword">let</span> orbitQuat = satellite.<span class="hljs-property">orbitQuat</span>;<br><br>  <span class="hljs-comment">// Draw Orbit</span><br>  <span class="hljs-keyword">let</span> angleIncrement = <span class="hljs-number">1</span>; <span class="hljs-comment">// Degree increment for plotting</span><br>  <span class="hljs-keyword">let</span> prevVisible = <span class="hljs-literal">false</span>;<br>  <span class="hljs-keyword">let</span> currentShapeStarted = <span class="hljs-literal">false</span>;<br><br>  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> angle = <span class="hljs-number">0</span>; angle &lt;= <span class="hljs-number">360</span>; angle += angleIncrement) &#123;<br>    <span class="hljs-keyword">let</span> angleRadian = <span class="hljs-title function_">radians</span>(angle);<br>    <span class="hljs-keyword">let</span> localPoint = &#123; <span class="hljs-attr">x</span>: orbitRadius * <span class="hljs-title function_">cos</span>(angleRadian), <span class="hljs-attr">y</span>: <span class="hljs-number">0</span>, <span class="hljs-attr">z</span>: orbitRadius * <span class="hljs-title function_">sin</span>(angleRadian) &#125;;<br>    <span class="hljs-keyword">let</span> rotatedPoint = <span class="hljs-title function_">rotateVectorByQuaternion</span>(localPoint, orbitQuat);<br><br>    <span class="hljs-comment">// Occlusion Logic</span><br>    <span class="hljs-keyword">let</span> y2z2 = rotatedPoint.<span class="hljs-property">y</span> * rotatedPoint.<span class="hljs-property">y</span> + rotatedPoint.<span class="hljs-property">z</span> * rotatedPoint.<span class="hljs-property">z</span>;<br>    <span class="hljs-keyword">let</span> visible = y2z2 &gt; radius * radius || rotatedPoint.<span class="hljs-property">x</span> &lt; <span class="hljs-title function_">sqrt</span>(radius * radius - y2z2);<br><br>    <span class="hljs-keyword">if</span> (visible) &#123;<br>      <span class="hljs-keyword">if</span> (!prevVisible) &#123;<br>        <span class="hljs-title function_">beginShape</span>();<br>        currentShapeStarted = <span class="hljs-literal">true</span>;<br>      &#125;<br>      <span class="hljs-keyword">let</span> screenX = centerX + rotatedPoint.<span class="hljs-property">z</span>;<br>      <span class="hljs-keyword">let</span> screenY = centerY - rotatedPoint.<span class="hljs-property">y</span>;<br>      <span class="hljs-title function_">stroke</span>(<span class="hljs-number">150</span>, <span class="hljs-title function_">map</span>(rotatedPoint.<span class="hljs-property">x</span>, -orbitRadius, orbitRadius, <span class="hljs-number">255</span>, <span class="hljs-number">50</span>));<br>      <span class="hljs-title function_">vertex</span>(screenX, screenY);<br>    &#125; <span class="hljs-keyword">else</span> &#123;<br>      <span class="hljs-keyword">if</span> (prevVisible &amp;&amp; currentShapeStarted) &#123;<br>        <span class="hljs-title function_">endShape</span>();<br>        currentShapeStarted = <span class="hljs-literal">false</span>;<br>      &#125;<br>    &#125;<br><br>    prevVisible = visible;<br>  &#125;<br>  <span class="hljs-keyword">if</span> (currentShapeStarted) &#123;<br>    <span class="hljs-title function_">endShape</span>();<br>  &#125;<br><br>  <span class="hljs-comment">// Update Satellite Position</span><br>  satellite.<span class="hljs-property">satelliteAngle</span> += satellite.<span class="hljs-property">orbitalSpeed</span> / orbitRadius;<br>  <span class="hljs-keyword">let</span> satellitePoint = &#123; <span class="hljs-attr">x</span>: orbitRadius * <span class="hljs-title function_">cos</span>(satellite.<span class="hljs-property">satelliteAngle</span>), <span class="hljs-attr">y</span>: <span class="hljs-number">0</span>, <span class="hljs-attr">z</span>: orbitRadius * <span class="hljs-title function_">sin</span>(satellite.<span class="hljs-property">satelliteAngle</span>) &#125;;<br>  <span class="hljs-keyword">let</span> rotatedSatellitePoint = <span class="hljs-title function_">rotateVectorByQuaternion</span>(satellitePoint, orbitQuat);<br>  satellitePositions3D.<span class="hljs-title function_">push</span>(rotatedSatellitePoint);<br><br>  <span class="hljs-comment">// Project to 2D</span><br>  <span class="hljs-keyword">let</span> screenSatelliteX = centerX + rotatedSatellitePoint.<span class="hljs-property">z</span>;<br>  <span class="hljs-keyword">let</span> screenSatelliteY = centerY - rotatedSatellitePoint.<span class="hljs-property">y</span>;<br>  <span class="hljs-keyword">let</span> alphaValue = <span class="hljs-title function_">map</span>(rotatedSatellitePoint.<span class="hljs-property">x</span>, -orbitRadius, orbitRadius, <span class="hljs-number">255</span>, <span class="hljs-number">50</span>);<br><br>  <span class="hljs-comment">// Occlusion Check for Satellite</span><br>  <span class="hljs-keyword">let</span> satY2Z2 = rotatedSatellitePoint.<span class="hljs-property">y</span> * rotatedSatellitePoint.<span class="hljs-property">y</span> + rotatedSatellitePoint.<span class="hljs-property">z</span> * rotatedSatellitePoint.<span class="hljs-property">z</span>;<br>  <span class="hljs-keyword">let</span> satelliteVisible = satY2Z2 &gt; radius * radius || rotatedSatellitePoint.<span class="hljs-property">x</span> &lt; <span class="hljs-title function_">sqrt</span>(radius * radius - satY2Z2);<br><br>  <span class="hljs-keyword">if</span> (satelliteVisible) &#123;<br>    <span class="hljs-title function_">fill</span>(<span class="hljs-number">0</span>, alphaValue);<br>    <span class="hljs-title function_">ellipse</span>(screenSatelliteX, screenSatelliteY, <span class="hljs-number">10</span>, <span class="hljs-number">10</span>);<br>    <span class="hljs-title function_">fill</span>(<span class="hljs-number">0</span>);<br>    <span class="hljs-title function_">textSize</span>(<span class="hljs-number">12</span>);<br>    <span class="hljs-title function_">text</span>(satellite.<span class="hljs-property">ship</span> ? satellite.<span class="hljs-property">ship</span>.<span class="hljs-property">name</span> : <span class="hljs-string">`卫星 <span class="hljs-subst">$&#123;satellites.indexOf(satellite) + <span class="hljs-number">1</span>&#125;</span>`</span>, screenSatelliteX + <span class="hljs-number">10</span>, screenSatelliteY);<br>  &#125; <span class="hljs-keyword">else</span> &#123;<br>    <span class="hljs-title function_">stroke</span>(<span class="hljs-number">0</span>);<br>    <span class="hljs-title function_">strokeWeight</span>(<span class="hljs-number">1</span>);<br>    drawingContext.<span class="hljs-title function_">setLineDash</span>([<span class="hljs-number">5</span>, <span class="hljs-number">5</span>]); <span class="hljs-comment">// Dashed line for occluded satellites</span><br>    <span class="hljs-title function_">fill</span>(<span class="hljs-number">255</span>);<br>    <span class="hljs-title function_">ellipse</span>(screenSatelliteX, screenSatelliteY, <span class="hljs-number">10</span>, <span class="hljs-number">10</span>);<br>    drawingContext.<span class="hljs-title function_">setLineDash</span>([]);<br>    <span class="hljs-title function_">fill</span>(<span class="hljs-number">0</span>);<br>    <span class="hljs-title function_">textSize</span>(<span class="hljs-number">12</span>);<br>    <span class="hljs-title function_">text</span>(satellite.<span class="hljs-property">ship</span> ? satellite.<span class="hljs-property">ship</span>.<span class="hljs-property">name</span> : <span class="hljs-string">`卫星 <span class="hljs-subst">$&#123;satellites.indexOf(satellite) + <span class="hljs-number">1</span>&#125;</span>`</span>, screenSatelliteX + <span class="hljs-number">10</span>, screenSatelliteY);<br>  &#125;<br><br>  <span class="hljs-comment">// Draw Attack Range</span><br>  <span class="hljs-title function_">drawSatelliteRangeArea</span>(rotatedSatellitePoint, satellites.<span class="hljs-title function_">indexOf</span>(satellite));<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="Occlusion-and-Visibility"><a href="#Occlusion-and-Visibility" class="headerlink" title="Occlusion and Visibility"></a>Occlusion and Visibility</h3><p>Occlusion ensures that satellites behind the planet are not fully visible, maintaining realism. The logic determines whether a satellite or a point on its orbit is obscured by the planet’s sphere based on their spatial coordinates.</p>
+<p><strong>Steps:</strong></p>
+<ol>
+<li><strong>Calculate Position</strong>: Determine the satellite’s position in 3D space.</li>
+<li><strong>Determine Visibility</strong>: If a satellite’s position intersects with the planet’s sphere (i.e., it’s behind), adjust its rendering style (e.g., dashed outline).</li>
+<li><strong>Render Accordingly</strong>: Visible satellites are drawn normally, while occluded ones have a distinct appearance.</li>
+</ol>
+<h3 id="Perspective-and-Depth"><a href="#Perspective-and-Depth" class="headerlink" title="Perspective and Depth"></a>Perspective and Depth</h3><p>By mapping the <code>z-axis</code> to the horizontal <code>x-axis</code> and adjusting transparency based on the <code>x</code> value, satellites appear to move towards or away from the viewer, enhancing the depth perception.</p>
+<hr>
+<h2 id="Calculating-and-Displaying-Satellite-Attack-Ranges"><a href="#Calculating-and-Displaying-Satellite-Attack-Ranges" class="headerlink" title="Calculating and Displaying Satellite Attack Ranges"></a>Calculating and Displaying Satellite Attack Ranges</h2><p>Visualizing attack ranges adds strategic depth to the battle system, allowing players to understand the influence areas of their satellites.</p>
+<h3 id="Defining-Attack-Range"><a href="#Defining-Attack-Range" class="headerlink" title="Defining Attack Range"></a>Defining Attack Range</h3><p>Each satellite possesses an attack range (<code>shootingRange</code>) determining how far its influence extends. This range is visualized as a circular area around the satellite’s current position.</p>
+<h3 id="Calculating-the-Range"><a href="#Calculating-the-Range" class="headerlink" title="Calculating the Range"></a>Calculating the Range</h3><p>The attack range is calculated based on the satellite’s position relative to the planet. It involves determining whether the range intersects with the planet’s surface and rendering the overlapping areas appropriately.</p>
+<p><strong>Mathematical Concepts:</strong></p>
+<ul>
+<li><strong>Circle Intersection</strong>: Determines if the attack range circle intersects with the planet’s sphere.</li>
+<li><strong>Orthogonal Projection</strong>: Projects the 3D range onto the 2D canvas, considering the planet’s rotation.</li>
+</ul>
+<h3 id="Rendering-the-Attack-Range"><a href="#Rendering-the-Attack-Range" class="headerlink" title="Rendering the Attack Range"></a>Rendering the Attack Range</h3><p>The attack range is depicted as a shaded area around each satellite. If the range overlaps with the planet, it appears partially obscured to maintain realism.</p>
+<p><strong>Code Snippet:</strong></p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">function</span> <span class="hljs-title function_">drawSatelliteRangeArea</span>(<span class="hljs-params">satellitePos, satelliteIndex</span>) &#123;<br>  <span class="hljs-keyword">let</span> <span class="hljs-variable constant_">R1</span> = radius; <span class="hljs-comment">// Planet radius</span><br>  <span class="hljs-keyword">let</span> <span class="hljs-variable constant_">R2</span> = shootingRange; <span class="hljs-comment">// Attack range</span><br>  <span class="hljs-keyword">let</span> <span class="hljs-variable constant_">P1</span> = &#123; <span class="hljs-attr">x</span>: <span class="hljs-number">0</span>, <span class="hljs-attr">y</span>: <span class="hljs-number">0</span>, <span class="hljs-attr">z</span>: <span class="hljs-number">0</span> &#125;; <span class="hljs-comment">// Planet center</span><br><br>  <span class="hljs-comment">// Rotate satellite position back to planet&#x27;s frame</span><br>  <span class="hljs-keyword">let</span> planetRotationQuat = <span class="hljs-title function_">rotateQuaternion</span>(&#123; <span class="hljs-attr">x</span>: <span class="hljs-number">0</span>, <span class="hljs-attr">y</span>: <span class="hljs-number">0</span>, <span class="hljs-attr">z</span>: <span class="hljs-number">0</span>, <span class="hljs-attr">w</span>: <span class="hljs-number">1</span> &#125;, &#123; <span class="hljs-attr">x</span>: <span class="hljs-number">0</span>, <span class="hljs-attr">y</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">z</span>: <span class="hljs-number">0</span> &#125;, rotationAngle);<br>  <span class="hljs-keyword">let</span> satellitePosInPlanetFrame = <span class="hljs-title function_">rotateVectorByQuaternion</span>(satellitePos, planetRotationQuatInverse);<br><br>  <span class="hljs-keyword">let</span> <span class="hljs-variable constant_">P2</span> = satellitePosInPlanetFrame; <span class="hljs-comment">// Satellite position in planet&#x27;s frame</span><br>  <span class="hljs-keyword">let</span> d = <span class="hljs-title function_">dist3D</span>(<span class="hljs-variable constant_">P1</span>, <span class="hljs-variable constant_">P2</span>); <span class="hljs-comment">// Distance between planet center and satellite</span><br><br>  <span class="hljs-comment">// Check for intersection</span><br>  <span class="hljs-keyword">if</span> (d &gt; <span class="hljs-variable constant_">R1</span> + <span class="hljs-variable constant_">R2</span> || d &lt; <span class="hljs-title function_">abs</span>(<span class="hljs-variable constant_">R1</span> - <span class="hljs-variable constant_">R2</span>)) &#123;<br>    <span class="hljs-keyword">return</span>; <span class="hljs-comment">// No intersection</span><br>  &#125;<br><br>  <span class="hljs-comment">// Calculate intersection circle</span><br>  <span class="hljs-keyword">let</span> a = (<span class="hljs-variable constant_">R1</span> * <span class="hljs-variable constant_">R1</span> - <span class="hljs-variable constant_">R2</span> * <span class="hljs-variable constant_">R2</span> + d * d) / (<span class="hljs-number">2</span> * d);<br>  <span class="hljs-keyword">let</span> h = <span class="hljs-title function_">sqrt</span>(<span class="hljs-variable constant_">R1</span> * <span class="hljs-variable constant_">R1</span> - a * a);<br><br>  <span class="hljs-comment">// Center of intersection circle</span><br>  <span class="hljs-keyword">let</span> P_c = &#123;<br>    <span class="hljs-attr">x</span>: <span class="hljs-variable constant_">P1</span>.<span class="hljs-property">x</span> + a * (<span class="hljs-variable constant_">P2</span>.<span class="hljs-property">x</span> - <span class="hljs-variable constant_">P1</span>.<span class="hljs-property">x</span>) / d,<br>    <span class="hljs-attr">y</span>: <span class="hljs-variable constant_">P1</span>.<span class="hljs-property">y</span> + a * (<span class="hljs-variable constant_">P2</span>.<span class="hljs-property">y</span> - <span class="hljs-variable constant_">P1</span>.<span class="hljs-property">y</span>) / d,<br>    <span class="hljs-attr">z</span>: <span class="hljs-variable constant_">P1</span>.<span class="hljs-property">z</span> + a * (<span class="hljs-variable constant_">P2</span>.<span class="hljs-property">z</span> - <span class="hljs-variable constant_">P1</span>.<span class="hljs-property">z</span>) / d<br>  &#125;;<br><br>  <span class="hljs-comment">// Normal vector</span><br>  <span class="hljs-keyword">let</span> n = &#123;<br>    <span class="hljs-attr">x</span>: (<span class="hljs-variable constant_">P2</span>.<span class="hljs-property">x</span> - <span class="hljs-variable constant_">P1</span>.<span class="hljs-property">x</span>) / d,<br>    <span class="hljs-attr">y</span>: (<span class="hljs-variable constant_">P2</span>.<span class="hljs-property">y</span> - <span class="hljs-variable constant_">P1</span>.<span class="hljs-property">y</span>) / d,<br>    <span class="hljs-attr">z</span>: (<span class="hljs-variable constant_">P2</span>.<span class="hljs-property">z</span> - <span class="hljs-variable constant_">P1</span>.<span class="hljs-property">z</span>) / d<br>  &#125;;<br><br>  <span class="hljs-comment">// Orthogonal basis</span><br>  <span class="hljs-keyword">let</span> arbitraryVector = &#123; <span class="hljs-attr">x</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">y</span>: <span class="hljs-number">0</span>, <span class="hljs-attr">z</span>: <span class="hljs-number">0</span> &#125;;<br>  <span class="hljs-keyword">if</span> (<span class="hljs-title function_">abs</span>(n.<span class="hljs-property">x</span>) &gt; <span class="hljs-number">0.99</span>) arbitraryVector = &#123; <span class="hljs-attr">x</span>: <span class="hljs-number">0</span>, <span class="hljs-attr">y</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">z</span>: <span class="hljs-number">0</span> &#125;;<br>  <span class="hljs-keyword">let</span> u = <span class="hljs-title function_">crossProduct</span>(n, arbitraryVector);<br>  u = <span class="hljs-title function_">normalize</span>(u);<br>  <span class="hljs-keyword">let</span> v = <span class="hljs-title function_">crossProduct</span>(n, u);<br><br>  <span class="hljs-comment">// Sample points around the intersection circle</span><br>  <span class="hljs-keyword">let</span> numPoints = <span class="hljs-number">100</span>;<br>  <span class="hljs-keyword">let</span> angleStep = <span class="hljs-variable constant_">TWO_PI</span> / numPoints;<br>  <span class="hljs-keyword">let</span> frontVertices = [];<br>  <span class="hljs-keyword">let</span> backVertices = [];<br><br>  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt;= numPoints; i++) &#123;<br>    <span class="hljs-keyword">let</span> angle = i * angleStep;<br>    <span class="hljs-keyword">let</span> point = &#123;<br>      <span class="hljs-attr">x</span>: P_c.<span class="hljs-property">x</span> + h * (<span class="hljs-title function_">cos</span>(angle) * u.<span class="hljs-property">x</span> + <span class="hljs-title function_">sin</span>(angle) * v.<span class="hljs-property">x</span>),<br>      <span class="hljs-attr">y</span>: P_c.<span class="hljs-property">y</span> + h * (<span class="hljs-title function_">cos</span>(angle) * u.<span class="hljs-property">y</span> + <span class="hljs-title function_">sin</span>(angle) * v.<span class="hljs-property">y</span>),<br>      <span class="hljs-attr">z</span>: P_c.<span class="hljs-property">z</span> + h * (<span class="hljs-title function_">cos</span>(angle) * u.<span class="hljs-property">z</span> + <span class="hljs-title function_">sin</span>(angle) * v.<span class="hljs-property">z</span>)<br>    &#125;;<br><br>    <span class="hljs-comment">// Rotate back to world frame</span><br>    <span class="hljs-keyword">let</span> rotatedPoint = <span class="hljs-title function_">rotateVectorByQuaternion</span>(point, planetRotationQuat);<br><br>    <span class="hljs-comment">// Project to 2D</span><br>    <span class="hljs-keyword">let</span> screenX = centerX + rotatedPoint.<span class="hljs-property">z</span>;<br>    <span class="hljs-keyword">let</span> screenY = centerY - rotatedPoint.<span class="hljs-property">y</span>;<br><br>    <span class="hljs-comment">// Determine front or back</span><br>    <span class="hljs-keyword">let</span> normal = <span class="hljs-title function_">normalize</span>(rotatedPoint);<br>    <span class="hljs-keyword">let</span> viewDir = &#123; <span class="hljs-attr">x</span>: -<span class="hljs-number">1</span>, <span class="hljs-attr">y</span>: <span class="hljs-number">0</span>, <span class="hljs-attr">z</span>: <span class="hljs-number">0</span> &#125;; <span class="hljs-comment">// Viewer direction</span><br>    <span class="hljs-keyword">let</span> dotProduct = <span class="hljs-title function_">dot</span>(normal, viewDir);<br><br>    <span class="hljs-keyword">if</span> (dotProduct &gt; <span class="hljs-number">0</span>) &#123;<br>      frontVertices.<span class="hljs-title function_">push</span>(&#123; <span class="hljs-attr">x</span>: screenX, <span class="hljs-attr">y</span>: screenY &#125;);<br>    &#125; <span class="hljs-keyword">else</span> &#123;<br>      backVertices.<span class="hljs-title function_">push</span>(&#123; <span class="hljs-attr">x</span>: screenX, <span class="hljs-attr">y</span>: screenY &#125;);<br>    &#125;<br>  &#125;<br><br>  <span class="hljs-comment">// Draw front area</span><br>  <span class="hljs-keyword">if</span> (frontVertices.<span class="hljs-property">length</span> &gt; <span class="hljs-number">2</span>) &#123;<br>    <span class="hljs-title function_">fill</span>(<span class="hljs-number">150</span>, <span class="hljs-number">150</span>, <span class="hljs-number">150</span>, <span class="hljs-number">100</span>); <span class="hljs-comment">// Semi-transparent gray</span><br>    <span class="hljs-title function_">stroke</span>(<span class="hljs-number">0</span>);<br>    <span class="hljs-title function_">beginShape</span>();<br>    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> v <span class="hljs-keyword">of</span> frontVertices) <span class="hljs-title function_">vertex</span>(v.<span class="hljs-property">x</span>, v.<span class="hljs-property">y</span>);<br>    <span class="hljs-title function_">endShape</span>(<span class="hljs-variable constant_">CLOSE</span>);<br>    <span class="hljs-title function_">noFill</span>();<br>  &#125;<br><br>  <span class="hljs-comment">// Draw back area</span><br>  <span class="hljs-keyword">if</span> (backVertices.<span class="hljs-property">length</span> &gt; <span class="hljs-number">2</span>) &#123;<br>    <span class="hljs-title function_">fill</span>(<span class="hljs-number">255</span>, <span class="hljs-number">255</span>, <span class="hljs-number">255</span>, <span class="hljs-number">0</span>); <span class="hljs-comment">// Transparent</span><br>    <span class="hljs-title function_">stroke</span>(<span class="hljs-number">0</span>);<br>    drawingContext.<span class="hljs-title function_">setLineDash</span>([<span class="hljs-number">5</span>, <span class="hljs-number">5</span>]); <span class="hljs-comment">// Dashed line</span><br>    <span class="hljs-title function_">beginShape</span>();<br>    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> v <span class="hljs-keyword">of</span> backVertices) <span class="hljs-title function_">vertex</span>(v.<span class="hljs-property">x</span>, v.<span class="hljs-property">y</span>);<br>    <span class="hljs-title function_">endShape</span>(<span class="hljs-variable constant_">CLOSE</span>);<br>    drawingContext.<span class="hljs-title function_">setLineDash</span>([]);<br>    <span class="hljs-title function_">noFill</span>();<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><strong>Key Steps:</strong></p>
+<ol>
+<li><strong>Intersection Calculation</strong>: Determines where the attack range intersects with the planet’s surface, ensuring that overlapping areas are handled correctly.</li>
+<li><strong>Orthogonal Basis Construction</strong>: Constructs an orthogonal basis (<code>u</code>, <code>v</code>) for the intersection circle, facilitating the sampling of points around it.</li>
+<li><strong>Projection and Rendering</strong>: Projects the 3D intersection points onto the 2D canvas, distinguishing between front and back areas to handle visibility and shading.</li>
+</ol>
+<hr>
+<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><p>Creating a 3D planetary battle system within a 2D canvas using p5.js is a harmonious blend of mathematics and graphics programming. By leveraging concepts like quaternions for smooth rotations, vector projections for depth perception, and geometric intersections for realistic attack range visualization, developers can craft immersive and interactive environments.</p>
+<p>This exploration showcased how to:</p>
+<ul>
+<li><strong>Render a rotating planet</strong> with latitude and longitude lines using quaternion-based rotations.</li>
+<li><strong>Project 3D space onto a 2D canvas</strong> to simulate depth and perspective.</li>
+<li><strong>Visualize satellite orbits</strong> with occlusion handling to enhance realism.</li>
+<li><strong>Calculate and display attack ranges</strong> dynamically, accounting for intersections with the planet.</li>
+</ul>
+<p>For beginners, integrating these concepts can seem daunting, but breaking them down into manageable components—as demonstrated—makes the process approachable. As you continue to experiment and refine these techniques, you’ll unlock the potential to create even more sophisticated and engaging visualizations in your projects.</p>
+<p>Happy coding, and may your virtual universes shine brilliantly!</p>
+
+    </div>
+
+    
+    <div class="about">
+        <h1>About this Post</h1>
+        <div class="details">
+            <p>This post is written by FFFeiya, licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc/4.0">CC BY-NC 4.0</a>.</p>
+        </div>
+        
+        <p class="tags">
+            
+            <i class="icon"></i>
+            <a href="/tags/p5-js/" class="tag">#p5.js</a><a href="/tags/Space/" class="tag">#Space</a><a href="/tags/JavaScript/" class="tag">#JavaScript</a>
+        </p>
+        
+    </div>
+    
+
+    <div class="container post-prev-next">
+        
+        <a href="/2024/12/15/hello-world/" class="next">
+            <div>
+                <div class="text">
+                    <p class="label">Next</p>
+                    <h3 class="title">Hello World</h3>
+                </div>
+            </div>
+        </a>
+        
+        
+        <a href="/2024/12/08/Bridging%20Unity%20with%20Python%20and%20ChatGPT/" class="prev">
+            <div>
+                <div class="text">
+                    <p class="label">Previous</p>
+                    <h3 class="title">Bridging Unity with Python and ChatGPT: A Comprehensive Guide</>
+                </div>
+            </div>
+        </a>
+        
+    </div>
+
+    
+        
+        
+    
+</article>
+
+        <footer>
+    <div class="inner">
+        <div class="links">
+            
+            <div class="group">
+                <h2 class="title">Blog</h2>
+                
+                <a href="/" class="item">Blog</a>
+                
+                <a href="/archives" class="item">Archives</a>
+                
+                <a href="/tags" class="item">Tags</a>
+                
+                <a href="/categories" class="item">Categories</a>
+                
+                <a href="/friends" class="item">Friends</a>
+                
+                <a href="/projects" class="item">Projects</a>
+                
+                <a href="/about" class="item">About</a>
+                
+            </div>
+            
+            <div class="group">
+                <h2 class="title">Projects</h2>
+                
+                <a target="_blank" rel="noopener" href="https://space.bilibili.com/86921782" class="item">VIDEOS</a>
+                
+            </div>
+            
+            <div class="group">
+                <h2 class="title">Me</h2>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/FFFeiya" class="item">GitHub</a>
+                
+                <a href="mailto:ya5henpai@163.com" class="item">Email</a>
+                
+                <a target="_blank" rel="noopener" href="https://bgm.tv/user/fffeiya" class="item">Bangumi</a>
+                
+                <a target="_blank" rel="noopener" href="https://www.pixiv.net/users/26980321" class="item">pixiv</a>
+                
+                <a target="_blank" rel="noopener" href="https://space.bilibili.com/86921782" class="item">Bilibili</a>
+                
+            </div>
+            
+        </div>
+        <span>&copy; 2024 FFFeiya<br>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> </span>
+        
+        
+            <br>
+            <div class="color-scheme-toggle" role="radiogroup" id="theme-color-scheme-toggle">
+                <label>
+                    <input type="radio" value="light">
+                    <span>Light</span>
+                </label>
+                <label>
+                    <input type="radio" value="dark">
+                    <span>Dark</span>
+                </label>
+                <label>
+                    <input type="radio" value="auto">
+                    <span>Auto</span>
+                </label>
+            </div>
+        
+    </div>
+</footer>
+
+
+        
+<script src="/js/main.js"></script>
+
+        
+        
+        
+
+        
+        <script src="https://unpkg.com/scrollreveal"></script>
+        <script>
+            window.addEventListener('load', () => {
+                ScrollReveal({ delay: 250, reset: true, easing: 'cubic-bezier(0, 0, 0, 1)' })
+                ScrollReveal().reveal('.post-list-item .cover-img img')
+                ScrollReveal().reveal('.post-list-item, .card, .content p img, .content .block-large img', { distance: '60px', origin: 'bottom', duration: 800 })
+            })
+        </script>
+        
+    </body>
+</html>
