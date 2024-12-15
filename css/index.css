@@ -20,7 +20,7 @@
 /* subtitle 样式 */
 .hero .sub {
     text-transform: uppercase; /* 转换为大写 */
-    font-size: 72px; /* 字体大小 */
+    font-size: 72px !important; /* 字体大小 */
     font-weight: 100; /* 字体细度 */
     color: var(--black-4, rgba(255, 255, 255, 0.7)); /* 半透明白色 */
     margin: 0;
