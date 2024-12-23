@@ -1,22 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My p5.js Game</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            overflow: hidden; /* 防止出现滚动条 */
-        }
-        canvas {
-            display: block; /* 确保画布居中 */
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>Fleet Battle Game</title>
+  <!-- 引入 p5.js 库 -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+  <!-- 引入 FileSaver.js 库用于保存文件 -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
 </head>
 <body>
-    <script src="planet3_5.js"></script>
+  <!-- 隐藏的文件输入，用于加载存档 -->
+  <input type="file" id="fileInput" accept=".json" style="display:none;" />
+  
+  <!-- 引入主游戏脚本 -->
+  <script src="planet6.js"></script>
 </body>
 </html>
