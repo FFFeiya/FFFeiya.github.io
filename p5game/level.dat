@@ -1,8 +1,220 @@
-1,5.972e24,0.01,200
+1,5.972e24,0.02,200
 3
-1-1,0.8,1.8,30,5,45,150,Poison,30,45,0
-1-2,0.8,1.8,25,5,45,180,Holy Light,-20,120,0
-1-3,0.6,2.2,30,5,45,150,Shadow,10,270,50
-50,100
-1
-Meteor,0.1
+RedPoint1_1,20,10,100,15,5,300,Fire,0,0,200
+RedPoint1_2,25,15,120,20,7,350,Water,45,90,200
+RedPoint1_3,30,20,150,25,10,400,Poison,90,180,200
+100,200
+3
+Heavy Cannon,0.2
+Light AA Gun,0.3
+Torpedo Launcher,0.1
+2,6.072e24,0.022,220
+4
+RedPoint2_1,22,12,110,16,6,320,Holy Light,30,60,220
+RedPoint2_2,28,18,140,22,12,420,Shadow,75,120,220
+RedPoint2_3,32,25,180,30,15,480,Energy,120,180,220
+RedPoint2_4,35,30,200,35,20,500,Poison,165,240,220
+150,300
+4
+Heavy Cannon,0.15
+Light AA Gun,0.25
+Torpedo Launcher,0.1
+Advanced Radar,0.05
+3,6.172e24,0.025,240
+5
+RedPoint3_1,24,14,130,18,8,340,Fire,15,30,240
+RedPoint3_2,30,20,160,25,12,450,Water,60,60,240
+RedPoint3_3,38,28,210,35,18,520,Holy Light,105,90,240
+RedPoint3_4,42,35,250,40,20,550,Shadow,150,120,240
+RedPoint3_5,45,40,280,45,25,600,Energy,195,150,240
+200,400
+5
+Heavy Cannon,0.1
+Light AA Gun,0.2
+Torpedo Launcher,0.15
+Advanced Radar,0.1
+Shield Generator,0.05
+4,6.272e24,0.028,260
+6
+RedPoint4_1,26,16,140,20,10,360,Poison,30,30,260
+RedPoint4_2,34,22,190,28,16,500,Fire,75,75,260
+RedPoint4_3,40,30,240,40,20,600,Energy,120,120,260
+RedPoint4_4,45,38,280,45,25,650,Holy Light,165,165,260
+RedPoint4_5,50,45,320,50,30,700,Poison,210,210,260
+RedPoint4_6,55,50,350,55,35,750,Energy,255,255,260
+250,500
+5
+Heavy Cannon,0.1
+Light AA Gun,0.2
+Torpedo Launcher,0.1
+Advanced Radar,0.1
+Shield Generator,0.05
+Missile Pod,0.07
+5,6.372e24,0.03,280
+6
+RedPoint5_1,28,18,150,22,12,380,Fire,45,0,280
+RedPoint5_2,36,24,200,30,18,520,Shadow,90,45,280
+RedPoint5_3,42,32,250,42,22,600,Energy,135,90,280
+RedPoint5_4,48,40,300,50,25,800,Holy Light,180,135,280
+RedPoint5_5,55,48,350,58,30,850,Poison,225,180,280
+RedPoint5_6,60,55,400,65,35,900,Energy,270,225,280
+300,600
+6
+Heavy Cannon,0.08
+Light AA Gun,0.12
+Torpedo Launcher,0.1
+Advanced Radar,0.08
+Shield Generator,0.05
+Missile Pod,0.07
+7,6.472e24,0.032,300
+6
+RedPoint6_1,30,20,160,24,14,400,Fire,60,0,300
+RedPoint6_2,38,26,210,32,20,540,Shadow,120,60,300
+RedPoint6_3,44,34,260,44,24,700,Energy,180,120,300
+RedPoint6_4,50,42,310,52,28,850,Holy Light,240,180,300
+RedPoint6_5,58,50,360,60,33,900,Poison,300,240,300
+RedPoint6_6,63,58,410,68,38,950,Energy,345,300,300
+350,700
+6
+Heavy Cannon,0.07
+Light AA Gun,0.1
+Torpedo Launcher,0.08
+Advanced Radar,0.07
+Shield Generator,0.05
+Missile Pod,0.07
+Quantum Disruptor,0.04
+8,6.572e24,0.035,320
+7
+RedPoint7_1,32,22,170,26,16,420,Fire,75,0,320
+RedPoint7_2,40,28,220,34,22,560,Shadow,150,60,320
+RedPoint7_3,46,36,270,46,26,720,Energy,225,120,320
+RedPoint7_4,52,44,320,54,30,870,Holy Light,300,180,320
+RedPoint7_5,60,52,370,62,35,920,Poison,360,240,320
+RedPoint7_6,65,60,420,70,40,970,Energy,405,300,320
+RedPoint7_7,72,68,470,78,45,1020,Holy Light,450,345,320
+400,800
+6
+Heavy Cannon,0.07
+Light AA Gun,0.1
+Torpedo Launcher,0.07
+Advanced Radar,0.07
+Shield Generator,0.05
+Missile Pod,0.07
+Quantum Disruptor,0.04
+Laser Cannon,0.05
+9,6.672e24,0.038,340
+8
+RedPoint8_1,34,24,180,28,18,440,Poison,90,0,340
+RedPoint8_2,42,30,230,36,24,580,Fire,180,60,340
+RedPoint8_3,48,38,280,48,28,740,Energy,270,120,340
+RedPoint8_4,54,46,330,56,32,890,Holy Light,360,180,340
+RedPoint8_5,62,54,380,64,37,940,Shadow,450,240,340
+RedPoint8_6,67,62,430,72,42,990,Energy,495,300,340
+RedPoint8_7,74,70,480,80,47,1040,Holy Light,540,345,340
+RedPoint8_8,80,78,530,88,52,1090,Poison,585,390,340
+450,900
+7
+Heavy Cannon,0.06
+Light AA Gun,0.09
+Torpedo Launcher,0.07
+Advanced Radar,0.07
+Shield Generator,0.05
+Missile Pod,0.07
+Laser Cannon,0.05
+Quantum Disruptor,0.04
+Plasma Rifle,0.02
+10,6.772e24,0.04,360
+9
+RedPoint9_1,36,26,190,30,20,460,Fire,105,0,360
+RedPoint9_2,44,32,240,38,26,600,Shadow,225,60,360
+RedPoint9_3,50,40,290,50,30,760,Energy,315,120,360
+RedPoint9_4,56,48,340,58,34,910,Holy Light,420,180,360
+RedPoint9_5,64,56,390,66,39,960,Poison,510,240,360
+RedPoint9_6,69,64,440,74,44,1010,Energy,555,300,360
+RedPoint9_7,76,72,490,82,49,1060,Holy Light,600,345,360
+RedPoint9_8,82,80,540,90,54,1110,Poison,645,390,360
+RedPoint9_9,90,88,590,98,59,1160,Energy,690,435,360
+500,1000
+8
+Heavy Cannon,0.06
+Light AA Gun,0.09
+Torpedo Launcher,0.07
+Advanced Radar,0.07
+Shield Generator,0.05
+Missile Pod,0.07
+Laser Cannon,0.05
+Quantum Disruptor,0.04
+Plasma Rifle,0.02
+Nano Repair Kit,0.03
+11,6.872e24,0.043,380
+9
+RedPoint10_1,38,28,200,32,22,480,Fire,120,0,380
+RedPoint10_2,46,34,250,40,28,620,Shadow,270,60,380
+RedPoint10_3,52,42,300,52,32,780,Energy,360,120,380
+RedPoint10_4,58,50,350,60,36,930,Holy Light,450,180,380
+RedPoint10_5,66,58,400,68,41,980,Poison,540,240,380
+RedPoint10_6,71,66,450,76,46,1030,Energy,585,300,380
+RedPoint10_7,78,74,500,84,51,1080,Holy Light,630,345,380
+RedPoint10_8,84,82,550,92,56,1130,Poison,675,390,380
+RedPoint10_9,90,90,600,100,61,1180,Energy,720,435,380
+RedPoint10_10,96,98,650,108,66,1230,Holy Light,765,480,380
+550,1100
+9
+Heavy Cannon,0.05
+Light AA Gun,0.08
+Torpedo Launcher,0.07
+Advanced Radar,0.07
+Shield Generator,0.05
+Missile Pod,0.07
+Laser Cannon,0.05
+Quantum Disruptor,0.04
+Plasma Rifle,0.02
+Nano Repair Kit,0.03
+10,6.972e24,0.046,400
+10
+RedPoint11_1,40,30,210,34,24,500,Fire,135,0,400
+RedPoint11_2,48,36,260,42,30,640,Shadow,315,60,400
+RedPoint11_3,54,44,310,54,34,800,Energy,405,120,400
+RedPoint11_4,60,52,360,62,39,950,Holy Light,495,180,400
+RedPoint11_5,68,60,410,70,44,1000,Poison,585,240,400
+RedPoint11_6,73,68,460,78,49,1050,Energy,630,300,400
+RedPoint11_7,80,76,510,86,54,1100,Holy Light,675,345,400
+RedPoint11_8,86,84,560,94,59,1150,Poison,720,390,400
+RedPoint11_9,92,92,610,102,64,1200,Energy,765,435,400
+RedPoint11_10,98,100,660,110,69,1250,Holy Light,810,480,400
+600,1200
+9
+Heavy Cannon,0.05
+Light AA Gun,0.08
+Torpedo Launcher,0.07
+Advanced Radar,0.07
+Shield Generator,0.05
+Missile Pod,0.07
+Laser Cannon,0.05
+Quantum Disruptor,0.04
+Plasma Rifle,0.02
+Nano Repair Kit,0.03
+12,7.072e24,0.05,420
+10
+RedPoint12_1,42,32,220,36,26,520,Fire,150,0,420
+RedPoint12_2,50,38,270,44,32,660,Shadow,360,60,420
+RedPoint12_3,56,46,320,56,36,820,Energy,450,120,420
+RedPoint12_4,62,54,370,64,41,970,Holy Light,540,180,420
+RedPoint12_5,70,62,420,72,46,1020,Poison,630,240,420
+RedPoint12_6,75,70,470,80,51,1070,Energy,675,300,420
+RedPoint12_7,82,78,520,88,56,1120,Holy Light,720,345,420
+RedPoint12_8,88,86,570,96,61,1170,Poison,765,390,420
+RedPoint12_9,94,94,620,104,66,1220,Energy,810,435,420
+RedPoint12_10,100,102,670,112,71,1270,Holy Light,855,480,420
+650,1300
+10
+Heavy Cannon,0.05
+Light AA Gun,0.08
+Torpedo Launcher,0.07
+Advanced Radar,0.07
+Shield Generator,0.05
+Missile Pod,0.07
+Laser Cannon,0.05
+Quantum Disruptor,0.04
+Plasma Rifle,0.02
+Nano Repair Kit,0.03

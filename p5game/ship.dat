@@ -1,3 +1,16 @@
-Nagato,Battleship,8.2,3.1,80,75,24,12,300,200,Fire,unlocked,1000
-Mutsu,Battleship,8.2,3.2,80,70,24,12,300,200,Water,blueprint,1200
-Kitakami,Light Cruiser,1.4,2.4,40,10,36,9,200,150,Poison,locked,500
+Shimakaze,Destroyer,30,20,100,15,10,50,300,200,1000,Fire
+Ayanami,Cruiser,50,35,200,25,15,100,500,300,2500,Water
+Kagerou,Submarine,25,15,150,10,20,60,400,250,1500,Poison
+Yamato,Battleship,80,60,500,50,5,200,600,400,5000,Holy Light
+Akashi,Carrier,60,50,400,40,8,180,550,350,4500,Shadow
+Mutsuki,Frigate,35,25,120,20,12,70,350,220,1200,Energy
+Fubuki,Corvette,40,30,130,18,14,80,380,230,1300,Fire&Poison
+Atago,Cruiser,55,40,220,28,17,110,520,320,2700,Energy
+Yamato,Battleship,100,50,500,300,20,1000,800,300,5000,Fire
+Akashi,Repair Ship,20,30,200,100,40,500,300,250,1500,Water
+Atago,Heavy Cruiser,80,60,400,250,25,800,700,280,4500,Poison
+Ayanami,Destroyer,60,40,350,200,30,700,600,270,4000,Shadow
+Fubuki,Light Cruiser,70,45,380,220,28,750,650,275,4200,Energy
+Shimakaze,Destroyer,65,35,340,180,35,680,620,265,3900,Fire
+Kagerou,Frigate,55,25,300,150,38,600,550,260,3500,Holy Light
+Mutsuki,Patrol Boat,40,20,250,120,45,500,450,255,3000,Normal
