@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head prefix="og: https://ogp.me/ns#">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  
+  <title>Using iFlytek&#39;s Speech Model in Unity for Text-to-Speech (TTS) Playback - FFFeiya</title>
+  
+    <link rel="shortcut icon" href="/favicon.ico">
+  
+  
+    <link rel='manifest' href='/manifest.json'>
+  
+
+  
+  
+  
+  <meta property="og:title" content="Using iFlytek&#39;s Speech Model in Unity for Text-to-Speech (TTS) Playback - FFFeiya" />
+  
+  <meta property="og:type" content="article" />
+  
+  <meta property="og:url" content="http://example.com/2025/01/08/Using%20iFlytek&#39;s%20Speech%20Model%20in%20Unity%20for%20Text-to-Speech%20(TTS)%20Playback/index.html" />
+  
+  <meta property="og:image" content="/favicon.png" />
+  
+  <meta property="og:article:published_time" content="2025-01-08T02:00:00.000Z" />
+  
+  <meta property="og:article:author" content="FFFeiya" />
+  
+  
+
+  
+<link rel="stylesheet" href="/css/var.css">
+
+  
+<link rel="stylesheet" href="/css/main.css">
+
+  
+<link rel="stylesheet" href="/css/typography.css">
+
+  
+<link rel="stylesheet" href="/css/code-highlighting.css">
+
+  
+<link rel="stylesheet" href="/css/components.css">
+
+  
+<link rel="stylesheet" href="/css/nav.css">
+
+  
+<link rel="stylesheet" href="/css/paginator.css">
+
+  
+<link rel="stylesheet" href="/css/footer.css">
+
+  
+<link rel="stylesheet" href="/css/post-list.css">
+
+  
+  
+<link rel="stylesheet" href="/css/rainbow-banner.css">
+
+  
+  
+  
+<link rel="stylesheet" href="/css/toc.css">
+
+  
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/post.css">
+
+  
+  
+  
+  
+  
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+    <body
+        data-color-scheme="auto"
+        data-uppercase-categories="true"
+        
+        data-rainbow-banner="true"
+        data-rainbow-banner-shown="auto"
+        data-rainbow-banner-month="6"
+        data-rainbow-banner-colors="#e50000,#ff8d00,#ffee00,#008121,#004cff,#760188"
+        
+        data-config-root="/"
+        
+        data-toc="true"
+        data-toc-max-depth="2"
+        
+        
+    >
+        <nav id="theme-nav">
+    <div class="inner">
+        <a class="title" href="/">Blog</a>
+        <div class="nav-arrow"></div>
+        <div class="nav-items">
+            <a class="nav-item nav-item-home" href="/">Home</a>
+            
+            
+            <a class="nav-item" href="/archives">Archives</a>
+            
+            
+            
+            <a class="nav-item" href="/friends">Friends</a>
+            
+            
+            
+            <a class="nav-item" href="/projects">Projects</a>
+            
+            
+            
+            <a class="nav-item" href="/about">About</a>
+            
+            
+            
+            <a class="nav-item nav-item-github nav-item-icon" href="https://github.com/FFFeiya" target="_blank" aria-label="GitHub">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-discord nav-item-icon" href="https://discord.gg" target="_blank" aria-label="Discord">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-search nav-item-icon" href="/search" target="_blank" aria-label="Search">&nbsp;</a>
+            
+            
+        </div>
+    </div>
+</nav>
+        
+<article class="post">
+    <div class="meta">
+        
+        <div class="categories text-uppercase">
+        
+            <a href="/categories/Programming/">Programming</a>
+        
+        </div>
+        
+
+        
+        <div class="date" id="date">
+            <span>January</span>
+            <span>8,</span>
+            <span>2025</span>
+        </div>
+        
+
+        <h1 class="title">Using iFlytek&#39;s Speech Model in Unity for Text-to-Speech (TTS) Playback</h1>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="content">
+        <h1 id="Using-iFlytek’s-Speech-Model-in-Unity-for-Text-to-Speech-TTS-Playback"><a href="#Using-iFlytek’s-Speech-Model-in-Unity-for-Text-to-Speech-TTS-Playback" class="headerlink" title="Using iFlytek’s Speech Model in Unity for Text-to-Speech (TTS) Playback"></a>Using iFlytek’s Speech Model in Unity for Text-to-Speech (TTS) Playback</h1><h3 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h3><p>Integrating iFlytek’s Text-to-Speech (TTS) technology into Unity can elevate game immersion by enabling realistic and dynamic voice responses. This article will detail how to use iFlytek’s TTS in Unity, covering:</p>
+<ol>
+<li>How iFlytek TTS works.</li>
+<li>Step-by-step integration into Unity.</li>
+<li>Handling audio data for playback.</li>
+<li>Key considerations and troubleshooting.</li>
+</ol>
+<h3 id="How-iFlytek-TTS-Works"><a href="#How-iFlytek-TTS-Works" class="headerlink" title="How iFlytek TTS Works"></a>How iFlytek TTS Works</h3><p>iFlytek TTS synthesizes speech by:</p>
+<ol>
+<li>Logging into iFlytek’s cloud services.</li>
+<li>Sending text to the TTS API for synthesis.</li>
+<li>Receiving and processing PCM (Pulse Code Modulation) audio data.</li>
+<li>Playing the processed audio in Unity.</li>
+</ol>
+<h3 id="Prerequisites"><a href="#Prerequisites" class="headerlink" title="Prerequisites"></a>Prerequisites</h3><ul>
+<li>Unity 2021 or later.</li>
+<li>An iFlytek developer account and AppID.</li>
+<li>The iFlytek SDK (including <code>msc_x64.dll</code> for Windows).</li>
+</ul>
+<h3 id="Step-by-Step-Integration"><a href="#Step-by-Step-Integration" class="headerlink" title="Step-by-Step Integration"></a>Step-by-Step Integration</h3><h4 id="1-Setting-Up-Unity"><a href="#1-Setting-Up-Unity" class="headerlink" title="1. Setting Up Unity"></a>1. Setting Up Unity</h4><ol>
+<li>Create a Unity project and add a GameObject to host the TTS script.</li>
+<li>Import the <code>msc_x64.dll</code> file into your project (place it in the <code>Assets/Plugins</code> folder).</li>
+</ol>
+<h4 id="2-Implementing-the-TTS-Script"><a href="#2-Implementing-the-TTS-Script" class="headerlink" title="2. Implementing the TTS Script"></a>2. Implementing the TTS Script</h4><p>Below is a complete breakdown of the <code>XunfeiTTS</code> class:</p>
+<h5 id="Initialization"><a href="#Initialization" class="headerlink" title="Initialization"></a>Initialization</h5><p>The <code>Awake</code> method logs into the iFlytek service and sets up an <code>AudioSource</code> component for playback:</p>
+<figure class="highlight csharp"><table><tr><td class="code"><pre><code class="hljs csharp"><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Awake</span>()</span><br>&#123;<br>    audioSource = gameObject.AddComponent&lt;AudioSource&gt;();<br>    Login();<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h5 id="Login-and-Logout"><a href="#Login-and-Logout" class="headerlink" title="Login and Logout"></a>Login and Logout</h5><p>The <code>Login</code> and <code>Logout</code> methods handle authentication with iFlytek’s servers:</p>
+<figure class="highlight csharp"><table><tr><td class="code"><pre><code class="hljs csharp"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Login</span>()</span><br>&#123;<br>    <span class="hljs-built_in">int</span> res = MSCDLL.MSPLogin(<span class="hljs-literal">null</span>, <span class="hljs-literal">null</span>, AppID);<br>    <span class="hljs-keyword">if</span> (res == <span class="hljs-number">0</span>)<br>    &#123;<br>        Debug.Log(<span class="hljs-string">&quot;iFlytek login successful!&quot;</span>);<br>    &#125;<br>    <span class="hljs-keyword">else</span><br>    &#123;<br>        Debug.LogError(<span class="hljs-string">$&quot;iFlytek login failed, error code: <span class="hljs-subst">&#123;res&#125;</span>&quot;</span>);<br>    &#125;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Logout</span>()</span><br>&#123;<br>    <span class="hljs-built_in">int</span> res = MSCDLL.MSPLogout();<br>    <span class="hljs-keyword">if</span> (res == <span class="hljs-number">0</span>)<br>    &#123;<br>        Debug.Log(<span class="hljs-string">&quot;iFlytek logout successful!&quot;</span>);<br>    &#125;<br>    <span class="hljs-keyword">else</span><br>    &#123;<br>        Debug.LogError(<span class="hljs-string">$&quot;iFlytek logout failed, error code: <span class="hljs-subst">&#123;res&#125;</span>&quot;</span>);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h5 id="Sending-a-TTS-Request"><a href="#Sending-a-TTS-Request" class="headerlink" title="Sending a TTS Request"></a>Sending a TTS Request</h5><p>The <code>SendTTSRequest</code> method initiates a TTS session, sends the text for synthesis, and fetches the resulting audio:</p>
+<figure class="highlight csharp"><table><tr><td class="code"><pre><code class="hljs csharp"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">SendTTSRequest</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> text</span>)</span><br>&#123;<br>    <span class="hljs-built_in">int</span> res = <span class="hljs-number">0</span>;<br><br>    <span class="hljs-comment">// Start TTS session</span><br>    ttsSession = MSCDLL.QTTSSessionBegin(<span class="hljs-string">&quot;engine_type=cloud,voice_name=aisjiuxu,speed=50,pitch=50,text_encoding=utf8,sample_rate=16000&quot;</span>, <span class="hljs-keyword">ref</span> res);<br>    <span class="hljs-keyword">if</span> (res != <span class="hljs-number">0</span> || ttsSession == IntPtr.Zero)<br>    &#123;<br>        Debug.LogError(<span class="hljs-string">$&quot;TTS session start failed, error code: <span class="hljs-subst">&#123;res&#125;</span>&quot;</span>);<br>        <span class="hljs-keyword">return</span>;<br>    &#125;<br><br>    <span class="hljs-comment">// Send text for synthesis</span><br>    res = MSCDLL.QTTSTextPut(ttsSession, text, (<span class="hljs-built_in">uint</span>)text.Length, <span class="hljs-literal">null</span>);<br>    <span class="hljs-keyword">if</span> (res != <span class="hljs-number">0</span>)<br>    &#123;<br>        Debug.LogError(<span class="hljs-string">$&quot;Text synthesis failed, error code: <span class="hljs-subst">&#123;res&#125;</span>&quot;</span>);<br>        EndSession();<br>        <span class="hljs-keyword">return</span>;<br>    &#125;<br><br>    <span class="hljs-comment">// Fetch and play audio</span><br>    FetchAndPlayAudio();<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h5 id="Fetching-and-Playing-Audio"><a href="#Fetching-and-Playing-Audio" class="headerlink" title="Fetching and Playing Audio"></a>Fetching and Playing Audio</h5><p><code>FetchAndPlayAudio</code> retrieves PCM audio data from the TTS service and converts it for playback:</p>
+<figure class="highlight csharp"><table><tr><td class="code"><pre><code class="hljs csharp"><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title">FetchAndPlayAudio</span>()</span><br>&#123;<br>    MemoryStream audioStream = <span class="hljs-keyword">new</span> MemoryStream();<br>    SynthStatus synthStatus = SynthStatus.MSP_TTS_FLAG_STILL_HAVE_DATA;<br><br>    <span class="hljs-built_in">int</span> res = <span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">while</span> (synthStatus == SynthStatus.MSP_TTS_FLAG_STILL_HAVE_DATA)<br>    &#123;<br>        <span class="hljs-built_in">uint</span> audioLen = <span class="hljs-number">0</span>;<br>        IntPtr audioData = MSCDLL.QTTSAudioGet(ttsSession, <span class="hljs-keyword">ref</span> audioLen, <span class="hljs-keyword">ref</span> synthStatus, <span class="hljs-keyword">ref</span> res);<br><br>        <span class="hljs-keyword">if</span> (res != <span class="hljs-number">0</span>)<br>        &#123;<br>            Debug.LogError(<span class="hljs-string">$&quot;Audio retrieval failed, error code: <span class="hljs-subst">&#123;res&#125;</span>&quot;</span>);<br>            EndSession();<br>            <span class="hljs-keyword">return</span>;<br>        &#125;<br><br>        <span class="hljs-keyword">if</span> (audioData != IntPtr.Zero &amp;&amp; audioLen &gt; <span class="hljs-number">0</span>)<br>        &#123;<br>            <span class="hljs-built_in">byte</span>[] buffer = <span class="hljs-keyword">new</span> <span class="hljs-built_in">byte</span>[audioLen];<br>            Marshal.Copy(audioData, buffer, <span class="hljs-number">0</span>, (<span class="hljs-built_in">int</span>)audioLen);<br>            audioStream.Write(buffer, <span class="hljs-number">0</span>, buffer.Length);<br>        &#125;<br>    &#125;<br><br>    PlayAudio(audioStream.ToArray());<br>    EndSession();<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>The <code>PlayAudio</code> method converts PCM data into a Unity <code>AudioClip</code>:</p>
+<figure class="highlight csharp"><table><tr><td class="code"><pre><code class="hljs csharp"><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title">PlayAudio</span>(<span class="hljs-params"><span class="hljs-built_in">byte</span>[] pcmData</span>)</span><br>&#123;<br>    <span class="hljs-built_in">int</span> sampleRate = <span class="hljs-number">16000</span>;<br>    <span class="hljs-built_in">int</span> channels = <span class="hljs-number">1</span>;<br>    <span class="hljs-built_in">float</span>[] audioSamples = <span class="hljs-keyword">new</span> <span class="hljs-built_in">float</span>[pcmData.Length / <span class="hljs-number">2</span>];<br><br>    <span class="hljs-keyword">for</span> (<span class="hljs-built_in">int</span> i = <span class="hljs-number">0</span>; i &lt; audioSamples.Length; i++)<br>    &#123;<br>        <span class="hljs-built_in">short</span> sample = BitConverter.ToInt16(pcmData, i * <span class="hljs-number">2</span>);<br>        audioSamples[i] = sample / <span class="hljs-number">32768f</span>; <span class="hljs-comment">// Normalize to [-1, 1]</span><br>    &#125;<br><br>    AudioClip audioClip = AudioClip.Create(<span class="hljs-string">&quot;TTS_Audio&quot;</span>, audioSamples.Length, channels, sampleRate, <span class="hljs-literal">false</span>);<br>    audioClip.SetData(audioSamples, <span class="hljs-number">0</span>);<br><br>    audioSource.clip = audioClip;<br>    audioSource.Play();<br>    Debug.Log(<span class="hljs-string">&quot;Audio playback complete.&quot;</span>);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h5 id="Ending-the-Session"><a href="#Ending-the-Session" class="headerlink" title="Ending the Session"></a>Ending the Session</h5><p>The <code>EndSession</code> method ensures proper resource cleanup:</p>
+<figure class="highlight csharp"><table><tr><td class="code"><pre><code class="hljs csharp"><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title">EndSession</span>()</span><br>&#123;<br>    <span class="hljs-built_in">int</span> res = MSCDLL.QTTSSessionEnd(ttsSession, <span class="hljs-string">&quot;end&quot;</span>);<br>    <span class="hljs-keyword">if</span> (res != <span class="hljs-number">0</span>)<br>    &#123;<br>        Debug.LogError(<span class="hljs-string">$&quot;TTS session end failed, error code: <span class="hljs-subst">&#123;res&#125;</span>&quot;</span>);<br>    &#125;<br>    <span class="hljs-keyword">else</span><br>    &#123;<br>        Debug.Log(<span class="hljs-string">&quot;TTS session ended successfully.&quot;</span>);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="Key-Considerations"><a href="#Key-Considerations" class="headerlink" title="Key Considerations"></a>Key Considerations</h3><h4 id="Text-Encoding"><a href="#Text-Encoding" class="headerlink" title="Text Encoding"></a>Text Encoding</h4><p>Ensure the text sent to the API is UTF-8 encoded to avoid errors.</p>
+<h4 id="Audio-Format"><a href="#Audio-Format" class="headerlink" title="Audio Format"></a>Audio Format</h4><p>The iFlytek TTS API typically outputs PCM audio at 16 kHz, mono. Convert this to a Unity-compatible format before playback.</p>
+<h4 id="Error-Handling"><a href="#Error-Handling" class="headerlink" title="Error Handling"></a>Error Handling</h4><p>Handle error codes returned by iFlytek’s SDK functions, as they provide vital information for debugging.</p>
+<h4 id="Dependency-Management"><a href="#Dependency-Management" class="headerlink" title="Dependency Management"></a>Dependency Management</h4><p>Include all required SDK files (<code>msc_x64.dll</code>) in the Unity project.</p>
+<h3 id="Troubleshooting"><a href="#Troubleshooting" class="headerlink" title="Troubleshooting"></a>Troubleshooting</h3><ol>
+<li><strong>No Audio Playback:</strong> Verify the <code>AudioSource</code> is correctly configured and the PCM data is properly converted.</li>
+<li><strong>SDK Errors:</strong> Refer to iFlytek’s SDK documentation for error code definitions.</li>
+<li><strong>DLL Not Found:</strong> Ensure the DLL is placed in the correct directory (<code>Assets/Plugins</code>).</li>
+</ol>
+<h3 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h3><p>By integrating iFlytek’s TTS into Unity, developers can create dynamic and engaging voice interactions in their games. This guide provides the foundational steps to harness iFlytek’s robust speech synthesis capabilities, paving the way for richer storytelling and enhanced player immersion.</p>
+
+    </div>
+
+    
+    <div class="about">
+        <h1>About this Post</h1>
+        <div class="details">
+            <p>This post is written by FFFeiya, licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc/4.0">CC BY-NC 4.0</a>.</p>
+        </div>
+        
+        <p class="tags">
+            
+            <i class="icon"></i>
+            <a href="/tags/Unity/" class="tag">#Unity</a><a href="/tags/CSharp/" class="tag">#CSharp</a><a href="/tags/TTS/" class="tag">#TTS</a>
+        </p>
+        
+    </div>
+    
+
+    <div class="container post-prev-next">
+        
+        <a href="/2025/01/08/Building%20Real-Time%20NPC%20Dialogue%20in%20Unity%20with%20Large%20Language%20Models/" class="next">
+            <div>
+                <div class="text">
+                    <p class="label">Next</p>
+                    <h3 class="title">Building Real-Time NPC Dialogue in Unity with Large Language Models</h3>
+                </div>
+            </div>
+        </a>
+        
+        
+        <a href="/2024/12/08/Game%20Demo%20of%20Star%20Annihilator%20-%20A%20Tower%20Defense%20Game%20Developing/" class="prev">
+            <div>
+                <div class="text">
+                    <p class="label">Previous</p>
+                    <h3 class="title">Game Demo of *Star Annihilator*: A Tower Defense Game Developing</>
+                </div>
+            </div>
+        </a>
+        
+    </div>
+
+    
+        
+        
+    
+</article>
+
+        <footer>
+    <div class="inner">
+        <div class="links">
+            
+            <div class="group">
+                <h2 class="title">Blog</h2>
+                
+                <a href="/" class="item">Blog</a>
+                
+                <a href="/archives" class="item">Archives</a>
+                
+                <a href="/tags" class="item">Tags</a>
+                
+                <a href="/categories" class="item">Categories</a>
+                
+                <a href="/friends" class="item">Friends</a>
+                
+                <a href="/p5game/index.html" class="item">Game</a>
+                
+                <a href="/about" class="item">About</a>
+                
+            </div>
+            
+            <div class="group">
+                <h2 class="title">Projects</h2>
+                
+                <a target="_blank" rel="noopener" href="https://space.bilibili.com/86921782" class="item">VIDEOS</a>
+                
+            </div>
+            
+            <div class="group">
+                <h2 class="title">Me</h2>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/FFFeiya" class="item">GitHub</a>
+                
+                <a href="mailto:ya5henpai@163.com" class="item">Email</a>
+                
+                <a target="_blank" rel="noopener" href="https://bgm.tv/user/fffeiya" class="item">Bangumi</a>
+                
+                <a target="_blank" rel="noopener" href="https://www.pixiv.net/users/26980321" class="item">pixiv</a>
+                
+                <a target="_blank" rel="noopener" href="https://space.bilibili.com/86921782" class="item">Bilibili</a>
+                
+            </div>
+            
+        </div>
+        <span>&copy; 2025 FFFeiya<br>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> </span>
+        
+        
+            <br>
+            <div class="color-scheme-toggle" role="radiogroup" id="theme-color-scheme-toggle">
+                <label>
+                    <input type="radio" value="light">
+                    <span>Light</span>
+                </label>
+                <label>
+                    <input type="radio" value="dark">
+                    <span>Dark</span>
+                </label>
+                <label>
+                    <input type="radio" value="auto">
+                    <span>Auto</span>
+                </label>
+            </div>
+        
+    </div>
+</footer>
+
+
+        
+<script src="/js/main.js"></script>
+
+        
+        
+        
+
+        
+        <script src="https://unpkg.com/scrollreveal"></script>
+        <script>
+            window.addEventListener('load', () => {
+                ScrollReveal({ delay: 250, reset: true, easing: 'cubic-bezier(0, 0, 0, 1)' })
+                ScrollReveal().reveal('.post-list-item .cover-img img')
+                ScrollReveal().reveal('.post-list-item, .card, .content p img, .content .block-large img', { distance: '60px', origin: 'bottom', duration: 800 })
+            })
+        </script>
+        
+    </body>
+</html>

@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head prefix="og: https://ogp.me/ns#">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  
+  <title>Building Real-Time NPC Dialogue in Unity with Large Language Models - FFFeiya</title>
+  
+    <link rel="shortcut icon" href="/favicon.ico">
+  
+  
+    <link rel='manifest' href='/manifest.json'>
+  
+
+  
+  
+  
+  <meta property="og:title" content="Building Real-Time NPC Dialogue in Unity with Large Language Models - FFFeiya" />
+  
+  <meta property="og:type" content="article" />
+  
+  <meta property="og:url" content="http://example.com/2025/01/08/Building%20Real-Time%20NPC%20Dialogue%20in%20Unity%20with%20Large%20Language%20Models/index.html" />
+  
+  <meta property="og:image" content="/favicon.png" />
+  
+  <meta property="og:article:published_time" content="2025-01-08T02:00:00.000Z" />
+  
+  <meta property="og:article:author" content="FFFeiya" />
+  
+  
+
+  
+<link rel="stylesheet" href="/css/var.css">
+
+  
+<link rel="stylesheet" href="/css/main.css">
+
+  
+<link rel="stylesheet" href="/css/typography.css">
+
+  
+<link rel="stylesheet" href="/css/code-highlighting.css">
+
+  
+<link rel="stylesheet" href="/css/components.css">
+
+  
+<link rel="stylesheet" href="/css/nav.css">
+
+  
+<link rel="stylesheet" href="/css/paginator.css">
+
+  
+<link rel="stylesheet" href="/css/footer.css">
+
+  
+<link rel="stylesheet" href="/css/post-list.css">
+
+  
+  
+<link rel="stylesheet" href="/css/rainbow-banner.css">
+
+  
+  
+  
+<link rel="stylesheet" href="/css/toc.css">
+
+  
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/post.css">
+
+  
+  
+  
+  
+  
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+    <body
+        data-color-scheme="auto"
+        data-uppercase-categories="true"
+        
+        data-rainbow-banner="true"
+        data-rainbow-banner-shown="auto"
+        data-rainbow-banner-month="6"
+        data-rainbow-banner-colors="#e50000,#ff8d00,#ffee00,#008121,#004cff,#760188"
+        
+        data-config-root="/"
+        
+        data-toc="true"
+        data-toc-max-depth="2"
+        
+        
+    >
+        <nav id="theme-nav">
+    <div class="inner">
+        <a class="title" href="/">Blog</a>
+        <div class="nav-arrow"></div>
+        <div class="nav-items">
+            <a class="nav-item nav-item-home" href="/">Home</a>
+            
+            
+            <a class="nav-item" href="/archives">Archives</a>
+            
+            
+            
+            <a class="nav-item" href="/friends">Friends</a>
+            
+            
+            
+            <a class="nav-item" href="/projects">Projects</a>
+            
+            
+            
+            <a class="nav-item" href="/about">About</a>
+            
+            
+            
+            <a class="nav-item nav-item-github nav-item-icon" href="https://github.com/FFFeiya" target="_blank" aria-label="GitHub">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-discord nav-item-icon" href="https://discord.gg" target="_blank" aria-label="Discord">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-search nav-item-icon" href="/search" target="_blank" aria-label="Search">&nbsp;</a>
+            
+            
+        </div>
+    </div>
+</nav>
+        
+<article class="post">
+    <div class="meta">
+        
+        <div class="categories text-uppercase">
+        
+            <a href="/categories/Programming/">Programming</a>
+        
+        </div>
+        
+
+        
+        <div class="date" id="date">
+            <span>January</span>
+            <span>8,</span>
+            <span>2025</span>
+        </div>
+        
+
+        <h1 class="title">Building Real-Time NPC Dialogue in Unity with Large Language Models</h1>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="content">
+        <h1 id="Building-Real-Time-NPC-Dialogue-in-Unity-with-Large-Language-Models"><a href="#Building-Real-Time-NPC-Dialogue-in-Unity-with-Large-Language-Models" class="headerlink" title="Building Real-Time NPC Dialogue in Unity with Large Language Models"></a>Building Real-Time NPC Dialogue in Unity with Large Language Models</h1><h3 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h3><p>Real-time dialogue systems enhance immersion in games, especially when players can interact with NPCs dynamically. Integrating a large language model (LLM) like Qwen or OpenAI’s GPT into Unity allows for responsive NPCs that generate contextually appropriate replies and trigger in-game events. This blog post explains how to:</p>
+<ol>
+<li>Use Unity to call an LLM API.</li>
+<li>Construct effective prompts.</li>
+<li>Parse model responses into NPC dialogues and game events.</li>
+</ol>
+<h3 id="Setting-Up-the-API-Connection"><a href="#Setting-Up-the-API-Connection" class="headerlink" title="Setting Up the API Connection"></a>Setting Up the API Connection</h3><h4 id="Prerequisites"><a href="#Prerequisites" class="headerlink" title="Prerequisites"></a>Prerequisites</h4><ul>
+<li>Unity Engine installed (2021.3 or later).</li>
+<li>Familiarity with C# scripting.</li>
+<li>Access to an LLM API (e.g., Qwen or OpenAI GPT). Obtain an API key and endpoint URL from the provider.</li>
+</ul>
+<h4 id="Script-Overview"><a href="#Script-Overview" class="headerlink" title="Script Overview"></a>Script Overview</h4><p>We’ll use Unity’s <code>UnityWebRequest</code> for API calls. The script connects to the Qwen model to generate NPC replies.</p>
+<p>Here’s a step-by-step breakdown:</p>
+<figure class="highlight csharp"><table><tr><td class="code"><pre><code class="hljs csharp"><span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> apiKey = <span class="hljs-string">&quot;your-api-key&quot;</span>;<br><span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> endpoint = <span class="hljs-string">&quot;your-api-endpoint&quot;</span>;<br><span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> model = <span class="hljs-string">&quot;qwen-plus&quot;</span>; <span class="hljs-comment">// Replace with the specific model name</span><br></code></pre></td></tr></table></figure>
+
+<p>The <code>apiKey</code> and <code>endpoint</code> should be replaced with credentials provided by your LLM service. The <code>model</code> specifies the version of the language model to use.</p>
+<h4 id="Sending-Messages"><a href="#Sending-Messages" class="headerlink" title="Sending Messages"></a>Sending Messages</h4><p>The <code>SendMessageToYiQianWen</code> function initiates communication with the API:</p>
+<figure class="highlight csharp"><table><tr><td class="code"><pre><code class="hljs csharp"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">async</span> <span class="hljs-keyword">void</span> <span class="hljs-title">SendMessageToYiQianWen</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> message</span>)</span><br>&#123;<br>    <span class="hljs-keyword">try</span><br>    &#123;<br>        <span class="hljs-built_in">string</span> response = <span class="hljs-keyword">await</span> GetYiQianWenResponse(message);<br>        DisplayResponse(response);<br>    &#125;<br>    <span class="hljs-keyword">catch</span> (Exception ex)<br>    &#123;<br>        Debug.LogError(<span class="hljs-string">$&quot;Error: <span class="hljs-subst">&#123;ex.Message&#125;</span>&quot;</span>);<br>        DisplayResponse(<span class="hljs-string">&quot;Network or API configuration issue.&quot;</span>);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>The function:</p>
+<ol>
+<li>Calls <code>GetYiQianWenResponse</code> to retrieve the model’s reply.</li>
+<li>Displays the response on a Unity TextMeshPro (TMP) element.</li>
+</ol>
+<h4 id="Constructing-the-API-Request"><a href="#Constructing-the-API-Request" class="headerlink" title="Constructing the API Request"></a>Constructing the API Request</h4><p>Requests are formatted in JSON, adhering to the LLM’s API schema:</p>
+<figure class="highlight csharp"><table><tr><td class="code"><pre><code class="hljs csharp"><span class="hljs-keyword">var</span> requestData = <span class="hljs-keyword">new</span><br>&#123;<br>    model = model,<br>    messages = <span class="hljs-keyword">new</span>[]<br>    &#123;<br>        <span class="hljs-keyword">new</span> &#123; role = <span class="hljs-string">&quot;system&quot;</span>, content = <span class="hljs-string">&quot;You are a helpful assistant.&quot;</span> &#125;,<br>        <span class="hljs-keyword">new</span> &#123; role = <span class="hljs-string">&quot;user&quot;</span>, content = message &#125;<br>    &#125;<br>&#125;;<br><span class="hljs-built_in">string</span> jsonData = JsonConvert.SerializeObject(requestData);<br></code></pre></td></tr></table></figure>
+
+<h4 id="Handling-API-Responses"><a href="#Handling-API-Responses" class="headerlink" title="Handling API Responses"></a>Handling API Responses</h4><p>The <code>DisplayResponse</code> function processes and presents model responses. For structured replies, the API should return JSON, which can be parsed into usable components like NPC replies and game triggers:</p>
+<figure class="highlight csharp"><table><tr><td class="code"><pre><code class="hljs csharp"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">DisplayResponse</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> response</span>)</span><br>&#123;<br>    <span class="hljs-keyword">var</span> parsedResponse = JsonConvert.DeserializeObject&lt;NPCResponse&gt;(response);<br>    <span class="hljs-keyword">if</span> (parsedResponse != <span class="hljs-literal">null</span>)<br>    &#123;<br>        responseText.text = parsedResponse.npc_reply;<br>        <span class="hljs-keyword">if</span> (parsedResponse.clue_unlocked?.Length &gt; <span class="hljs-number">0</span>)<br>        &#123;<br>            <span class="hljs-keyword">foreach</span> (<span class="hljs-keyword">var</span> clueId <span class="hljs-keyword">in</span> parsedResponse.clue_unlocked)<br>            &#123;<br>                TriggerClue(clueId);<br>            &#125;<br>        &#125;<br>    &#125;<br>    <span class="hljs-keyword">else</span><br>    &#123;<br>        Debug.LogWarning(<span class="hljs-string">&quot;Invalid response format.&quot;</span>);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="Constructing-Prompts-for-Real-Time-Dialogue"><a href="#Constructing-Prompts-for-Real-Time-Dialogue" class="headerlink" title="Constructing Prompts for Real-Time Dialogue"></a>Constructing Prompts for Real-Time Dialogue</h3><p>The prompt guides the LLM’s behavior. Here’s an example:</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><code class="hljs text">You are &quot;Li Xin,&quot; a middle-aged laboratory administrator in a key optics lab in Shanghai. Respond realistically to the player’s queries, staying within the game’s context. Format your output as:<br>&#123;<br>    &quot;npc_reply&quot;: &quot;[NPC&#x27;s reply]&quot;,<br>    &quot;clue_unlocked&quot;: [array of clue IDs, empty if none],<br>    &quot;context&quot;: &quot;[Explanation or additional context]&quot;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><strong>Tips for Effective Prompts:</strong></p>
+<ol>
+<li><strong>Define NPC Roles</strong>: Specify the NPC’s personality, knowledge scope, and restrictions.</li>
+<li><strong>Set Context</strong>: Include game lore or NPC backstory to keep responses relevant.</li>
+<li><strong>Output Formatting</strong>: Clearly specify response structure (e.g., JSON).</li>
+</ol>
+<h3 id="Parsing-Model-Responses"><a href="#Parsing-Model-Responses" class="headerlink" title="Parsing Model Responses"></a>Parsing Model Responses</h3><p>The API response often includes nested JSON. For instance:</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><code class="hljs json"><span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;choices&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><br>        <span class="hljs-punctuation">&#123;</span><br>            <span class="hljs-attr">&quot;message&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>                <span class="hljs-attr">&quot;role&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;assistant&quot;</span><span class="hljs-punctuation">,</span><br>                <span class="hljs-attr">&quot;content&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;&#123;\&quot;npc_reply\&quot;: \&quot;Welcome to the lab!\&quot;, \&quot;clue_unlocked\&quot;: [1], \&quot;context\&quot;: \&quot;Lab orientation\&quot;&#125;&quot;</span><br>            <span class="hljs-punctuation">&#125;</span><br>        <span class="hljs-punctuation">&#125;</span><br>    <span class="hljs-punctuation">]</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<p>To extract data:</p>
+<ol>
+<li><p>Parse the outer response:</p>
+ <figure class="highlight csharp"><table><tr><td class="code"><pre><code class="hljs csharp"><span class="hljs-keyword">var</span> outerResponse = JsonConvert.DeserializeObject&lt;OuterResponse&gt;(response);<br><span class="hljs-built_in">string</span> innerContent = outerResponse.choices[<span class="hljs-number">0</span>].message.content;<br></code></pre></td></tr></table></figure>
+</li>
+<li><p>Parse the inner JSON:</p>
+ <figure class="highlight csharp"><table><tr><td class="code"><pre><code class="hljs csharp"><span class="hljs-keyword">var</span> innerResponse = JsonConvert.DeserializeObject&lt;NPCResponse&gt;(innerContent);<br></code></pre></td></tr></table></figure>
+</li>
+<li><p>Use the extracted data to update game state and UI.</p>
+</li>
+</ol>
+<h3 id="Triggering-In-Game-Events"><a href="#Triggering-In-Game-Events" class="headerlink" title="Triggering In-Game Events"></a>Triggering In-Game Events</h3><p>The <code>TriggerClue</code> method handles game actions linked to the response:</p>
+<figure class="highlight csharp"><table><tr><td class="code"><pre><code class="hljs csharp"><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title">TriggerClue</span>(<span class="hljs-params"><span class="hljs-built_in">int</span> clueId</span>)</span><br>&#123;<br>    <span class="hljs-keyword">switch</span> (clueId)<br>    &#123;<br>        <span class="hljs-keyword">case</span> <span class="hljs-number">1</span>:<br>            Debug.Log(<span class="hljs-string">&quot;Clue 1: Pick up the bottle.&quot;</span>);<br>            targetObject.position = targetPosition;<br>            <span class="hljs-keyword">break</span>;<br>        <span class="hljs-literal">default</span>:<br>            Debug.LogWarning(<span class="hljs-string">&quot;Undefined clue ID.&quot;</span>);<br>            <span class="hljs-keyword">break</span>;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="Real-Time-Speech-Integration"><a href="#Real-Time-Speech-Integration" class="headerlink" title="Real-Time Speech Integration"></a>Real-Time Speech Integration</h3><p>For immersive dialogue:</p>
+<ol>
+<li><p><strong>Speech-to-Text (STT)</strong>: Use a transcriber to convert player speech into text.</p>
+ <figure class="highlight csharp"><table><tr><td class="code"><pre><code class="hljs csharp">realtimeTranscriber.StartListening();<br>bufferText += transcribedText + <span class="hljs-string">&quot; &quot;</span>;<br></code></pre></td></tr></table></figure>
+</li>
+<li><p><strong>Text-to-Speech (TTS)</strong>: Convert NPC replies into audio using a TTS system.</p>
+ <figure class="highlight csharp"><table><tr><td class="code"><pre><code class="hljs csharp">SSTTS.SendTTSRequest(npcReply);<br></code></pre></td></tr></table></figure></li>
+</ol>
+<h3 id="Periodic-Updates"><a href="#Periodic-Updates" class="headerlink" title="Periodic Updates"></a>Periodic Updates</h3><p>Buffering transcriptions and sending them at intervals improves performance:</p>
+<figure class="highlight csharp"><table><tr><td class="code"><pre><code class="hljs csharp"><span class="hljs-function"><span class="hljs-keyword">private</span> IEnumerator <span class="hljs-title">SendBufferedTextPeriodically</span>()</span><br>&#123;<br>    <span class="hljs-keyword">while</span> (isDialogueActive)<br>    &#123;<br>        <span class="hljs-keyword">if</span> (!<span class="hljs-built_in">string</span>.IsNullOrWhiteSpace(bufferText))<br>        &#123;<br>            <span class="hljs-function"><span class="hljs-keyword">yield</span> <span class="hljs-keyword">return</span> <span class="hljs-title">SendBufferedText</span>(<span class="hljs-params">bufferText.Trim(</span>))</span>;<br>            bufferText = <span class="hljs-string">&quot;&quot;</span>;<br>        &#125;<br>        <span class="hljs-function"><span class="hljs-keyword">yield</span> <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title">WaitForSeconds</span>(<span class="hljs-params"><span class="hljs-number">5f</span></span>)</span>;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h3><p>This setup enables rich, real-time NPC dialogues powered by LLMs in Unity. The combination of well-structured prompts, robust API handling, and seamless Unity integration creates a dynamic player experience. As LLMs improve, the potential for more interactive storytelling grows exponentially.</p>
+
+    </div>
+
+    
+    <div class="about">
+        <h1>About this Post</h1>
+        <div class="details">
+            <p>This post is written by FFFeiya, licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc/4.0">CC BY-NC 4.0</a>.</p>
+        </div>
+        
+        <p class="tags">
+            
+            <i class="icon"></i>
+            <a href="/tags/Unity/" class="tag">#Unity</a><a href="/tags/LLM/" class="tag">#LLM</a>
+        </p>
+        
+    </div>
+    
+
+    <div class="container post-prev-next">
+        <a class="next"></a>
+        
+        <a href="/2025/01/08/Using%20iFlytek&#39;s%20Speech%20Model%20in%20Unity%20for%20Text-to-Speech%20(TTS)%20Playback/" class="prev">
+            <div>
+                <div class="text">
+                    <p class="label">Previous</p>
+                    <h3 class="title">Using iFlytek&#39;s Speech Model in Unity for Text-to-Speech (TTS) Playback</>
+                </div>
+            </div>
+        </a>
+        
+    </div>
+
+    
+        
+        
+    
+</article>
+
+        <footer>
+    <div class="inner">
+        <div class="links">
+            
+            <div class="group">
+                <h2 class="title">Blog</h2>
+                
+                <a href="/" class="item">Blog</a>
+                
+                <a href="/archives" class="item">Archives</a>
+                
+                <a href="/tags" class="item">Tags</a>
+                
+                <a href="/categories" class="item">Categories</a>
+                
+                <a href="/friends" class="item">Friends</a>
+                
+                <a href="/p5game/index.html" class="item">Game</a>
+                
+                <a href="/about" class="item">About</a>
+                
+            </div>
+            
+            <div class="group">
+                <h2 class="title">Projects</h2>
+                
+                <a target="_blank" rel="noopener" href="https://space.bilibili.com/86921782" class="item">VIDEOS</a>
+                
+            </div>
+            
+            <div class="group">
+                <h2 class="title">Me</h2>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/FFFeiya" class="item">GitHub</a>
+                
+                <a href="mailto:ya5henpai@163.com" class="item">Email</a>
+                
+                <a target="_blank" rel="noopener" href="https://bgm.tv/user/fffeiya" class="item">Bangumi</a>
+                
+                <a target="_blank" rel="noopener" href="https://www.pixiv.net/users/26980321" class="item">pixiv</a>
+                
+                <a target="_blank" rel="noopener" href="https://space.bilibili.com/86921782" class="item">Bilibili</a>
+                
+            </div>
+            
+        </div>
+        <span>&copy; 2025 FFFeiya<br>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> </span>
+        
+        
+            <br>
+            <div class="color-scheme-toggle" role="radiogroup" id="theme-color-scheme-toggle">
+                <label>
+                    <input type="radio" value="light">
+                    <span>Light</span>
+                </label>
+                <label>
+                    <input type="radio" value="dark">
+                    <span>Dark</span>
+                </label>
+                <label>
+                    <input type="radio" value="auto">
+                    <span>Auto</span>
+                </label>
+            </div>
+        
+    </div>
+</footer>
+
+
+        
+<script src="/js/main.js"></script>
+
+        
+        
+        
+
+        
+        <script src="https://unpkg.com/scrollreveal"></script>
+        <script>
+            window.addEventListener('load', () => {
+                ScrollReveal({ delay: 250, reset: true, easing: 'cubic-bezier(0, 0, 0, 1)' })
+                ScrollReveal().reveal('.post-list-item .cover-img img')
+                ScrollReveal().reveal('.post-list-item, .card, .content p img, .content .block-large img', { distance: '60px', origin: 'bottom', duration: 800 })
+            })
+        </script>
+        
+    </body>
+</html>
