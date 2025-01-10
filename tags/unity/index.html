@@ -207,7 +207,7 @@
                 
                 <a href="/tobeavtuber" class="item">Projects-ToBeAVtuber!</a>
                 
-                <a href="/p5game" class="item">Projects-KanSentou!(StarAnnihilator)</a>
+                <a href="/p5game" class="item">Projects-KanSentou! (StarAnnihilator)</a>
                 
             </div>
             
@@ -235,6 +235,40 @@
                 <label>
                     <input type="radio" value="light">
                     <span>Light</span>
+                </label>
+                <label>
+                    <input type="radio" value="dark">
+                    <span>Dark</span>
+                </label>
+                <label>
+                    <input type="radio" value="auto">
+                    <span>Auto</span>
+                </label>
+            </div>
+        
+    </div>
+</footer>
+
+
+        
+<script src="/js/main.js"></script>
+
+        
+        
+        
+
+        
+        <script src="https://unpkg.com/scrollreveal"></script>
+        <script>
+            window.addEventListener('load', () => {
+                ScrollReveal({ delay: 250, reset: true, easing: 'cubic-bezier(0, 0, 0, 1)' })
+                ScrollReveal().reveal('.post-list-item .cover-img img')
+                ScrollReveal().reveal('.post-list-item, .card, .content p img, .content .block-large img', { distance: '60px', origin: 'bottom', duration: 800 })
+            })
+        </script>
+        
+    </body>
+</html>      <span>Light</span>
                 </label>
                 <label>
                     <input type="radio" value="dark">
