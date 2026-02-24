@@ -1,0 +1,934 @@
+
+<!DOCTYPE html><html lang="en" data-theme="dark">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="hexo-theme" content="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.33.1" theme-name="Stellar" theme-version="1.33.1">
+  
+  
+  <meta name="generator" content="Hexo 7.3.0">
+  <meta http-equiv='x-dns-prefetch-control' content='on' />
+  
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000">
+  <meta name="theme-color" content="#f9fafb">
+  <title>Farmix（Unity Qix-like 领地占领 / 规则驱动格子游戏） - FFFeiya</title>
+
+  
+    <meta name="description" content="这是一个“规则复杂、状态多、调参多”的玩法项目，我负责把它做成可迭代、可维护、可跨平台发布的工程。  Farmix 是一款 Qix-like 的领地占领玩法原型（农场主题）：玩家在安全边界上移动，离开安全区就会在网格上“画线”，当轨迹闭合时触发 封闭区域判定 + 填充占领 + 计分。敌人系统包含 Sheep &#x2F; Wolves &#x2F; Bears &#x2F; Locusts 等不">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Farmix（Unity Qix-like 领地占领 &#x2F; 规则驱动格子游戏）">
+<meta property="og:url" content="http://example.com/projects/farmix/">
+<meta property="og:site_name" content="FFFeiya">
+<meta property="og:description" content="这是一个“规则复杂、状态多、调参多”的玩法项目，我负责把它做成可迭代、可维护、可跨平台发布的工程。  Farmix 是一款 Qix-like 的领地占领玩法原型（农场主题）：玩家在安全边界上移动，离开安全区就会在网格上“画线”，当轨迹闭合时触发 封闭区域判定 + 填充占领 + 计分。敌人系统包含 Sheep &#x2F; Wolves &#x2F; Bears &#x2F; Locusts 等不">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/images/Farmix/Screenshot1.png">
+<meta property="og:image" content="http://example.com/images/Farmix/Screenshot2.png">
+<meta property="article:published_time" content="2026-02-22T07:00:00.000Z">
+<meta property="article:modified_time" content="2026-02-24T04:11:48.977Z">
+<meta property="article:author" content="FFFeiya">
+<meta property="article:tag" content="Unity">
+<meta property="article:tag" content="CSharp">
+<meta property="article:tag" content="Gameplay Programming">
+<meta property="article:tag" content="Grid">
+<meta property="article:tag" content="AI">
+<meta property="article:tag" content="Android">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/images/Farmix/Screenshot1.png">
+  
+  
+  
+  <meta name="keywords" content=",,,,,">
+
+  <!-- feed -->
+  
+
+  <link rel="stylesheet" href="/css/main.css?v=1.33.1">
+
+
+  
+
+  
+    
+<link rel="stylesheet" href="https://gcore.jsdelivr.net/gh/highlightjs/cdn-release@11.9/build/styles/atom-one-dark.min.css">
+
+  
+
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Website","@id":"http://example.com/projects/farmix/","author":{"@type":"Person","name":"FFFeiya","sameAs":[]},"name":"Farmix（Unity Qix-like 领地占领 / 规则驱动格子游戏）","description":"\n这是一个“规则复杂、状态多、调参多”的玩法项目，我负责把它做成可迭代、可维护、可跨平台发布的工程。\n\nFarmix 是一款 Qix-like 的领地占领玩法原型（农场主题）：玩家在安全边界上移动，离开安全区就会在网格上“画线”，当轨迹闭合时触发 封闭区域判定 + 填充占领 + 计分。敌人系统包含 Sheep &#x2F; Wolves &#x2F; Bears &#x2F; Locusts...","url":"http://example.com/projects/farmix/"}</script>
+  <link rel="stylesheet" href="/css/custom.css">
+</head>
+<body><div class="sitebg"><div class="siteblur"></div></div>
+
+<div class="l_body content" id="start" layout="page" type="tech" ><aside class="l_left"><div class="sidebg"></div><div class="leftbar-container">
+
+
+<header class="header"><div class="logo-wrap"><a class="avatar" href="/about/"><div class="bg" style="opacity:0;background-image:url(https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/rainbow64@3x.webp);"></div><img no-lazy class="avatar" src="/images/Putin.png" onerror="javascript:this.classList.add('error');this.src='https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/image/2659360.svg';"></a><a class="title" href="/"><div class="main">FFFeiya</div><div class="sub normal cap">Portfolio</div><div class="sub hover cap" style="opacity:0"> UE / Unity / Tools</div></a></div></header>
+
+<div class="nav-area">
+
+<nav class="menu dis-select"><a class="nav-item" title="Projects" href="/projects/" style="color:#E0E0E0">项目列表</a><a class="nav-item" title="Tech Blog" href="/blog/" style="color:#E0E0E0">工程博客</a><a class="nav-item" title="Play" href="/play/" style="color:#E0E0E0">在线游玩</a><a class="nav-item" title="(Tech) Art" href="/art/" style="color:#E0E0E0">技术美术</a><a class="nav-item" title="Design" href="/design/" style="color:#E0E0E0">文字</a><a class="nav-item" title="About / Resume" href="/about/" style="color:#E0E0E0">关于</a></nav>
+</div>
+<div class="widgets">
+<div class="search-wrapper" id="search-wrapper"><form class="search-form"><a class="search-button" onclick="document.getElementById(&quot;search-input&quot;).focus();"><svg t="1705074644177" viewBox="0 0 1025 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1560" width="200" height="200"><path d="M1008.839137 935.96571L792.364903 719.491476a56.783488 56.783488 0 0 0-80.152866 0 358.53545 358.53545 0 1 1 100.857314-335.166073 362.840335 362.840335 0 0 1-3.689902 170.145468 51.248635 51.248635 0 1 0 99.217358 26.444296 462.057693 462.057693 0 1 0-158.255785 242.303546l185.930047 185.725053a51.248635 51.248635 0 0 0 72.568068 0 51.248635 51.248635 0 0 0 0-72.978056z" p-id="1561"></path><path d="M616.479587 615.969233a50.428657 50.428657 0 0 0-61.498362-5.534852 174.655348 174.655348 0 0 1-177.525271 3.484907 49.403684 49.403684 0 0 0-58.833433 6.76482l-3.074918 2.869923a49.403684 49.403684 0 0 0 8.609771 78.10292 277.767601 277.767601 0 0 0 286.992355-5.739847 49.403684 49.403684 0 0 0 8.404776-76.667958z" p-id="1562"></path></svg></a><input type="text" class="search-input" id="search-input" placeholder="Search"></form><div id="search-result"></div><div class="search-no-result">No Results!</div></div>
+
+<widget class="widget-wrapper recent post-list"><div class="widget-header dis-select"><span class="name">Recent Update</span></div><div class="widget-body fs14"><a class="item title" href="/2025/01/08/Building%20Real-Time%20NPC%20Dialogue%20in%20Unity%20with%20Large%20Language%20Models.zh-CN/"><span class="title">在 Unity 中用大语言模型构建实时 NPC 对话</span></a><a class="item title" href="/2024/12/08/Bridging%20Unity%20with%20Python%20and%20ChatGPT.zh-CN/"><span class="title">Unity 对接 Python 与 ChatGPT：综合指南</span></a><a class="item title" href="/2024/12/08/Building%20a%20Dynamic%20Planetary%20Battle%20System.zh-CN/"><span class="title">用 p5.js 做太空可视化：构建动态行星战斗系统</span></a><a class="item title" href="/2026/02/24/tech_blog_hexo_stellar_portfolio_safe/"><span class="title">用 Hexo + Stellar 搭一个作品展柜：卡片入口、主题配色与 CSS 覆盖</span></a><a class="item title" href="/2025/01/08/Using%20iFlytek's%20Speech%20Model%20in%20Unity%20for%20Text-to-Speech%20(TTS)%20Playback/"><span class="title">Using iFlytek's Speech Model in Unity for Text-to-Speech (TTS) Playback</span></a><a class="item title" href="/2024/12/08/Game%20Demo%20of%20Star%20Annihilator%20-%20A%20Tower%20Defense%20Game%20Developing/"><span class="title">Game Demo of *Star Annihilator*: A Tower Defense Game Developing</span></a><a class="item title" href="/2024/12/08/How%20to%20Convert%20a%20p5.js%20Game%20into%20Java%20(JavaFX)/"><span class="title">How to Convert a p5.js Game into Java (JavaFX)</span></a></div></widget>
+</div>
+
+</div></aside><div class="l_main" id="main">
+
+
+
+
+
+<div class="article banner top">
+  <div class="content">
+    <div class="top bread-nav footnote"><div class="left"><div class="flex-row" id="breadcrumb"><a class="cap breadcrumb" href="/">Home</a>
+
+  <span class="sep"></span>
+  <a class="cap breadcrumb" href="/projects/farmix/">Farmix（Unity Qix-like 领地占领 / 规则驱动格子游戏）</a>
+  </div>
+<div class="flex-row" id="post-meta"><span class="text created">Posted on: <time datetime="2026-02-22T07:00:00.000Z">2026-02-22</time></span><span class="sep updated"></span><span class="text updated">Updated on: <time datetime="2026-02-24T04:11:48.977Z">2026-02-23</time></span></div></div></div>
+    
+    <div class="bottom only-title">
+      
+      <div class="text-area">
+        <h1 class="text title"><span>Farmix（Unity Qix-like 领地占领 / 规则驱动格子游戏）</span></h1>
+        
+      </div>
+    </div>
+    
+  </div>
+  </div><article class="md-text content"><blockquote>
+<p>这是一个“规则复杂、状态多、调参多”的玩法项目，我负责把它做成可迭代、可维护、可跨平台发布的工程。</p>
+</blockquote>
+<p><strong>Farmix</strong> 是一款 <strong>Qix-like</strong> 的领地占领玩法原型（农场主题）：玩家在安全边界上移动，离开安全区就会在网格上“画线”，当轨迹闭合时触发 <strong>封闭区域判定 + 填充占领 + 计分</strong>。敌人系统包含 <strong>Sheep &#x2F; Wolves &#x2F; Bears &#x2F; Locusts</strong> 等不同规则的单位，并加入了“蝗虫啃食占领地 + 杀虫剂冷却”的动态对抗机制。项目最终完成 <strong>可玩 Demo + 多关卡配置 + Android APK</strong>。</p>
+<p> <img src="/images/Farmix/Screenshot1.png"></p>
+<hr>
+<h2 id="关键词"><a href="#关键词" class="headerlink" title="关键词"></a>关键词</h2><ul>
+<li><strong>规则优先的网格架构</strong>：Empty &#x2F; Occupied &#x2F; Trail 三态数据，渲染用 <strong>14-direction mask</strong> 派生（视觉与规则解耦）</li>
+<li><strong>闭合判定 + Flood Fill&#x2F;BFS</strong>：以敌人可达性为核心的区域填充与计分</li>
+<li><strong>模块化敌人 AI</strong>：  <ul>
+<li>Wolves：可调 <strong>2×2</strong> 等矩形占位移动  </li>
+<li>Bears：合法边界巡逻 + <strong>计时阶段加速</strong> + 受地形变化影响的自恢复  </li>
+<li>Locusts：并发上限、BFS 找可吃的 Occupied、全局冷却与自毁规则</li>
+</ul>
+</li>
+<li><strong>数据驱动难度与调参</strong>：<code>LevelManager.LevelConfig</code> 暴露数量&#x2F;速度&#x2F;计分&#x2F;计时&#x2F;胜利阈值&#x2F;蝗虫并发等参数</li>
+<li><strong>跨平台体验</strong>：键盘 + 陀螺仪输入、分辨率&#x2F;色彩适配、Android APK</li>
+<li><strong>完整游戏流</strong>：主菜单 → 关卡流程 → 死亡&#x2F;胜利反馈 → 结算弹窗 → 音频系统（BGM&#x2F;SFX）</li>
+</ul>
+<hr>
+<h2 id="我的职责与工程贡献"><a href="#我的职责与工程贡献" class="headerlink" title="我的职责与工程贡献"></a>我的职责与工程贡献</h2><p>我主要负责 <strong>工程架构 + 核心玩法实现 + 优化与联调</strong>：</p>
+<h3 id="1-网格数据与渲染解耦（规则先行）"><a href="#1-网格数据与渲染解耦（规则先行）" class="headerlink" title="1) 网格数据与渲染解耦（规则先行）"></a>1) 网格数据与渲染解耦（规则先行）</h3><ul>
+<li>网格只存三态：<code>Empty / Occupied / Trail</code></li>
+<li>渲染层不写死拼贴，而是通过 <strong>14 向边缘 mask</strong> 从邻接关系计算出正确的边缘&#x2F;轨迹贴图  </li>
+<li>这让系统能稳定迭代，例如：<ul>
+<li>“Trail 在视觉上当作空地参与边缘高亮，但在规则上仍然可致死&#x2F;阻挡”</li>
+<li>“边界合法性只检查内侧邻居（防止边框外的假邻接干扰）”</li>
+</ul>
+</li>
+</ul>
+<p>对应实现集中在：<code>QixLite.cs</code>（格子构建、状态机、边缘 mask 选择、视觉刷新）</p>
+<hr>
+<h3 id="2-画线闭合、区域填充与计分（BFS-Flood-Fill）"><a href="#2-画线闭合、区域填充与计分（BFS-Flood-Fill）" class="headerlink" title="2) 画线闭合、区域填充与计分（BFS&#x2F;Flood Fill）"></a>2) 画线闭合、区域填充与计分（BFS&#x2F;Flood Fill）</h3><p>闭合后核心流程（工程上尽量保证可解释、可调参、可恢复）：</p>
+<ol>
+<li>从所有敌人（狼的矩形占位、熊等）出发 BFS，标记“可达的 Empty”</li>
+<li>不可达的 Empty 判为“被封闭” → 转为 <code>Occupied</code>；同时把整条 <code>Trail</code> 转为 <code>Occupied</code></li>
+<li>增加得分：<code>filledCells × scorePerCell</code>，并对封闭的 Sheep 额外加分</li>
+<li>对被封闭在内部的 Bears 生成一条“回到合法边界”的路径（只走 Occupied 的直线路径，带安全上限防止死循环）</li>
+<li>触发 UI、音效、胜利判定（占领率 ≥ 阈值）</li>
+</ol>
+<p>对应实现集中在：<code>QixLite.cs</code>（BFS 可达性、填充、计分、熊的回归路径构建）</p>
+<hr>
+<h3 id="3-敌人系统：同一套规则层，不同的行为层"><a href="#3-敌人系统：同一套规则层，不同的行为层" class="headerlink" title="3) 敌人系统：同一套规则层，不同的行为层"></a>3) 敌人系统：同一套规则层，不同的行为层</h3><ul>
+<li><strong>Sheep</strong>：封闭后作为计分目标</li>
+<li><strong>Wolves</strong>：矩形占位（默认 2×2，可调），更接近“体积移动”的碰撞与合法性检查</li>
+<li><strong>Bears</strong>：只在合法边界巡逻；随着计时事件分阶段提速，晚期允许走 Trail（难度曲线更明确）</li>
+<li><strong>Locusts</strong>：  <ul>
+<li>达成前置条件（例如封闭次数、冷却期、并发上限）才尝试刷新  </li>
+<li>在 Occupied 上移动，BFS 寻找可吃目标（不可吃边框）  </li>
+<li>只剩最后一圈边界时会自毁并进入全局冷却，避免把玩法推到“无解”</li>
+</ul>
+</li>
+</ul>
+<p>对应实现集中在：<code>QixLite.cs</code>（Actor&#x2F;行为逻辑） + <code>LevelManager.cs</code>（参数注入）</p>
+<hr>
+<h3 id="4-关卡与流程：LevelManager-可调参工程"><a href="#4-关卡与流程：LevelManager-可调参工程" class="headerlink" title="4) 关卡与流程：LevelManager + 可调参工程"></a>4) 关卡与流程：LevelManager + 可调参工程</h3><p><code>LevelManager</code> 提供 <code>LevelConfig</code>，把下面这些都变成可调参数：</p>
+<ul>
+<li>Lives、单位数量（Sheep&#x2F;Wolves&#x2F;Bears）与狼占位大小</li>
+<li>玩家&#x2F;敌人速度、计时器、胜利占领比</li>
+<li>Locust：刷新间隔、全局冷却、最大并发数</li>
+<li>计分规则（每格&#x2F;每 Sheep）</li>
+</ul>
+<p>对应实现：<code>LevelManager.cs</code>（多关卡序列 + 胜利回调推进&#x2F;回主菜单）</p>
+<hr>
+<h3 id="5-UI-音频-体验：把可玩性做完整"><a href="#5-UI-音频-体验：把可玩性做完整" class="headerlink" title="5) UI&#x2F;音频&#x2F;体验：把可玩性做完整"></a>5) UI&#x2F;音频&#x2F;体验：把可玩性做完整</h3><ul>
+<li>主菜单两页弹窗流程与场景切换（防抖、可点击或超时继续）：<code>MainMenuUI.cs</code></li>
+<li>HUD&#x2F;结算弹窗&#x2F;首关提示等游戏流完整性（项目内以 TMP&#x2F;文本为主）</li>
+<li>音频：BGM 循环、事件音效钩子（胜利&#x2F;死亡&#x2F;得分&#x2F;蝗虫等）</li>
+<li>反馈：抖动&#x2F;特效&#x2F;动画等（例如 <code>ShakeObject.cs</code>、尘土&#x2F;胜利扫过等）</li>
+</ul>
+<h3 id="6-版本发布和技术文档"><a href="#6-版本发布和技术文档" class="headerlink" title="6) 版本发布和技术文档"></a>6) 版本发布和技术文档</h3><p><img src="/images/Farmix/Screenshot2.png"></p>
+<hr>
+<h2 id="开发过程中的关键难点（以及我怎么解决）"><a href="#开发过程中的关键难点（以及我怎么解决）" class="headerlink" title="开发过程中的关键难点（以及我怎么解决）"></a>开发过程中的关键难点（以及我怎么解决）</h2><ul>
+<li><p><strong>边界与合法性规则最容易“写着写着就矛盾”</strong><br>我把“合法站立边界”定义成明确可验证的条件（例如必须与内侧 Empty 产生 8 邻接），并把“边框&#x2F;内边界”规则统一起来，避免敌人与玩家走法分裂。</p>
+</li>
+<li><p><strong>Trail 方向贴图与邻接判断</strong><br>早期 14-dir Trail 方向映射出错、且把无关邻居算进连通逻辑。我把轨迹连通性收敛为“只看 prev&#x2F;next”，其它方向仅在 Occupied 情况下参与，从而稳定解决 sprite 朝向与分叉误判。</p>
+</li>
+<li><p><strong>视觉与规则耦合导致的滞后&#x2F;错判</strong><br>增加 Visual-only 的邻接判断函数，把“高亮边缘”从“移动合法性”里拆出来，两套口径互不干扰。</p>
+</li>
+<li><p><strong>动态地形变化导致熊卡死</strong><br>Locust 啃地会改变地形，如果恢复路径强行要求每步都是 Occupied，容易陷入循环。我增加了救援模式（允许临时跨空格回到最近合法点）并加安全上限，保证最坏情况也能恢复。</p>
+</li>
+</ul>
+<p>这些问题的共性是：<strong>先锁定不变量（invariants），再用工具&#x2F;日志把不变量变得可验证</strong>。这是我在客户端岗位里最常用的“保命方法”。</p>
+<hr>
+<h2 id="技术栈"><a href="#技术栈" class="headerlink" title="技术栈"></a>技术栈</h2><ul>
+<li>Unity 6 &#x2F; C#</li>
+<li>Unity UI（GridLayoutGroup + Image）&#x2F; TextMeshPro</li>
+<li>BFS &#x2F; Flood Fill &#x2F; 网格邻接 mask 选择（14-dir）</li>
+<li>Android 构建与移动端输入调优（陀螺仪&#x2F;分辨率）</li>
+</ul>
+<hr>
+<h2 id="代码入口"><a href="#代码入口" class="headerlink" title="代码入口"></a>代码入口</h2><ul>
+<li><code>QixLite.cs</code>：核心玩法（网格、输入、闭合填充、敌人、UI&#x2F;音频钩子）</li>
+<li><code>LevelManager.cs</code>：关卡参数注入与流程推进</li>
+<li><code>QixMinimal.cs</code>：早期最小原型（Texture2D + flood fill 思路）</li>
+<li><code>MainMenuUI.cs</code>：菜单与弹窗流程</li>
+<li><code>CloudLooper.cs</code> &#x2F; <code>ShakeObject.cs</code>：背景循环与交互反馈</li>
+</ul>
+<hr>
+<h2 id="Links"><a href="#Links" class="headerlink" title="Links"></a>Links</h2><ul>
+<li>技术文档：<a href="/projects/farmix/TechDoc">Farmix Project Technical Documentation</a></li>
+<li>代码仓库：<a target="_blank" rel="noopener" href="https://github.com/FFFeiya/Qix-Original">https://github.com/FFFeiya/Qix-Original</a></li>
+<li>Android APK：<a target="_blank" rel="noopener" href="https://nexiie.itch.io/farmix">下载</a></li>
+</ul>
+<pre><code>
+</code></pre>
+</article>
+
+
+
+<footer class="page-footer footnote"><hr><div class="text"><p>本站由 <a href="/">FFFeiya</a> 使用 <a target="_blank" rel="noopener" href="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.33.1">Stellar 1.33.1</a> 主题创建。<br>本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处。</p>
+</div></footer>
+<div class="main-mask" onclick="sidebar.dismiss()"></div></div><aside class="l_right">
+<div class="widgets">
+
+<widget class="widget-wrapper toc" id="data-toc" collapse="false"><div class="widget-header dis-select"><span class="name">On This Page</span><a class="cap-action" onclick="sidebar.toggleTOC()" ><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg></a></div><div class="widget-body"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E9%94%AE%E8%AF%8D"><span class="toc-text">关键词</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%88%91%E7%9A%84%E8%81%8C%E8%B4%A3%E4%B8%8E%E5%B7%A5%E7%A8%8B%E8%B4%A1%E7%8C%AE"><span class="toc-text">我的职责与工程贡献</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E7%BD%91%E6%A0%BC%E6%95%B0%E6%8D%AE%E4%B8%8E%E6%B8%B2%E6%9F%93%E8%A7%A3%E8%80%A6%EF%BC%88%E8%A7%84%E5%88%99%E5%85%88%E8%A1%8C%EF%BC%89"><span class="toc-text">1) 网格数据与渲染解耦（规则先行）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E7%94%BB%E7%BA%BF%E9%97%AD%E5%90%88%E3%80%81%E5%8C%BA%E5%9F%9F%E5%A1%AB%E5%85%85%E4%B8%8E%E8%AE%A1%E5%88%86%EF%BC%88BFS-Flood-Fill%EF%BC%89"><span class="toc-text">2) 画线闭合、区域填充与计分（BFS&#x2F;Flood Fill）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E6%95%8C%E4%BA%BA%E7%B3%BB%E7%BB%9F%EF%BC%9A%E5%90%8C%E4%B8%80%E5%A5%97%E8%A7%84%E5%88%99%E5%B1%82%EF%BC%8C%E4%B8%8D%E5%90%8C%E7%9A%84%E8%A1%8C%E4%B8%BA%E5%B1%82"><span class="toc-text">3) 敌人系统：同一套规则层，不同的行为层</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E5%85%B3%E5%8D%A1%E4%B8%8E%E6%B5%81%E7%A8%8B%EF%BC%9ALevelManager-%E5%8F%AF%E8%B0%83%E5%8F%82%E5%B7%A5%E7%A8%8B"><span class="toc-text">4) 关卡与流程：LevelManager + 可调参工程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-UI-%E9%9F%B3%E9%A2%91-%E4%BD%93%E9%AA%8C%EF%BC%9A%E6%8A%8A%E5%8F%AF%E7%8E%A9%E6%80%A7%E5%81%9A%E5%AE%8C%E6%95%B4"><span class="toc-text">5) UI&#x2F;音频&#x2F;体验：把可玩性做完整</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-%E7%89%88%E6%9C%AC%E5%8F%91%E5%B8%83%E5%92%8C%E6%8A%80%E6%9C%AF%E6%96%87%E6%A1%A3"><span class="toc-text">6) 版本发布和技术文档</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BC%80%E5%8F%91%E8%BF%87%E7%A8%8B%E4%B8%AD%E7%9A%84%E5%85%B3%E9%94%AE%E9%9A%BE%E7%82%B9%EF%BC%88%E4%BB%A5%E5%8F%8A%E6%88%91%E6%80%8E%E4%B9%88%E8%A7%A3%E5%86%B3%EF%BC%89"><span class="toc-text">开发过程中的关键难点（以及我怎么解决）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8A%80%E6%9C%AF%E6%A0%88"><span class="toc-text">技术栈</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E5%85%A5%E5%8F%A3"><span class="toc-text">代码入口</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Links"><span class="toc-text">Links</span></a></li></ol></div><div class="widget-footer"><a class="top" onclick="util.scrollTop()"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path stroke-linejoin="round" d="m9 15.5l3-3l3 3m-6-4l3-3l3 3"/><path d="M7 3.338A9.95 9.95 0 0 1 12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12c0-1.821.487-3.53 1.338-5"/></g></svg><span>Scroll to Top</span></a></div></widget>
+</div></aside><div class='float-panel'>
+  <button type='button' style='display:none' class='laptop-only rightbar-toggle mobile' onclick='sidebar.rightbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg>
+  </button>
+  <button type='button' style='display:none' class='mobile-only leftbar-toggle mobile' onclick='sidebar.leftbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 11c0-3.771 0-5.657 1.172-6.828C4.343 3 6.229 3 10 3h4c3.771 0 5.657 0 6.828 1.172C22 5.343 22 7.229 22 11v2c0 3.771 0 5.657-1.172 6.828C19.657 21 17.771 21 14 21h-4c-3.771 0-5.657 0-6.828-1.172C2 18.657 2 16.771 2 13z"/><path id="sep" stroke-linecap="round" d="M5.5 10h6m-5 4h4m4.5 7V3"/></g></svg>
+  </button>
+</div>
+</div><div class="scripts">
+
+
+<script type="text/javascript">
+  window.canonical = {"originalHost":null,"officialHosts":["localhost"],"encoded":""};
+  const ctx = {
+    date_suffix: {
+      just: `Just`,
+      min: `minutes ago`,
+      hour: `hours ago`,
+      day: `days ago`,
+    },
+    root : `/`,
+    tag_plugins: {
+      chat: Object.assign({"api":"https://siteinfo.listentothewind.cn/api/v1"}),
+    }
+  };
+
+  // required plugins (only load if needs)
+  if (`local_search`) {
+    ctx.search = {};
+    ctx.search.service = `local_search`;
+    if (ctx.search.service == 'local_search') {
+      let service_obj = Object.assign({}, `{"field":"all","path":"/search.json","content":true,"skip_search":null,"sort":"-date"}`);
+      ctx.search[ctx.search.service] = service_obj;
+    }
+  }
+  const def = {
+    avatar: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/3442075.svg`,
+    cover: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/cover/76b86c0226ffd.svg`,
+    loading: `https://api.iconify.design/eos-icons:three-dots-loading.svg?color=%231cd0fd`,
+  };
+  const deps = {
+    jquery: `https://gcore.jsdelivr.net/npm/jquery@3.7/dist/jquery.min.js`,
+    marked: `https://gcore.jsdelivr.net/npm/marked@13.0/lib/marked.umd.min.js`,
+    lazyload: `/%5Bobject%20Object%5D`
+  }
+  
+
+</script>
+
+<script type="text/javascript">
+  
+  function RunItem() {
+    this.list = []; // 存放回调函数
+    this.start = () => {
+      for (var i = 0; i < this.list.length; i++) {
+        this.list[i].run();
+      }
+    };
+    this.push = (fn, name, setRequestAnimationFrame = true) => {
+      let myfn = fn
+      if (setRequestAnimationFrame) {
+        myfn = () => {
+          utils.requestAnimationFrame(fn)
+        }
+      }
+      var f = new Item(myfn, name);
+      this.list.push(f);
+    };
+    this.remove = (name) => {
+      for (let index = 0; index < this.list.length; index++) {
+        const e = this.list[index];
+        if (e.name == name) {
+          this.list.splice(index, 1);
+        }
+      }
+    }
+    // 构造一个可以run的对象
+    function Item(fn, name) {
+      // 函数名称
+      this.name = name || fn.name;
+      // run方法
+      this.run = () => {
+        try {
+          fn()
+        } catch (error) {
+          console.log(error);
+        }
+      };
+    }
+  }
+
+  const utils = {
+    // 懒加载 css https://github.com/filamentgroup/loadCSS
+    css: (href, before, media, attributes) => {
+      var doc = window.document;
+      var ss = doc.createElement("link");
+      var ref;
+      if (before) {
+        ref = before;
+      } else {
+        var refs = (doc.body || doc.getElementsByTagName("head")[0]).childNodes;
+        ref = refs[refs.length - 1];
+      }
+      var sheets = doc.styleSheets;
+      if (attributes) {
+        for (var attributeName in attributes) {
+          if (attributes.hasOwnProperty(attributeName)) {
+            ss.setAttribute(attributeName, attributes[attributeName]);
+          }
+        }
+      }
+      ss.rel = "stylesheet";
+      ss.href = href;
+      ss.media = "only x";
+      function ready(cb) {
+        if (doc.body) {
+          return cb();
+        }
+        setTimeout(function () {
+          ready(cb);
+        });
+      }
+      ready(function () {
+        ref.parentNode.insertBefore(ss, before ? ref : ref.nextSibling);
+      });
+      var onloadcssdefined = function (cb) {
+        var resolvedHref = ss.href;
+        var i = sheets.length;
+        while (i--) {
+          if (sheets[i].href === resolvedHref) {
+            return cb();
+          }
+        }
+        setTimeout(function () {
+          onloadcssdefined(cb);
+        });
+      };
+      function loadCB() {
+        if (ss.addEventListener) {
+          ss.removeEventListener("load", loadCB);
+        }
+        ss.media = media || "all";
+      }
+      if (ss.addEventListener) {
+        ss.addEventListener("load", loadCB);
+      }
+      ss.onloadcssdefined = onloadcssdefined;
+      onloadcssdefined(loadCB);
+      return ss;
+    },
+
+    js: (src, opt) => new Promise((resolve, reject) => {
+      var script = document.createElement('script');
+      if (src.startsWith('/')) {
+        src = ctx.root + src.substring(1);
+      }
+      script.src = src;
+      if (opt) {
+        for (let key of Object.keys(opt)) {
+          script[key] = opt[key]
+        }
+      } else {
+        // 默认异步，如果需要同步，第二个参数传入 {} 即可
+        script.async = true
+      }
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function () {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    }),
+
+    jq: (fn) => {
+      if (typeof jQuery === 'undefined') {
+        utils.js(deps.jquery).then(fn)
+      } else {
+        fn()
+      }
+    },
+
+    onLoading: (el) => {
+      if (el) {
+        $(el).append('<div class="loading-wrap"><svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" stroke-opacity=".3" d="M12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="1.3s" values="60;0"/></path><path stroke-dasharray="15" stroke-dashoffset="15" d="M12 3C16.9706 3 21 7.02944 21 12"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="15;0"/><animateTransform attributeName="transform" dur="1.5s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"/></path></g></svg></div>');
+      }
+    },
+    onLoadSuccess: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap').remove();
+      }
+    },
+    onLoadFailure: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap svg').remove();
+        $(el).find('.loading-wrap').append('<svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" d="M12 3L21 20H3L12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.5s" values="60;0"/></path><path stroke-dasharray="6" stroke-dashoffset="6" d="M12 10V14"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.6s" dur="0.2s" values="6;0"/></path></g><circle cx="12" cy="17" r="1" fill="currentColor" fill-opacity="0"><animate fill="freeze" attributeName="fill-opacity" begin="0.8s" dur="0.4s" values="0;1"/></circle></svg>');
+        $(el).find('.loading-wrap').addClass('error');
+      }
+    },
+    request: (el, url, callback, onFailure) => {
+      const maxRetry = 3;
+      let retryCount = 0;
+
+      return new Promise((resolve, reject) => {
+        const load = () => {
+          utils.onLoading?.(el);
+
+          let timedOut = false;
+          const timeout = setTimeout(() => {
+            timedOut = true;
+            console.warn('[request] 超时:', url);
+
+            if (++retryCount >= maxRetry) {
+              utils.onLoadFailure?.(el);
+              onFailure?.();
+              reject('请求超时');
+            } else {
+              setTimeout(load, 1000);
+            }
+          }, 5000);
+
+          fetch(url).then(resp => {
+            if (timedOut) return;
+            clearTimeout(timeout);
+
+            if (!resp.ok) throw new Error('响应失败');
+            return resp;
+          }).then(data => {
+            if (timedOut) return;
+            utils.onLoadSuccess?.(el);
+            callback(data);
+            resolve(data);
+          }).catch(err => {
+            clearTimeout(timeout);
+            console.warn('[request] 错误:', err);
+
+            if (++retryCount >= maxRetry) {
+              utils.onLoadFailure?.(el);
+              onFailure?.();
+              reject(err);
+            } else {
+              setTimeout(load, 1000);
+            }
+          });
+        };
+
+        load();
+      });
+    },
+    requestWithoutLoading: (url, options = {}, maxRetry = 2, timeout = 5000) => {
+      return new Promise((resolve, reject) => {
+        let retryCount = 0;
+
+        const tryRequest = () => {
+          let timedOut = false;
+          const timer = setTimeout(() => {
+            timedOut = true;
+            if (++retryCount > maxRetry) reject('timeout');
+            else tryRequest();
+          }, timeout);
+
+          fetch(url, options)
+            .then(resp => {
+              clearTimeout(timer);
+              if (!resp.ok) throw new Error('bad response');
+              resolve(resp);
+            })
+            .catch(err => {
+              clearTimeout(timer);
+              if (++retryCount > maxRetry) reject(err);
+              else setTimeout(tryRequest, 500);
+            });
+        };
+
+        tryRequest();
+      });
+    },
+    /********************** requestAnimationFrame ********************************/
+    // 1、requestAnimationFrame 会把每一帧中的所有 DOM 操作集中起来，在一次重绘或回流中就完成，并且重绘或回流的时间间隔紧紧跟随浏览器的刷新频率，一般来说，这个频率为每秒60帧。
+    // 2、在隐藏或不可见的元素中，requestAnimationFrame 将不会进行重绘或回流，这当然就意味着更少的的 cpu，gpu 和内存使用量。
+    requestAnimationFrame: (fn) => {
+      if (!window.requestAnimationFrame) {
+        window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame;
+      }
+      window.requestAnimationFrame(fn)
+    },
+    dark: {},
+  };
+
+  // utils.dark.mode 当前模式 dark or light
+  // utils.dark.toggle() 暗黑模式触发器
+  // utils.dark.push(callBack[,"callBackName"]) 传入触发器回调函数
+  utils.dark.method = {
+    toggle: new RunItem(),
+  };
+  utils.dark = Object.assign(utils.dark, {
+    push: utils.dark.method.toggle.push,
+  });
+</script>
+<script>
+  const sidebar = {
+    leftbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    rightbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('rightbar');
+        l_body.removeAttribute('leftbar');
+      }
+    },
+    dismiss: () => {
+      if (l_body) {
+        l_body.removeAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    toggleTOC: () => {
+      document.querySelector('#data-toc').classList.toggle('collapse');
+    }
+  }
+</script>
+<script type="text/javascript">
+  (() => {
+    const tagSwitchers = document.querySelectorAll('.tag-subtree.parent-tag > a > .tag-switcher-wrapper')
+    for (const tagSwitcher of tagSwitchers) {
+      tagSwitcher.addEventListener('click', (e) => {
+        const parent = e.target.closest('.tag-subtree.parent-tag')
+        parent.classList.toggle('expanded')
+        e.preventDefault()
+      })
+    }
+
+    // Get active tag from query string, then activate it.
+    const urlParams = new URLSearchParams(window.location.search)
+    const activeTag = urlParams.get('tag')
+    if (activeTag) {
+      let tag = document.querySelector(`.tag-subtree[data-tag="${activeTag}"]`)
+      if (tag) {
+        tag.querySelector('a').classList.add('active')
+        
+        while (tag) {
+          tag.classList.add('expanded')
+          tag = tag.parentElement.closest('.tag-subtree.parent-tag')
+        }
+      }
+    }
+  })()
+</script>
+
+<script async src="https://gcore.jsdelivr.net/npm/vanilla-lazyload@19.1/dist/lazyload.min.js"></script>
+<script>
+  // https://www.npmjs.com/package/vanilla-lazyload
+  // Set the options globally
+  // to make LazyLoad self-initialize
+  window.lazyLoadOptions = {
+    elements_selector: ".lazy",
+    callback_loaded: (el) => {
+      el.classList.add('loaded');
+      const wrapper = el.closest('.lazy-box');
+      const icon = wrapper?.querySelector('.lazy-icon');
+      if (icon) icon.remove();
+    }
+  };
+  // Listen to the initialization event
+  // and get the instance of LazyLoad
+  window.addEventListener(
+    "LazyLoad::Initialized",
+    function (event) {
+      window.lazyLoadInstance = event.detail.instance;
+    },
+    false
+  );
+  document.addEventListener('DOMContentLoaded', function () {
+    window.lazyLoadInstance?.update();
+  });
+
+  window.wrapLazyloadImages = (container) => {
+    if (typeof container === 'string') {
+      container = document.querySelector(container);
+    }
+    if (!container) return;
+    
+    const images = container.querySelectorAll('img');
+    images.forEach((img) => {
+      if (img.classList.contains('lazy')) return;
+
+      const src = img.getAttribute('src');
+      if (!src) return;
+
+      const wrapper = document.createElement('div');
+      wrapper.className = 'lazy-box';
+
+      const newImg = img.cloneNode();
+      newImg.removeAttribute('src');
+      newImg.setAttribute('data-src', src);
+      newImg.classList.add('lazy');
+
+      const icon = document.createElement('div');
+      icon.className = 'lazy-icon';
+      if (def.loading) {
+        icon.style.backgroundImage = `url("${def.loading}")`;
+      }
+
+      wrapper.appendChild(newImg);
+      wrapper.appendChild(icon);
+
+      img.replaceWith(wrapper);
+    });
+
+    // 通知 LazyLoad 更新
+    if (window.lazyLoadInstance?.update) {
+      window.lazyLoadInstance.update();
+    }
+  }
+  
+</script>
+
+<!-- required -->
+<script src="/js/main.js?v=1.33.1" defer></script>
+
+<script type="text/javascript">
+  const applyTheme = (theme) => {
+    if (theme === 'auto') {
+      document.documentElement.removeAttribute('data-theme')
+    } else {
+      document.documentElement.setAttribute('data-theme', theme)
+    }
+
+    // applyThemeToGiscus(theme)
+  }
+
+  // FIXME: 这会导致无法使用 preferred_color_scheme 以外的主题
+  const applyThemeToGiscus = (theme) => {
+    // theme = theme === 'auto' ? 'preferred_color_scheme' : theme
+    const cmt = document.getElementById('giscus')
+    if (cmt) {
+      // This works before giscus load.
+      cmt.setAttribute('data-theme', theme)
+    }
+
+    const iframe = document.querySelector('#comments > section.giscus > iframe')
+    if (iframe) {
+      // This works after giscus loaded.
+      const src = iframe.src
+      const newSrc = src.replace(/theme=[\w]+/, `theme=${theme}`)
+      iframe.src = newSrc
+    }
+  }
+
+  const switchTheme = () => {
+    // light -> dark -> auto -> light -> ...
+    const currentTheme = document.documentElement.getAttribute('data-theme')
+    let newTheme;
+    switch (currentTheme) {
+      case 'light':
+        newTheme = 'dark'
+        break
+      case 'dark':
+        newTheme = 'auto'
+        break
+      default:
+        newTheme = 'light'
+    }
+    applyTheme(newTheme)
+    window.localStorage.setItem('Stellar.theme', newTheme)
+    utils.dark.mode = newTheme === 'auto' ? (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light") : newTheme;
+    utils.dark.method.toggle.start();
+
+    const messages = {
+      light: `Switched to Light Mode`,
+      dark: `Switched to Dark Mode`,
+      auto: `Switched to Auto Mode`,
+    }
+    hud?.toast?.(messages[newTheme])
+  }
+
+  (() => {
+    // Apply user's preferred theme, if any.
+    const theme = window.localStorage.getItem('Stellar.theme')
+    if (theme !== null) {
+      applyTheme(theme)
+    } else {
+      utils.dark.mode = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    }
+    utils.dark.method.toggle.start();
+  })()
+</script>
+
+
+<!-- optional -->
+
+
+
+<script defer>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.services = Object.assign({}, JSON.parse(`{"mdrender":{"js":"/js/services/mdrender.js"},"siteinfo":{"js":"/js/services/siteinfo.js","api":null},"ghinfo":{"js":"/js/services/ghinfo.js"},"rating":{"js":"/js/services/rating.js","api":"https://star-vote.xaox.cc/api/rating"},"vote":{"js":"/js/services/vote.js","api":"https://star-vote.xaox.cc/api/vote"},"sites":{"js":"/js/services/sites.js"},"friends":{"js":"/js/services/friends.js"},"friends_and_posts":{"js":"/js/services/friends_and_posts.js"},"timeline":{"js":"/js/services/timeline.js"},"fcircle":{"js":"/js/services/fcircle.js"},"weibo":{"js":"/js/services/weibo.js"},"memos":{"js":"/js/services/memos.js"},"voice":{"js":"/js/plugins/voice.js"},"video":{"js":"/js/plugins/video.js"},"download-file":{"js":"/js/plugins/download-file.js"},"twikoo":{"js":"/js/services/twikoo_latest_comment.js"},"waline":{"js":"/js/services/waline_latest_comment.js"},"artalk":{"js":"/js/services/artalk_latest_comment.js"},"giscus":{"js":"/js/services/giscus_latest_comment.js"},"contributors":{"edit_this_page":{"_posts/":null,"wiki/stellar/":"https://github.com/xaoxuu/hexo-theme-stellar-docs/blob/main/"},"js":"/js/services/contributors.js"}}`));
+    for (let id of Object.keys(ctx.services)) {
+      const js = ctx.services[id].js;
+      if (id == 'siteinfo') {
+        ctx.cardlinks = document.querySelectorAll('a.link-card[cardlink]');
+        if (ctx.cardlinks?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            setCardLink(ctx.cardlinks);
+          });
+        }
+      } else if (id == 'voice') {
+        ctx.voiceAudios = document.querySelectorAll('.voice>audio');
+        if (ctx.voiceAudios?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            createVoiceDom(ctx.voiceAudios);
+          });
+        }
+      } else if (id == 'video') {
+        ctx.videos = document.querySelectorAll('.video>video');
+        if (ctx.videos?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            videoEvents(ctx.videos);
+          });
+        }
+      } else if (id == 'download-file') {
+        ctx.files = document.querySelectorAll('.file');
+        if (ctx.files?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            downloadFileEvent(ctx.files);
+          });
+        }
+      } else {
+        const els = document.getElementsByClassName(`ds-${id}`);
+        if (els?.length > 0) {
+          utils.jq(() => {
+            if (id == 'timeline' || 'memos' || 'marked') {
+              utils.js(deps.marked).then(function () {
+                utils.js(js, { defer: true });
+              });
+            } else {
+              utils.js(js, { defer: true });
+            }
+          });
+        }
+      }
+    }
+
+    // chat iphone time
+    let phoneTimes = document.querySelectorAll('.chat .status-bar .time');
+
+    if (phoneTimes.length > 0) {
+      NowTime();
+      var date = new Date();
+      var sec = date.getSeconds();
+      var firstAdjustInterval = setInterval(firstAdjustTime, 1000 * (60 - sec));
+    }
+
+    function firstAdjustTime() {
+      NowTime();
+      clearInterval(firstAdjustInterval);
+      setInterval(NowTime, 1000 * 60);
+    }
+
+    function NowTime() {
+      for (let i = 0; i < phoneTimes.length; ++i) {
+        var timeSpan = phoneTimes[i];
+        var date = new Date();
+        var hour = date.getHours();
+        var min = date.getMinutes();
+        timeSpan.innerHTML = check(hour) + ":" + check(min);
+      }
+    };
+
+    function check(val) {
+      if (val < 10) {
+        return ("0" + val);
+      }
+      return (val);
+    }
+
+    // chat quote
+    const chat_quote_obverser = new IntersectionObserver((entries, observer) => {
+      entries.filter((entry) => { return entry.isIntersecting }).sort((a, b) => a.intersectionRect.y !== b.intersectionRect.y ? a.intersectionRect.y - b.intersectionRect.y : a.intersectionRect.x - b.intersectionRect.x).forEach((entry, index) => {
+          observer.unobserve(entry.target);
+          setTimeout(() => {
+            entry.target.classList.add('quote-blink');
+            setTimeout(() => {
+              entry.target.classList.remove('quote-blink');
+            }, 1000);
+          }, Math.max(100, 16) * (index + 1));
+        });
+    });
+
+    var chatQuotes = document.querySelectorAll(".chat .talk .quote");
+    chatQuotes.forEach((quote) => {
+      quote.addEventListener('click', function () {
+        var chatCellDom = document.getElementById("quote-" + quote.getAttribute("quotedCellTag"));
+        if (chatCellDom) {
+          var chatDiv = chatCellDom.parentElement;
+          var mid = chatDiv.clientHeight / 2;
+          var offsetTop = chatCellDom.offsetTop;
+          if (offsetTop > mid - chatCellDom.clientHeight / 2) {
+            chatDiv.scrollTo({
+              top: chatCellDom.offsetTop - mid + chatCellDom.clientHeight / 2,
+              behavior: "smooth"
+            });
+          } else {
+            chatDiv.scrollTo({
+              top: 0,
+              behavior: "smooth"
+            });
+          }
+          chat_quote_obverser.observe(chatCellDom);
+        }
+      });
+    });
+  });
+</script>
+
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.search = {
+      path: `/search.json`,
+    }
+    utils.js('/js/search/local-search.js', { defer: true });
+  });
+</script><script>
+  window.FPConfig = {
+    delay: 0,
+    ignoreKeywords: [],
+    maxRPS: 5,
+    hoverDelay: 25
+  };
+</script>
+<script defer src="https://gcore.jsdelivr.net/npm/flying-pages@2/flying-pages.min.js"></script><script>
+  ctx.fancybox = {
+    selector: `.timenode p>img`,
+    css: `https://gcore.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css`,
+    js: `https://gcore.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js`
+  };
+  var selector = '[data-fancybox]:not(.error), .with-fancybox .atk-content img:not([atk-emoticon])';
+  if (ctx.fancybox.selector) {
+    selector += `, ${ctx.fancybox.selector}`
+  }
+  var needFancybox = document.querySelectorAll(selector).length !== 0;
+  if (!needFancybox) {
+    const memos = document.getElementsByClassName('ds-memos');
+    if (memos != undefined && memos.length > 0) {
+      needFancybox = true;
+    }
+    const fancybox = document.getElementsByClassName('with-fancybox');
+    if (fancybox != undefined && fancybox.length > 0) {
+      needFancybox = true;
+    }
+  }
+  if (needFancybox) {
+    utils.css(ctx.fancybox.css);
+    utils.js(ctx.fancybox.js, { defer: true }).then(function () {
+      Fancybox.bind(selector, {
+        hideScrollbar: false,
+        Thumbs: {
+          autoStart: false,
+        },
+        caption: (fancybox, slide) => {
+          return slide.triggerEl.alt || slide.triggerEl.dataset.caption || null
+        }
+      });
+    })
+  }
+</script>
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    const swiper_api = document.getElementById('swiper-api');
+    if (swiper_api != undefined) {
+      utils.css(`https://unpkg.com/swiper@10.3/swiper-bundle.min.css`);
+      utils.js(`https://unpkg.com/swiper@10.3/swiper-bundle.min.js`, { defer: true }).then(function () {
+        const effect = swiper_api.getAttribute('effect') || '';
+        var swiper = new Swiper('.swiper#swiper-api', {
+          slidesPerView: 'auto',
+          spaceBetween: 8,
+          centeredSlides: true,
+          effect: effect,
+          rewind: true,
+          pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+          },
+          navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+          },
+        });
+      })
+    }
+  });
+</script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    window.codeElements = document.querySelectorAll('.code');
+    if (window.codeElements.length > 0) {
+      ctx.copycode = {
+        default_text: `Copy`,
+        success_text: `Copied`,
+        toast: `复制成功`,
+      };
+      utils.js('/js/plugins/copycode.js');
+    }
+  });
+</script>
+
+
+<!-- inject -->
+
+</div></body></html>

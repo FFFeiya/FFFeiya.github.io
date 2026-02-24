@@ -1,0 +1,959 @@
+
+<!DOCTYPE html><html lang="en" data-theme="dark">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="hexo-theme" content="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.33.1" theme-name="Stellar" theme-version="1.33.1">
+  
+  
+  <meta name="generator" content="Hexo 7.3.0">
+  <meta http-equiv='x-dns-prefetch-control' content='on' />
+  
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000">
+  <meta name="theme-color" content="#f9fafb">
+  <title>Unity 对接 Python 与 ChatGPT：综合指南 - FFFeiya</title>
+
+  
+    <meta name="description" content="Unity 一直是游戏开发的主力平台：编辑器成熟、生态完善、交互能力强。但项目一旦复杂起来，你往往会想把更多工具拉进来——比如用 Python 做数据处理&#x2F;自动化，用大模型（如 ChatGPT）做对话、内容生成或辅助开发。本篇文章会用比较“工程化”的方式讲清楚：如何在 Unity 里运行 Python 脚本，以及如何从 Unity 调用 OpenAI 的 ChatGPT 接口。  目录">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Unity 对接 Python 与 ChatGPT：综合指南">
+<meta property="og:url" content="http://example.com/2024/12/08/Bridging%20Unity%20with%20Python%20and%20ChatGPT.zh-CN/">
+<meta property="og:site_name" content="FFFeiya">
+<meta property="og:description" content="Unity 一直是游戏开发的主力平台：编辑器成熟、生态完善、交互能力强。但项目一旦复杂起来，你往往会想把更多工具拉进来——比如用 Python 做数据处理&#x2F;自动化，用大模型（如 ChatGPT）做对话、内容生成或辅助开发。本篇文章会用比较“工程化”的方式讲清楚：如何在 Unity 里运行 Python 脚本，以及如何从 Unity 调用 OpenAI 的 ChatGPT 接口。  目录">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2024-12-08T17:00:00.000Z">
+<meta property="article:modified_time" content="2026-02-24T03:31:10.905Z">
+<meta property="article:author" content="FFFeiya">
+<meta property="article:tag" content="unity">
+<meta property="article:tag" content="ChatGPT">
+<meta property="article:tag" content="CSharp">
+<meta name="twitter:card" content="summary">
+  
+  
+  
+  <meta name="keywords" content="unity,ChatGPT,CSharp">
+
+  <!-- feed -->
+  
+
+  <link rel="stylesheet" href="/css/main.css?v=1.33.1">
+
+
+  
+
+  
+    
+<link rel="stylesheet" href="https://gcore.jsdelivr.net/gh/highlightjs/cdn-release@11.9/build/styles/atom-one-dark.min.css">
+
+  
+
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"FFFeiya","sameAs":[]},"dateCreated":"2024-12-08T10:00:00-07:00","dateModified":"2026-02-23T20:31:10-07:00","datePublished":"2024-12-08T10:00:00-07:00","description":"","headline":"Unity 对接 Python 与 ChatGPT：综合指南","mainEntityOfPage":{"@type":"WebPage","@id":"http://example.com/2024/12/08/Bridging%20Unity%20with%20Python%20and%20ChatGPT.zh-CN/"},"publisher":{"@type":"Organization","name":"FFFeiya","sameAs":[]},"url":"http://example.com/2024/12/08/Bridging%20Unity%20with%20Python%20and%20ChatGPT.zh-CN/","keywords":"unity, ChatGPT, CSharp","image":[]}</script>
+  <link rel="stylesheet" href="/css/custom.css">
+</head>
+<body><div class="sitebg"><div class="siteblur"></div></div>
+
+<div class="l_body content" id="start" layout="post" type="tech" ><aside class="l_left"><div class="sidebg"></div><div class="leftbar-container">
+
+
+<header class="header"><div class="logo-wrap"><a class="avatar" href="/about/"><div class="bg" style="opacity:0;background-image:url(https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/rainbow64@3x.webp);"></div><img no-lazy class="avatar" src="/images/Putin.png" onerror="javascript:this.classList.add('error');this.src='https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/image/2659360.svg';"></a><a class="title" href="/"><div class="main">FFFeiya</div><div class="sub normal cap">Portfolio</div><div class="sub hover cap" style="opacity:0"> UE / Unity / Tools</div></a></div></header>
+
+<div class="nav-area">
+
+<nav class="menu dis-select"><a class="nav-item" title="Projects" href="/projects/" style="color:#E0E0E0">项目列表</a><a class="nav-item" title="Tech Blog" href="/blog/" style="color:#E0E0E0">工程博客</a><a class="nav-item" title="Play" href="/play/" style="color:#E0E0E0">在线游玩</a><a class="nav-item" title="(Tech) Art" href="/art/" style="color:#E0E0E0">技术美术</a><a class="nav-item" title="Design" href="/design/" style="color:#E0E0E0">文字</a><a class="nav-item" title="About / Resume" href="/about/" style="color:#E0E0E0">关于</a></nav>
+</div>
+<div class="widgets">
+<div class="search-wrapper" id="search-wrapper"><form class="search-form"><a class="search-button" onclick="document.getElementById(&quot;search-input&quot;).focus();"><svg t="1705074644177" viewBox="0 0 1025 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1560" width="200" height="200"><path d="M1008.839137 935.96571L792.364903 719.491476a56.783488 56.783488 0 0 0-80.152866 0 358.53545 358.53545 0 1 1 100.857314-335.166073 362.840335 362.840335 0 0 1-3.689902 170.145468 51.248635 51.248635 0 1 0 99.217358 26.444296 462.057693 462.057693 0 1 0-158.255785 242.303546l185.930047 185.725053a51.248635 51.248635 0 0 0 72.568068 0 51.248635 51.248635 0 0 0 0-72.978056z" p-id="1561"></path><path d="M616.479587 615.969233a50.428657 50.428657 0 0 0-61.498362-5.534852 174.655348 174.655348 0 0 1-177.525271 3.484907 49.403684 49.403684 0 0 0-58.833433 6.76482l-3.074918 2.869923a49.403684 49.403684 0 0 0 8.609771 78.10292 277.767601 277.767601 0 0 0 286.992355-5.739847 49.403684 49.403684 0 0 0 8.404776-76.667958z" p-id="1562"></path></svg></a><input type="text" class="search-input" id="search-input" placeholder="Search"></form><div id="search-result"></div><div class="search-no-result">No Results!</div></div>
+
+
+
+<widget class="widget-wrapper recent post-list"><div class="widget-header dis-select"><span class="name">Recent Update</span></div><div class="widget-body fs14"><a class="item title" href="/2025/01/08/Building%20Real-Time%20NPC%20Dialogue%20in%20Unity%20with%20Large%20Language%20Models.zh-CN/"><span class="title">在 Unity 中用大语言模型构建实时 NPC 对话</span></a><a class="item title" href="/2024/12/08/Bridging%20Unity%20with%20Python%20and%20ChatGPT.zh-CN/"><span class="title">Unity 对接 Python 与 ChatGPT：综合指南</span></a><a class="item title" href="/2024/12/08/Building%20a%20Dynamic%20Planetary%20Battle%20System.zh-CN/"><span class="title">用 p5.js 做太空可视化：构建动态行星战斗系统</span></a><a class="item title" href="/2026/02/24/tech_blog_hexo_stellar_portfolio_safe/"><span class="title">用 Hexo + Stellar 搭一个作品展柜：卡片入口、主题配色与 CSS 覆盖</span></a><a class="item title" href="/2025/01/08/Using%20iFlytek's%20Speech%20Model%20in%20Unity%20for%20Text-to-Speech%20(TTS)%20Playback/"><span class="title">Using iFlytek's Speech Model in Unity for Text-to-Speech (TTS) Playback</span></a><a class="item title" href="/2024/12/08/Game%20Demo%20of%20Star%20Annihilator%20-%20A%20Tower%20Defense%20Game%20Developing/"><span class="title">Game Demo of *Star Annihilator*: A Tower Defense Game Developing</span></a><a class="item title" href="/2024/12/08/How%20to%20Convert%20a%20p5.js%20Game%20into%20Java%20(JavaFX)/"><span class="title">How to Convert a p5.js Game into Java (JavaFX)</span></a></div></widget>
+</div>
+
+</div></aside><div class="l_main" id="main">
+
+
+
+
+
+<div class="article banner top">
+  <div class="content">
+    <div class="top bread-nav footnote"><div class="left"><div class="flex-row" id="breadcrumb"><a class="cap breadcrumb" href="/">Home</a>
+<span class="sep"></span><a class="cap breadcrumb" href="/blog/">Blog</a><span class="sep"></span><a class="cap breadcrumb-link" href="/categories/Programming/">Programming</a></div>
+<div class="flex-row" id="post-meta"><span class="text created">Posted on: <time datetime="2024-12-08T17:00:00.000Z">2024-12-08</time></span><span class="sep updated"></span><span class="text updated">Updated on: <time datetime="2026-02-24T03:31:10.905Z">2026-02-23</time></span></div></div></div>
+    
+    <div class="bottom only-title">
+      
+      <div class="text-area">
+        <h1 class="text title"><span>Unity 对接 Python 与 ChatGPT：综合指南</span></h1>
+        
+      </div>
+    </div>
+    
+  </div>
+  </div><article class="md-text content"><p>Unity 一直是游戏开发的主力平台：编辑器成熟、生态完善、交互能力强。但项目一旦复杂起来，你往往会想把更多工具拉进来——比如用 Python 做数据处理&#x2F;自动化，用大模型（如 ChatGPT）做对话、内容生成或辅助开发。本篇文章会用比较“工程化”的方式讲清楚：如何在 Unity 里运行 Python 脚本，以及如何从 Unity 调用 OpenAI 的 ChatGPT 接口。</p>
+<p><a id="table-of-contents"></a></p>
+<h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ul>
+<li><a href="#introduction">引言</a></li>
+<li><a href="#why-integrate-python-with-unity">为什么要在 Unity 里集成 Python？</a></li>
+<li><a href="#running-python-scripts-from-unity">从 Unity 运行 Python 脚本</a><ul>
+<li><a href="#understanding-pythonscriptrunnercs">理解 <code>PythonScriptRunner.cs</code></a></li>
+<li><a href="#step-by-step-breakdown">分步拆解</a></li>
+</ul>
+</li>
+<li><a href="#connecting-unity-to-chatgpt">让 Unity 连接 ChatGPT</a><ul>
+<li><a href="#understanding-chatgptapics">理解 <code>ChatGPTAPI.cs</code></a></li>
+<li><a href="#step-by-step-breakdown-1">分步拆解</a></li>
+</ul>
+</li>
+<li><a href="#best-practices-and-security-considerations">最佳实践与安全注意事项</a></li>
+<li><a href="#conclusion">结语</a></li>
+</ul>
+<hr>
+<p><a id="introduction"></a></p>
+<h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>随着开发工作越来越“跨栈”，把多语言与外部 API 集成进 Unity 的需求会变得非常现实：Python 负责数据处理、工具链、机器学习；LLM 负责对话、剧情生成、甚至动态任务系统。本指南会聚焦在“能跑起来、能排错、能维护”的实现方式：你会看到如何在 C# 中启动 Python 进程并读取输出；也会看到如何用 <code>UnityWebRequest</code> 发 HTTP 请求，把模型回复写入文件。</p>
+<hr>
+<p><a id="why-integrate-python-with-unity"></a></p>
+<h2 id="为什么要在-Unity-里集成-Python？"><a href="#为什么要在-Unity-里集成-Python？" class="headerlink" title="为什么要在 Unity 里集成 Python？"></a>为什么要在 Unity 里集成 Python？</h2><p>Unity 主要用 C#，但 Python 依然有它无法替代的优势：</p>
+<ul>
+<li><strong>数据处理</strong>：Python 在数据清洗、格式转换、批处理上非常强，适合做图像处理、文本处理、机器学习前后处理等。</li>
+<li><strong>自动化</strong>：把重复的生产流程脚本化（导入资源、批量生成配置、离线烘焙某些数据等）。</li>
+<li><strong>复用生态</strong>：很多专业库（科学计算、CV、NLP、管线工具）在 Python 里成熟且现成，直接调用比在 C# 重造轮子更划算。</li>
+</ul>
+<p>当你把 Python 工具链嵌入 Unity 工作流，最直接的收益通常是：<strong>把编辑器与外部处理流程串起来</strong>，让团队效率上去。</p>
+<hr>
+<p><a id="running-python-scripts-from-unity"></a></p>
+<h2 id="从-Unity-运行-Python-脚本"><a href="#从-Unity-运行-Python-脚本" class="headerlink" title="从 Unity 运行 Python 脚本"></a>从 Unity 运行 Python 脚本</h2><p>为了在 Unity 和 Python 之间搭桥，这里用一个 C# 工具类来启动 Python 脚本并处理输出。下面我们拆解 <code>PythonScriptRunner.cs</code>。</p>
+<p><a id="understanding-pythonscriptrunnercs"></a></p>
+<h3 id="理解-PythonScriptRunner-cs"><a href="#理解-PythonScriptRunner-cs" class="headerlink" title="理解 PythonScriptRunner.cs"></a>理解 <code>PythonScriptRunner.cs</code></h3><figure class="highlight csharp"><table><tr><td class="code"><pre><code class="hljs csharp"><span class="hljs-keyword">using</span> System.Diagnostics;<br><span class="hljs-keyword">using</span> System.IO;<br><span class="hljs-keyword">using</span> UnityEngine;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">class</span> <span class="hljs-title">PythonScriptRunner</span><br>&#123;<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">RunPythonScript</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> pythonScriptPath, <span class="hljs-built_in">string</span> shapePredictorPath, <span class="hljs-built_in">string</span> faceImagePath, <span class="hljs-built_in">string</span> imagePath, <span class="hljs-built_in">string</span> resultImagePath, System.Action&lt;Texture2D&gt; onImageLoaded</span>)</span><br>    &#123;<br>        <span class="hljs-built_in">bool</span> scriptExists = File.Exists(pythonScriptPath);<br>        <span class="hljs-built_in">bool</span> predictorExists = File.Exists(shapePredictorPath);<br>        <span class="hljs-built_in">bool</span> faceImageExists = File.Exists(faceImagePath);<br>        <span class="hljs-built_in">bool</span> imageExists = File.Exists(imagePath);<br><br>        <span class="hljs-keyword">if</span> (scriptExists &amp;&amp; predictorExists &amp;&amp; faceImageExists &amp;&amp; imageExists)<br>        &#123;<br>            RunScript(pythonScriptPath, shapePredictorPath, faceImagePath, imagePath, resultImagePath);<br>            LoadResultImage(resultImagePath, onImageLoaded);<br>        &#125;<br>        <span class="hljs-keyword">else</span><br>        &#123;<br>            <span class="hljs-keyword">if</span> (!scriptExists)<br>                UnityEngine.Debug.LogError(<span class="hljs-string">&quot;Python script not found at: &quot;</span> + pythonScriptPath);<br>            <span class="hljs-keyword">if</span> (!predictorExists)<br>                UnityEngine.Debug.LogError(<span class="hljs-string">&quot;Shape predictor not found at: &quot;</span> + shapePredictorPath);<br>            <span class="hljs-keyword">if</span> (!faceImageExists)<br>                UnityEngine.Debug.LogError(<span class="hljs-string">&quot;Face image not found at: &quot;</span> + faceImagePath);<br>            <span class="hljs-keyword">if</span> (!imageExists)<br>                UnityEngine.Debug.LogError(<span class="hljs-string">&quot;Image not found at: &quot;</span> + imagePath);<br>        &#125;<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">RunScript</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> scriptPath, <span class="hljs-built_in">string</span> shapePredictorPath, <span class="hljs-built_in">string</span> faceImagePath, <span class="hljs-built_in">string</span> imagePath, <span class="hljs-built_in">string</span> resultImagePath</span>)</span><br>    &#123;<br>        ProcessStartInfo start = <span class="hljs-keyword">new</span> ProcessStartInfo();<br>        start.FileName = <span class="hljs-string">&quot;python&quot;</span>;<br>        start.Arguments = <span class="hljs-built_in">string</span>.Format(<span class="hljs-string">&quot;\&quot;&#123;0&#125;\&quot; \&quot;&#123;1&#125;\&quot; \&quot;&#123;2&#125;\&quot; \&quot;&#123;3&#125;\&quot; \&quot;&#123;4&#125;\&quot;&quot;</span>, scriptPath, shapePredictorPath, faceImagePath, imagePath, resultImagePath);<br>        start.UseShellExecute = <span class="hljs-literal">false</span>;<br>        start.RedirectStandardOutput = <span class="hljs-literal">true</span>;<br>        start.RedirectStandardError = <span class="hljs-literal">true</span>;<br>        start.CreateNoWindow = <span class="hljs-literal">true</span>;<br><br>        <span class="hljs-keyword">using</span> (Process process = Process.Start(start))<br>        &#123;<br>            <span class="hljs-keyword">using</span> (StreamReader reader = process.StandardOutput)<br>            &#123;<br>                <span class="hljs-built_in">string</span> result = reader.ReadToEnd();<br>                UnityEngine.Debug.Log(result);<br>            &#125;<br><br>            <span class="hljs-keyword">using</span> (StreamReader reader = process.StandardError)<br>            &#123;<br>                <span class="hljs-built_in">string</span> error = reader.ReadToEnd();<br>                <span class="hljs-keyword">if</span> (!<span class="hljs-built_in">string</span>.IsNullOrEmpty(error))<br>                &#123;<br>                    UnityEngine.Debug.LogError(error);<br>                &#125;<br>            &#125;<br>        &#125;<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">LoadResultImage</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> imagePath, System.Action&lt;Texture2D&gt; onImageLoaded</span>)</span><br>    &#123;<br>        <span class="hljs-keyword">if</span> (File.Exists(imagePath))<br>        &#123;<br>            <span class="hljs-built_in">byte</span>[] fileData = File.ReadAllBytes(imagePath);<br>            Texture2D tex = <span class="hljs-keyword">new</span> Texture2D(<span class="hljs-number">2</span>, <span class="hljs-number">2</span>);<br>            tex.LoadImage(fileData);<br>            onImageLoaded?.Invoke(tex);<br>        &#125;<br>        <span class="hljs-keyword">else</span><br>        &#123;<br>            UnityEngine.Debug.LogError(<span class="hljs-string">&quot;Result image not found at: &quot;</span> + imagePath);<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><a id="step-by-step-breakdown"></a></p>
+<h3 id="分步拆解"><a href="#分步拆解" class="headerlink" title="分步拆解"></a>分步拆解</h3><ol>
+<li><p><strong>文件存在性检查</strong><br><code>RunPythonScript</code> 首先检查所有必要文件是否存在：Python 脚本、shape predictor、输入图片等。这样做的价值是：<strong>不要让外部进程“静默失败”</strong>，缺什么就明确报什么。</p>
+</li>
+<li><p><strong>启动 Python 进程</strong><br><code>RunScript</code> 里用 <code>ProcessStartInfo</code> 配置并启动进程，关键参数包括：</p>
+<ul>
+<li><code>FileName = &quot;python&quot;</code>：使用系统路径中的 Python 解释器（若你用虚拟环境或自带 Python，需要换成绝对路径）。</li>
+<li><code>Arguments</code>：把脚本路径与参数传进去。</li>
+<li><code>UseShellExecute = false</code>：必须关掉才能重定向输出。</li>
+<li><code>RedirectStandardOutput / RedirectStandardError</code>：捕获脚本 stdout&#x2F;stderr，方便日志与排错。</li>
+<li><code>CreateNoWindow = true</code>：避免弹出命令行窗口（对工具类调用友好）。</li>
+</ul>
+</li>
+<li><p><strong>读取输出与错误</strong><br>读取 <code>StandardOutput</code> 并 <code>Debug.Log</code>，读取 <code>StandardError</code> 并 <code>Debug.LogError</code>。这一点非常实用：你能直接在 Unity Console 里看到 Python 报错栈。</p>
+</li>
+<li><p><strong>加载处理结果</strong><br>脚本跑完后，<code>LoadResultImage</code> 把结果图片读成 <code>byte[]</code>，再 <code>Texture2D.LoadImage</code> 生成纹理对象，通过回调返回给调用方。这样你就能把结果贴到 UI&#x2F;材质上，形成一个完整的“Unity → Python → Unity”的数据闭环。</p>
+</li>
+</ol>
+<hr>
+<p><a id="connecting-unity-to-chatgpt"></a></p>
+<h2 id="让-Unity-连接-ChatGPT"><a href="#让-Unity-连接-ChatGPT" class="headerlink" title="让 Unity 连接 ChatGPT"></a>让 Unity 连接 ChatGPT</h2><p>把 ChatGPT 接进 Unity，常见用途包括：NPC 对话、动态任务&#x2F;剧情文本、自动生成描述&#x2F;提示等。以下示例脚本 <code>ChatGPTAPI.cs</code> 使用 <code>UnityWebRequest</code> 调用 OpenAI 接口，拿到回复后写成文本文件。</p>
+<p><a id="understanding-chatgptapics"></a></p>
+<h3 id="理解-ChatGPTAPI-cs"><a href="#理解-ChatGPTAPI-cs" class="headerlink" title="理解 ChatGPTAPI.cs"></a>理解 <code>ChatGPTAPI.cs</code></h3><figure class="highlight csharp"><table><tr><td class="code"><pre><code class="hljs csharp"><span class="hljs-keyword">using</span> System.Collections;<br><span class="hljs-keyword">using</span> System.IO;<br><span class="hljs-keyword">using</span> UnityEngine;<br><span class="hljs-keyword">using</span> UnityEngine.Networking;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">ChatGPTAPI</span> : <span class="hljs-title">MonoBehaviour</span><br>&#123;<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">const</span> <span class="hljs-built_in">string</span> apiUrl = <span class="hljs-string">&quot;https://api.openai.com/v1/engines/davinci-codex/completions&quot;</span>;<br>    <span class="hljs-keyword">private</span> <span class="hljs-built_in">string</span> apiKey = <span class="hljs-string">&quot;YOUR_OPENAI_API_KEY&quot;</span>; <span class="hljs-comment">// Replace with your OpenAI API key</span><br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> IEnumerator <span class="hljs-title">GetGPT2txt</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> question, <span class="hljs-built_in">string</span> textname</span>)</span><br>    &#123;<br>        <span class="hljs-comment">// Create JSON payload</span><br>        <span class="hljs-built_in">string</span> jsonRequest = JsonUtility.ToJson(<span class="hljs-keyword">new</span> OpenAIRequest<br>        &#123;<br>            model = <span class="hljs-string">&quot;text-davinci-003&quot;</span>,<br>            prompt = question,<br>            max_tokens = <span class="hljs-number">100</span><br>        &#125;);<br><br>        <span class="hljs-comment">// Configure UnityWebRequest</span><br>        UnityWebRequest request = <span class="hljs-keyword">new</span> UnityWebRequest(apiUrl, <span class="hljs-string">&quot;POST&quot;</span>);<br>        <span class="hljs-built_in">byte</span>[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(jsonRequest);<br>        request.uploadHandler = <span class="hljs-keyword">new</span> UploadHandlerRaw(bodyRaw);<br>        request.downloadHandler = <span class="hljs-keyword">new</span> DownloadHandlerBuffer();<br>        request.SetRequestHeader(<span class="hljs-string">&quot;Content-Type&quot;</span>, <span class="hljs-string">&quot;application/json&quot;</span>);<br>        request.SetRequestHeader(<span class="hljs-string">&quot;Authorization&quot;</span>, <span class="hljs-string">&quot;Bearer &quot;</span> + apiKey);<br><br>        <span class="hljs-comment">// Send request and wait for response</span><br>        <span class="hljs-keyword">yield</span> <span class="hljs-keyword">return</span> request.SendWebRequest();<br><br>        <span class="hljs-keyword">if</span> (request.result == UnityWebRequest.Result.Success)<br>        &#123;<br>            <span class="hljs-built_in">string</span> responseText = request.downloadHandler.text;<br>            <span class="hljs-comment">// Parse JSON response to extract ChatGPT&#x27;s reply</span><br>            ChatGPTResponse response = JsonUtility.FromJson&lt;ChatGPTResponse&gt;(responseText);<br>            <span class="hljs-built_in">string</span> gptResponse = response.choices[<span class="hljs-number">0</span>].text.Trim();<br><br>            <span class="hljs-comment">// Save response to a file</span><br>            <span class="hljs-built_in">string</span> path = Path.Combine(Application.dataPath, <span class="hljs-string">&quot;Subrip&quot;</span>, textname + <span class="hljs-string">&quot;.txt&quot;</span>);<br>            SaveToFile(gptResponse, path);<br>        &#125;<br>        <span class="hljs-keyword">else</span><br>        &#123;<br>            Debug.LogError(<span class="hljs-string">&quot;Error: &quot;</span> + request.error + <span class="hljs-string">&quot;\n&quot;</span> + request.downloadHandler.text);<br>        &#125;<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title">SaveToFile</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> text, <span class="hljs-built_in">string</span> path</span>)</span><br>    &#123;<br>        <span class="hljs-keyword">try</span><br>        &#123;<br>            File.WriteAllText(path, text);<br>            Debug.Log(<span class="hljs-string">&quot;Saved response to: &quot;</span> + path);<br>        &#125;<br>        <span class="hljs-keyword">catch</span> (IOException e)<br>        &#123;<br>            Debug.LogError(<span class="hljs-string">&quot;Failed to write to file: &quot;</span> + e.Message);<br>        &#125;<br>    &#125;<br>&#125;<br><br>[<span class="hljs-meta">System.Serializable</span>]<br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">OpenAIRequest</span><br>&#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> model;<br>    <span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> prompt;<br>    <span class="hljs-keyword">public</span> <span class="hljs-built_in">int</span> max_tokens;<br>&#125;<br><br>[<span class="hljs-meta">System.Serializable</span>]<br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">ChatGPTResponse</span><br>&#123;<br>    <span class="hljs-keyword">public</span> Choice[] choices;<br>&#125;<br><br>[<span class="hljs-meta">System.Serializable</span>]<br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">Choice</span><br>&#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> text;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><a id="step-by-step-breakdown-1"></a></p>
+<h3 id="分步拆解-1"><a href="#分步拆解-1" class="headerlink" title="分步拆解"></a>分步拆解</h3><ol>
+<li><p><strong>API 端点配置</strong><br><code>apiUrl</code> 指向 OpenAI 的 completions 端点（示例中是旧的 <code>davinci-codex</code> 引擎）。在真实项目中，你需要根据你使用的 OpenAI API 版本与模型，更新 endpoint 与请求结构。<br><strong>安全提醒</strong>：示例把 <code>apiKey</code> 写在脚本里是为了演示，生产环境不要这么做。</p>
+</li>
+<li><p><strong>构造请求 JSON</strong><br><code>OpenAIRequest</code> 用 <code>JsonUtility.ToJson</code> 序列化，里面包括：</p>
+<ul>
+<li><code>model</code>：要用的模型名。</li>
+<li><code>prompt</code>：输入文本（问题或上下文）。</li>
+<li><code>max_tokens</code>：回复长度限制。</li>
+</ul>
+</li>
+<li><p><strong>发送 HTTP 请求</strong><br>使用 <code>UnityWebRequest</code> 发送 POST：</p>
+<ul>
+<li><code>UploadHandlerRaw</code> 放 JSON body；</li>
+<li><code>DownloadHandlerBuffer</code> 接收返回；</li>
+<li>Header 里设置 <code>Content-Type</code> 与 <code>Authorization</code>。</li>
+</ul>
+</li>
+<li><p><strong>处理响应</strong><br>成功后取 <code>downloadHandler.text</code>，解析 JSON 并拿到 <code>choices[0].text</code> 作为回复，再写进项目目录里的某个文件。</p>
+</li>
+<li><p><strong>错误处理</strong><br>失败时把 <code>request.error</code> 与返回 body 一并输出，通常能快速定位：网络问题、Key 无效、配额问题、请求格式错误等。</p>
+</li>
+</ol>
+<hr>
+<p><a id="best-practices-and-security-considerations"></a></p>
+<h2 id="最佳实践与安全注意事项"><a href="#最佳实践与安全注意事项" class="headerlink" title="最佳实践与安全注意事项"></a>最佳实践与安全注意事项</h2><p>集成外部脚本和外部 API 时，真正决定项目能否长期稳定运行的，往往不是“能不能跑”，而是“出了问题能不能定位”“上线后会不会泄露密钥”。</p>
+<ol>
+<li><p><strong>保护 API Key</strong>  </p>
+<ul>
+<li>不要把 Key 硬编码在脚本里，更不要提交到 Git。</li>
+<li>用环境变量、加密配置文件、或平台提供的安全存储方案（不同项目会选不同做法）。</li>
+<li>在团队协作中，考虑为不同环境（开发&#x2F;测试&#x2F;线上）配置不同的 Key 与权限。</li>
+</ul>
+</li>
+<li><p><strong>输入输出校验</strong>  </p>
+<ul>
+<li>对传给 Python&#x2F;LLM 的数据做基本校验（空值、长度、非法字符、路径注入等）。</li>
+<li>对返回数据做结构校验（JSON 格式是否正确、字段是否存在、长度是否超限）。</li>
+</ul>
+</li>
+<li><p><strong>更扎实的错误处理</strong>  </p>
+<ul>
+<li>关键外部调用要有重试策略、超时、与降级输出（例如给用户显示“网络异常”的占位文本）。</li>
+<li>日志要包含足够上下文（请求 id、时间戳、关键参数摘要），否则线上很难复现。</li>
+</ul>
+</li>
+<li><p><strong>性能考虑</strong>  </p>
+<ul>
+<li>外部进程（Python）启动开销不小：能批处理就批处理，能复用进程就复用进程。</li>
+<li>LLM API 是网络请求：考虑缓存、节流、异步 UI、以及失败时的 fallback。</li>
+</ul>
+</li>
+<li><p><strong>文档化与可维护性</strong>  </p>
+<ul>
+<li>把接口结构、参数、返回格式、版本号写清楚。</li>
+<li>让新同事不用“靠猜”就能跑通、排错、替换模型或脚本。</li>
+</ul>
+</li>
+</ol>
+<hr>
+<p><a id="conclusion"></a></p>
+<h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><p>把 Python 与 ChatGPT 引入 Unity，通常不是“炫技”，而是为了更高效的工作流与更强的交互能力：Python 负责重活与工具链，LLM 负责文本智能与动态内容。只要你把进程、网络、错误处理、密钥管理这几个基础工程问题处理好，这条路就会越走越顺。  </p>
+</article>
+<div class="article-footer">
+    <section id="license">
+      <div class="header"><span>License</span></div>
+      <div class="body"><p>本文采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">署名-非商业性使用-相同方式共享 4.0 国际</a> 许可协议，转载请注明出处。</p>
+</div>
+    </section>
+    
+
+</div>
+
+<div class="related-wrap" id="read-next"><section class="body"><div class="item" id="prev"><div class="note">Newer</div><a href="/2024/12/08/How%20to%20Convert%20a%20p5.js%20Game%20into%20Java%20(JavaFX)/">How to Convert a p5.js Game into Java (JavaFX)</a></div><div class="item" id="next"><div class="note">Older</div><a href="/2024/12/08/Building%20a%20Dynamic%20Planetary%20Battle%20System.zh-CN/">用 p5.js 做太空可视化：构建动态行星战斗系统</a></div></section></div>
+
+
+
+
+
+
+<footer class="page-footer footnote"><hr><div class="text"><p>本站由 <a href="/">FFFeiya</a> 使用 <a target="_blank" rel="noopener" href="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.33.1">Stellar 1.33.1</a> 主题创建。<br>本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处。</p>
+</div></footer>
+<div class="main-mask" onclick="sidebar.dismiss()"></div></div><aside class="l_right">
+<div class="widgets">
+
+
+
+<widget class="widget-wrapper toc" id="data-toc" collapse="false"><div class="widget-header dis-select"><span class="name">On This Page</span><a class="cap-action" onclick="sidebar.toggleTOC()" ><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg></a></div><div class="widget-body"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9B%AE%E5%BD%95"><span class="toc-text">目录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BC%95%E8%A8%80"><span class="toc-text">引言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E5%9C%A8-Unity-%E9%87%8C%E9%9B%86%E6%88%90-Python%EF%BC%9F"><span class="toc-text">为什么要在 Unity 里集成 Python？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%8E-Unity-%E8%BF%90%E8%A1%8C-Python-%E8%84%9A%E6%9C%AC"><span class="toc-text">从 Unity 运行 Python 脚本</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%90%86%E8%A7%A3-PythonScriptRunner-cs"><span class="toc-text">理解 PythonScriptRunner.cs</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%86%E6%AD%A5%E6%8B%86%E8%A7%A3"><span class="toc-text">分步拆解</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%A9-Unity-%E8%BF%9E%E6%8E%A5-ChatGPT"><span class="toc-text">让 Unity 连接 ChatGPT</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%90%86%E8%A7%A3-ChatGPTAPI-cs"><span class="toc-text">理解 ChatGPTAPI.cs</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%86%E6%AD%A5%E6%8B%86%E8%A7%A3-1"><span class="toc-text">分步拆解</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5%E4%B8%8E%E5%AE%89%E5%85%A8%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="toc-text">最佳实践与安全注意事项</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%93%E8%AF%AD"><span class="toc-text">结语</span></a></li></ol></div><div class="widget-footer"><a class="top" onclick="util.scrollTop()"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path stroke-linejoin="round" d="m9 15.5l3-3l3 3m-6-4l3-3l3 3"/><path d="M7 3.338A9.95 9.95 0 0 1 12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12c0-1.821.487-3.53 1.338-5"/></g></svg><span>Scroll to Top</span></a></div></widget>
+</div></aside><div class='float-panel'>
+  <button type='button' style='display:none' class='laptop-only rightbar-toggle mobile' onclick='sidebar.rightbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg>
+  </button>
+  <button type='button' style='display:none' class='mobile-only leftbar-toggle mobile' onclick='sidebar.leftbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 11c0-3.771 0-5.657 1.172-6.828C4.343 3 6.229 3 10 3h4c3.771 0 5.657 0 6.828 1.172C22 5.343 22 7.229 22 11v2c0 3.771 0 5.657-1.172 6.828C19.657 21 17.771 21 14 21h-4c-3.771 0-5.657 0-6.828-1.172C2 18.657 2 16.771 2 13z"/><path id="sep" stroke-linecap="round" d="M5.5 10h6m-5 4h4m4.5 7V3"/></g></svg>
+  </button>
+</div>
+</div><div class="scripts">
+
+
+<script type="text/javascript">
+  window.canonical = {"originalHost":null,"officialHosts":["localhost"],"encoded":""};
+  const ctx = {
+    date_suffix: {
+      just: `Just`,
+      min: `minutes ago`,
+      hour: `hours ago`,
+      day: `days ago`,
+    },
+    root : `/`,
+    tag_plugins: {
+      chat: Object.assign({"api":"https://siteinfo.listentothewind.cn/api/v1"}),
+    }
+  };
+
+  // required plugins (only load if needs)
+  if (`local_search`) {
+    ctx.search = {};
+    ctx.search.service = `local_search`;
+    if (ctx.search.service == 'local_search') {
+      let service_obj = Object.assign({}, `{"field":"all","path":"/search.json","content":true,"skip_search":null,"sort":"-date"}`);
+      ctx.search[ctx.search.service] = service_obj;
+    }
+  }
+  const def = {
+    avatar: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/3442075.svg`,
+    cover: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/cover/76b86c0226ffd.svg`,
+    loading: `https://api.iconify.design/eos-icons:three-dots-loading.svg?color=%231cd0fd`,
+  };
+  const deps = {
+    jquery: `https://gcore.jsdelivr.net/npm/jquery@3.7/dist/jquery.min.js`,
+    marked: `https://gcore.jsdelivr.net/npm/marked@13.0/lib/marked.umd.min.js`,
+    lazyload: `/%5Bobject%20Object%5D`
+  }
+  
+
+</script>
+
+<script type="text/javascript">
+  
+  function RunItem() {
+    this.list = []; // 存放回调函数
+    this.start = () => {
+      for (var i = 0; i < this.list.length; i++) {
+        this.list[i].run();
+      }
+    };
+    this.push = (fn, name, setRequestAnimationFrame = true) => {
+      let myfn = fn
+      if (setRequestAnimationFrame) {
+        myfn = () => {
+          utils.requestAnimationFrame(fn)
+        }
+      }
+      var f = new Item(myfn, name);
+      this.list.push(f);
+    };
+    this.remove = (name) => {
+      for (let index = 0; index < this.list.length; index++) {
+        const e = this.list[index];
+        if (e.name == name) {
+          this.list.splice(index, 1);
+        }
+      }
+    }
+    // 构造一个可以run的对象
+    function Item(fn, name) {
+      // 函数名称
+      this.name = name || fn.name;
+      // run方法
+      this.run = () => {
+        try {
+          fn()
+        } catch (error) {
+          console.log(error);
+        }
+      };
+    }
+  }
+
+  const utils = {
+    // 懒加载 css https://github.com/filamentgroup/loadCSS
+    css: (href, before, media, attributes) => {
+      var doc = window.document;
+      var ss = doc.createElement("link");
+      var ref;
+      if (before) {
+        ref = before;
+      } else {
+        var refs = (doc.body || doc.getElementsByTagName("head")[0]).childNodes;
+        ref = refs[refs.length - 1];
+      }
+      var sheets = doc.styleSheets;
+      if (attributes) {
+        for (var attributeName in attributes) {
+          if (attributes.hasOwnProperty(attributeName)) {
+            ss.setAttribute(attributeName, attributes[attributeName]);
+          }
+        }
+      }
+      ss.rel = "stylesheet";
+      ss.href = href;
+      ss.media = "only x";
+      function ready(cb) {
+        if (doc.body) {
+          return cb();
+        }
+        setTimeout(function () {
+          ready(cb);
+        });
+      }
+      ready(function () {
+        ref.parentNode.insertBefore(ss, before ? ref : ref.nextSibling);
+      });
+      var onloadcssdefined = function (cb) {
+        var resolvedHref = ss.href;
+        var i = sheets.length;
+        while (i--) {
+          if (sheets[i].href === resolvedHref) {
+            return cb();
+          }
+        }
+        setTimeout(function () {
+          onloadcssdefined(cb);
+        });
+      };
+      function loadCB() {
+        if (ss.addEventListener) {
+          ss.removeEventListener("load", loadCB);
+        }
+        ss.media = media || "all";
+      }
+      if (ss.addEventListener) {
+        ss.addEventListener("load", loadCB);
+      }
+      ss.onloadcssdefined = onloadcssdefined;
+      onloadcssdefined(loadCB);
+      return ss;
+    },
+
+    js: (src, opt) => new Promise((resolve, reject) => {
+      var script = document.createElement('script');
+      if (src.startsWith('/')) {
+        src = ctx.root + src.substring(1);
+      }
+      script.src = src;
+      if (opt) {
+        for (let key of Object.keys(opt)) {
+          script[key] = opt[key]
+        }
+      } else {
+        // 默认异步，如果需要同步，第二个参数传入 {} 即可
+        script.async = true
+      }
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function () {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    }),
+
+    jq: (fn) => {
+      if (typeof jQuery === 'undefined') {
+        utils.js(deps.jquery).then(fn)
+      } else {
+        fn()
+      }
+    },
+
+    onLoading: (el) => {
+      if (el) {
+        $(el).append('<div class="loading-wrap"><svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" stroke-opacity=".3" d="M12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="1.3s" values="60;0"/></path><path stroke-dasharray="15" stroke-dashoffset="15" d="M12 3C16.9706 3 21 7.02944 21 12"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="15;0"/><animateTransform attributeName="transform" dur="1.5s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"/></path></g></svg></div>');
+      }
+    },
+    onLoadSuccess: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap').remove();
+      }
+    },
+    onLoadFailure: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap svg').remove();
+        $(el).find('.loading-wrap').append('<svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" d="M12 3L21 20H3L12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.5s" values="60;0"/></path><path stroke-dasharray="6" stroke-dashoffset="6" d="M12 10V14"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.6s" dur="0.2s" values="6;0"/></path></g><circle cx="12" cy="17" r="1" fill="currentColor" fill-opacity="0"><animate fill="freeze" attributeName="fill-opacity" begin="0.8s" dur="0.4s" values="0;1"/></circle></svg>');
+        $(el).find('.loading-wrap').addClass('error');
+      }
+    },
+    request: (el, url, callback, onFailure) => {
+      const maxRetry = 3;
+      let retryCount = 0;
+
+      return new Promise((resolve, reject) => {
+        const load = () => {
+          utils.onLoading?.(el);
+
+          let timedOut = false;
+          const timeout = setTimeout(() => {
+            timedOut = true;
+            console.warn('[request] 超时:', url);
+
+            if (++retryCount >= maxRetry) {
+              utils.onLoadFailure?.(el);
+              onFailure?.();
+              reject('请求超时');
+            } else {
+              setTimeout(load, 1000);
+            }
+          }, 5000);
+
+          fetch(url).then(resp => {
+            if (timedOut) return;
+            clearTimeout(timeout);
+
+            if (!resp.ok) throw new Error('响应失败');
+            return resp;
+          }).then(data => {
+            if (timedOut) return;
+            utils.onLoadSuccess?.(el);
+            callback(data);
+            resolve(data);
+          }).catch(err => {
+            clearTimeout(timeout);
+            console.warn('[request] 错误:', err);
+
+            if (++retryCount >= maxRetry) {
+              utils.onLoadFailure?.(el);
+              onFailure?.();
+              reject(err);
+            } else {
+              setTimeout(load, 1000);
+            }
+          });
+        };
+
+        load();
+      });
+    },
+    requestWithoutLoading: (url, options = {}, maxRetry = 2, timeout = 5000) => {
+      return new Promise((resolve, reject) => {
+        let retryCount = 0;
+
+        const tryRequest = () => {
+          let timedOut = false;
+          const timer = setTimeout(() => {
+            timedOut = true;
+            if (++retryCount > maxRetry) reject('timeout');
+            else tryRequest();
+          }, timeout);
+
+          fetch(url, options)
+            .then(resp => {
+              clearTimeout(timer);
+              if (!resp.ok) throw new Error('bad response');
+              resolve(resp);
+            })
+            .catch(err => {
+              clearTimeout(timer);
+              if (++retryCount > maxRetry) reject(err);
+              else setTimeout(tryRequest, 500);
+            });
+        };
+
+        tryRequest();
+      });
+    },
+    /********************** requestAnimationFrame ********************************/
+    // 1、requestAnimationFrame 会把每一帧中的所有 DOM 操作集中起来，在一次重绘或回流中就完成，并且重绘或回流的时间间隔紧紧跟随浏览器的刷新频率，一般来说，这个频率为每秒60帧。
+    // 2、在隐藏或不可见的元素中，requestAnimationFrame 将不会进行重绘或回流，这当然就意味着更少的的 cpu，gpu 和内存使用量。
+    requestAnimationFrame: (fn) => {
+      if (!window.requestAnimationFrame) {
+        window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame;
+      }
+      window.requestAnimationFrame(fn)
+    },
+    dark: {},
+  };
+
+  // utils.dark.mode 当前模式 dark or light
+  // utils.dark.toggle() 暗黑模式触发器
+  // utils.dark.push(callBack[,"callBackName"]) 传入触发器回调函数
+  utils.dark.method = {
+    toggle: new RunItem(),
+  };
+  utils.dark = Object.assign(utils.dark, {
+    push: utils.dark.method.toggle.push,
+  });
+</script>
+<script>
+  const sidebar = {
+    leftbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    rightbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('rightbar');
+        l_body.removeAttribute('leftbar');
+      }
+    },
+    dismiss: () => {
+      if (l_body) {
+        l_body.removeAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    toggleTOC: () => {
+      document.querySelector('#data-toc').classList.toggle('collapse');
+    }
+  }
+</script>
+<script type="text/javascript">
+  (() => {
+    const tagSwitchers = document.querySelectorAll('.tag-subtree.parent-tag > a > .tag-switcher-wrapper')
+    for (const tagSwitcher of tagSwitchers) {
+      tagSwitcher.addEventListener('click', (e) => {
+        const parent = e.target.closest('.tag-subtree.parent-tag')
+        parent.classList.toggle('expanded')
+        e.preventDefault()
+      })
+    }
+
+    // Get active tag from query string, then activate it.
+    const urlParams = new URLSearchParams(window.location.search)
+    const activeTag = urlParams.get('tag')
+    if (activeTag) {
+      let tag = document.querySelector(`.tag-subtree[data-tag="${activeTag}"]`)
+      if (tag) {
+        tag.querySelector('a').classList.add('active')
+        
+        while (tag) {
+          tag.classList.add('expanded')
+          tag = tag.parentElement.closest('.tag-subtree.parent-tag')
+        }
+      }
+    }
+  })()
+</script>
+
+<script async src="https://gcore.jsdelivr.net/npm/vanilla-lazyload@19.1/dist/lazyload.min.js"></script>
+<script>
+  // https://www.npmjs.com/package/vanilla-lazyload
+  // Set the options globally
+  // to make LazyLoad self-initialize
+  window.lazyLoadOptions = {
+    elements_selector: ".lazy",
+    callback_loaded: (el) => {
+      el.classList.add('loaded');
+      const wrapper = el.closest('.lazy-box');
+      const icon = wrapper?.querySelector('.lazy-icon');
+      if (icon) icon.remove();
+    }
+  };
+  // Listen to the initialization event
+  // and get the instance of LazyLoad
+  window.addEventListener(
+    "LazyLoad::Initialized",
+    function (event) {
+      window.lazyLoadInstance = event.detail.instance;
+    },
+    false
+  );
+  document.addEventListener('DOMContentLoaded', function () {
+    window.lazyLoadInstance?.update();
+  });
+
+  window.wrapLazyloadImages = (container) => {
+    if (typeof container === 'string') {
+      container = document.querySelector(container);
+    }
+    if (!container) return;
+    
+    const images = container.querySelectorAll('img');
+    images.forEach((img) => {
+      if (img.classList.contains('lazy')) return;
+
+      const src = img.getAttribute('src');
+      if (!src) return;
+
+      const wrapper = document.createElement('div');
+      wrapper.className = 'lazy-box';
+
+      const newImg = img.cloneNode();
+      newImg.removeAttribute('src');
+      newImg.setAttribute('data-src', src);
+      newImg.classList.add('lazy');
+
+      const icon = document.createElement('div');
+      icon.className = 'lazy-icon';
+      if (def.loading) {
+        icon.style.backgroundImage = `url("${def.loading}")`;
+      }
+
+      wrapper.appendChild(newImg);
+      wrapper.appendChild(icon);
+
+      img.replaceWith(wrapper);
+    });
+
+    // 通知 LazyLoad 更新
+    if (window.lazyLoadInstance?.update) {
+      window.lazyLoadInstance.update();
+    }
+  }
+  
+</script>
+
+<!-- required -->
+<script src="/js/main.js?v=1.33.1" defer></script>
+
+<script type="text/javascript">
+  const applyTheme = (theme) => {
+    if (theme === 'auto') {
+      document.documentElement.removeAttribute('data-theme')
+    } else {
+      document.documentElement.setAttribute('data-theme', theme)
+    }
+
+    // applyThemeToGiscus(theme)
+  }
+
+  // FIXME: 这会导致无法使用 preferred_color_scheme 以外的主题
+  const applyThemeToGiscus = (theme) => {
+    // theme = theme === 'auto' ? 'preferred_color_scheme' : theme
+    const cmt = document.getElementById('giscus')
+    if (cmt) {
+      // This works before giscus load.
+      cmt.setAttribute('data-theme', theme)
+    }
+
+    const iframe = document.querySelector('#comments > section.giscus > iframe')
+    if (iframe) {
+      // This works after giscus loaded.
+      const src = iframe.src
+      const newSrc = src.replace(/theme=[\w]+/, `theme=${theme}`)
+      iframe.src = newSrc
+    }
+  }
+
+  const switchTheme = () => {
+    // light -> dark -> auto -> light -> ...
+    const currentTheme = document.documentElement.getAttribute('data-theme')
+    let newTheme;
+    switch (currentTheme) {
+      case 'light':
+        newTheme = 'dark'
+        break
+      case 'dark':
+        newTheme = 'auto'
+        break
+      default:
+        newTheme = 'light'
+    }
+    applyTheme(newTheme)
+    window.localStorage.setItem('Stellar.theme', newTheme)
+    utils.dark.mode = newTheme === 'auto' ? (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light") : newTheme;
+    utils.dark.method.toggle.start();
+
+    const messages = {
+      light: `Switched to Light Mode`,
+      dark: `Switched to Dark Mode`,
+      auto: `Switched to Auto Mode`,
+    }
+    hud?.toast?.(messages[newTheme])
+  }
+
+  (() => {
+    // Apply user's preferred theme, if any.
+    const theme = window.localStorage.getItem('Stellar.theme')
+    if (theme !== null) {
+      applyTheme(theme)
+    } else {
+      utils.dark.mode = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    }
+    utils.dark.method.toggle.start();
+  })()
+</script>
+
+
+<!-- optional -->
+
+
+
+<script defer>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.services = Object.assign({}, JSON.parse(`{"mdrender":{"js":"/js/services/mdrender.js"},"siteinfo":{"js":"/js/services/siteinfo.js","api":null},"ghinfo":{"js":"/js/services/ghinfo.js"},"rating":{"js":"/js/services/rating.js","api":"https://star-vote.xaox.cc/api/rating"},"vote":{"js":"/js/services/vote.js","api":"https://star-vote.xaox.cc/api/vote"},"sites":{"js":"/js/services/sites.js"},"friends":{"js":"/js/services/friends.js"},"friends_and_posts":{"js":"/js/services/friends_and_posts.js"},"timeline":{"js":"/js/services/timeline.js"},"fcircle":{"js":"/js/services/fcircle.js"},"weibo":{"js":"/js/services/weibo.js"},"memos":{"js":"/js/services/memos.js"},"voice":{"js":"/js/plugins/voice.js"},"video":{"js":"/js/plugins/video.js"},"download-file":{"js":"/js/plugins/download-file.js"},"twikoo":{"js":"/js/services/twikoo_latest_comment.js"},"waline":{"js":"/js/services/waline_latest_comment.js"},"artalk":{"js":"/js/services/artalk_latest_comment.js"},"giscus":{"js":"/js/services/giscus_latest_comment.js"},"contributors":{"edit_this_page":{"_posts/":null,"wiki/stellar/":"https://github.com/xaoxuu/hexo-theme-stellar-docs/blob/main/"},"js":"/js/services/contributors.js"}}`));
+    for (let id of Object.keys(ctx.services)) {
+      const js = ctx.services[id].js;
+      if (id == 'siteinfo') {
+        ctx.cardlinks = document.querySelectorAll('a.link-card[cardlink]');
+        if (ctx.cardlinks?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            setCardLink(ctx.cardlinks);
+          });
+        }
+      } else if (id == 'voice') {
+        ctx.voiceAudios = document.querySelectorAll('.voice>audio');
+        if (ctx.voiceAudios?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            createVoiceDom(ctx.voiceAudios);
+          });
+        }
+      } else if (id == 'video') {
+        ctx.videos = document.querySelectorAll('.video>video');
+        if (ctx.videos?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            videoEvents(ctx.videos);
+          });
+        }
+      } else if (id == 'download-file') {
+        ctx.files = document.querySelectorAll('.file');
+        if (ctx.files?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            downloadFileEvent(ctx.files);
+          });
+        }
+      } else {
+        const els = document.getElementsByClassName(`ds-${id}`);
+        if (els?.length > 0) {
+          utils.jq(() => {
+            if (id == 'timeline' || 'memos' || 'marked') {
+              utils.js(deps.marked).then(function () {
+                utils.js(js, { defer: true });
+              });
+            } else {
+              utils.js(js, { defer: true });
+            }
+          });
+        }
+      }
+    }
+
+    // chat iphone time
+    let phoneTimes = document.querySelectorAll('.chat .status-bar .time');
+
+    if (phoneTimes.length > 0) {
+      NowTime();
+      var date = new Date();
+      var sec = date.getSeconds();
+      var firstAdjustInterval = setInterval(firstAdjustTime, 1000 * (60 - sec));
+    }
+
+    function firstAdjustTime() {
+      NowTime();
+      clearInterval(firstAdjustInterval);
+      setInterval(NowTime, 1000 * 60);
+    }
+
+    function NowTime() {
+      for (let i = 0; i < phoneTimes.length; ++i) {
+        var timeSpan = phoneTimes[i];
+        var date = new Date();
+        var hour = date.getHours();
+        var min = date.getMinutes();
+        timeSpan.innerHTML = check(hour) + ":" + check(min);
+      }
+    };
+
+    function check(val) {
+      if (val < 10) {
+        return ("0" + val);
+      }
+      return (val);
+    }
+
+    // chat quote
+    const chat_quote_obverser = new IntersectionObserver((entries, observer) => {
+      entries.filter((entry) => { return entry.isIntersecting }).sort((a, b) => a.intersectionRect.y !== b.intersectionRect.y ? a.intersectionRect.y - b.intersectionRect.y : a.intersectionRect.x - b.intersectionRect.x).forEach((entry, index) => {
+          observer.unobserve(entry.target);
+          setTimeout(() => {
+            entry.target.classList.add('quote-blink');
+            setTimeout(() => {
+              entry.target.classList.remove('quote-blink');
+            }, 1000);
+          }, Math.max(100, 16) * (index + 1));
+        });
+    });
+
+    var chatQuotes = document.querySelectorAll(".chat .talk .quote");
+    chatQuotes.forEach((quote) => {
+      quote.addEventListener('click', function () {
+        var chatCellDom = document.getElementById("quote-" + quote.getAttribute("quotedCellTag"));
+        if (chatCellDom) {
+          var chatDiv = chatCellDom.parentElement;
+          var mid = chatDiv.clientHeight / 2;
+          var offsetTop = chatCellDom.offsetTop;
+          if (offsetTop > mid - chatCellDom.clientHeight / 2) {
+            chatDiv.scrollTo({
+              top: chatCellDom.offsetTop - mid + chatCellDom.clientHeight / 2,
+              behavior: "smooth"
+            });
+          } else {
+            chatDiv.scrollTo({
+              top: 0,
+              behavior: "smooth"
+            });
+          }
+          chat_quote_obverser.observe(chatCellDom);
+        }
+      });
+    });
+  });
+</script>
+
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.search = {
+      path: `/search.json`,
+    }
+    utils.js('/js/search/local-search.js', { defer: true });
+  });
+</script><script>
+  window.FPConfig = {
+    delay: 0,
+    ignoreKeywords: [],
+    maxRPS: 5,
+    hoverDelay: 25
+  };
+</script>
+<script defer src="https://gcore.jsdelivr.net/npm/flying-pages@2/flying-pages.min.js"></script><script>
+  ctx.fancybox = {
+    selector: `.timenode p>img`,
+    css: `https://gcore.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css`,
+    js: `https://gcore.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js`
+  };
+  var selector = '[data-fancybox]:not(.error), .with-fancybox .atk-content img:not([atk-emoticon])';
+  if (ctx.fancybox.selector) {
+    selector += `, ${ctx.fancybox.selector}`
+  }
+  var needFancybox = document.querySelectorAll(selector).length !== 0;
+  if (!needFancybox) {
+    const memos = document.getElementsByClassName('ds-memos');
+    if (memos != undefined && memos.length > 0) {
+      needFancybox = true;
+    }
+    const fancybox = document.getElementsByClassName('with-fancybox');
+    if (fancybox != undefined && fancybox.length > 0) {
+      needFancybox = true;
+    }
+  }
+  if (needFancybox) {
+    utils.css(ctx.fancybox.css);
+    utils.js(ctx.fancybox.js, { defer: true }).then(function () {
+      Fancybox.bind(selector, {
+        hideScrollbar: false,
+        Thumbs: {
+          autoStart: false,
+        },
+        caption: (fancybox, slide) => {
+          return slide.triggerEl.alt || slide.triggerEl.dataset.caption || null
+        }
+      });
+    })
+  }
+</script>
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    const swiper_api = document.getElementById('swiper-api');
+    if (swiper_api != undefined) {
+      utils.css(`https://unpkg.com/swiper@10.3/swiper-bundle.min.css`);
+      utils.js(`https://unpkg.com/swiper@10.3/swiper-bundle.min.js`, { defer: true }).then(function () {
+        const effect = swiper_api.getAttribute('effect') || '';
+        var swiper = new Swiper('.swiper#swiper-api', {
+          slidesPerView: 'auto',
+          spaceBetween: 8,
+          centeredSlides: true,
+          effect: effect,
+          rewind: true,
+          pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+          },
+          navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+          },
+        });
+      })
+    }
+  });
+</script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    window.codeElements = document.querySelectorAll('.code');
+    if (window.codeElements.length > 0) {
+      ctx.copycode = {
+        default_text: `Copy`,
+        success_text: `Copied`,
+        toast: `复制成功`,
+      };
+      utils.js('/js/plugins/copycode.js');
+    }
+  });
+</script>
+
+
+<!-- inject -->
+
+</div></body></html>

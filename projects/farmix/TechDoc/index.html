@@ -1,0 +1,1143 @@
+
+<!DOCTYPE html><html lang="en" data-theme="dark">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="hexo-theme" content="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.33.1" theme-name="Stellar" theme-version="1.33.1">
+  
+  
+  <meta name="generator" content="Hexo 7.3.0">
+  <meta http-equiv='x-dns-prefetch-control' content='on' />
+  
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000">
+  <meta name="theme-color" content="#f9fafb">
+  <title>FFFeiya</title>
+
+  
+    <meta name="description" content="Farmix 项目技术文档（Tech Doc） 0. 快速开始 场景与组件清单  打开 GameScene，确认这些对象存在且启用：Qix（挂载 QixLite）、Level（挂载 LevelManager）、Canvas、EventSystem、Main Camera。 QixLite 会在运行时构建玩法网格和 UI；你不需要在层级里预先摆放网格格子。   资源绑定（必需）  在 QixLite">
+<meta property="og:type" content="website">
+<meta property="og:title" content="FFFeiya">
+<meta property="og:url" content="http://example.com/projects/farmix/TechDoc/">
+<meta property="og:site_name" content="FFFeiya">
+<meta property="og:description" content="Farmix 项目技术文档（Tech Doc） 0. 快速开始 场景与组件清单  打开 GameScene，确认这些对象存在且启用：Qix（挂载 QixLite）、Level（挂载 LevelManager）、Canvas、EventSystem、Main Camera。 QixLite 会在运行时构建玩法网格和 UI；你不需要在层级里预先摆放网格格子。   资源绑定（必需）  在 QixLite">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-02-23T06:51:45.368Z">
+<meta property="article:modified_time" content="2026-02-23T06:50:54.123Z">
+<meta property="article:author" content="FFFeiya">
+<meta name="twitter:card" content="summary">
+  
+  
+  
+  
+
+  <!-- feed -->
+  
+
+  <link rel="stylesheet" href="/css/main.css?v=1.33.1">
+
+
+  
+
+  
+    
+<link rel="stylesheet" href="https://gcore.jsdelivr.net/gh/highlightjs/cdn-release@11.9/build/styles/atom-one-dark.min.css">
+
+  
+
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Website","@id":"http://example.com/projects/farmix/TechDoc/","author":{"@type":"Person","name":"FFFeiya","sameAs":[]},"name":"FFFeiya","description":"Farmix 项目技术文档（Tech Doc）\n0. 快速开始\n场景与组件清单\n\n打开 GameScene，确认这些对象存在且启用：Qix（挂载 QixLite）、Level（挂载 LevelManager）、Canvas、EventSystem、Main Camera。\nQixLite 会在运行时构建玩法网格和 UI；你不需要在层级里预先摆放网格格子。\n\n\n资源绑定（必需）\n\n在 QixL...","url":"http://example.com/projects/farmix/TechDoc/"}</script>
+  <link rel="stylesheet" href="/css/custom.css">
+</head>
+<body><div class="sitebg"><div class="siteblur"></div></div>
+
+<div class="l_body content" id="start" layout="page" type="tech" ><aside class="l_left"><div class="sidebg"></div><div class="leftbar-container">
+
+
+<header class="header"><div class="logo-wrap"><a class="avatar" href="/about/"><div class="bg" style="opacity:0;background-image:url(https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/rainbow64@3x.webp);"></div><img no-lazy class="avatar" src="/images/Putin.png" onerror="javascript:this.classList.add('error');this.src='https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/image/2659360.svg';"></a><a class="title" href="/"><div class="main">FFFeiya</div><div class="sub normal cap">Portfolio</div><div class="sub hover cap" style="opacity:0"> UE / Unity / Tools</div></a></div></header>
+
+<div class="nav-area">
+
+<nav class="menu dis-select"><a class="nav-item" title="Projects" href="/projects/" style="color:#E0E0E0">项目列表</a><a class="nav-item" title="Tech Blog" href="/blog/" style="color:#E0E0E0">工程博客</a><a class="nav-item" title="Play" href="/play/" style="color:#E0E0E0">在线游玩</a><a class="nav-item" title="(Tech) Art" href="/art/" style="color:#E0E0E0">技术美术</a><a class="nav-item" title="Design" href="/design/" style="color:#E0E0E0">文字</a><a class="nav-item" title="About / Resume" href="/about/" style="color:#E0E0E0">关于</a></nav>
+</div>
+<div class="widgets">
+<div class="search-wrapper" id="search-wrapper"><form class="search-form"><a class="search-button" onclick="document.getElementById(&quot;search-input&quot;).focus();"><svg t="1705074644177" viewBox="0 0 1025 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1560" width="200" height="200"><path d="M1008.839137 935.96571L792.364903 719.491476a56.783488 56.783488 0 0 0-80.152866 0 358.53545 358.53545 0 1 1 100.857314-335.166073 362.840335 362.840335 0 0 1-3.689902 170.145468 51.248635 51.248635 0 1 0 99.217358 26.444296 462.057693 462.057693 0 1 0-158.255785 242.303546l185.930047 185.725053a51.248635 51.248635 0 0 0 72.568068 0 51.248635 51.248635 0 0 0 0-72.978056z" p-id="1561"></path><path d="M616.479587 615.969233a50.428657 50.428657 0 0 0-61.498362-5.534852 174.655348 174.655348 0 0 1-177.525271 3.484907 49.403684 49.403684 0 0 0-58.833433 6.76482l-3.074918 2.869923a49.403684 49.403684 0 0 0 8.609771 78.10292 277.767601 277.767601 0 0 0 286.992355-5.739847 49.403684 49.403684 0 0 0 8.404776-76.667958z" p-id="1562"></path></svg></a><input type="text" class="search-input" id="search-input" placeholder="Search"></form><div id="search-result"></div><div class="search-no-result">No Results!</div></div>
+
+<widget class="widget-wrapper recent post-list"><div class="widget-header dis-select"><span class="name">Recent Update</span></div><div class="widget-body fs14"><a class="item title" href="/2025/01/08/Building%20Real-Time%20NPC%20Dialogue%20in%20Unity%20with%20Large%20Language%20Models.zh-CN/"><span class="title">在 Unity 中用大语言模型构建实时 NPC 对话</span></a><a class="item title" href="/2024/12/08/Bridging%20Unity%20with%20Python%20and%20ChatGPT.zh-CN/"><span class="title">Unity 对接 Python 与 ChatGPT：综合指南</span></a><a class="item title" href="/2024/12/08/Building%20a%20Dynamic%20Planetary%20Battle%20System.zh-CN/"><span class="title">用 p5.js 做太空可视化：构建动态行星战斗系统</span></a><a class="item title" href="/2026/02/24/tech_blog_hexo_stellar_portfolio_safe/"><span class="title">用 Hexo + Stellar 搭一个作品展柜：卡片入口、主题配色与 CSS 覆盖</span></a><a class="item title" href="/2025/01/08/Using%20iFlytek's%20Speech%20Model%20in%20Unity%20for%20Text-to-Speech%20(TTS)%20Playback/"><span class="title">Using iFlytek's Speech Model in Unity for Text-to-Speech (TTS) Playback</span></a><a class="item title" href="/2024/12/08/Game%20Demo%20of%20Star%20Annihilator%20-%20A%20Tower%20Defense%20Game%20Developing/"><span class="title">Game Demo of *Star Annihilator*: A Tower Defense Game Developing</span></a><a class="item title" href="/2024/12/08/How%20to%20Convert%20a%20p5.js%20Game%20into%20Java%20(JavaFX)/"><span class="title">How to Convert a p5.js Game into Java (JavaFX)</span></a></div></widget>
+</div>
+
+</div></aside><div class="l_main" id="main">
+
+
+
+
+
+<div class="article banner top">
+  <div class="content">
+    <div class="top bread-nav footnote"><div class="left"><div class="flex-row" id="breadcrumb"><a class="cap breadcrumb" href="/">Home</a>
+
+  <span class="sep"></span>
+  <a class="cap breadcrumb" href="/projects/farmix/TechDoc/"></a>
+  </div>
+<div class="flex-row" id="post-meta"><span class="text created">Posted on: <time datetime="2026-02-23T06:51:45.368Z">2026-02-22</time></span><span class="sep updated"></span><span class="text updated">Updated on: <time datetime="2026-02-23T06:50:54.123Z">2026-02-22</time></span></div></div></div>
+    
+  </div>
+  </div><article class="md-text content"><h1 id="Farmix-项目技术文档（Tech-Doc）"><a href="#Farmix-项目技术文档（Tech-Doc）" class="headerlink" title="Farmix 项目技术文档（Tech Doc）"></a>Farmix 项目技术文档（Tech Doc）</h1><hr>
+<h2 id="0-快速开始"><a href="#0-快速开始" class="headerlink" title="0. 快速开始"></a>0. 快速开始</h2><ol>
+<li><p><strong>场景与组件清单</strong></p>
+<ul>
+<li>打开 <code>GameScene</code>，确认这些对象存在且启用：<code>Qix</code>（挂载 <code>QixLite</code>）、<code>Level</code>（挂载 <code>LevelManager</code>）、<code>Canvas</code>、<code>EventSystem</code>、<code>Main Camera</code>。</li>
+<li><code>QixLite</code> 会在<strong>运行时构建玩法网格和 UI</strong>；你<strong>不需要</strong>在层级里预先摆放网格格子。</li>
+</ul>
+</li>
+<li><p><strong>资源绑定（必需）</strong></p>
+<ul>
+<li>在 <code>QixLite</code> 的 Inspector 中，<strong>拖拽绑定资源</strong>：地面 sprites、14 向边缘 mask、14 向轨迹（Trail）mask、Player&#x2F;Sheep&#x2F;Wolf&#x2F;Bear&#x2F;Locust&#x2F;Pesticide 的静态 sprite 与动画帧数组；BGM 与 SFX；如果使用 TextMeshPro，也请绑定 <code>hudTMP</code>。</li>
+</ul>
+</li>
+<li><p><strong>关卡设置</strong></p>
+<ul>
+<li>在 <code>Level</code>（<code>LevelManager</code>）中编辑 <code>Levels</code> 列表以定义多个关卡。如果列表为空，会自动生成<strong>5 个默认关卡</strong>，难度逐级递增。</li>
+</ul>
+</li>
+<li><p><strong>Build Settings</strong></p>
+<ul>
+<li>将 <code>GameScene</code> 和 <code>MainMenu</code>（或你使用的菜单场景名）加入 Build Settings。通关后，<code>LevelManager</code> 会返回 <code>mainMenuSceneName</code>。</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2 id="1-架构与职责"><a href="#1-架构与职责" class="headerlink" title="1. 架构与职责"></a>1. 架构与职责</h2><h3 id="1-1-运行时对象与脚本边界"><a href="#1-1-运行时对象与脚本边界" class="headerlink" title="1.1 运行时对象与脚本边界"></a>1.1 运行时对象与脚本边界</h3><ul>
+<li><p><strong><code>LevelManager</code>（流程&#x2F;难度）</strong></p>
+<ul>
+<li>对外暴露 <code>LevelConfig</code>（生命数、单位数量、速度、计时器、计分、胜利占领比、蝗虫并发上限等）。</li>
+<li>游戏开始：查找 <code>QixLite</code> 并调用 <code>BeginLevel(cfg)</code> 注入关卡参数并启动关卡。</li>
+<li>关卡结束：接收 <code>QixLite</code> 的胜利回调，推进到下一关或返回主菜单。</li>
+</ul>
+</li>
+<li><p><strong><code>QixLite</code>（玩法&#x2F;渲染&#x2F;输入&#x2F;视听）</strong></p>
+<ul>
+<li><strong>网格</strong>：用 <code>GridLayoutGroup</code> 运行时构建 <code>width×height</code> 的 <code>Image</code> 网格，并维护状态机（Empty&#x2F;Occupied&#x2F;Trail）。</li>
+<li><strong>玩家移动</strong>：键盘 + 陀螺仪；进入&#x2F;退出画线模式；闭合后进行填充、计分与胜负判定。</li>
+<li><strong>敌人与行为</strong>：Sheep（计分目标）、Wolf（多格占位移动）、Bear（边缘巡逻&#x2F;计时提速&#x2F;边缘规则）、Locust（并发刷新、啃食已占领区域、全局冷却）。</li>
+<li><strong>UI&#x2F;HUD</strong>：分数、生命、占领率、计时器（Text 或 TMP），以及动画&#x2F;SFX 钩子。</li>
+<li><strong>特效&#x2F;音频</strong>：序列帧动画、一次性尘土 FX、杀虫剂闪烁 FX、BGM&#x2F;SFX 播放。</li>
+</ul>
+</li>
+</ul>
+<h3 id="1-2-“没有-LevelManager”-的兜底模式"><a href="#1-2-“没有-LevelManager”-的兜底模式" class="headerlink" title="1.2 “没有 LevelManager” 的兜底模式"></a>1.2 “没有 LevelManager” 的兜底模式</h3><ul>
+<li>如果场景里<strong>没有</strong> <code>LevelManager</code>，<code>QixLite.Start()</code> 会使用 Inspector 中的<strong>自身参数</strong>创建“Free Play”配置并自动开始。这个模式适合做单元测试&#x2F;美术集成。</li>
+</ul>
+<hr>
+<h2 id="2-网格、精灵与边缘规则（视觉-规则统一）"><a href="#2-网格、精灵与边缘规则（视觉-规则统一）" class="headerlink" title="2. 网格、精灵与边缘规则（视觉 + 规则统一）"></a>2. 网格、精灵与边缘规则（视觉 + 规则统一）</h2><h3 id="2-1-网格构建"><a href="#2-1-网格构建" class="headerlink" title="2.1 网格构建"></a>2.1 网格构建</h3><ul>
+<li>运行时创建 <code>Canvas</code>、<code>Grid</code>、<code>HUD</code>、<code>Actors</code> 等 Transform。<code>Grid</code> 使用 <code>GridLayoutGroup</code>；每个格子创建一个 <code>Image</code> 并初始化为空地 sprite。</li>
+</ul>
+<h3 id="2-2-格子状态"><a href="#2-2-格子状态" class="headerlink" title="2.2 格子状态"></a>2.2 格子状态</h3><ul>
+<li><code>Cell</code>：三态——<code>Empty / Occupied / Trail</code>。状态写入通过 <code>SetCell/SetCellDirect</code>，并在写入后刷新邻居。</li>
+</ul>
+<h3 id="2-3-14-向边缘-Mask（Occupied-Trail-各一套）"><a href="#2-3-14-向边缘-Mask（Occupied-Trail-各一套）" class="headerlink" title="2.3 14 向边缘 Mask（Occupied &#x2F; Trail 各一套）"></a>2.3 14 向边缘 Mask（Occupied &#x2F; Trail 各一套）</h3><ul>
+<li>位掩码：<strong>Up&#x3D;1, Right&#x3D;2, Down&#x3D;4, Left&#x3D;8</strong>。</li>
+<li><code>Occupied</code> 与 <code>Trail</code> 各有 14 张组合边缘 sprite。<code>ApplyCellSprite()</code> 会根据邻接关系选择正确 sprite。</li>
+<li><strong>注意</strong>：无论是<strong>内部</strong>还是<strong>边界</strong>情况，为了让边缘高亮更直观，计算高亮时会把 <code>Trail</code> <strong>在视觉上当作空地</strong>来处理。</li>
+</ul>
+<h3 id="2-4-边界特例规则"><a href="#2-4-边界特例规则" class="headerlink" title="2.4 边界特例规则"></a>2.4 边界特例规则</h3><ul>
+<li>边界上的 <code>Occupied</code> 是否显示为“贴近空地的边界高亮”，通过采样<strong>仅内侧的 8 邻居</strong>来决定，避免高亮“扩散到场外”。</li>
+<li>边界角落如果只有纯对角接触（cardinal mask &#x3D; 0），规则上仍然<strong>可行走</strong>，但会渲染为纯实心占领（不高亮）以避免误导。</li>
+</ul>
+<hr>
+<h2 id="3-玩家输入与移动状态机"><a href="#3-玩家输入与移动状态机" class="headerlink" title="3. 玩家输入与移动状态机"></a>3. 玩家输入与移动状态机</h2><h3 id="3-1-输入优先级"><a href="#3-1-输入优先级" class="headerlink" title="3.1 输入优先级"></a>3.1 输入优先级</h3><ul>
+<li>键盘（WASD&#x2F;方向键）优先；当两个轴都按下时，优先采用<strong>最后一次移动的轴</strong>。若无键盘输入，则读取陀螺仪（带 dead-zone&#x2F;threshold）。</li>
+</ul>
+<h3 id="3-2-在-Occupied-上的可行走性"><a href="#3-2-在-Occupied-上的可行走性" class="headerlink" title="3.2 在 Occupied 上的可行走性"></a>3.2 在 Occupied 上的可行走性</h3><ul>
+<li><p>在 <code>Occupied</code> 上行走需要格子是<strong>合法边缘</strong>：</p>
+<ul>
+<li><strong>边界（Border）</strong>：必须与 <code>Empty</code>（“空地”）存在 <strong>8 邻接接触</strong>。</li>
+<li><strong>内部（Interior）</strong>：只有当存在 8 邻接接触 <code>Empty</code> 时才合法；否则玩家被视为<strong>被困</strong>（trapped）。</li>
+</ul>
+</li>
+<li><p>踩到自己的 <code>Trail</code>（自撞）会立刻触发死亡处理。</p>
+</li>
+</ul>
+<h3 id="3-3-画线与闭合"><a href="#3-3-画线与闭合" class="headerlink" title="3.3 画线与闭合"></a>3.3 画线与闭合</h3><ul>
+<li>从占领区离开即进入画线模式；经过的格子变为 <code>Trail</code> 并应用正确的 14 向轨迹 sprite。重新进入占领区会触发 <code>CloseAndFillArea()</code> 执行 flood fill 与结算。</li>
+</ul>
+<h3 id="3-4-自动救援（被困时）"><a href="#3-4-自动救援（被困时）" class="headerlink" title="3.4 自动救援（被困时）"></a>3.4 自动救援（被困时）</h3><ul>
+<li><p>如果玩家站在 <code>Occupied</code> 上但<strong>不在合法边缘</strong>，会启动 <code>PlayerRescueAutopilot()</code>：</p>
+<ul>
+<li>先闪烁 1 秒（真实时间）→ 在 <code>Occupied</code> 上 BFS 到最近的<strong>玩家可站立</strong>的占领边缘格 → 按当前玩家步速移动过去。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="4-区域闭合、填充与计分"><a href="#4-区域闭合、填充与计分" class="headerlink" title="4. 区域闭合、填充与计分"></a>4. 区域闭合、填充与计分</h2><h3 id="4-1-核心填充算法"><a href="#4-1-核心填充算法" class="headerlink" title="4.1 核心填充算法"></a>4.1 核心填充算法</h3><ol>
+<li>从所有狼（它们的矩形占位）和熊出发 BFS，标记“<strong>可达的 Empty</strong>”。</li>
+<li>未标记的 <code>Empty</code> 判定为<strong>被封闭</strong> → 设为 <code>Occupied</code>；同时将整条 <code>Trail</code> 转为 <code>Occupied</code>。</li>
+<li>统计 <code>filled</code> 格子数并加分：<code>filled × scorePerCell</code>；统计被封闭的羊并为每只加 <code>scorePerSheep</code>。</li>
+<li>被封闭在内部的熊会获得一条“回到最近合法边缘”的<strong>路径</strong>（仅在 <code>Occupied</code> 上的直线路径）。</li>
+<li>若 <code>filled &gt; 0</code>，<code>sealsCount</code> 自增（用于蝗虫刷新前置条件；见 §6）。</li>
+<li>刷新边缘 sprite 与 UI。若占领率 ≥ <code>winOccupyRatio</code>，触发胜利。</li>
+</ol>
+<blockquote>
+<p>BFS 与直线路径构造位于 <code>FindPathToNearestEdge()</code> &#x2F; <code>BuildStraightPath()</code>，并保证每一步都在 <code>Occupied</code> 上。</p>
+</blockquote>
+<hr>
+<h2 id="5-敌人系统"><a href="#5-敌人系统" class="headerlink" title="5. 敌人系统"></a>5. 敌人系统</h2><h3 id="5-1-Sheep（羊）"><a href="#5-1-Sheep（羊）" class="headerlink" title="5.1 Sheep（羊）"></a>5.1 Sheep（羊）</h3><ul>
+<li>随机生成在空地单格上；当被完整封闭时加分并播放计分 SFX。</li>
+</ul>
+<h3 id="5-2-Wolves（狼：矩形占位）"><a href="#5-2-Wolves（狼：矩形占位）" class="headerlink" title="5.2 Wolves（狼：矩形占位）"></a>5.2 Wolves（狼：矩形占位）</h3><ul>
+<li><code>wolfSize</code> 为边长（默认 2 → 2×2 区域）。在空地矩形上生成；支持四方向动画（未配置时回退到通用动画）。</li>
+<li>轨迹切割可能触发“狼分离”检测（<code>CheckWolfSeparationByTrail()</code>；即便这里未展示片段也已预留接线）。</li>
+</ul>
+<h3 id="5-3-Bears（熊：边缘巡逻-计时提速-边缘规则）"><a href="#5-3-Bears（熊：边缘巡逻-计时提速-边缘规则）" class="headerlink" title="5.3 Bears（熊：边缘巡逻 &#x2F; 计时提速 &#x2F; 边缘规则）"></a>5.3 Bears（熊：边缘巡逻 &#x2F; 计时提速 &#x2F; 边缘规则）</h3><ul>
+<li>初始在右上附近生成到最近 <code>Occupied</code>；若无效，则在 <code>Occupied</code> 上 BFS 找最近合法边缘作为出生点。</li>
+<li>熊的可行走性与玩家一致：必须为<strong>合法边缘</strong>（边界&#x2F;内部都要求与 Empty 存在 8 邻接接触）。</li>
+<li>在计时器事件中速度可提升（<code>bearTilesPerSecondFast/Faster</code>）；<code>HandleTimerTimeout()</code> 也可按关卡配置追加生成熊。</li>
+</ul>
+<hr>
+<h2 id="6-蝗虫系统（并发、啃食、冷却）"><a href="#6-蝗虫系统（并发、啃食、冷却）" class="headerlink" title="6. 蝗虫系统（并发、啃食、冷却）"></a>6. 蝗虫系统（并发、啃食、冷却）</h2><h3 id="6-1-刷新条件与并发上限"><a href="#6-1-刷新条件与并发上限" class="headerlink" title="6.1 刷新条件与并发上限"></a>6.1 刷新条件与并发上限</h3><ul>
+<li><p>全局 tick 达到 <code>locustSpawnInterval</code> 才尝试刷新；需要满足：</p>
+<ul>
+<li>至少 <strong>两次闭合</strong>（<code>sealsCount ≥ 2</code>）；</li>
+<li>当前时间 ≥ <code>locustGlobalNoSpawnUntil</code>（即不在全局冷却期）；</li>
+<li>当前蝗虫数量 <code>&lt; maxLocusts</code>；</li>
+<li>每次尝试有 50% 概率；</li>
+<li>优先选择<strong>与空地接触的占领格</strong>（内部边缘）或<strong>内部占领边缘</strong>；若不存在则回退到任意占领格；</li>
+<li>出生格不能与除羊以外的实体碰撞（玩家与羊不阻挡）。</li>
+</ul>
+</li>
+<li><p><code>maxLocusts</code> 来自关卡配置 <code>LevelConfig.locustMaxConcurrent</code>，进入关卡时应用。</p>
+</li>
+</ul>
+<h3 id="6-2-移动与旋转"><a href="#6-2-移动与旋转" class="headerlink" title="6.2 移动与旋转"></a>6.2 移动与旋转</h3><ul>
+<li>每一步，蝗虫都会 BFS 到最近的**可吃的 <code>Occupied</code>**（非边界）。移动始终保持在 <code>Occupied</code> 上。步进方向会驱动 sprite 的旋转。</li>
+<li><strong>边界不可吃</strong>。如果只剩 <strong>一条</strong>合法占领边缘，蝗虫会<strong>自毁</strong>并启动全局冷却，避免把最后的边缘断开导致无解。</li>
+</ul>
+<h3 id="6-3-移除-死亡与特效"><a href="#6-3-移除-死亡与特效" class="headerlink" title="6.3 移除&#x2F;死亡与特效"></a>6.3 移除&#x2F;死亡与特效</h3><ul>
+<li>当新填充的区域与蝗虫所在的占领连通块连到一起时，蝗虫被击杀并播放杀虫剂闪烁 FX（默认 2 秒；<code>pesticideAnim</code> 或 <code>pesticideBaseSprite</code>）；随后启动<strong>全局冷却</strong>（<code>locustRespawnCooldown</code>）。</li>
+<li>若只剩一条合法边缘或找不到可吃目标，蝗虫会<strong>消失（despawn）</strong>并进入冷却。</li>
+<li>提供 spawn&#x2F;death 的独立 SFX 钩子（<code>sfxLocustSpawn</code> &#x2F; <code>sfxLocustEaten</code>）。</li>
+</ul>
+<hr>
+<h2 id="7-计时器与阶段事件"><a href="#7-计时器与阶段事件" class="headerlink" title="7. 计时器与阶段事件"></a>7. 计时器与阶段事件</h2><ul>
+<li><p>关卡计时 <code>levelTimerSeconds</code> 每帧递减；当 ≤ 0 时触发 <code>HandleTimerTimeout()</code>，随后计时器会<strong>重置</strong>为初始值。</p>
+</li>
+<li><p>典型阶段动作（由关卡配置决定）：</p>
+<ul>
+<li><strong>第一次超时</strong>：可选地通过 <code>extraBearsOnFirstTimeout</code> 增加熊；</li>
+<li><strong>提速</strong>：将熊速度切换到 <code>bearTilesPerSecondFast/Faster</code>。</li>
+</ul>
+</li>
+<li><p>计时器由 HUD&#x2F;TMP 显示（<code>TimerText</code>；使用 <code>hudTMP</code> 可构建更丰富的 HUD）。</p>
+</li>
+</ul>
+<hr>
+<h2 id="8-UI-HUD-字体"><a href="#8-UI-HUD-字体" class="headerlink" title="8. UI &#x2F; HUD &#x2F; 字体"></a>8. UI &#x2F; HUD &#x2F; 字体</h2><h3 id="8-1-运行时构建-UI"><a href="#8-1-运行时构建-UI" class="headerlink" title="8.1 运行时构建 UI"></a>8.1 运行时构建 UI</h3><ul>
+<li><code>ConstructIfNeeded()</code> 创建 <code>Canvas</code>、<code>Grid</code>、<code>HUD</code>、<code>Actors</code>。HUD 默认包含 <code>TimerText</code>；<code>hudText</code> 作为扩展钩子（推荐 TMP）。</li>
+</ul>
+<h3 id="8-2-字体兼容性（Unity-6）"><a href="#8-2-字体兼容性（Unity-6）" class="headerlink" title="8.2 字体兼容性（Unity 6）"></a>8.2 字体兼容性（Unity 6）</h3><ul>
+<li><p><code>CreateText()</code> 使用 <code>builtinFont ? builtinFont : Resources.GetBuiltinResource&lt;Font&gt;(&quot;Arial.ttf&quot;)</code>。</p>
+</li>
+<li><p>Unity 6 内置 Arial 资源的<strong>名称&#x2F;路径发生变化</strong>（常见报错：“Arial.ttf is no longer a valid built in font. Please use LegacyRuntime.ttf”）。</p>
+<ul>
+<li><p><strong>建议</strong>：</p>
+<ol>
+<li>给 <code>builtinFont</code> 指定工程内字体（最好与 TMP 同字体族），或</li>
+<li>将 fallback 资源改为 <code>&quot;LegacyRuntime.ttf&quot;</code>，或</li>
+<li>将 HUD 全面迁移到 <strong>TextMeshPro</strong>。项目已经提供 <code>hudTMP</code> 字段。</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="9-音频系统"><a href="#9-音频系统" class="headerlink" title="9. 音频系统"></a>9. 音频系统</h2><ul>
+<li>使用两个 <code>AudioSource</code>：<code>musicSource</code> 播放 BGM（支持“升级版 BGM”），<code>sfxSource</code> 播放短音效（脚步、计分、蝗虫刷新&#x2F;消失、胜负等）。</li>
+<li>工具方法：<code>PlayBGM(clip, loop)</code> 与 <code>PlaySfx(clip, vol)</code>。</li>
+<li><strong>建议</strong>：使用 <code>AudioMixer</code> 将 BGM&#x2F;SFX 分组并加 limiter；叠加时尽量把 SFX 峰值控制在 -6 dBFS 以下，避免削波失真。</li>
+</ul>
+<hr>
+<h2 id="10-LevelConfig-→-运行时映射"><a href="#10-LevelConfig-→-运行时映射" class="headerlink" title="10. LevelConfig → 运行时映射"></a>10. LevelConfig → 运行时映射</h2><table>
+<thead>
+<tr>
+<th>LevelConfig 字段</th>
+<th>用途 &#x2F; 应用位置</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>lives</code></td>
+<td>进入关卡时若 <code>resetLives</code> 为 true，则覆盖 <code>QixLite.lives</code></td>
+</tr>
+<tr>
+<td><code>numSheep / numWolves / wolfSize</code></td>
+<td>进入关卡时应用；用于 <code>SpawnSheep/SpawnWolves</code></td>
+</tr>
+<tr>
+<td><code>initialBears / extraBearsOnFirstTimeout</code></td>
+<td>初始熊数量 + 第一次超时追加熊</td>
+</tr>
+<tr>
+<td><code>playerStepPerSecond</code></td>
+<td>玩家步速（tiles&#x2F;sec）</td>
+</tr>
+<tr>
+<td><code>wolfSpeed</code></td>
+<td>狼速度 → <code>wolfTilesPerSecond</code></td>
+</tr>
+<tr>
+<td><code>bearSpeed / bearFastSpeed / bearFasterSpeed</code></td>
+<td>熊的三段速度</td>
+</tr>
+<tr>
+<td><code>locustSpeed / SpawnInterval / RespawnCooldown</code></td>
+<td>蝗虫速度 &#x2F; 刷新间隔 &#x2F; 全局冷却</td>
+</tr>
+<tr>
+<td><code>locustMaxConcurrent</code></td>
+<td><strong>并发上限</strong> → <code>maxLocusts = Max(1, cfg.locustMaxConcurrent)</code></td>
+</tr>
+<tr>
+<td><code>winOccupyRatio</code></td>
+<td>胜利阈值（0.5–0.95）</td>
+</tr>
+<tr>
+<td><code>levelTimerSeconds</code></td>
+<td>初始计时值</td>
+</tr>
+<tr>
+<td><code>scorePerCell / scorePerSheep</code></td>
+<td>填充每格得分 &#x2F; 捕获羊得分</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>若 <code>LevelManager.levels</code> 为空，<code>Awake()</code> 会生成 5 个默认关卡，敌人逐渐加速、计时略微缩短。</p>
+</blockquote>
+<hr>
+<h2 id="11-资源规范与美术说明"><a href="#11-资源规范与美术说明" class="headerlink" title="11. 资源规范与美术说明"></a>11. 资源规范与美术说明</h2><ul>
+<li><p><strong>Sprites</strong>：</p>
+<ul>
+<li>地面：<code>groundEmpty / groundOccupied / groundTrail / groundCrops</code>。</li>
+<li>边缘 mask：<code>Occupied</code> <strong>14 张</strong>，<code>Trail</code> <strong>14 张</strong>（U&#x2F;D&#x2F;L&#x2F;R、UR&#x2F;UL&#x2F;DR&#x2F;DL、URD&#x2F;ULD&#x2F;DRL&#x2F;URL、RL&#x2F;UD）。命名清晰、像素尺寸一致。</li>
+</ul>
+</li>
+<li><p><strong>动画序列帧</strong>：数组顺序即播放顺序；每个资源可配置 FPS。支持玩家&#x2F;敌人&#x2F;尘土&#x2F;杀虫剂。</p>
+</li>
+<li><p><strong>视觉缩放</strong>：每个 actor 有一个 <code>xxxVisualScale</code>，只影响<strong>视觉大小</strong>（不改变碰撞&#x2F;规则）。</p>
+</li>
+</ul>
+<hr>
+<h2 id="12-性能与内存"><a href="#12-性能与内存" class="headerlink" title="12. 性能与内存"></a>12. 性能与内存</h2><ul>
+<li><strong>网格大小</strong>：默认 48×27 ≈ 1296 个 <code>Image</code>。中高端设备可接受。避免重复重建网格；当前实现只构建一次，后续只替换 sprite。</li>
+<li><strong>Actor</strong>：Sheep&#x2F;Wolf&#x2F;Bear&#x2F;Locust&#x2F;FX 按需 Instantiate&#x2F;Destroy。若并发较高，建议引入<strong>对象池</strong>。</li>
+<li><strong>寻路&#x2F;BFS</strong>：网格上是 O(w·h)。蝗虫频繁 BFS 时可限制搜索半径或加入局部缓存。</li>
+<li><strong>音频</strong>：对每步脚步音效做节流，或复用 <code>AudioSource</code>，避免同一帧多次播放。</li>
+</ul>
+<hr>
+<h2 id="13-QA-测试清单"><a href="#13-QA-测试清单" class="headerlink" title="13. QA 测试清单"></a>13. QA 测试清单</h2><p><strong>功能</strong></p>
+<ul>
+<li><input disabled="" type="checkbox"> 闭合后：空地填充正确；14 向边缘组合正确；整条 <code>Trail</code> 变为 <code>Occupied</code>。</li>
+<li><input disabled="" type="checkbox"> 捕获羊加分并播放 SFX。</li>
+<li><input disabled="" type="checkbox"> 熊出生点合法；巡逻始终走边缘；计时提速按配置触发。</li>
+<li><input disabled="" type="checkbox"> 狼 2×2 碰撞与分离逻辑正确。</li>
+<li><input disabled="" type="checkbox"> 蝗虫刷新满足 <code>sealsCount</code>&#x2F;冷却&#x2F;并发；不吃边界；只剩一条合法边缘时自毁。</li>
+<li><input disabled="" type="checkbox"> 自动救援：1 秒闪烁 + BFS 路径正确；地图在救援途中变化时不死锁。</li>
+<li><input disabled="" type="checkbox"> 计时器超时事件（第一次加熊&#x2F;提速）与计时器重置正确。</li>
+<li><input disabled="" type="checkbox"> 胜利后 <code>LevelManager.OnLevelWinFinished()</code> 能正确推进&#x2F;回菜单。</li>
+</ul>
+<p><strong>兼容性</strong></p>
+<ul>
+<li><input disabled="" type="checkbox"> HUD 使用 TMP 且指定字体；若仍用 <code>Text</code>，需设置 <code>builtinFont</code> 或 fallback 到 <code>LegacyRuntime.ttf</code>。</li>
+<li><input disabled="" type="checkbox"> 移动端：陀螺仪阈值&#x2F;dead-zone 手感合理；横竖屏 UI 安全区正确。</li>
+</ul>
+<p><strong>健壮性</strong></p>
+<ul>
+<li><input disabled="" type="checkbox"> <code>LevelConfig</code> 极端值（0&#x2F;负数）被 clamp（例如 <code>maxLocusts = Max(1, …)</code>）。</li>
+<li><input disabled="" type="checkbox"> 关卡切换时清理旧的 Actors 与 FX。</li>
+<li><input disabled="" type="checkbox"> 在暂停状态（死亡&#x2F;救援&#x2F;杀虫剂&#x2F;狼清理）中，<code>Update</code> 要 early-out，避免竞态。</li>
+</ul>
+<hr>
+<h2 id="14-FAQ"><a href="#14-FAQ" class="headerlink" title="14. FAQ"></a>14. FAQ</h2><ol>
+<li><p><strong>HUD 字体报错（Unity 6）</strong></p>
+<ul>
+<li>现象：<code>Arial.ttf is no longer a valid built in font</code>。</li>
+<li>解决：给 <code>builtinFont</code> 指定工程字体或把 fallback 改为 <code>LegacyRuntime.ttf</code>；最好切换到 TMP。</li>
+</ul>
+</li>
+<li><p><strong>HUD&#x2F;计时器不显示</strong></p>
+<ul>
+<li><code>ConstructIfNeeded()</code> 会在 HUD 下创建 <code>TimerText</code>。若 UI 被挡住，检查 sibling 顺序：<code>gridRoot</code>（0）&lt; <code>actorsRoot</code>（1）&lt; <code>uiRoot</code>（2）。</li>
+</ul>
+</li>
+<li><p><strong>蝗虫“啃掉最后一条边缘”导致死局</strong></p>
+<ul>
+<li>已有防护：<strong>边界不可吃</strong>；当只剩一条合法内部边缘时蝗虫会自毁并进入冷却。</li>
+</ul>
+</li>
+<li><p><strong>玩家在边界&#x2F;角落“卡住”</strong></p>
+<ul>
+<li>合法边缘要求与 Empty 8 邻接接触；纯对角接触会渲染为实心占领（仍可走）。被困时会触发自动救援。</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2 id="15-扩展与可改造点"><a href="#15-扩展与可改造点" class="headerlink" title="15. 扩展与可改造点"></a>15. 扩展与可改造点</h2><ul>
+<li><strong>新增单位</strong>：沿用 <code>Actor.Kind</code> 与 <code>SpawnXxx/MoveXxx</code> 模式，为新类型添加 sprite、动画与移动规则。</li>
+<li><strong>更高级 AI</strong>：给狼增加 flocking&#x2F;避 Trail；给熊增加“追最近合法玩家边缘”（复用 <code>FindPathToNearestEdge</code>）。</li>
+<li><strong>脚本化关卡</strong>：将 <code>LevelConfig</code> 序列化为 JSON&#x2F;ScriptableObject 做关卡编辑器；在 <code>LevelManager.Awake</code> 中加载。</li>
+<li><strong>对象池</strong>：统一 Actors 与 FX 生命周期，降低 GC 与卡顿。</li>
+<li><strong>调试面板</strong>：在 <code>QixLite</code> 增加 Debug 区（路径覆盖、mask bit、合法&#x2F;非法边缘上色等）。</li>
+</ul>
+<hr>
+<h2 id="16-团队协作习惯"><a href="#16-团队协作习惯" class="headerlink" title="16. 团队协作习惯"></a>16. 团队协作习惯</h2><ul>
+<li><strong>命名</strong>：对 sprites&#x2F;动画使用一致前缀（<code>occ_</code> &#x2F; <code>tr_</code> &#x2F; <code>wolf_up_XX</code> 等），方便批量绑定与搜索。</li>
+<li><strong>提交前自检</strong>：从开始跑到通关一局；检查边缘高亮、计分与音频；用 Deep Profile 检查分配。</li>
+<li><strong>PR 说明</strong>：若改动关键路径（如 <code>ApplyCellSprite / CloseAndFillArea / HandleLocust</code>），请提供<strong>前后对比</strong>截图与<strong>性能数据</strong>。</li>
+</ul>
+<hr>
+<h2 id="17-关键-API-方法（按用途）"><a href="#17-关键-API-方法（按用途）" class="headerlink" title="17. 关键 API&#x2F;方法（按用途）"></a>17. 关键 API&#x2F;方法（按用途）</h2><ul>
+<li><strong>关卡</strong>：<code>BeginLevel(cfg, levelIndex, resetLives)</code>（进入），<code>OnLevelWinFinished(caller)</code>（推进）</li>
+<li><strong>网格&#x2F;边缘</strong>：<code>ApplyCellSprite / UpdateAllEdgeVisuals / BorderHasEmpty8 / HasEmptyNeighbor8</code></li>
+<li><strong>玩家</strong>：<code>ReadPlayerDirectionCardinal / StepPlayer / IsPlayerTrapped / PlayerRescueAutopilot</code></li>
+<li><strong>闭合</strong>：<code>CloseAndFillArea / FindPathToNearestEdge / BuildStraightPath</code></li>
+<li><strong>蝗虫</strong>：<code>HandleLocust / TrySpawnLocustPreferOccupied / IsEdibleOccupied / LocustNextStepToNearestEdible / KillLocustWithSmoke</code></li>
+<li><strong>熊</strong>：<code>IsBearEdgeCell / FindFreeEdgeSpawnNear</code></li>
+<li><strong>UI</strong>：<code>ConstructIfNeeded / CreateText / UpdateHUD</code>（HUD 更新在 <code>Update</code>&#x2F;结算逻辑中触发）</li>
+</ul>
+<hr>
+<h2 id="18-版本与环境"><a href="#18-版本与环境" class="headerlink" title="18. 版本与环境"></a>18. 版本与环境</h2><ul>
+<li><strong>Unity</strong>：Unity 6（按截图），DX11；注意内置 Text 字体资源变更。</li>
+<li><strong>平台</strong>：支持键鼠 + 陀螺仪（移动端）；iOS&#x2F;Android 可补充触控输入映射与响应式 UI。</li>
+<li><strong>依赖</strong>：TextMeshPro（推荐用于所有 HUD 文本）。</li>
+</ul>
+<hr>
+<h3 id="附录：上手-运营清单"><a href="#附录：上手-运营清单" class="headerlink" title="附录：上手&#x2F;运营清单"></a>附录：上手&#x2F;运营清单</h3><ul>
+<li><strong>美术接线</strong>：把 14 向 masks 与动画序列帧拖到 <code>QixLite</code> 中对应数组（注意顺序）。</li>
+<li><strong>SFX 调参</strong>：在安静环境跑一局，确认脚步音效不疲劳；必要时加小的播放节流间隔。</li>
+<li><strong>关卡调参</strong>：从 <code>Level 1</code> 起步：<code>wolfSpeed 6, bearSpeed 4, win 0.75, timer 37s, maxLocusts 1</code>；后续逐步提高速度&#x2F;并发并缩短计时器。</li>
+</ul>
+</article>
+
+
+
+<footer class="page-footer footnote"><hr><div class="text"><p>本站由 <a href="/">FFFeiya</a> 使用 <a target="_blank" rel="noopener" href="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.33.1">Stellar 1.33.1</a> 主题创建。<br>本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处。</p>
+</div></footer>
+<div class="main-mask" onclick="sidebar.dismiss()"></div></div><aside class="l_right">
+<div class="widgets">
+
+<widget class="widget-wrapper toc" id="data-toc" collapse="false"><div class="widget-header dis-select"><span class="name">On This Page</span><a class="cap-action" onclick="sidebar.toggleTOC()" ><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg></a></div><div class="widget-body"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Farmix-%E9%A1%B9%E7%9B%AE%E6%8A%80%E6%9C%AF%E6%96%87%E6%A1%A3%EF%BC%88Tech-Doc%EF%BC%89"><span class="toc-text">Farmix 项目技术文档（Tech Doc）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#0-%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B"><span class="toc-text">0. 快速开始</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E6%9E%B6%E6%9E%84%E4%B8%8E%E8%81%8C%E8%B4%A3"><span class="toc-text">1. 架构与职责</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-%E8%BF%90%E8%A1%8C%E6%97%B6%E5%AF%B9%E8%B1%A1%E4%B8%8E%E8%84%9A%E6%9C%AC%E8%BE%B9%E7%95%8C"><span class="toc-text">1.1 运行时对象与脚本边界</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-%E2%80%9C%E6%B2%A1%E6%9C%89-LevelManager%E2%80%9D-%E7%9A%84%E5%85%9C%E5%BA%95%E6%A8%A1%E5%BC%8F"><span class="toc-text">1.2 “没有 LevelManager” 的兜底模式</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E7%BD%91%E6%A0%BC%E3%80%81%E7%B2%BE%E7%81%B5%E4%B8%8E%E8%BE%B9%E7%BC%98%E8%A7%84%E5%88%99%EF%BC%88%E8%A7%86%E8%A7%89-%E8%A7%84%E5%88%99%E7%BB%9F%E4%B8%80%EF%BC%89"><span class="toc-text">2. 网格、精灵与边缘规则（视觉 + 规则统一）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E7%BD%91%E6%A0%BC%E6%9E%84%E5%BB%BA"><span class="toc-text">2.1 网格构建</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E6%A0%BC%E5%AD%90%E7%8A%B6%E6%80%81"><span class="toc-text">2.2 格子状态</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-14-%E5%90%91%E8%BE%B9%E7%BC%98-Mask%EF%BC%88Occupied-Trail-%E5%90%84%E4%B8%80%E5%A5%97%EF%BC%89"><span class="toc-text">2.3 14 向边缘 Mask（Occupied &#x2F; Trail 各一套）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-4-%E8%BE%B9%E7%95%8C%E7%89%B9%E4%BE%8B%E8%A7%84%E5%88%99"><span class="toc-text">2.4 边界特例规则</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E7%8E%A9%E5%AE%B6%E8%BE%93%E5%85%A5%E4%B8%8E%E7%A7%BB%E5%8A%A8%E7%8A%B6%E6%80%81%E6%9C%BA"><span class="toc-text">3. 玩家输入与移动状态机</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-%E8%BE%93%E5%85%A5%E4%BC%98%E5%85%88%E7%BA%A7"><span class="toc-text">3.1 输入优先级</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-%E5%9C%A8-Occupied-%E4%B8%8A%E7%9A%84%E5%8F%AF%E8%A1%8C%E8%B5%B0%E6%80%A7"><span class="toc-text">3.2 在 Occupied 上的可行走性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-%E7%94%BB%E7%BA%BF%E4%B8%8E%E9%97%AD%E5%90%88"><span class="toc-text">3.3 画线与闭合</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4-%E8%87%AA%E5%8A%A8%E6%95%91%E6%8F%B4%EF%BC%88%E8%A2%AB%E5%9B%B0%E6%97%B6%EF%BC%89"><span class="toc-text">3.4 自动救援（被困时）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E5%8C%BA%E5%9F%9F%E9%97%AD%E5%90%88%E3%80%81%E5%A1%AB%E5%85%85%E4%B8%8E%E8%AE%A1%E5%88%86"><span class="toc-text">4. 区域闭合、填充与计分</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-%E6%A0%B8%E5%BF%83%E5%A1%AB%E5%85%85%E7%AE%97%E6%B3%95"><span class="toc-text">4.1 核心填充算法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E6%95%8C%E4%BA%BA%E7%B3%BB%E7%BB%9F"><span class="toc-text">5. 敌人系统</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#5-1-Sheep%EF%BC%88%E7%BE%8A%EF%BC%89"><span class="toc-text">5.1 Sheep（羊）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-2-Wolves%EF%BC%88%E7%8B%BC%EF%BC%9A%E7%9F%A9%E5%BD%A2%E5%8D%A0%E4%BD%8D%EF%BC%89"><span class="toc-text">5.2 Wolves（狼：矩形占位）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-3-Bears%EF%BC%88%E7%86%8A%EF%BC%9A%E8%BE%B9%E7%BC%98%E5%B7%A1%E9%80%BB-%E8%AE%A1%E6%97%B6%E6%8F%90%E9%80%9F-%E8%BE%B9%E7%BC%98%E8%A7%84%E5%88%99%EF%BC%89"><span class="toc-text">5.3 Bears（熊：边缘巡逻 &#x2F; 计时提速 &#x2F; 边缘规则）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-%E8%9D%97%E8%99%AB%E7%B3%BB%E7%BB%9F%EF%BC%88%E5%B9%B6%E5%8F%91%E3%80%81%E5%95%83%E9%A3%9F%E3%80%81%E5%86%B7%E5%8D%B4%EF%BC%89"><span class="toc-text">6. 蝗虫系统（并发、啃食、冷却）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#6-1-%E5%88%B7%E6%96%B0%E6%9D%A1%E4%BB%B6%E4%B8%8E%E5%B9%B6%E5%8F%91%E4%B8%8A%E9%99%90"><span class="toc-text">6.1 刷新条件与并发上限</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-2-%E7%A7%BB%E5%8A%A8%E4%B8%8E%E6%97%8B%E8%BD%AC"><span class="toc-text">6.2 移动与旋转</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-3-%E7%A7%BB%E9%99%A4-%E6%AD%BB%E4%BA%A1%E4%B8%8E%E7%89%B9%E6%95%88"><span class="toc-text">6.3 移除&#x2F;死亡与特效</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-%E8%AE%A1%E6%97%B6%E5%99%A8%E4%B8%8E%E9%98%B6%E6%AE%B5%E4%BA%8B%E4%BB%B6"><span class="toc-text">7. 计时器与阶段事件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-UI-HUD-%E5%AD%97%E4%BD%93"><span class="toc-text">8. UI &#x2F; HUD &#x2F; 字体</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#8-1-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%9E%84%E5%BB%BA-UI"><span class="toc-text">8.1 运行时构建 UI</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-2-%E5%AD%97%E4%BD%93%E5%85%BC%E5%AE%B9%E6%80%A7%EF%BC%88Unity-6%EF%BC%89"><span class="toc-text">8.2 字体兼容性（Unity 6）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-%E9%9F%B3%E9%A2%91%E7%B3%BB%E7%BB%9F"><span class="toc-text">9. 音频系统</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10-LevelConfig-%E2%86%92-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%98%A0%E5%B0%84"><span class="toc-text">10. LevelConfig → 运行时映射</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#11-%E8%B5%84%E6%BA%90%E8%A7%84%E8%8C%83%E4%B8%8E%E7%BE%8E%E6%9C%AF%E8%AF%B4%E6%98%8E"><span class="toc-text">11. 资源规范与美术说明</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#12-%E6%80%A7%E8%83%BD%E4%B8%8E%E5%86%85%E5%AD%98"><span class="toc-text">12. 性能与内存</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#13-QA-%E6%B5%8B%E8%AF%95%E6%B8%85%E5%8D%95"><span class="toc-text">13. QA 测试清单</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#14-FAQ"><span class="toc-text">14. FAQ</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#15-%E6%89%A9%E5%B1%95%E4%B8%8E%E5%8F%AF%E6%94%B9%E9%80%A0%E7%82%B9"><span class="toc-text">15. 扩展与可改造点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#16-%E5%9B%A2%E9%98%9F%E5%8D%8F%E4%BD%9C%E4%B9%A0%E6%83%AF"><span class="toc-text">16. 团队协作习惯</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#17-%E5%85%B3%E9%94%AE-API-%E6%96%B9%E6%B3%95%EF%BC%88%E6%8C%89%E7%94%A8%E9%80%94%EF%BC%89"><span class="toc-text">17. 关键 API&#x2F;方法（按用途）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#18-%E7%89%88%E6%9C%AC%E4%B8%8E%E7%8E%AF%E5%A2%83"><span class="toc-text">18. 版本与环境</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%99%84%E5%BD%95%EF%BC%9A%E4%B8%8A%E6%89%8B-%E8%BF%90%E8%90%A5%E6%B8%85%E5%8D%95"><span class="toc-text">附录：上手&#x2F;运营清单</span></a></li></ol></li></ol></li></ol></div><div class="widget-footer"><a class="top" onclick="util.scrollTop()"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path stroke-linejoin="round" d="m9 15.5l3-3l3 3m-6-4l3-3l3 3"/><path d="M7 3.338A9.95 9.95 0 0 1 12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12c0-1.821.487-3.53 1.338-5"/></g></svg><span>Scroll to Top</span></a></div></widget>
+</div></aside><div class='float-panel'>
+  <button type='button' style='display:none' class='laptop-only rightbar-toggle mobile' onclick='sidebar.rightbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg>
+  </button>
+  <button type='button' style='display:none' class='mobile-only leftbar-toggle mobile' onclick='sidebar.leftbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 11c0-3.771 0-5.657 1.172-6.828C4.343 3 6.229 3 10 3h4c3.771 0 5.657 0 6.828 1.172C22 5.343 22 7.229 22 11v2c0 3.771 0 5.657-1.172 6.828C19.657 21 17.771 21 14 21h-4c-3.771 0-5.657 0-6.828-1.172C2 18.657 2 16.771 2 13z"/><path id="sep" stroke-linecap="round" d="M5.5 10h6m-5 4h4m4.5 7V3"/></g></svg>
+  </button>
+</div>
+</div><div class="scripts">
+
+
+<script type="text/javascript">
+  window.canonical = {"originalHost":null,"officialHosts":["localhost"],"encoded":""};
+  const ctx = {
+    date_suffix: {
+      just: `Just`,
+      min: `minutes ago`,
+      hour: `hours ago`,
+      day: `days ago`,
+    },
+    root : `/`,
+    tag_plugins: {
+      chat: Object.assign({"api":"https://siteinfo.listentothewind.cn/api/v1"}),
+    }
+  };
+
+  // required plugins (only load if needs)
+  if (`local_search`) {
+    ctx.search = {};
+    ctx.search.service = `local_search`;
+    if (ctx.search.service == 'local_search') {
+      let service_obj = Object.assign({}, `{"field":"all","path":"/search.json","content":true,"skip_search":null,"sort":"-date"}`);
+      ctx.search[ctx.search.service] = service_obj;
+    }
+  }
+  const def = {
+    avatar: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/3442075.svg`,
+    cover: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/cover/76b86c0226ffd.svg`,
+    loading: `https://api.iconify.design/eos-icons:three-dots-loading.svg?color=%231cd0fd`,
+  };
+  const deps = {
+    jquery: `https://gcore.jsdelivr.net/npm/jquery@3.7/dist/jquery.min.js`,
+    marked: `https://gcore.jsdelivr.net/npm/marked@13.0/lib/marked.umd.min.js`,
+    lazyload: `/%5Bobject%20Object%5D`
+  }
+  
+
+</script>
+
+<script type="text/javascript">
+  
+  function RunItem() {
+    this.list = []; // 存放回调函数
+    this.start = () => {
+      for (var i = 0; i < this.list.length; i++) {
+        this.list[i].run();
+      }
+    };
+    this.push = (fn, name, setRequestAnimationFrame = true) => {
+      let myfn = fn
+      if (setRequestAnimationFrame) {
+        myfn = () => {
+          utils.requestAnimationFrame(fn)
+        }
+      }
+      var f = new Item(myfn, name);
+      this.list.push(f);
+    };
+    this.remove = (name) => {
+      for (let index = 0; index < this.list.length; index++) {
+        const e = this.list[index];
+        if (e.name == name) {
+          this.list.splice(index, 1);
+        }
+      }
+    }
+    // 构造一个可以run的对象
+    function Item(fn, name) {
+      // 函数名称
+      this.name = name || fn.name;
+      // run方法
+      this.run = () => {
+        try {
+          fn()
+        } catch (error) {
+          console.log(error);
+        }
+      };
+    }
+  }
+
+  const utils = {
+    // 懒加载 css https://github.com/filamentgroup/loadCSS
+    css: (href, before, media, attributes) => {
+      var doc = window.document;
+      var ss = doc.createElement("link");
+      var ref;
+      if (before) {
+        ref = before;
+      } else {
+        var refs = (doc.body || doc.getElementsByTagName("head")[0]).childNodes;
+        ref = refs[refs.length - 1];
+      }
+      var sheets = doc.styleSheets;
+      if (attributes) {
+        for (var attributeName in attributes) {
+          if (attributes.hasOwnProperty(attributeName)) {
+            ss.setAttribute(attributeName, attributes[attributeName]);
+          }
+        }
+      }
+      ss.rel = "stylesheet";
+      ss.href = href;
+      ss.media = "only x";
+      function ready(cb) {
+        if (doc.body) {
+          return cb();
+        }
+        setTimeout(function () {
+          ready(cb);
+        });
+      }
+      ready(function () {
+        ref.parentNode.insertBefore(ss, before ? ref : ref.nextSibling);
+      });
+      var onloadcssdefined = function (cb) {
+        var resolvedHref = ss.href;
+        var i = sheets.length;
+        while (i--) {
+          if (sheets[i].href === resolvedHref) {
+            return cb();
+          }
+        }
+        setTimeout(function () {
+          onloadcssdefined(cb);
+        });
+      };
+      function loadCB() {
+        if (ss.addEventListener) {
+          ss.removeEventListener("load", loadCB);
+        }
+        ss.media = media || "all";
+      }
+      if (ss.addEventListener) {
+        ss.addEventListener("load", loadCB);
+      }
+      ss.onloadcssdefined = onloadcssdefined;
+      onloadcssdefined(loadCB);
+      return ss;
+    },
+
+    js: (src, opt) => new Promise((resolve, reject) => {
+      var script = document.createElement('script');
+      if (src.startsWith('/')) {
+        src = ctx.root + src.substring(1);
+      }
+      script.src = src;
+      if (opt) {
+        for (let key of Object.keys(opt)) {
+          script[key] = opt[key]
+        }
+      } else {
+        // 默认异步，如果需要同步，第二个参数传入 {} 即可
+        script.async = true
+      }
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function () {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    }),
+
+    jq: (fn) => {
+      if (typeof jQuery === 'undefined') {
+        utils.js(deps.jquery).then(fn)
+      } else {
+        fn()
+      }
+    },
+
+    onLoading: (el) => {
+      if (el) {
+        $(el).append('<div class="loading-wrap"><svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" stroke-opacity=".3" d="M12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="1.3s" values="60;0"/></path><path stroke-dasharray="15" stroke-dashoffset="15" d="M12 3C16.9706 3 21 7.02944 21 12"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="15;0"/><animateTransform attributeName="transform" dur="1.5s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"/></path></g></svg></div>');
+      }
+    },
+    onLoadSuccess: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap').remove();
+      }
+    },
+    onLoadFailure: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap svg').remove();
+        $(el).find('.loading-wrap').append('<svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" d="M12 3L21 20H3L12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.5s" values="60;0"/></path><path stroke-dasharray="6" stroke-dashoffset="6" d="M12 10V14"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.6s" dur="0.2s" values="6;0"/></path></g><circle cx="12" cy="17" r="1" fill="currentColor" fill-opacity="0"><animate fill="freeze" attributeName="fill-opacity" begin="0.8s" dur="0.4s" values="0;1"/></circle></svg>');
+        $(el).find('.loading-wrap').addClass('error');
+      }
+    },
+    request: (el, url, callback, onFailure) => {
+      const maxRetry = 3;
+      let retryCount = 0;
+
+      return new Promise((resolve, reject) => {
+        const load = () => {
+          utils.onLoading?.(el);
+
+          let timedOut = false;
+          const timeout = setTimeout(() => {
+            timedOut = true;
+            console.warn('[request] 超时:', url);
+
+            if (++retryCount >= maxRetry) {
+              utils.onLoadFailure?.(el);
+              onFailure?.();
+              reject('请求超时');
+            } else {
+              setTimeout(load, 1000);
+            }
+          }, 5000);
+
+          fetch(url).then(resp => {
+            if (timedOut) return;
+            clearTimeout(timeout);
+
+            if (!resp.ok) throw new Error('响应失败');
+            return resp;
+          }).then(data => {
+            if (timedOut) return;
+            utils.onLoadSuccess?.(el);
+            callback(data);
+            resolve(data);
+          }).catch(err => {
+            clearTimeout(timeout);
+            console.warn('[request] 错误:', err);
+
+            if (++retryCount >= maxRetry) {
+              utils.onLoadFailure?.(el);
+              onFailure?.();
+              reject(err);
+            } else {
+              setTimeout(load, 1000);
+            }
+          });
+        };
+
+        load();
+      });
+    },
+    requestWithoutLoading: (url, options = {}, maxRetry = 2, timeout = 5000) => {
+      return new Promise((resolve, reject) => {
+        let retryCount = 0;
+
+        const tryRequest = () => {
+          let timedOut = false;
+          const timer = setTimeout(() => {
+            timedOut = true;
+            if (++retryCount > maxRetry) reject('timeout');
+            else tryRequest();
+          }, timeout);
+
+          fetch(url, options)
+            .then(resp => {
+              clearTimeout(timer);
+              if (!resp.ok) throw new Error('bad response');
+              resolve(resp);
+            })
+            .catch(err => {
+              clearTimeout(timer);
+              if (++retryCount > maxRetry) reject(err);
+              else setTimeout(tryRequest, 500);
+            });
+        };
+
+        tryRequest();
+      });
+    },
+    /********************** requestAnimationFrame ********************************/
+    // 1、requestAnimationFrame 会把每一帧中的所有 DOM 操作集中起来，在一次重绘或回流中就完成，并且重绘或回流的时间间隔紧紧跟随浏览器的刷新频率，一般来说，这个频率为每秒60帧。
+    // 2、在隐藏或不可见的元素中，requestAnimationFrame 将不会进行重绘或回流，这当然就意味着更少的的 cpu，gpu 和内存使用量。
+    requestAnimationFrame: (fn) => {
+      if (!window.requestAnimationFrame) {
+        window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame;
+      }
+      window.requestAnimationFrame(fn)
+    },
+    dark: {},
+  };
+
+  // utils.dark.mode 当前模式 dark or light
+  // utils.dark.toggle() 暗黑模式触发器
+  // utils.dark.push(callBack[,"callBackName"]) 传入触发器回调函数
+  utils.dark.method = {
+    toggle: new RunItem(),
+  };
+  utils.dark = Object.assign(utils.dark, {
+    push: utils.dark.method.toggle.push,
+  });
+</script>
+<script>
+  const sidebar = {
+    leftbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    rightbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('rightbar');
+        l_body.removeAttribute('leftbar');
+      }
+    },
+    dismiss: () => {
+      if (l_body) {
+        l_body.removeAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    toggleTOC: () => {
+      document.querySelector('#data-toc').classList.toggle('collapse');
+    }
+  }
+</script>
+<script type="text/javascript">
+  (() => {
+    const tagSwitchers = document.querySelectorAll('.tag-subtree.parent-tag > a > .tag-switcher-wrapper')
+    for (const tagSwitcher of tagSwitchers) {
+      tagSwitcher.addEventListener('click', (e) => {
+        const parent = e.target.closest('.tag-subtree.parent-tag')
+        parent.classList.toggle('expanded')
+        e.preventDefault()
+      })
+    }
+
+    // Get active tag from query string, then activate it.
+    const urlParams = new URLSearchParams(window.location.search)
+    const activeTag = urlParams.get('tag')
+    if (activeTag) {
+      let tag = document.querySelector(`.tag-subtree[data-tag="${activeTag}"]`)
+      if (tag) {
+        tag.querySelector('a').classList.add('active')
+        
+        while (tag) {
+          tag.classList.add('expanded')
+          tag = tag.parentElement.closest('.tag-subtree.parent-tag')
+        }
+      }
+    }
+  })()
+</script>
+
+<script async src="https://gcore.jsdelivr.net/npm/vanilla-lazyload@19.1/dist/lazyload.min.js"></script>
+<script>
+  // https://www.npmjs.com/package/vanilla-lazyload
+  // Set the options globally
+  // to make LazyLoad self-initialize
+  window.lazyLoadOptions = {
+    elements_selector: ".lazy",
+    callback_loaded: (el) => {
+      el.classList.add('loaded');
+      const wrapper = el.closest('.lazy-box');
+      const icon = wrapper?.querySelector('.lazy-icon');
+      if (icon) icon.remove();
+    }
+  };
+  // Listen to the initialization event
+  // and get the instance of LazyLoad
+  window.addEventListener(
+    "LazyLoad::Initialized",
+    function (event) {
+      window.lazyLoadInstance = event.detail.instance;
+    },
+    false
+  );
+  document.addEventListener('DOMContentLoaded', function () {
+    window.lazyLoadInstance?.update();
+  });
+
+  window.wrapLazyloadImages = (container) => {
+    if (typeof container === 'string') {
+      container = document.querySelector(container);
+    }
+    if (!container) return;
+    
+    const images = container.querySelectorAll('img');
+    images.forEach((img) => {
+      if (img.classList.contains('lazy')) return;
+
+      const src = img.getAttribute('src');
+      if (!src) return;
+
+      const wrapper = document.createElement('div');
+      wrapper.className = 'lazy-box';
+
+      const newImg = img.cloneNode();
+      newImg.removeAttribute('src');
+      newImg.setAttribute('data-src', src);
+      newImg.classList.add('lazy');
+
+      const icon = document.createElement('div');
+      icon.className = 'lazy-icon';
+      if (def.loading) {
+        icon.style.backgroundImage = `url("${def.loading}")`;
+      }
+
+      wrapper.appendChild(newImg);
+      wrapper.appendChild(icon);
+
+      img.replaceWith(wrapper);
+    });
+
+    // 通知 LazyLoad 更新
+    if (window.lazyLoadInstance?.update) {
+      window.lazyLoadInstance.update();
+    }
+  }
+  
+</script>
+
+<!-- required -->
+<script src="/js/main.js?v=1.33.1" defer></script>
+
+<script type="text/javascript">
+  const applyTheme = (theme) => {
+    if (theme === 'auto') {
+      document.documentElement.removeAttribute('data-theme')
+    } else {
+      document.documentElement.setAttribute('data-theme', theme)
+    }
+
+    // applyThemeToGiscus(theme)
+  }
+
+  // FIXME: 这会导致无法使用 preferred_color_scheme 以外的主题
+  const applyThemeToGiscus = (theme) => {
+    // theme = theme === 'auto' ? 'preferred_color_scheme' : theme
+    const cmt = document.getElementById('giscus')
+    if (cmt) {
+      // This works before giscus load.
+      cmt.setAttribute('data-theme', theme)
+    }
+
+    const iframe = document.querySelector('#comments > section.giscus > iframe')
+    if (iframe) {
+      // This works after giscus loaded.
+      const src = iframe.src
+      const newSrc = src.replace(/theme=[\w]+/, `theme=${theme}`)
+      iframe.src = newSrc
+    }
+  }
+
+  const switchTheme = () => {
+    // light -> dark -> auto -> light -> ...
+    const currentTheme = document.documentElement.getAttribute('data-theme')
+    let newTheme;
+    switch (currentTheme) {
+      case 'light':
+        newTheme = 'dark'
+        break
+      case 'dark':
+        newTheme = 'auto'
+        break
+      default:
+        newTheme = 'light'
+    }
+    applyTheme(newTheme)
+    window.localStorage.setItem('Stellar.theme', newTheme)
+    utils.dark.mode = newTheme === 'auto' ? (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light") : newTheme;
+    utils.dark.method.toggle.start();
+
+    const messages = {
+      light: `Switched to Light Mode`,
+      dark: `Switched to Dark Mode`,
+      auto: `Switched to Auto Mode`,
+    }
+    hud?.toast?.(messages[newTheme])
+  }
+
+  (() => {
+    // Apply user's preferred theme, if any.
+    const theme = window.localStorage.getItem('Stellar.theme')
+    if (theme !== null) {
+      applyTheme(theme)
+    } else {
+      utils.dark.mode = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    }
+    utils.dark.method.toggle.start();
+  })()
+</script>
+
+
+<!-- optional -->
+
+
+
+<script defer>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.services = Object.assign({}, JSON.parse(`{"mdrender":{"js":"/js/services/mdrender.js"},"siteinfo":{"js":"/js/services/siteinfo.js","api":null},"ghinfo":{"js":"/js/services/ghinfo.js"},"rating":{"js":"/js/services/rating.js","api":"https://star-vote.xaox.cc/api/rating"},"vote":{"js":"/js/services/vote.js","api":"https://star-vote.xaox.cc/api/vote"},"sites":{"js":"/js/services/sites.js"},"friends":{"js":"/js/services/friends.js"},"friends_and_posts":{"js":"/js/services/friends_and_posts.js"},"timeline":{"js":"/js/services/timeline.js"},"fcircle":{"js":"/js/services/fcircle.js"},"weibo":{"js":"/js/services/weibo.js"},"memos":{"js":"/js/services/memos.js"},"voice":{"js":"/js/plugins/voice.js"},"video":{"js":"/js/plugins/video.js"},"download-file":{"js":"/js/plugins/download-file.js"},"twikoo":{"js":"/js/services/twikoo_latest_comment.js"},"waline":{"js":"/js/services/waline_latest_comment.js"},"artalk":{"js":"/js/services/artalk_latest_comment.js"},"giscus":{"js":"/js/services/giscus_latest_comment.js"},"contributors":{"edit_this_page":{"_posts/":null,"wiki/stellar/":"https://github.com/xaoxuu/hexo-theme-stellar-docs/blob/main/"},"js":"/js/services/contributors.js"}}`));
+    for (let id of Object.keys(ctx.services)) {
+      const js = ctx.services[id].js;
+      if (id == 'siteinfo') {
+        ctx.cardlinks = document.querySelectorAll('a.link-card[cardlink]');
+        if (ctx.cardlinks?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            setCardLink(ctx.cardlinks);
+          });
+        }
+      } else if (id == 'voice') {
+        ctx.voiceAudios = document.querySelectorAll('.voice>audio');
+        if (ctx.voiceAudios?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            createVoiceDom(ctx.voiceAudios);
+          });
+        }
+      } else if (id == 'video') {
+        ctx.videos = document.querySelectorAll('.video>video');
+        if (ctx.videos?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            videoEvents(ctx.videos);
+          });
+        }
+      } else if (id == 'download-file') {
+        ctx.files = document.querySelectorAll('.file');
+        if (ctx.files?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            downloadFileEvent(ctx.files);
+          });
+        }
+      } else {
+        const els = document.getElementsByClassName(`ds-${id}`);
+        if (els?.length > 0) {
+          utils.jq(() => {
+            if (id == 'timeline' || 'memos' || 'marked') {
+              utils.js(deps.marked).then(function () {
+                utils.js(js, { defer: true });
+              });
+            } else {
+              utils.js(js, { defer: true });
+            }
+          });
+        }
+      }
+    }
+
+    // chat iphone time
+    let phoneTimes = document.querySelectorAll('.chat .status-bar .time');
+
+    if (phoneTimes.length > 0) {
+      NowTime();
+      var date = new Date();
+      var sec = date.getSeconds();
+      var firstAdjustInterval = setInterval(firstAdjustTime, 1000 * (60 - sec));
+    }
+
+    function firstAdjustTime() {
+      NowTime();
+      clearInterval(firstAdjustInterval);
+      setInterval(NowTime, 1000 * 60);
+    }
+
+    function NowTime() {
+      for (let i = 0; i < phoneTimes.length; ++i) {
+        var timeSpan = phoneTimes[i];
+        var date = new Date();
+        var hour = date.getHours();
+        var min = date.getMinutes();
+        timeSpan.innerHTML = check(hour) + ":" + check(min);
+      }
+    };
+
+    function check(val) {
+      if (val < 10) {
+        return ("0" + val);
+      }
+      return (val);
+    }
+
+    // chat quote
+    const chat_quote_obverser = new IntersectionObserver((entries, observer) => {
+      entries.filter((entry) => { return entry.isIntersecting }).sort((a, b) => a.intersectionRect.y !== b.intersectionRect.y ? a.intersectionRect.y - b.intersectionRect.y : a.intersectionRect.x - b.intersectionRect.x).forEach((entry, index) => {
+          observer.unobserve(entry.target);
+          setTimeout(() => {
+            entry.target.classList.add('quote-blink');
+            setTimeout(() => {
+              entry.target.classList.remove('quote-blink');
+            }, 1000);
+          }, Math.max(100, 16) * (index + 1));
+        });
+    });
+
+    var chatQuotes = document.querySelectorAll(".chat .talk .quote");
+    chatQuotes.forEach((quote) => {
+      quote.addEventListener('click', function () {
+        var chatCellDom = document.getElementById("quote-" + quote.getAttribute("quotedCellTag"));
+        if (chatCellDom) {
+          var chatDiv = chatCellDom.parentElement;
+          var mid = chatDiv.clientHeight / 2;
+          var offsetTop = chatCellDom.offsetTop;
+          if (offsetTop > mid - chatCellDom.clientHeight / 2) {
+            chatDiv.scrollTo({
+              top: chatCellDom.offsetTop - mid + chatCellDom.clientHeight / 2,
+              behavior: "smooth"
+            });
+          } else {
+            chatDiv.scrollTo({
+              top: 0,
+              behavior: "smooth"
+            });
+          }
+          chat_quote_obverser.observe(chatCellDom);
+        }
+      });
+    });
+  });
+</script>
+
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.search = {
+      path: `/search.json`,
+    }
+    utils.js('/js/search/local-search.js', { defer: true });
+  });
+</script><script>
+  window.FPConfig = {
+    delay: 0,
+    ignoreKeywords: [],
+    maxRPS: 5,
+    hoverDelay: 25
+  };
+</script>
+<script defer src="https://gcore.jsdelivr.net/npm/flying-pages@2/flying-pages.min.js"></script><script>
+  ctx.fancybox = {
+    selector: `.timenode p>img`,
+    css: `https://gcore.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css`,
+    js: `https://gcore.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js`
+  };
+  var selector = '[data-fancybox]:not(.error), .with-fancybox .atk-content img:not([atk-emoticon])';
+  if (ctx.fancybox.selector) {
+    selector += `, ${ctx.fancybox.selector}`
+  }
+  var needFancybox = document.querySelectorAll(selector).length !== 0;
+  if (!needFancybox) {
+    const memos = document.getElementsByClassName('ds-memos');
+    if (memos != undefined && memos.length > 0) {
+      needFancybox = true;
+    }
+    const fancybox = document.getElementsByClassName('with-fancybox');
+    if (fancybox != undefined && fancybox.length > 0) {
+      needFancybox = true;
+    }
+  }
+  if (needFancybox) {
+    utils.css(ctx.fancybox.css);
+    utils.js(ctx.fancybox.js, { defer: true }).then(function () {
+      Fancybox.bind(selector, {
+        hideScrollbar: false,
+        Thumbs: {
+          autoStart: false,
+        },
+        caption: (fancybox, slide) => {
+          return slide.triggerEl.alt || slide.triggerEl.dataset.caption || null
+        }
+      });
+    })
+  }
+</script>
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    const swiper_api = document.getElementById('swiper-api');
+    if (swiper_api != undefined) {
+      utils.css(`https://unpkg.com/swiper@10.3/swiper-bundle.min.css`);
+      utils.js(`https://unpkg.com/swiper@10.3/swiper-bundle.min.js`, { defer: true }).then(function () {
+        const effect = swiper_api.getAttribute('effect') || '';
+        var swiper = new Swiper('.swiper#swiper-api', {
+          slidesPerView: 'auto',
+          spaceBetween: 8,
+          centeredSlides: true,
+          effect: effect,
+          rewind: true,
+          pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+          },
+          navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+          },
+        });
+      })
+    }
+  });
+</script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    window.codeElements = document.querySelectorAll('.code');
+    if (window.codeElements.length > 0) {
+      ctx.copycode = {
+        default_text: `Copy`,
+        success_text: `Copied`,
+        toast: `复制成功`,
+      };
+      utils.js('/js/plugins/copycode.js');
+    }
+  });
+</script>
+
+
+<!-- inject -->
+
+</div></body></html>

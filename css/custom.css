@@ -1,0 +1,579 @@
+/* =========================
+   Neo / Cyber Home (black + red)
+   Stellar 1.33.1 custom.css
+   ========================= */
+
+/* ===== Make {% sites %} cards larger ===== */
+
+/* 1) 网格：每个卡片的最小宽度（越大 -> 一行越少张 -> 卡越大）
+   现在你一行看起来能放 4 张的布局，改成 260~320 会舒服很多 */
+.tag-plugin.sites-wrap .grid-box {
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)) !important;
+  gap: 50px !important; /* 卡片之间间距，也可以改成 20px */
+}
+
+/* 2) 卡片整体：更高一点，圆角/阴影不动 */
+.tag-plugin.sites-wrap .site-card {
+  min-height: 210px !important; /* 你可以试 260/280 */
+}
+
+/* 3) 封面图区域：决定“视觉上卡片有多大” */
+.tag-plugin.sites-wrap .site-card .lazy-box.snapshot {
+  height: 140px !important; /* 你可以试 180/200 */
+}
+
+/* 4) 封面图填充方式：避免拉伸变形 */
+.tag-plugin.sites-wrap .site-card .lazy-box.snapshot img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important; /* 保持裁切填满 */
+}
+
+/* 让 Projects 的 sites 卡片之间有空隙 */
+.tag-plugin.sites-wrap .grid-box {
+  column-gap: 18px !important;  /* 左右间距 */
+  row-gap: 18px !important;     /* 上下间距 */
+  /* 或者直接用 gap: 18px !important; */
+}
+
+/* ===== Stellar sites cards: show more lines (no font-size change) ===== */
+
+/* 让 info 区域别被固定高度卡死 */
+.tag-plugin.sites-wrap .site-card .info {
+  height: auto !important;
+  max-height: none !important;
+}
+
+/* 标题：2 行（你要 3 行就把 2 改成 3） */
+.tag-plugin.sites-wrap .site-card .info .title,
+.tag-plugin.sites-wrap .site-card .title {
+  display: -webkit-box !important;
+  -webkit-box-orient: vertical !important;
+  -webkit-line-clamp: 2 !important;
+  overflow: hidden !important;
+
+  white-space: normal !important;     /* 干掉单行 nowrap */
+  text-overflow: clip !important;     /* 干掉 ellipsis */
+  max-height: none !important;
+}
+
+/* 描述：3 行（你要 4 行就把 3 改成 4） */
+.tag-plugin.sites-wrap .site-card .info .desc,
+.tag-plugin.sites-wrap .site-card .desc {
+  display: -webkit-box !important;
+  -webkit-box-orient: vertical !important;
+  -webkit-line-clamp: 3 !important;
+  overflow: hidden !important;
+
+  white-space: normal !important;
+  text-overflow: clip !important;
+  max-height: none !important;
+}
+
+/* ---- 2) 主页 Neo 皮肤（尽量只影响 index.md 的 home 区域） ---- */
+.home--neo{
+  position: relative;
+  padding: 8px 0 40px;
+  color: rgba(255,255,255,.88);
+}
+
+/* 背景：星尘 + 红雾（纯 CSS，不依赖图片） */
+.home--neo::before{
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  background:
+    radial-gradient(1200px 700px at 25% 15%, rgba(255,70,70,.20), transparent 60%),
+    radial-gradient(900px 600px at 70% 65%, rgba(255,0,80,.14), transparent 62%),
+    radial-gradient(800px 500px at 55% 30%, rgba(255,20,20,.10), transparent 55%),
+    radial-gradient(2px 2px at 10% 20%, rgba(255,255,255,.20), transparent 60%),
+    radial-gradient(1px 1px at 30% 80%, rgba(255,255,255,.20), transparent 60%),
+    radial-gradient(1px 1px at 70% 40%, rgba(255,255,255,.18), transparent 60%),
+    radial-gradient(2px 2px at 85% 25%, rgba(255,255,255,.16), transparent 60%),
+    linear-gradient(180deg, #05060a 0%, #07070c 40%, #05060a 100%);
+  filter: saturate(1.2) contrast(1.05);
+}
+
+/* 柔光遮罩（让背景更“雾”一点） */
+.home--neo::after{
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(1200px 800px at 50% 50%, rgba(0,0,0,.35), rgba(0,0,0,.70));
+  pointer-events: none;
+}
+
+/* ---- 3) Hero ---- */
+.neo-hero{
+  padding: 18px 18px 10px;
+  margin-bottom: 14px;
+  border-radius: 18px;
+  background: rgba(10,10,14,.55);
+  border: 1px solid rgba(255,255,255,.06);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 20px 60px rgba(0,0,0,.35);
+}
+
+.neo-hero__title{
+  font-size: 42px;
+  font-weight: 800;
+  letter-spacing: .2px;
+  line-height: 1.1;
+}
+
+.neo-dot{
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin: 0 10px;
+  border-radius: 999px;
+  background: #ff3347;
+  box-shadow: 0 0 16px rgba(255,51,71,.8);
+  transform: translateY(-4px);
+}
+
+.neo-hero__subtitle{
+  margin-top: 10px;
+  font-size: 15px;
+  color: rgba(255,255,255,.72);
+}
+
+/* ---- 4) Projects 入口大卡 ---- */
+.neo-project-entry{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 18px;
+  border-radius: 20px;
+  text-decoration: none;
+  color: rgba(255,255,255,.90);
+  background: rgba(12,12,18,.55);
+  border: 1px solid rgba(255,255,255,.07);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 18px 55px rgba(0,0,0,.35);
+  position: relative;
+  overflow: hidden;
+}
+
+/* 红色霓虹边缘 */
+.neo-project-entry::before{
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: 20px;
+  background: radial-gradient(700px 120px at 18% 100%, rgba(255,40,40,.35), transparent 70%);
+  pointer-events: none;
+}
+
+.neo-project-entry__kicker{
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.neo-project-entry__desc{
+  margin-top: 8px;
+  font-size: 14px;
+  color: rgba(255,255,255,.70);
+}
+
+.neo-chip-row{
+  margin-top: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.neo-chip{
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 13px;
+  color: rgba(255,90,90,.95);
+  background: rgba(255,60,60,.10);
+  border: 1px solid rgba(255,60,60,.18);
+}
+
+.neo-project-entry__cta{
+  flex: 0 0 auto;
+  padding: 10px 18px;
+  border-radius: 999px;
+  font-weight: 800;
+  letter-spacing: .2px;
+  color: rgba(255,120,120,.95);
+  border: 1px solid rgba(255,60,60,.40);
+  background: rgba(255,60,60,.08);
+  box-shadow: 0 0 0 0 rgba(255,60,60,.0);
+  transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
+}
+
+.neo-project-entry:hover .neo-project-entry__cta{
+  transform: translateY(-1px);
+  box-shadow: 0 0 28px rgba(255,40,40,.35);
+  background: rgba(255,60,60,.12);
+}
+
+/* ---- 5) 下方双栏 ---- */
+.neo-grid{
+  margin-top: 16px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+
+/* 响应式：窄屏变单栏 */
+@media (max-width: 900px){
+  .neo-grid{
+    grid-template-columns: 1fr;
+  }
+  .neo-hero__title{
+    font-size: 34px;
+  }
+}
+
+/* ---- 6) 卡片 ---- */
+.neo-card{
+  padding: 18px 18px 16px;
+  border-radius: 20px;
+  background: rgba(12,12,18,.55);
+  border: 1px solid rgba(255,255,255,.07);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 18px 55px rgba(0,0,0,.35);
+  position: relative;
+  overflow: hidden;
+}
+
+/* 卡片底部红雾 */
+.neo-card::after{
+  content: "";
+  position: absolute;
+  left: -10%;
+  right: -10%;
+  bottom: -40px;
+  height: 120px;
+  background: radial-gradient(60% 100% at 30% 50%, rgba(255,30,30,.35), transparent 70%);
+  opacity: .55;
+  pointer-events: none;
+}
+
+.neo-card__title{
+  font-size: 18px;
+  font-weight: 900;
+}
+
+.neo-card__desc{
+  margin-top: 8px;
+  font-size: 13px;
+  color: rgba(255,255,255,.62);
+}
+
+/* ---- 7) 技术文章列表 ---- */
+.neo-list{
+  margin: 12px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.neo-item{
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(255,255,255,.06);
+}
+
+.neo-item:last-child{
+  border-bottom: none;
+}
+
+.neo-link{
+  display: inline-block;
+  font-weight: 800;
+  text-decoration: none;
+  color: rgba(255,120,120,.95);
+}
+
+.neo-link:hover{
+  color: rgba(255,160,160,1);
+  text-decoration: underline;
+}
+
+.neo-meta{
+  display: block;
+  margin-top: 6px;
+  font-size: 12px;
+  color: rgba(255,255,255,.55);
+}
+
+.neo-more{
+  display: inline-block;
+  margin-top: 14px;
+  text-decoration: none;
+  font-weight: 800;
+  color: rgba(255,120,120,.95);
+}
+
+.neo-more:hover{
+  text-decoration: underline;
+}
+
+/* ---- 8) 右侧按钮网格 ---- */
+.neo-btn-grid{
+  margin-top: 14px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.neo-btn{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 44px;
+  border-radius: 14px;
+  text-decoration: none;
+  font-weight: 800;
+  color: rgba(255,255,255,.85);
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,60,60,.22);
+  box-shadow: 0 0 0 rgba(255,60,60,0);
+  transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
+}
+
+.neo-btn:hover{
+  transform: translateY(-1px);
+  background: rgba(255,60,60,.08);
+  box-shadow: 0 0 26px rgba(255,40,40,.25);
+}
+
+.neo-tip{
+  margin-top: 12px;
+  font-size: 12px;
+  color: rgba(255,255,255,.55);
+}
+
+.neo-tip code{
+  color: rgba(255,160,160,.95);
+  background: rgba(255,60,60,.10);
+  border: 1px solid rgba(255,60,60,.20);
+  padding: 2px 6px;
+  border-radius: 8px;
+}
+/* ==============================
+   NEO LEFTBAR — unify with neo-card / neo-btn
+   Paste at END of custom.css
+   ============================== */
+
+:root{
+  --neo-surface: rgba(12,12,18,.55);
+  --neo-border: rgba(255,255,255,.07);
+  --neo-text: rgba(255,255,255,.88);
+  --neo-shadow: 0 18px 55px rgba(0,0,0,.35);
+  --neo-blur: blur(10px);
+
+  --neo-red-border: rgba(255,60,60,.22);
+  --neo-red-border-strong: rgba(255,60,60,.55);
+  --neo-red-bg: rgba(255,60,60,.08);
+  --neo-red-bg-strong: rgba(255,60,60,.12);
+  --neo-red-glow: 0 0 26px rgba(255,40,40,.25);
+
+  --neo-radius: 20px;
+  --neo-btn-radius: 14px;
+
+  --neo-leftbar-w: 400px; /* 420/460 自己调 */
+}
+
+/* 桌面端加宽 + padding（兼容 Stellar 的 content 布局） */
+@media (min-width: 900px){
+  body .l_body.content{
+    grid-template-columns: var(--neo-leftbar-w) minmax(0,1fr) !important;
+  }
+  body .l_body.content > aside.l_left{
+    width: var(--neo-leftbar-w) !important;
+    min-width: var(--neo-leftbar-w) !important;
+    flex: 0 0 var(--neo-leftbar-w) !important;
+  }
+  body .l_body.content > aside.l_left > .leftbar-container{
+    padding: 22px 22px 18px !important;
+    box-sizing: border-box !important;
+  }
+}
+
+/* 侧边栏外壳 = neo-card 语言 */
+body .l_body > aside.l_left{
+  border-radius: var(--neo-radius) !important;
+  background: var(--neo-surface) !important;
+  border: 1px solid var(--neo-border) !important;
+  box-shadow: var(--neo-shadow) !important;
+  backdrop-filter: var(--neo-blur) !important;
+  -webkit-backdrop-filter: var(--neo-blur) !important;
+  overflow: hidden !important;
+  color: var(--neo-text) !important;
+}
+
+/* 杀掉主题可能加的“高光伪元素” */
+body .l_body > aside.l_left::before,
+body .l_body > aside.l_left::after,
+body .l_body > aside.l_left > .sidebg::before,
+body .l_body > aside.l_left > .sidebg::after,
+body .l_body > aside.l_left > .leftbar-container::before,
+body .l_body > aside.l_left > .leftbar-container::after{
+  content: none !important;
+  display: none !important;
+}
+
+/* 背景层：只在底部铺红雾（像 neo-card::after） */
+/* LEFTBAR sidebg — softer, bottom-only fog (replace your current sidebg block) */
+body .l_body > aside.l_left > .sidebg{
+  background: transparent !important;
+  background-image:
+    radial-gradient(60% 120% at 25% 125%, rgba(255,30,30,.28), transparent 68%),
+    radial-gradient(70% 140% at 85% 140%, rgba(255,0,80,.10), transparent 72%) !important;
+  background-repeat: no-repeat !important;
+  background-size: 120% 200px, 120% 260px !important;
+  background-position: 50% 100%, 50% 100% !important;
+  border-radius: inherit !important;
+  pointer-events: none !important;
+  opacity: .75 !important;
+}
+
+/* 关键：容器必须透明，否则你永远看不到 sidebg 的红雾，也不会“像卡片” */
+body .l_body > aside.l_left > .leftbar-container{
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+/* 菜单网格：3 列 */
+body .l_body > aside.l_left .nav-area nav.menu{
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0,1fr)) !important;
+  gap: 12px !important;
+  margin-top: 12px !important;
+}
+
+/* =========================
+   LEFTBAR 外链（linklist）布局
+   - 标题在上
+   - 按钮一行两个
+   - 总宽度与上方菜单按钮一致
+   ========================= */
+
+/* 1) 强制“外链”这个 widget 纵向排：标题一行、按钮区在下方 */
+@supports selector(.x:has(.y)) {
+  body .l_body > aside.l_left .widget:has(.linklist),
+  body .l_body > aside.l_left section:has(.linklist),
+  body .l_body > aside.l_left .widget-area:has(.linklist){
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 10px !important;
+  }
+
+  /* 标题块：占满一行 */
+  body .l_body > aside.l_left .widget:has(.linklist) .title,
+  body .l_body > aside.l_left section:has(.linklist) .title,
+  body .l_body > aside.l_left .widget-area:has(.linklist) .title,
+  body .l_body > aside.l_left .widget:has(.linklist) .widget-title,
+  body .l_body > aside.l_left section:has(.linklist) .widget-title{
+    width: 100% !important;
+    float: none !important;
+    margin: 0 0 2px 0 !important;
+  }
+}
+
+/* 2) 兼容兜底：如果主题给外链 widget 加了这些 class（有就命中） */
+body .l_body > aside.l_left .widget.linklist,
+body .l_body > aside.l_left .widget.widget-linklist,
+body .l_body > aside.l_left .widget.links,
+body .l_body > aside.l_left .widget.widget-links{
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: stretch !important;
+  gap: 10px !important;
+}
+
+/* 3) 按钮容器：两列网格，满宽（= 和上面菜单按钮同一个“容器宽度”观感） */
+body .l_body > aside.l_left .linklist{
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 12px !important;
+
+  justify-items: stretch !important;
+  align-items: stretch !important;
+
+  /* 如果父容器是 grid（标题+内容并排），把它拉到下一行并占满 */
+  grid-column: 1 / -1 !important;
+
+  float: none !important;
+  list-style: none !important;
+  box-sizing: border-box !important;
+}
+
+/* 4) 按钮本身：单元格内撑满宽度，样式对齐上方菜单按钮 */
+body .l_body > aside.l_left .linklist a,
+body .l_body > aside.l_left .linklist a.link{
+  width: 100% !important;
+  box-sizing: border-box !important;
+
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  min-height: 44px !important;
+  padding: 0 12px !important;
+  border-radius: var(--neo-btn-radius, 14px) !important;
+
+  text-decoration: none !important;
+  font-weight: 800 !important;
+
+  /* 按钮文字别把布局撑炸：需要换行就删掉这三行 */
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+
+  color: rgba(255,255,255,.85) !important;
+  background: rgba(255,255,255,.04) !important;
+  border: 1px solid var(--neo-red-border, rgba(255,60,60,.22)) !important;
+
+  box-shadow: 0 0 0 rgba(255,60,60,0) !important;
+  transition: transform .15s ease, box-shadow .15s ease, background .15s ease, border-color .15s ease !important;
+}
+
+body .l_body > aside.l_left .linklist a:hover,
+body .l_body > aside.l_left .linklist a.link:hover{
+  transform: translateY(-1px) !important;
+  background: var(--neo-red-bg, rgba(255,60,60,.08)) !important;
+  border-color: rgba(255,60,60,.40) !important;
+  box-shadow: var(--neo-red-glow, 0 0 26px rgba(255,40,40,.25)) !important;
+}
+
+/* 当前页面高亮（多写几个常见写法，防主题类名不一致） */
+body .l_body > aside.l_left .nav-area .nav-item.active,
+body .l_body > aside.l_left .nav-area .nav-item.is-active,
+body .l_body > aside.l_left .nav-area .nav-item[aria-current="page"]{
+  background: var(--neo-red-bg-strong) !important;
+  border-color: var(--neo-red-border-strong) !important;
+  box-shadow: 0 0 30px rgba(255,40,40,.28) !important;
+}
+
+/* Layout centering + gutter (wide screens) */
+:root{
+  --neo-layout-max: 1480px;   /* 你屏幕很宽就 1560/1680 */
+  --neo-layout-gutter: 32px;  /* 左右留白 */
+  --neo-layout-gap: 28px;     /* 左栏和主栏间距 */
+}
+
+@media (min-width: 1200px){
+  body .l_body.content{
+    max-width: var(--neo-layout-max) !important;
+    margin: 0 auto !important;
+    padding-left: var(--neo-layout-gutter) !important;
+    padding-right: var(--neo-layout-gutter) !important;
+    column-gap: var(--neo-layout-gap) !important;
+    box-sizing: border-box !important;
+  }
+}
