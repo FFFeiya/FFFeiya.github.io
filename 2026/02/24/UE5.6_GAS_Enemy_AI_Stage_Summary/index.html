@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="hexo-theme" content="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.33.1" theme-name="Stellar" theme-version="1.33.1">
   
-  <meta name="robots" content="noindex,follow">
+  
   <meta name="generator" content="Hexo 7.3.0">
   <meta http-equiv='x-dns-prefetch-control' content='on' />
   
@@ -17,20 +17,29 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000">
   <meta name="theme-color" content="#f9fafb">
-  <title>Archives - FFFeiya</title>
+  <title>用 UE5.6 + GAS 搭一个可迭代的敌人近战 AI：从状态机图到可调试行为树 - FFFeiya</title>
 
   
-    <meta property="og:type" content="website">
-<meta property="og:title" content="Archives">
-<meta property="og:url" content="http://example.com/archives/2025/">
+    <meta name="description" content="关键词：Unreal Engine 5.6、Gameplay Ability System（GAS）、Behavior Tree、Blackboard、Motion Warping、近战 HitScan、GameplayEffect、调试与工程化     1. 背景：我在做什么项目里同事已经基于 GAS 搭好了「基础角色」「受击木桩」「近战武器与命中窗口（HitScan Window）」等战斗底">
+<meta property="og:type" content="article">
+<meta property="og:title" content="用 UE5.6 + GAS 搭一个可迭代的敌人近战 AI：从状态机图到可调试行为树">
+<meta property="og:url" content="http://example.com/2026/02/24/UE5.6_GAS_Enemy_AI_Stage_Summary/">
 <meta property="og:site_name" content="FFFeiya">
+<meta property="og:description" content="关键词：Unreal Engine 5.6、Gameplay Ability System（GAS）、Behavior Tree、Blackboard、Motion Warping、近战 HitScan、GameplayEffect、调试与工程化     1. 背景：我在做什么项目里同事已经基于 GAS 搭好了「基础角色」「受击木桩」「近战武器与命中窗口（HitScan Window）」等战斗底">
 <meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-02-24T07:00:00.000Z">
+<meta property="article:modified_time" content="2026-02-24T11:29:00.518Z">
 <meta property="article:author" content="FFFeiya">
+<meta property="article:tag" content="Unreal">
+<meta property="article:tag" content="GAS">
+<meta property="article:tag" content="Behavior Tree">
+<meta property="article:tag" content="Blackboard">
+<meta property="article:tag" content="GameplayEffect">
 <meta name="twitter:card" content="summary">
   
   
   
-  
+  <meta name="keywords" content="Unreal,GAS,Behavior Tree,Blackboard,GameplayEffect">
 
   <!-- feed -->
   
@@ -46,12 +55,12 @@
 
   
 
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Website","@id":"http://example.com","author":{"@type":"Person","name":"FFFeiya","sameAs":[]},"name":"FFFeiya","description":"","url":"http://example.com"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"FFFeiya","sameAs":[]},"dateCreated":"2026-02-24T00:00:00-07:00","dateModified":"2026-02-24T04:29:00-07:00","datePublished":"2026-02-24T00:00:00-07:00","description":"","headline":"用 UE5.6 + GAS 搭一个可迭代的敌人近战 AI：从状态机图到可调试行为树","mainEntityOfPage":{"@type":"WebPage","@id":"http://example.com/2026/02/24/UE5.6_GAS_Enemy_AI_Stage_Summary/"},"publisher":{"@type":"Organization","name":"FFFeiya","sameAs":[]},"url":"http://example.com/2026/02/24/UE5.6_GAS_Enemy_AI_Stage_Summary/","keywords":"Unreal, GAS, Behavior Tree, Blackboard, GameplayEffect","image":[]}</script>
   <link rel="stylesheet" href="/css/custom.css">
 </head>
 <body><div class="sitebg"><div class="siteblur"></div></div>
 
-<div class="l_body index" id="start" layout="undefined" type="undefined" ><aside class="l_left"><div class="sidebg"></div><div class="leftbar-container">
+<div class="l_body content" id="start" layout="post" type="tech" ><aside class="l_left"><div class="sidebg"></div><div class="leftbar-container">
 
 
 <header class="header"><div class="logo-wrap"><a class="avatar" href="/about/"><div class="bg" style="opacity:0;background-image:url(https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/rainbow64@3x.webp);"></div><img no-lazy class="avatar" src="/images/Putin.png" onerror="javascript:this.classList.add('error');this.src='https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/image/2659360.svg';"></a><a class="title" href="/"><div class="main">FFFeiya</div><div class="sub normal cap">Portfolio</div><div class="sub hover cap" style="opacity:0"> UE / Unity / Tools</div></a></div></header>
@@ -63,21 +72,238 @@
 <div class="widgets">
 <div class="search-wrapper" id="search-wrapper"><form class="search-form"><a class="search-button" onclick="document.getElementById(&quot;search-input&quot;).focus();"><svg t="1705074644177" viewBox="0 0 1025 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1560" width="200" height="200"><path d="M1008.839137 935.96571L792.364903 719.491476a56.783488 56.783488 0 0 0-80.152866 0 358.53545 358.53545 0 1 1 100.857314-335.166073 362.840335 362.840335 0 0 1-3.689902 170.145468 51.248635 51.248635 0 1 0 99.217358 26.444296 462.057693 462.057693 0 1 0-158.255785 242.303546l185.930047 185.725053a51.248635 51.248635 0 0 0 72.568068 0 51.248635 51.248635 0 0 0 0-72.978056z" p-id="1561"></path><path d="M616.479587 615.969233a50.428657 50.428657 0 0 0-61.498362-5.534852 174.655348 174.655348 0 0 1-177.525271 3.484907 49.403684 49.403684 0 0 0-58.833433 6.76482l-3.074918 2.869923a49.403684 49.403684 0 0 0 8.609771 78.10292 277.767601 277.767601 0 0 0 286.992355-5.739847 49.403684 49.403684 0 0 0 8.404776-76.667958z" p-id="1562"></path></svg></a><input type="text" class="search-input" id="search-input" placeholder="Search"></form><div id="search-result"></div><div class="search-no-result">No Results!</div></div>
 
+
+
 <widget class="widget-wrapper recent post-list"><div class="widget-header dis-select"><span class="name">Recent Update</span></div><div class="widget-body fs14"><a class="item title" href="/2026/02/24/UE5.6_GAS_Enemy_AI_Stage_Summary/"><span class="title">用 UE5.6 + GAS 搭一个可迭代的敌人近战 AI：从状态机图到可调试行为树</span></a><a class="item title" href="/2025/01/08/Building%20Real-Time%20NPC%20Dialogue%20in%20Unity%20with%20Large%20Language%20Models.zh-CN/"><span class="title">在 Unity 中用大语言模型构建实时 NPC 对话</span></a><a class="item title" href="/2024/12/08/Bridging%20Unity%20with%20Python%20and%20ChatGPT.zh-CN/"><span class="title">Unity 对接 Python 与 ChatGPT：综合指南</span></a><a class="item title" href="/2024/12/08/Building%20a%20Dynamic%20Planetary%20Battle%20System.zh-CN/"><span class="title">用 p5.js 做太空可视化：构建动态行星战斗系统</span></a><a class="item title" href="/2026/02/24/tech_blog_hexo_stellar_portfolio_safe/"><span class="title">用 Hexo + Stellar 搭一个作品展柜：卡片入口、主题配色与 CSS 覆盖</span></a><a class="item title" href="/2025/01/08/Using%20iFlytek's%20Speech%20Model%20in%20Unity%20for%20Text-to-Speech%20(TTS)%20Playback/"><span class="title">Using iFlytek's Speech Model in Unity for Text-to-Speech (TTS) Playback</span></a><a class="item title" href="/2024/12/08/Game%20Demo%20of%20Star%20Annihilator%20-%20A%20Tower%20Defense%20Game%20Developing/"><span class="title">Game Demo of *Star Annihilator*: A Tower Defense Game Developing</span></a><a class="item title" href="/2024/12/08/How%20to%20Convert%20a%20p5.js%20Game%20into%20Java%20(JavaFX)/"><span class="title">How to Convert a p5.js Game into Java (JavaFX)</span></a></div></widget>
 </div>
 
 </div></aside><div class="l_main" id="main">
 
-<header class="header mobile-only"><div class="logo-wrap"><a class="avatar" href="/about/"><div class="bg" style="opacity:0;background-image:url(https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/rainbow64@3x.webp);"></div><img no-lazy class="avatar" src="/images/Putin.png" onerror="javascript:this.classList.add('error');this.src='https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/image/2659360.svg';"></a><a class="title" href="/"><div class="main">FFFeiya</div><div class="sub normal cap">Portfolio</div><div class="sub hover cap" style="opacity:0"> UE / Unity / Tools</div></a></div></header>
-
- 
 
 
-<div class="navbar top"><div class="navbar-blur"><div class="navbar-container"><nav class="post"><a href="/blog/">Recent</a><a href="/categories/">Categories</a><a href="/tags/">Tags</a><a class="active" href="/archives/">Archives</a></nav></div></div></div><div class="post-list archives"><article class="" id="archive"><div class='archive-header h4'>2026</div><div class="archive-list"><a class='post fs14' href="/2026/02/24/tech_blog_hexo_stellar_portfolio_safe/"><time>02-24</time><span>用 Hexo + Stellar 搭一个作品展柜：卡片入口、主题配色与 CSS 覆盖</span></a></div><div class="archive-list"><a class='post fs14' href="/2026/02/24/UE5.6_GAS_Enemy_AI_Stage_Summary/"><time>02-24</time><span>用 UE5.6 + GAS 搭一个可迭代的敌人近战 AI：从状态机图到可调试行为树</span></a></div></article><article class="" id="archive"><div class='archive-header h4'>2025</div><div class="archive-list"><a class='post fs14' href="/2025/01/08/Building%20Real-Time%20NPC%20Dialogue%20in%20Unity%20with%20Large%20Language%20Models.zh-CN/"><time>01-08</time><span>在 Unity 中用大语言模型构建实时 NPC 对话</span></a></div><div class="archive-list"><a class='post fs14' href="/2025/01/08/Using%20iFlytek's%20Speech%20Model%20in%20Unity%20for%20Text-to-Speech%20(TTS)%20Playback/"><time>01-08</time><span>Using iFlytek's Speech Model in Unity for Text-to-Speech (TTS) Playback</span></a></div></article><article class="" id="archive"><div class='archive-header h4'>2024</div><div class="archive-list"><a class='post fs14' href="/2024/12/08/Bridging%20Unity%20with%20Python%20and%20ChatGPT.zh-CN/"><time>12-08</time><span>Unity 对接 Python 与 ChatGPT：综合指南</span></a></div><div class="archive-list"><a class='post fs14' href="/2024/12/08/Building%20a%20Dynamic%20Planetary%20Battle%20System.zh-CN/"><time>12-08</time><span>用 p5.js 做太空可视化：构建动态行星战斗系统</span></a></div><div class="archive-list"><a class='post fs14' href="/2024/12/08/How%20to%20Convert%20a%20p5.js%20Game%20into%20Java%20(JavaFX)/"><time>12-08</time><span>How to Convert a p5.js Game into Java (JavaFX)</span></a></div><div class="archive-list"><a class='post fs14' href="/2024/12/08/Game%20Demo%20of%20Star%20Annihilator%20-%20A%20Tower%20Defense%20Game%20Developing/"><time>12-08</time><span>Game Demo of *Star Annihilator*: A Tower Defense Game Developing</span></a></div></article></div>
+
+
+<div class="article banner top">
+  <div class="content">
+    <div class="top bread-nav footnote"><div class="left"><div class="flex-row" id="breadcrumb"><a class="cap breadcrumb" href="/">Home</a>
+<span class="sep"></span><a class="cap breadcrumb" href="/blog/">Blog</a><span class="sep"></span><a class="cap breadcrumb-link" href="/categories/Tech-Blog/">Tech Blog</a></div>
+<div class="flex-row" id="post-meta"><span class="text created">Posted on: <time datetime="2026-02-24T07:00:00.000Z">2026-02-24</time></span><span class="sep updated"></span><span class="text updated">Updated on: <time datetime="2026-02-24T11:29:00.518Z">2026-02-24</time></span></div></div></div>
+    
+    <div class="bottom only-title">
+      
+      <div class="text-area">
+        <h1 class="text title"><span>用 UE5.6 + GAS 搭一个可迭代的敌人近战 AI：从状态机图到可调试行为树</span></h1>
+        
+      </div>
+    </div>
+    
+  </div>
+  </div><article class="md-text content"><blockquote>
+<p>关键词：Unreal Engine 5.6、Gameplay Ability System（GAS）、Behavior Tree、Blackboard、Motion Warping、近战 HitScan、GameplayEffect、调试与工程化  </p>
+</blockquote>
+<hr>
+<h2 id="1-背景：我在做什么"><a href="#1-背景：我在做什么" class="headerlink" title="1. 背景：我在做什么"></a>1. 背景：我在做什么</h2><p>项目里同事已经基于 <strong>GAS</strong> 搭好了「基础角色」「受击木桩」「近战武器与命中窗口（HitScan Window）」等战斗底座。我需要在<strong>初学 GAS</strong>的前提下，做一个<strong>敌人 AI</strong>，能按设计图执行：</p>
+<ul>
+<li><strong>距离近</strong>：轻击 → 轻击连招（先做一招&#x2F;后续可扩展）→ 后退拉开距离</li>
+<li><strong>距离远</strong>：追击&#x2F;位移 → 靠近后轻击</li>
+<li>按节奏循环，且能持续调试、扩展到更多招式&#x2F;更多状态</li>
+</ul>
+<p>我把这件事拆成两条主线：</p>
+<ol>
+<li><strong>AI 决策</strong>：把图里的流程翻译为 Behavior Tree（BT）+ Blackboard（BB）  </li>
+<li><strong>战斗触发</strong>：让 BT 触发 GAS 的能力（GA），并接上现有武器 HitScan&#x2F;伤害体系</li>
+</ol>
+<hr>
+<h2 id="2-目标与验收标准"><a href="#2-目标与验收标准" class="headerlink" title="2. 目标与验收标准"></a>2. 目标与验收标准</h2><h3 id="2-1-验收（可见行为）"><a href="#2-1-验收（可见行为）" class="headerlink" title="2.1 验收（可见行为）"></a>2.1 验收（可见行为）</h3><ul>
+<li>敌人能锁定目标（玩家&#x2F;木桩）</li>
+<li>能随距离切换：追击 &#x2F; 近战攻击 &#x2F; 后撤</li>
+<li>近战攻击走 GAS：播放 Montage、触发 HitScan、对<strong>目标</strong>扣血</li>
+<li>不会出现「攻击一次后 AI 永久卡死」或「一直 Wait 不动」等锁死现象</li>
+</ul>
+<h3 id="2-2-工程化验收（可维护）"><a href="#2-2-工程化验收（可维护）" class="headerlink" title="2.2 工程化验收（可维护）"></a>2.2 工程化验收（可维护）</h3><ul>
+<li>关键状态（Target、Distance、IsAttacking、RetreatLocation）都可在 Blackboard 里观察</li>
+<li>Task&#x2F;Service 有足够的打印与失败分支，避免“静默失败”</li>
+<li>能快速替换攻击能力（GA_Enemy_LightCombo → 其他 GA），不用重写 AI</li>
+</ul>
+<hr>
+<h2 id="3-总体结构：BT-BB-GAS-武器-HitScan"><a href="#3-总体结构：BT-BB-GAS-武器-HitScan" class="headerlink" title="3. 总体结构：BT&#x2F;BB + GAS + 武器 HitScan"></a>3. 总体结构：BT&#x2F;BB + GAS + 武器 HitScan</h2><p>整体结构可以理解为三层：</p>
+<h3 id="3-1-行为树层（AI-决策）"><a href="#3-1-行为树层（AI-决策）" class="headerlink" title="3.1 行为树层（AI 决策）"></a>3.1 行为树层（AI 决策）</h3><ul>
+<li><strong>BB_Enemy</strong>：保存 AI 当前“世界观”</li>
+<li><strong>BT_Enemy</strong>：按距离选择 Chase&#x2F;CloseAttack 分支</li>
+<li><strong>BTService</strong>：每 0.2 秒更新距离、目标位置、后撤点</li>
+<li><strong>BTTask</strong>：触发攻击开始&#x2F;结束（以及可选的连招输入）</li>
+</ul>
+<h3 id="3-2-能力层（GAS）"><a href="#3-2-能力层（GAS）" class="headerlink" title="3.2 能力层（GAS）"></a>3.2 能力层（GAS）</h3><ul>
+<li><strong>GA_Enemy_LightCombo</strong>：敌人轻击能力（继承 GA_MeleeAttack_Base）</li>
+<li>能力播放 Montage，并通过 GameplayEvent 打开&#x2F;关闭 HitScan 窗口</li>
+</ul>
+<h3 id="3-3-武器层（命中检测-伤害应用）"><a href="#3-3-武器层（命中检测-伤害应用）" class="headerlink" title="3.3 武器层（命中检测 + 伤害应用）"></a>3.3 武器层（命中检测 + 伤害应用）</h3><ul>
+<li><strong>BP_Weapon_Base &#x2F; BP_Weapon_EnemyKnife</strong>：在 HitScan 窗口内做 Trace，找到命中目标，把 GameplayEffect 应用到<strong>目标 ASC</strong>（AbilitySystemComponent）</li>
+</ul>
+<hr>
+<h2 id="4-资源清单（我创建-改动了哪些文件）"><a href="#4-资源清单（我创建-改动了哪些文件）" class="headerlink" title="4. 资源清单（我创建&#x2F;改动了哪些文件）"></a>4. 资源清单（我创建&#x2F;改动了哪些文件）</h2><blockquote>
+<p>命名以我的工程里实际资源为准（面试官问的时候我会按这一套展开）。</p>
+</blockquote>
+<h3 id="4-1-AI-资源"><a href="#4-1-AI-资源" class="headerlink" title="4.1 AI 资源"></a>4.1 AI 资源</h3><ul>
+<li><code>BB_Enemy</code>（Blackboard Key）<ul>
+<li><code>TargetActor</code> (Object) &#x2F; <code>TargetLocation</code> (Vector)</li>
+<li><code>DistToTarget</code> (Float)</li>
+<li><code>HasTarget</code> (Bool)</li>
+<li><code>IsAttacking</code> (Bool) —— <strong>用“是否设置”模拟状态门禁</strong></li>
+<li><code>RetreatLocation</code> (Vector)</li>
+</ul>
+</li>
+<li><code>BT_Enemy</code>（Behavior Tree）</li>
+<li><code>BTService_BlueprintBase</code>（Service：每 0.2s 更新 BB）</li>
+<li><code>BP_EnemyAIController</code>（OnPossess 运行 BT，并初始化 BB）</li>
+</ul>
+<h3 id="4-2-BT-Tasks"><a href="#4-2-BT-Tasks" class="headerlink" title="4.2 BT Tasks"></a>4.2 BT Tasks</h3><ul>
+<li><code>BTT_LightStart</code>：尝试激活 GA（Try Activate Ability by Class）</li>
+<li><code>BTT_AttackEnd</code>：清理攻击门禁（Clear Value(IsAttacking)）</li>
+<li>（可选）<code>BTT_ComboContinue</code>：发送连招输入事件（后续扩展用）</li>
+</ul>
+<h3 id="4-3-GAS-动画-武器"><a href="#4-3-GAS-动画-武器" class="headerlink" title="4.3 GAS &#x2F; 动画 &#x2F; 武器"></a>4.3 GAS &#x2F; 动画 &#x2F; 武器</h3><ul>
+<li><code>GA_Enemy_LightCombo</code>（data-only，继承 <code>GA_MeleeAttack_Base</code>）</li>
+<li><code>AM_Enemy_LightCombo</code>（Montage，含 <code>Hit Scan Window</code> NotifyState）</li>
+<li><code>BP_Weapon_EnemyKnife</code>（武器配置）</li>
+<li><code>BP_Weapon_Base</code>（HitScan 与 ApplyEffect 逻辑修复）</li>
+</ul>
+<hr>
+<h2 id="5-把“流程图”翻译成-BT：我怎么拆"><a href="#5-把“流程图”翻译成-BT：我怎么拆" class="headerlink" title="5. 把“流程图”翻译成 BT：我怎么拆"></a>5. 把“流程图”翻译成 BT：我怎么拆</h2><p>设计图的核心是“距离判断 + 一套近战循环”。<br>我把它映射成一个典型的 BT 结构：</p>
+<ul>
+<li>Root → Selector  <ul>
+<li><strong>Combat 分支</strong>（Decorator：TargetActor is Set）<ul>
+<li>Sequence（挂 Service）<ul>
+<li>Selector（按距离）<ul>
+<li>CloseAttack（Dist &lt;&#x3D; 300 且 IsAttacking Not Set）<ul>
+<li>LightStart（触发攻击）</li>
+<li>Wait（给蒙太奇&#x2F;窗口时间）</li>
+<li>AttackEnd（清门禁，避免锁死）</li>
+<li>MoveTo RetreatLocation（后撤）</li>
+</ul>
+</li>
+<li>Chase（Dist &gt; 300 且 IsAttacking Not Set）<ul>
+<li>MoveTo TargetActor（追击）</li>
+<li>Wait（防抖）</li>
+<li>LightStart</li>
+<li>AttackEnd</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>Fallback Wait</strong>（没目标就空转）</li>
+</ul>
+</li>
+</ul>
+<h3 id="5-1-关于-IsAttacking：为什么不用-True-False，而用-Set-Not-Set"><a href="#5-1-关于-IsAttacking：为什么不用-True-False，而用-Set-Not-Set" class="headerlink" title="5.1 关于 IsAttacking：为什么不用 True&#x2F;False，而用 Set&#x2F;Not Set"></a>5.1 关于 IsAttacking：为什么不用 True&#x2F;False，而用 Set&#x2F;Not Set</h3><p>我在 UE5.6 的 BT Decorator 菜单里，只能选 <strong>Is Set &#x2F; Is Not Set</strong>（没有“Is True&#x2F;Is False”比较版本）。<br>所以我把 <code>IsAttacking</code> 作为“门闩”来用：</p>
+<ul>
+<li>攻击开始：<code>SetBB(IsAttacking)=true</code>（&#x3D; 已设置）</li>
+<li>攻击结束：<code>Clear Value(IsAttacking)</code>（&#x3D; 未设置）</li>
+</ul>
+<p>这样 Decorator <code>IsAttacking is Not Set</code> 就等价于 “IsAttacking &#x3D;&#x3D; false”。</p>
+<p>这个决策的价值：  </p>
+<ul>
+<li>兼容现有工具限制  </li>
+<li>逻辑清晰  </li>
+<li>解决“攻击一次后永远卡死”的典型问题（后面会细讲）</li>
+</ul>
+<hr>
+<h2 id="6-关键实现细节与踩坑记录"><a href="#6-关键实现细节与踩坑记录" class="headerlink" title="6. 关键实现细节与踩坑记录"></a>6. 关键实现细节与踩坑记录</h2><h3 id="6-1-TryActivate-一直-False：原来是“能力根本没授予”"><a href="#6-1-TryActivate-一直-False：原来是“能力根本没授予”" class="headerlink" title="6.1 TryActivate 一直 False：原来是“能力根本没授予”"></a>6.1 TryActivate 一直 False：原来是“能力根本没授予”</h3><p>我在 Task 里用 <code>Try Activate Ability by Class(GA_Enemy_LightCombo)</code>，但一直返回 False。<br>用 <code>Find All Abilities with Tags + Length</code> 打印发现 <code>AbilityCount=0</code>，说明<strong>敌人的 ASC 里压根没有这条能力 Spec</strong>。</p>
+<p>根因：我只是把 GA 填进 <code>Abilities to Grant</code> 属性，但项目里并没有自动遍历授予（或授予链路没跑）。<br>修复：在敌人 BeginPlay &#x2F; 初始化链路里显式 <code>Give Ability(GA_Enemy_LightCombo)</code>，验证后 <code>AbilityCount=1</code>，TryActivate 变 True。</p>
+<blockquote>
+<p>我不是盲猜“权限&#x2F;Tag&#x2F;冷却”，而是先验证“Spec 是否存在”，把问题从“CanActivate”缩小成“授予链路”。</p>
+</blockquote>
+<h3 id="6-2-TargetActor-变-invalid：Service-的“数据源”要统一"><a href="#6-2-TargetActor-变-invalid：Service-的“数据源”要统一" class="headerlink" title="6.2 TargetActor 变 invalid：Service 的“数据源”要统一"></a>6.2 TargetActor 变 invalid：Service 的“数据源”要统一</h3><p>黑板里经常出现 <code>TargetActor (invalid)</code>，导致 <code>TargetLocation/RetreatLocation</code> invalid，距离恒为 0，BT 回退到 Root Wait。</p>
+<p>修复思路：Service 每 tick 不再“信任黑板旧引用”，而是用当前帧的 <code>GetPlayerCharacter</code> 作为唯一数据源：</p>
+<ul>
+<li>先写回 BB(TargetActor&#x2F;HasTarget)</li>
+<li>再用同一个对象算 <code>TargetLocation/DistToTarget</code><br>这样避免引用残留&#x2F;时序导致的 invalid。</li>
+</ul>
+<blockquote>
+<p>这是典型“数据一致性”问题：要么全从黑板读，要么全从实时来源算。混用会产生不可预期状态。</p>
+</blockquote>
+<h3 id="6-3-攻击一次后无限-Wait：MoveTo-卡住导致-AttackEnd-永远不执行"><a href="#6-3-攻击一次后无限-Wait：MoveTo-卡住导致-AttackEnd-永远不执行" class="headerlink" title="6.3 攻击一次后无限 Wait：MoveTo 卡住导致 AttackEnd 永远不执行"></a>6.3 攻击一次后无限 Wait：MoveTo 卡住导致 AttackEnd 永远不执行</h3><p>出现过典型锁死：第一次 LightStart 成功把 <code>IsAttacking</code> 设为 true，但 <code>AttackEnd</code> 没执行到，导致 Close&#x2F;Chase 的 Decorator 永远 fail。</p>
+<p>根因：<code>MoveTo RetreatLocation</code> 可能因为目标点动态变化、或在 NavMesh 外导致一直不结束。<br>修复：把顺序改为：</p>
+<ul>
+<li><strong>先 AttackEnd（Clear IsAttacking）再 MoveTo Retreat</strong><br>即使 MoveTo 卡住，也不会把 AI 的“攻击门禁”永久锁死。</li>
+</ul>
+<blockquote>
+<p>我把“关键状态释放”与“可能失败&#x2F;耗时的移动”解耦，提升系统鲁棒性。</p>
+</blockquote>
+<h3 id="6-4-敌人打玩家扣自己血：武器-HitScan-里忽略对象写死成玩家"><a href="#6-4-敌人打玩家扣自己血：武器-HitScan-里忽略对象写死成玩家" class="headerlink" title="6.4 敌人打玩家扣自己血：武器 HitScan 里忽略对象写死成玩家"></a>6.4 敌人打玩家扣自己血：武器 HitScan 里忽略对象写死成玩家</h3><p>伤害走 <code>GA_MeleeAttack_Base</code> → <code>HandleHitScanStart</code> → 传 EffectSpec 给 <code>BP_Weapon_Base</code>。<br>真正 Apply 发生在武器里。</p>
+<p>我发现武器 Trace 的 <code>Actors to Ignore</code> 里写死了 <code>GetPlayerCharacter(0)</code>（为玩家武器设计），当武器给 AI 用时就会：</p>
+<ul>
+<li>忽略玩家 → 打不到玩家</li>
+<li>不忽略 Owner → 更可能命中自己<br>修复：改成忽略 <code>GetOwner()</code>（武器持有者），并额外加“HitActor&#x3D;&#x3D;Owner 跳过”保险。</li>
+</ul>
+<blockquote>
+<p>这是典型“复用系统从 Player 扩展到 AI”时的隐性耦合问题：把数据从“固定玩家”抽象成“Owner&#x2F;Instigator”。</p>
+</blockquote>
+<hr>
+<h2 id="8-我现在的阶段成果"><a href="#8-我现在的阶段成果" class="headerlink" title="8. 我现在的阶段成果"></a>8. 我现在的阶段成果</h2><h3 id="8-1-我做出了什么"><a href="#8-1-我做出了什么" class="headerlink" title="8.1 我做出了什么"></a>8.1 我做出了什么</h3><ul>
+<li>用 BT&#x2F;BB&#x2F;Service&#x2F;Task 把“距离驱动的近战 AI”跑通</li>
+<li>敌人能通过 GAS 激活近战能力，播放 Montage，并触发 HitScan 窗口</li>
+<li>修复了“授予链路缺失”“目标 invalid”“攻击状态锁死”“武器忽略对象写死玩家”等问题</li>
+<li>整套系统可扩展到更多招式（只要换 GA 与 Montage&#x2F;Notify）</li>
+</ul>
+<h3 id="8-2-我用什么方法解决问题"><a href="#8-2-我用什么方法解决问题" class="headerlink" title="8.2 我用什么方法解决问题"></a>8.2 我用什么方法解决问题</h3><ul>
+<li>先 <strong>观测</strong>：Blackboard&#x2F;Print&#x2F;AbilityCount&#x2F;HitActorName</li>
+<li>再 <strong>定位</strong>：把问题拆成“AI 决策”“能力授予&#x2F;激活”“命中检测&#x2F;Apply”三层</li>
+<li>最后 <strong>工程化修复</strong>：加失败分支 Finish、把状态释放放在 MoveTo 前、统一数据源</li>
+</ul>
+<h3 id="8-3-QA"><a href="#8-3-QA" class="headerlink" title="8.3 QA"></a>8.3 QA</h3><ul>
+<li><strong>Q：为什么 TryActivate 一直失败？</strong><br>A：我先验证 Spec 是否存在。用 <code>Find All Abilities with Tags</code> 打印 <code>AbilityCount=0</code>，发现不是 CanActivate 条件，而是能力根本没授予。补 <code>GiveAbility</code> 后成功。</li>
+<li><strong>Q：为什么会出现 AI 打自己？</strong><br>A：伤害 Apply 在武器层；武器 Trace 忽略对象写死为玩家，AI 拿武器时命中自己。修复为 ignore Owner，并过滤 HitActor&#x3D;&#x3D;Owner。</li>
+<li><strong>Q：为什么会出现“攻击一次后卡死”？</strong><br>A：IsAttacking 门禁没释放；MoveTo&#x2F;动态目标可能卡住导致 AttackEnd 不执行。我把状态释放提前到 MoveTo 前，避免锁死。</li>
+</ul>
+<hr>
+<h2 id="9-下一步计划（可继续迭代）"><a href="#9-下一步计划（可继续迭代）" class="headerlink" title="9. 下一步计划（可继续迭代）"></a>9. 下一步计划（可继续迭代）</h2><ul>
+<li>把轻击连招扩展到 2 段（ContinueComboInput 或 Montage section + event）</li>
+<li>RetreatLocation 使用 <code>Project Point to Navigation</code> 投射到 NavMesh，后撤更稳定</li>
+<li>接入 AI Perception（视线&#x2F;听觉）替代“永远锁玩家”为目标</li>
+<li>把关键参数（近战距离、后撤距离、攻击冷却）做成 DataAsset&#x2F;可调表</li>
+</ul>
+<hr>
+<h2 id="10-小结"><a href="#10-小结" class="headerlink" title="10. 小结"></a>10. 小结</h2><p>这次工作表面上是在“拼 BT 节点”，本质上是在做三件事：</p>
+<ol>
+<li>把设计图翻译成<strong>可调试的状态机</strong>（BT+BB）  </li>
+<li>把 AI 的“决策”与 GAS 的“执行”正确对接  </li>
+<li>用工程化手段消灭“隐性耦合”（玩家写死、引用 invalid、状态锁死）</li>
+</ol>
+<p>最终得到的是一套<strong>可复用、可扩展、能讲清楚</strong>的敌人近战 AI 方案。</p>
+<hr>
+<p><em>本文为阶段性总结，后续会继续补充：二段连招、更多敌人 archetype、AI 感知与战斗节奏。这个是与同学合作制作的动作游戏的阶段性总结。</em></p>
+</article>
+<div class="article-footer">
+    <section id="license">
+      <div class="header"><span>License</span></div>
+      <div class="body"><p>本文采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">署名-非商业性使用-相同方式共享 4.0 国际</a> 许可协议，转载请注明出处。</p>
+</div>
+    </section>
+    
+
+</div>
+
+<div class="related-wrap" id="read-next"><section class="body"><div class="item" id="prev"><div class="note">Newer</div><a href="/2026/02/24/tech_blog_hexo_stellar_portfolio_safe/">用 Hexo + Stellar 搭一个作品展柜：卡片入口、主题配色与 CSS 覆盖</a></div><div class="item" id="next"><div class="note">Older</div><a href="/2025/01/08/Building%20Real-Time%20NPC%20Dialogue%20in%20Unity%20with%20Large%20Language%20Models.zh-CN/">在 Unity 中用大语言模型构建实时 NPC 对话</a></div></section></div>
+
+
+
+
+
+
 <footer class="page-footer footnote"><hr><div class="text"><p>本站由 <a href="/">FFFeiya</a> 使用 <a target="_blank" rel="noopener" href="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.33.1">Stellar 1.33.1</a> 主题创建。<br>本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处。</p>
 </div></footer>
 <div class="main-mask" onclick="sidebar.dismiss()"></div></div><aside class="l_right">
-</aside><div class='float-panel'>
+<div class="widgets">
+
+
+
+<widget class="widget-wrapper toc" id="data-toc" collapse="false"><div class="widget-header dis-select"><span class="name">On This Page</span><a class="cap-action" onclick="sidebar.toggleTOC()" ><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg></a></div><div class="widget-body"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E8%83%8C%E6%99%AF%EF%BC%9A%E6%88%91%E5%9C%A8%E5%81%9A%E4%BB%80%E4%B9%88"><span class="toc-text">1. 背景：我在做什么</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E7%9B%AE%E6%A0%87%E4%B8%8E%E9%AA%8C%E6%94%B6%E6%A0%87%E5%87%86"><span class="toc-text">2. 目标与验收标准</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E9%AA%8C%E6%94%B6%EF%BC%88%E5%8F%AF%E8%A7%81%E8%A1%8C%E4%B8%BA%EF%BC%89"><span class="toc-text">2.1 验收（可见行为）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E5%B7%A5%E7%A8%8B%E5%8C%96%E9%AA%8C%E6%94%B6%EF%BC%88%E5%8F%AF%E7%BB%B4%E6%8A%A4%EF%BC%89"><span class="toc-text">2.2 工程化验收（可维护）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E6%80%BB%E4%BD%93%E7%BB%93%E6%9E%84%EF%BC%9ABT-BB-GAS-%E6%AD%A6%E5%99%A8-HitScan"><span class="toc-text">3. 总体结构：BT&#x2F;BB + GAS + 武器 HitScan</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-%E8%A1%8C%E4%B8%BA%E6%A0%91%E5%B1%82%EF%BC%88AI-%E5%86%B3%E7%AD%96%EF%BC%89"><span class="toc-text">3.1 行为树层（AI 决策）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-%E8%83%BD%E5%8A%9B%E5%B1%82%EF%BC%88GAS%EF%BC%89"><span class="toc-text">3.2 能力层（GAS）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-%E6%AD%A6%E5%99%A8%E5%B1%82%EF%BC%88%E5%91%BD%E4%B8%AD%E6%A3%80%E6%B5%8B-%E4%BC%A4%E5%AE%B3%E5%BA%94%E7%94%A8%EF%BC%89"><span class="toc-text">3.3 武器层（命中检测 + 伤害应用）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E8%B5%84%E6%BA%90%E6%B8%85%E5%8D%95%EF%BC%88%E6%88%91%E5%88%9B%E5%BB%BA-%E6%94%B9%E5%8A%A8%E4%BA%86%E5%93%AA%E4%BA%9B%E6%96%87%E4%BB%B6%EF%BC%89"><span class="toc-text">4. 资源清单（我创建&#x2F;改动了哪些文件）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-AI-%E8%B5%84%E6%BA%90"><span class="toc-text">4.1 AI 资源</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-BT-Tasks"><span class="toc-text">4.2 BT Tasks</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-3-GAS-%E5%8A%A8%E7%94%BB-%E6%AD%A6%E5%99%A8"><span class="toc-text">4.3 GAS &#x2F; 动画 &#x2F; 武器</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E6%8A%8A%E2%80%9C%E6%B5%81%E7%A8%8B%E5%9B%BE%E2%80%9D%E7%BF%BB%E8%AF%91%E6%88%90-BT%EF%BC%9A%E6%88%91%E6%80%8E%E4%B9%88%E6%8B%86"><span class="toc-text">5. 把“流程图”翻译成 BT：我怎么拆</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#5-1-%E5%85%B3%E4%BA%8E-IsAttacking%EF%BC%9A%E4%B8%BA%E4%BB%80%E4%B9%88%E4%B8%8D%E7%94%A8-True-False%EF%BC%8C%E8%80%8C%E7%94%A8-Set-Not-Set"><span class="toc-text">5.1 关于 IsAttacking：为什么不用 True&#x2F;False，而用 Set&#x2F;Not Set</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-%E5%85%B3%E9%94%AE%E5%AE%9E%E7%8E%B0%E7%BB%86%E8%8A%82%E4%B8%8E%E8%B8%A9%E5%9D%91%E8%AE%B0%E5%BD%95"><span class="toc-text">6. 关键实现细节与踩坑记录</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#6-1-TryActivate-%E4%B8%80%E7%9B%B4-False%EF%BC%9A%E5%8E%9F%E6%9D%A5%E6%98%AF%E2%80%9C%E8%83%BD%E5%8A%9B%E6%A0%B9%E6%9C%AC%E6%B2%A1%E6%8E%88%E4%BA%88%E2%80%9D"><span class="toc-text">6.1 TryActivate 一直 False：原来是“能力根本没授予”</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-2-TargetActor-%E5%8F%98-invalid%EF%BC%9AService-%E7%9A%84%E2%80%9C%E6%95%B0%E6%8D%AE%E6%BA%90%E2%80%9D%E8%A6%81%E7%BB%9F%E4%B8%80"><span class="toc-text">6.2 TargetActor 变 invalid：Service 的“数据源”要统一</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-3-%E6%94%BB%E5%87%BB%E4%B8%80%E6%AC%A1%E5%90%8E%E6%97%A0%E9%99%90-Wait%EF%BC%9AMoveTo-%E5%8D%A1%E4%BD%8F%E5%AF%BC%E8%87%B4-AttackEnd-%E6%B0%B8%E8%BF%9C%E4%B8%8D%E6%89%A7%E8%A1%8C"><span class="toc-text">6.3 攻击一次后无限 Wait：MoveTo 卡住导致 AttackEnd 永远不执行</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-4-%E6%95%8C%E4%BA%BA%E6%89%93%E7%8E%A9%E5%AE%B6%E6%89%A3%E8%87%AA%E5%B7%B1%E8%A1%80%EF%BC%9A%E6%AD%A6%E5%99%A8-HitScan-%E9%87%8C%E5%BF%BD%E7%95%A5%E5%AF%B9%E8%B1%A1%E5%86%99%E6%AD%BB%E6%88%90%E7%8E%A9%E5%AE%B6"><span class="toc-text">6.4 敌人打玩家扣自己血：武器 HitScan 里忽略对象写死成玩家</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-%E6%88%91%E7%8E%B0%E5%9C%A8%E7%9A%84%E9%98%B6%E6%AE%B5%E6%88%90%E6%9E%9C"><span class="toc-text">8. 我现在的阶段成果</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#8-1-%E6%88%91%E5%81%9A%E5%87%BA%E4%BA%86%E4%BB%80%E4%B9%88"><span class="toc-text">8.1 我做出了什么</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-2-%E6%88%91%E7%94%A8%E4%BB%80%E4%B9%88%E6%96%B9%E6%B3%95%E8%A7%A3%E5%86%B3%E9%97%AE%E9%A2%98"><span class="toc-text">8.2 我用什么方法解决问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-3-QA"><span class="toc-text">8.3 QA</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-%E4%B8%8B%E4%B8%80%E6%AD%A5%E8%AE%A1%E5%88%92%EF%BC%88%E5%8F%AF%E7%BB%A7%E7%BB%AD%E8%BF%AD%E4%BB%A3%EF%BC%89"><span class="toc-text">9. 下一步计划（可继续迭代）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10-%E5%B0%8F%E7%BB%93"><span class="toc-text">10. 小结</span></a></li></ol></div><div class="widget-footer"><a class="top" onclick="util.scrollTop()"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path stroke-linejoin="round" d="m9 15.5l3-3l3 3m-6-4l3-3l3 3"/><path d="M7 3.338A9.95 9.95 0 0 1 12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12c0-1.821.487-3.53 1.338-5"/></g></svg><span>Scroll to Top</span></a></div></widget>
+</div></aside><div class='float-panel'>
   <button type='button' style='display:none' class='laptop-only rightbar-toggle mobile' onclick='sidebar.rightbar()'>
     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg>
   </button>

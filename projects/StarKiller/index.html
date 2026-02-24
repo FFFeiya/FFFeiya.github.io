@@ -17,24 +17,30 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000">
   <meta name="theme-color" content="#f9fafb">
-  <title>Feiya / Portfolio - FFFeiya</title>
+  <title>《歼星者》原型：浏览器端太空舰队战斗与养成系统（p5.js） - FFFeiya</title>
 
   
-    <meta name="description" content="Feiya  Portfolio Unity &#x2F; UE 客户端开发 · 玩法系统 &amp; 工具链 · 性能与工程化（Profiler &#x2F; 架构 &#x2F; 可维护性）     Projects 项目列表 直接浏览我的 Unity &#x2F; Unreal &#x2F; Web &#x2F; Toolchain 项目。  Unity Unreal Engine Web &#x2F; p5.js Toolchain   进入 →     技术文章">
+    <meta name="description" content="这是我独立研发的太空舰队游戏《歼星者》的原型代码（浏览器端）。这个原型的核心目标不是“做一段演示动画”，而是把一套可扩展的玩法骨架跑通：数据驱动的舰船&#x2F;装备&#x2F;关卡配置 + 舰队编成 + 轨道战斗模拟 + 进度存档&#x2F;导入导出 + 多语言 UI。  关键词 数据驱动（Data-driven）：舰船 &#x2F; 装备 &#x2F; 关卡 &#x2F; 抽卡池全部由外部 .">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Feiya &#x2F; Portfolio">
-<meta property="og:url" content="http://example.com/">
+<meta property="og:title" content="《歼星者》原型：浏览器端太空舰队战斗与养成系统（p5.js）">
+<meta property="og:url" content="http://example.com/projects/StarKiller/">
 <meta property="og:site_name" content="FFFeiya">
-<meta property="og:description" content="Feiya  Portfolio Unity &#x2F; UE 客户端开发 · 玩法系统 &amp; 工具链 · 性能与工程化（Profiler &#x2F; 架构 &#x2F; 可维护性）     Projects 项目列表 直接浏览我的 Unity &#x2F; Unreal &#x2F; Web &#x2F; Toolchain 项目。  Unity Unreal Engine Web &#x2F; p5.js Toolchain   进入 →     技术文章">
+<meta property="og:description" content="这是我独立研发的太空舰队游戏《歼星者》的原型代码（浏览器端）。这个原型的核心目标不是“做一段演示动画”，而是把一套可扩展的玩法骨架跑通：数据驱动的舰船&#x2F;装备&#x2F;关卡配置 + 舰队编成 + 轨道战斗模拟 + 进度存档&#x2F;导入导出 + 多语言 UI。  关键词 数据驱动（Data-driven）：舰船 &#x2F; 装备 &#x2F; 关卡 &#x2F; 抽卡池全部由外部 .">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2026-02-24T11:35:33.154Z">
-<meta property="article:modified_time" content="2026-02-24T11:35:33.154Z">
+<meta property="article:published_time" content="2026-02-24T07:00:00.000Z">
+<meta property="article:modified_time" content="2026-02-24T07:33:10.714Z">
 <meta property="article:author" content="FFFeiya">
+<meta property="article:tag" content="JavaScript">
+<meta property="article:tag" content="p5.js">
+<meta property="article:tag" content="Game-Prototype">
+<meta property="article:tag" content="UI">
+<meta property="article:tag" content="Data-Driven">
+<meta property="article:tag" content="Save-Load">
 <meta name="twitter:card" content="summary">
   
   
   
-  
+  <meta name="keywords" content=",,,,,">
 
   <!-- feed -->
   
@@ -50,7 +56,7 @@
 
   
 
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Website","@id":"http://example.com/","author":{"@type":"Person","name":"FFFeiya","sameAs":[]},"name":"Feiya / Portfolio","description":"\n\nFeiya  Portfolio\nUnity / UE 客户端开发 · 玩法系统 & 工具链 · 性能与工程化（Profiler / 架构 / 可维护性）\n\n\n\n\nProjects 项目列表\n直接浏览我的 Unity / Unreal / Web / Toolchain 项目。\n\nUnity\nUnreal Engine\nWeb / p5.js\nToolchain\n\n\n进入 →\n\n\n\n\n技...","url":"http://example.com/"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Website","@id":"http://example.com/projects/StarKiller/","author":{"@type":"Person","name":"FFFeiya","sameAs":[]},"name":"《歼星者》原型：浏览器端太空舰队战斗与养成系统（p5.js）","description":"这是我独立研发的太空舰队游戏《歼星者》的原型代码（浏览器端）。这个原型的核心目标不是“做一段演示动画”，而是把一套可扩展的玩法骨架跑通：数据驱动的舰船&#x2F;装备&#x2F;关卡配置 + 舰队编成 + 轨道战斗模拟 + 进度存档&#x2F;导入导出 + 多语言 UI。\n\n关键词\n数据驱动（Data-driven）：舰船 &#x2F; 装备 &#x2F; 关卡 &#x2F; 抽卡池全部由外...","url":"http://example.com/projects/StarKiller/"}</script>
   <link rel="stylesheet" href="/css/custom.css">
 </head>
 <body><div class="sitebg"><div class="siteblur"></div></div>
@@ -67,12 +73,7 @@
 <div class="widgets">
 <div class="search-wrapper" id="search-wrapper"><form class="search-form"><a class="search-button" onclick="document.getElementById(&quot;search-input&quot;).focus();"><svg t="1705074644177" viewBox="0 0 1025 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1560" width="200" height="200"><path d="M1008.839137 935.96571L792.364903 719.491476a56.783488 56.783488 0 0 0-80.152866 0 358.53545 358.53545 0 1 1 100.857314-335.166073 362.840335 362.840335 0 0 1-3.689902 170.145468 51.248635 51.248635 0 1 0 99.217358 26.444296 462.057693 462.057693 0 1 0-158.255785 242.303546l185.930047 185.725053a51.248635 51.248635 0 0 0 72.568068 0 51.248635 51.248635 0 0 0 0-72.978056z" p-id="1561"></path><path d="M616.479587 615.969233a50.428657 50.428657 0 0 0-61.498362-5.534852 174.655348 174.655348 0 0 1-177.525271 3.484907 49.403684 49.403684 0 0 0-58.833433 6.76482l-3.074918 2.869923a49.403684 49.403684 0 0 0 8.609771 78.10292 277.767601 277.767601 0 0 0 286.992355-5.739847 49.403684 49.403684 0 0 0 8.404776-76.667958z" p-id="1562"></path></svg></a><input type="text" class="search-input" id="search-input" placeholder="Search"></form><div id="search-result"></div><div class="search-no-result">No Results!</div></div>
 
-<widget class="widget-wrapper linklist"><div class="widget-header dis-select"><span class="name">外链</span></div><div class="widget-body fs14">
-<div class="linklist center" style="grid-template-columns:repeat(2,1fr);">
-<a class="link" title="GitHub" target="_blank" rel="noopener" href="https://github.com/FFFeiya"><div class="flex"><span>GitHub</span></div></a>
-<a class="link" title="简历" href="files/Resume.pdf"><div class="flex"><span>简历</span></div></a>
-<a class="link" title="Bangumi" target="_blank" rel="noopener" href="https://bgm.tv/user/fffeiya"><div class="flex"><span>Bangumi</span></div></a>
-<a class="link" title="Email" href="fffeiya@foxmail.com"><div class="flex"><span>Email</span></div></a></div></div></widget>
+<widget class="widget-wrapper recent post-list"><div class="widget-header dis-select"><span class="name">Recent Update</span></div><div class="widget-body fs14"><a class="item title" href="/2026/02/24/UE5.6_GAS_Enemy_AI_Stage_Summary/"><span class="title">用 UE5.6 + GAS 搭一个可迭代的敌人近战 AI：从状态机图到可调试行为树</span></a><a class="item title" href="/2025/01/08/Building%20Real-Time%20NPC%20Dialogue%20in%20Unity%20with%20Large%20Language%20Models.zh-CN/"><span class="title">在 Unity 中用大语言模型构建实时 NPC 对话</span></a><a class="item title" href="/2024/12/08/Bridging%20Unity%20with%20Python%20and%20ChatGPT.zh-CN/"><span class="title">Unity 对接 Python 与 ChatGPT：综合指南</span></a><a class="item title" href="/2024/12/08/Building%20a%20Dynamic%20Planetary%20Battle%20System.zh-CN/"><span class="title">用 p5.js 做太空可视化：构建动态行星战斗系统</span></a><a class="item title" href="/2026/02/24/tech_blog_hexo_stellar_portfolio_safe/"><span class="title">用 Hexo + Stellar 搭一个作品展柜：卡片入口、主题配色与 CSS 覆盖</span></a><a class="item title" href="/2025/01/08/Using%20iFlytek's%20Speech%20Model%20in%20Unity%20for%20Text-to-Speech%20(TTS)%20Playback/"><span class="title">Using iFlytek's Speech Model in Unity for Text-to-Speech (TTS) Playback</span></a><a class="item title" href="/2024/12/08/Game%20Demo%20of%20Star%20Annihilator%20-%20A%20Tower%20Defense%20Game%20Developing/"><span class="title">Game Demo of *Star Annihilator*: A Tower Defense Game Developing</span></a><a class="item title" href="/2024/12/08/How%20to%20Convert%20a%20p5.js%20Game%20into%20Java%20(JavaFX)/"><span class="title">How to Convert a p5.js Game into Java (JavaFX)</span></a></div></widget>
 </div>
 
 </div></aside><div class="l_main" id="main">
@@ -81,69 +82,130 @@
 
 
 
-<article class="md-text content"><div class="home home--neo">
-<section class="neo-hero">
-<div class="neo-hero__title">Feiya <span class="neo-dot"></span> Portfolio</div>
-<div class="neo-hero__subtitle">Unity / UE 客户端开发 · 玩法系统 & 工具链 · 性能与工程化（Profiler / 架构 / 可维护性）</div>
-</section>
+<div class="article banner top">
+  <div class="content">
+    <div class="top bread-nav footnote"><div class="left"><div class="flex-row" id="breadcrumb"><a class="cap breadcrumb" href="/">Home</a>
 
-<a class="neo-project-entry" href="projects/">
-<div class="neo-project-entry__left">
-<div class="neo-project-entry__kicker">Projects 项目列表</div>
-<div class="neo-project-entry__desc">直接浏览我的 Unity / Unreal / Web / Toolchain 项目。</div>
-<div class="neo-chip-row" aria-label="project categories">
-<span class="neo-chip">Unity</span>
-<span class="neo-chip">Unreal Engine</span>
-<span class="neo-chip">Web / p5.js</span>
-<span class="neo-chip">Toolchain</span>
-</div>
-</div>
-<div class="neo-project-entry__cta">进入 →</div>
-</a>
-
-<div class="neo-grid">
-<section class="neo-card">
-<div class="neo-card__title">技术文章精选</div>
-<div class="neo-card__desc">（性能 / 架构 / 网络 / 工具）。</div>
-
-<ul class="neo-list">
-<li class="neo-item">
-<a class="neo-link" href="2024/12/08/Bridging%20Unity%20with%20Python%20and%20ChatGPT.zh-CN/">工具：Unity 对接 Python 与 ChatGPT 综合指南</a>
-<span class="neo-meta">Python / Unity / LLM API / WebRequest </span>
-</li>
-<li class="neo-item">
-<a class="neo-link" href="2024/12/08/Building%20a%20Dynamic%20Planetary%20Battle%20System.zh-CN/">架构：用 p5.js 做太空可视化：构建动态行星战斗系统</a>
-<span class="neo-meta">数据驱动 / 四元数/ 渲染 / 可维护</span>
-</li> 
-<li class="neo-item">
-<a class="neo-link" href="2026/02/24/UE5.6_GAS_Enemy_AI_Stage_Summary/">方案：用 UE5.6 + GAS 搭一个可迭代的敌人近战 AI：从状态机图到可调试行为树</a>
-<span class="neo-meta">GAS / Behavior Tree / 调试与工程化</span>
-</li>
+  <span class="sep"></span>
+  <a class="cap breadcrumb" href="/projects/StarKiller/">《歼星者》原型：浏览器端太空舰队战斗与养成系统（p5.js）</a>
+  </div>
+<div class="flex-row" id="post-meta"><span class="text created">Posted on: <time datetime="2026-02-24T07:00:00.000Z">2026-02-24</time></span><span class="sep updated"></span><span class="text updated">Updated on: <time datetime="2026-02-24T07:33:10.714Z">2026-02-24</time></span></div></div></div>
+    
+    <div class="bottom only-title">
+      
+      <div class="text-area">
+        <h1 class="text title"><span>《歼星者》原型：浏览器端太空舰队战斗与养成系统（p5.js）</span></h1>
+        
+      </div>
+    </div>
+    
+  </div>
+  </div><article class="md-text content"><p>这是我独立研发的太空舰队游戏《歼星者》的<strong>原型代码</strong>（浏览器端）。这个原型的核心目标不是“做一段演示动画”，而是把一套可扩展的玩法骨架跑通：<strong>数据驱动的舰船&#x2F;装备&#x2F;关卡配置 + 舰队编成 + 轨道战斗模拟 + 进度存档&#x2F;导入导出 + 多语言 UI</strong>。</p>
+<hr>
+<h2 id="关键词"><a href="#关键词" class="headerlink" title="关键词"></a>关键词</h2><ul>
+<li><strong>数据驱动（Data-driven）</strong>：舰船 &#x2F; 装备 &#x2F; 关卡 &#x2F; 抽卡池全部由外部 <code>.dat</code> 配置加载与解析  </li>
+<li><strong>状态机式 UI 架构</strong>：主菜单 &#x2F; 关卡选择 &#x2F; 舰队编成 &#x2F; 研发抽卡 &#x2F; 战斗 &#x2F; 胜负界面清晰分层  </li>
+<li><strong>舰队编成系统</strong>：舰船槽位、装备槽位、载重&#x2F;容量约束、编成保存与预览  </li>
+<li><strong>战斗模拟</strong>：轨道单位（satellite）+ 攻击流程 + 射程与属性克制（倍率）+ 战斗日志可视化  </li>
+<li><strong>轨道&#x2F;物理味道</strong>：用万有引力公式计算轨道速度（并做缩放），让“绕行战斗”有一致的数学基础  </li>
+<li><strong>可用的存档体系</strong>：LocalStorage 自动保存 + JSON 文件导入&#x2F;导出（便于分享与回放）  </li>
+<li><strong>多语言（i18n）</strong>：中英双语字典与 UI 文案统一入口  </li>
+<li><strong>工程化细节</strong>：数据 normalize &#x2F; deep clone &#x2F; 容错解析 &#x2F; UI Modal 覆盖层 &#x2F; 迷你地图信息聚合</li>
 </ul>
-
-<p><a class="neo-more" href="blog/">查看全部技术文章 →</a></p>
-</section>
-
-<section class="neo-card">
-<div class="neo-card__title">在线游玩</div>
-<div class="neo-card__desc">一键直达：在线 Demo、游戏下载。</div>
-
-<div class="neo-btn-grid">
-<a class="neo-btn" href="p5game/">歼星者</a>
-<a class="neo-btn" target="_blank" rel="noopener" href="https://nexiie.itch.io/farmix">Farmix</a>
-</div>
-
-<div class="neo-tip">Tip：推荐使用Chrome体验在线游戏“歼星者”。</div>
-</section>
-</div>
-</div></article>
+<hr>
+<h2 id="项目概述"><a href="#项目概述" class="headerlink" title="项目概述"></a>项目概述</h2><p>《歼星者》原型包含一套完整循环：</p>
+<ol>
+<li><strong>读取配置数据</strong>：从 <code>ship.dat / equipment.dat / level.dat / gacha.dat / init.dat</code> 加载初始内容  </li>
+<li><strong>资源与养成</strong>：玩家拥有金币、已拥有舰船&#x2F;装备、可解锁图纸与抽卡池  </li>
+<li><strong>舰队编成</strong>：在槽位中选择舰船、配置装备，受载重&#x2F;容量等规则约束  </li>
+<li><strong>关卡战斗</strong>：在行星轨道上部署单位，执行攻击回合与伤害结算，记录战斗日志并给出胜负  </li>
+<li><strong>存档&#x2F;分享</strong>：进度自动写入本地，也可以导出 JSON，换设备后导入继续</li>
+</ol>
+<hr>
+<h2 id="我做了哪些系统（对应代码结构）"><a href="#我做了哪些系统（对应代码结构）" class="headerlink" title="我做了哪些系统（对应代码结构）"></a>我做了哪些系统（对应代码结构）</h2><h3 id="1-数据层：全部从-dat-配置驱动"><a href="#1-数据层：全部从-dat-配置驱动" class="headerlink" title="1) 数据层：全部从 .dat 配置驱动"></a>1) 数据层：全部从 <code>.dat</code> 配置驱动</h3><ul>
+<li>舰船：名称、类型、火力、防空、耐久、护甲、闪避、载重、射程、最小轨道、价格、属性  </li>
+<li>装备：种类、数值、质量、价格、属性等  </li>
+<li>关卡：敌方配置、奖励、难度参数  </li>
+<li>抽卡池：概率&#x2F;掉落定义  </li>
+<li>初始化：初始赠送&#x2F;解锁内容</li>
+</ul>
+<p>实现方式是：对每个数据文件提供 <code>loadXxxData()</code> + <code>parseXxxData()</code>，并做基础容错（跳过空行&#x2F;注释、字段数量校验、类型转换、错误输出）。</p>
+<p><strong>关键</strong>：这套结构意味着后续加内容不需要改逻辑代码，只需要新增数据行或关卡表。</p>
+<hr>
+<h3 id="2-UI-与流程：用-gameState-组织整个产品流"><a href="#2-UI-与流程：用-gameState-组织整个产品流" class="headerlink" title="2) UI 与流程：用 gameState 组织整个产品流"></a>2) UI 与流程：用 <code>gameState</code> 组织整个产品流</h3><p>原型把界面拆成清晰的状态：</p>
+<ul>
+<li><code>mainMenu</code> 主菜单  </li>
+<li><code>levelSelect</code> 关卡选择  </li>
+<li><code>fleetFormation</code> 舰队编成  </li>
+<li><code>fleetResearch</code> 研发&#x2F;抽卡  </li>
+<li><code>battle</code> 战斗  </li>
+<li><code>victory / defeat</code> 结算  </li>
+<li><code>dialog</code> 对话&#x2F;引导</li>
+</ul>
+<p>每个状态对应一套 <code>drawXxx()</code> 与输入处理（<code>mousePressed / keyPressed</code>），并用 Modal Overlay 管理弹窗。</p>
+<p><strong>工程收益</strong>：状态彼此隔离，UI 与玩法逻辑更容易迭代，不会“到处 if-else”。</p>
+<hr>
+<h3 id="3-舰队编成：槽位-装备-规则约束"><a href="#3-舰队编成：槽位-装备-规则约束" class="headerlink" title="3) 舰队编成：槽位 + 装备 + 规则约束"></a>3) 舰队编成：槽位 + 装备 + 规则约束</h3><ul>
+<li><code>fleetSlots / playerFleet</code> 管理编队  </li>
+<li>记录每艘船的装备与装备总质量（影响载重&#x2F;容量）  </li>
+<li>提供编成保存按钮与预览渲染</li>
+</ul>
+<p>这块的价值是：它不是“点一下就开打”，而是把<strong>配置阶段</strong>做成一等公民，让战斗结果与玩家选择强相关。</p>
+<hr>
+<h3 id="4-战斗模拟：轨道单位、射程、属性克制、战斗日志"><a href="#4-战斗模拟：轨道单位、射程、属性克制、战斗日志" class="headerlink" title="4) 战斗模拟：轨道单位、射程、属性克制、战斗日志"></a>4) 战斗模拟：轨道单位、射程、属性克制、战斗日志</h3><p>战斗侧的关键对象与 UI：</p>
+<ul>
+<li><code>satellites</code>：轨道单位（承载舰船数据、HP、角度、轨道半径、速度等）  </li>
+<li><code>redPoints</code>：敌方&#x2F;事件点（用于目标与信息展示）  </li>
+<li><code>battleLog</code>：战斗日志（限制条数，支持可视窗口）</li>
+</ul>
+<p>伤害体系包括：</p>
+<ul>
+<li>基础数值（火力、防空、护甲、闪避等）  </li>
+<li>射程&#x2F;轨道距离的判断  </li>
+<li><strong>属性克制</strong>：强克制×2、弱克制×1.5、被克制×0.5（多属性组合可叠乘）</li>
+</ul>
+<p><strong>关键</strong>：我把“战斗过程”做成可解释的系统（日志+倍率），便于调参、复现与定位问题。</p>
+<hr>
+<h3 id="5-轨道-物理味道：用引力公式定义速度基准"><a href="#5-轨道-物理味道：用引力公式定义速度基准" class="headerlink" title="5) 轨道&#x2F;物理味道：用引力公式定义速度基准"></a>5) 轨道&#x2F;物理味道：用引力公式定义速度基准</h3><p>原型用万有引力公式 <code>v = sqrt(G*M/r)</code> 计算轨道速度，并做合理缩放，让轨道运动具备统一的数学基础（而不是纯粹手调常数）。</p>
+<p>这会让后续拓展（不同质量行星、不同轨道层、速度&#x2F;射程的策略取舍）更自然。</p>
+<hr>
+<h3 id="6-存档与导入导出：LocalStorage-JSON-文件"><a href="#6-存档与导入导出：LocalStorage-JSON-文件" class="headerlink" title="6) 存档与导入导出：LocalStorage + JSON 文件"></a>6) 存档与导入导出：LocalStorage + JSON 文件</h3><ul>
+<li>自动：LocalStorage 写入 <code>playerData</code>  </li>
+<li>手动：导出 <code>playerProgress.json</code>（优先 FileSaver.js，退化为 p5 的 <code>saveJSON</code>）  </li>
+<li>导入：通过隐藏 file input 读取 JSON 恢复进度</li>
+</ul>
+<p><strong>工程收益</strong>：测试、分享、回归验证都更方便；也能支持“存档格式升级”这种真实产品需求。</p>
+<hr>
+<h2 id="技术栈"><a href="#技术栈" class="headerlink" title="技术栈"></a>技术栈</h2><ul>
+<li>JavaScript（浏览器端）  </li>
+<li>p5.js（绘制、输入、资源加载、JSON 保存）  </li>
+<li>LocalStorage（本地持久化）  </li>
+<li>FileSaver.js（可选，用于更稳定的文件保存）</li>
+</ul>
+<hr>
+<h2 id="下一步可迭代方向（如果继续做成正式项目）"><a href="#下一步可迭代方向（如果继续做成正式项目）" class="headerlink" title="下一步可迭代方向（如果继续做成正式项目）"></a>下一步可迭代方向（如果继续做成正式项目）</h2><ul>
+<li>将数据&#x2F;战斗&#x2F;渲染拆成模块（ESM），减少单文件复杂度  </li>
+<li>增加确定性随机（seed RNG），让战斗可复现、便于回放与单元测试  </li>
+<li>抽离“数值结算层”，让战斗模拟可在无渲染环境跑批量平衡测试  </li>
+<li>引入更清晰的事件系统（例如战斗事件总线），提升扩展性（技能、BUFF、AI）</li>
+</ul>
+<hr>
+<h2 id="链接"><a href="#链接" class="headerlink" title="链接"></a>链接</h2><ul>
+<li>试玩入口：<a href="/p5game/">在线试玩</a>  </li>
+<li>代码下载：<a href="/p5game/planet8.js">下载</a>  </li>
+<li>设计文档：<a href="/2024/12/08/Building%20a%20Dynamic%20Planetary%20Battle%20System.zh-CN/">用 p5.js 做太空可视化：构建动态行星战斗系统</a></li>
+</ul>
+</article>
 
 
 
 <footer class="page-footer footnote"><hr><div class="text"><p>本站由 <a href="/">FFFeiya</a> 使用 <a target="_blank" rel="noopener" href="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.33.1">Stellar 1.33.1</a> 主题创建。<br>本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处。</p>
 </div></footer>
 <div class="main-mask" onclick="sidebar.dismiss()"></div></div><aside class="l_right">
-</aside><div class='float-panel'>
+<div class="widgets">
+
+<widget class="widget-wrapper toc" id="data-toc" collapse="false"><div class="widget-header dis-select"><span class="name">On This Page</span><a class="cap-action" onclick="sidebar.toggleTOC()" ><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg></a></div><div class="widget-body"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E9%94%AE%E8%AF%8D"><span class="toc-text">关键词</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%A1%B9%E7%9B%AE%E6%A6%82%E8%BF%B0"><span class="toc-text">项目概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%88%91%E5%81%9A%E4%BA%86%E5%93%AA%E4%BA%9B%E7%B3%BB%E7%BB%9F%EF%BC%88%E5%AF%B9%E5%BA%94%E4%BB%A3%E7%A0%81%E7%BB%93%E6%9E%84%EF%BC%89"><span class="toc-text">我做了哪些系统（对应代码结构）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E6%95%B0%E6%8D%AE%E5%B1%82%EF%BC%9A%E5%85%A8%E9%83%A8%E4%BB%8E-dat-%E9%85%8D%E7%BD%AE%E9%A9%B1%E5%8A%A8"><span class="toc-text">1) 数据层：全部从 .dat 配置驱动</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-UI-%E4%B8%8E%E6%B5%81%E7%A8%8B%EF%BC%9A%E7%94%A8-gameState-%E7%BB%84%E7%BB%87%E6%95%B4%E4%B8%AA%E4%BA%A7%E5%93%81%E6%B5%81"><span class="toc-text">2) UI 与流程：用 gameState 组织整个产品流</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E8%88%B0%E9%98%9F%E7%BC%96%E6%88%90%EF%BC%9A%E6%A7%BD%E4%BD%8D-%E8%A3%85%E5%A4%87-%E8%A7%84%E5%88%99%E7%BA%A6%E6%9D%9F"><span class="toc-text">3) 舰队编成：槽位 + 装备 + 规则约束</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E6%88%98%E6%96%97%E6%A8%A1%E6%8B%9F%EF%BC%9A%E8%BD%A8%E9%81%93%E5%8D%95%E4%BD%8D%E3%80%81%E5%B0%84%E7%A8%8B%E3%80%81%E5%B1%9E%E6%80%A7%E5%85%8B%E5%88%B6%E3%80%81%E6%88%98%E6%96%97%E6%97%A5%E5%BF%97"><span class="toc-text">4) 战斗模拟：轨道单位、射程、属性克制、战斗日志</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-%E8%BD%A8%E9%81%93-%E7%89%A9%E7%90%86%E5%91%B3%E9%81%93%EF%BC%9A%E7%94%A8%E5%BC%95%E5%8A%9B%E5%85%AC%E5%BC%8F%E5%AE%9A%E4%B9%89%E9%80%9F%E5%BA%A6%E5%9F%BA%E5%87%86"><span class="toc-text">5) 轨道&#x2F;物理味道：用引力公式定义速度基准</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-%E5%AD%98%E6%A1%A3%E4%B8%8E%E5%AF%BC%E5%85%A5%E5%AF%BC%E5%87%BA%EF%BC%9ALocalStorage-JSON-%E6%96%87%E4%BB%B6"><span class="toc-text">6) 存档与导入导出：LocalStorage + JSON 文件</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8A%80%E6%9C%AF%E6%A0%88"><span class="toc-text">技术栈</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%8B%E4%B8%80%E6%AD%A5%E5%8F%AF%E8%BF%AD%E4%BB%A3%E6%96%B9%E5%90%91%EF%BC%88%E5%A6%82%E6%9E%9C%E7%BB%A7%E7%BB%AD%E5%81%9A%E6%88%90%E6%AD%A3%E5%BC%8F%E9%A1%B9%E7%9B%AE%EF%BC%89"><span class="toc-text">下一步可迭代方向（如果继续做成正式项目）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%93%BE%E6%8E%A5"><span class="toc-text">链接</span></a></li></ol></div><div class="widget-footer"><a class="top" onclick="util.scrollTop()"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path stroke-linejoin="round" d="m9 15.5l3-3l3 3m-6-4l3-3l3 3"/><path d="M7 3.338A9.95 9.95 0 0 1 12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12c0-1.821.487-3.53 1.338-5"/></g></svg><span>Scroll to Top</span></a></div></widget>
+</div></aside><div class='float-panel'>
   <button type='button' style='display:none' class='laptop-only rightbar-toggle mobile' onclick='sidebar.rightbar()'>
     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg>
   </button>

@@ -1,0 +1,3357 @@
+// ============ 全局变量与状态 ============
+let gameState = 'dialog'; // 初始状态为对话界面
+
+// 数据相关
+let ships = [];        // 所有舰船数据
+let equipments = [];   // 所有装备数据
+let levels = [];       // 所有关卡数据
+let gachaPool = [];    // 抽卡池数据
+let playerData = {     // 玩家数据
+  coins: 2000, // 初始金币为2000
+  ownedShips: [], // 拥有的舰船
+  unlockedShipBlueprints: [], // 解锁的舰船图纸
+  ownedEquipments: [], // 拥有的装备
+  unlockedEquipBlueprints: [], // 解锁的装备图纸
+  clearedLevels: [] // 已通关的关卡
+};
+
+// 舰队编成相关
+let fleetSlots = []; // 舰队槽位
+let playerFleet = []; // 玩家保存的舰队（ship, equipments, totalEquipmentMass）
+let currentModal = null; // 当前弹窗
+
+// UI相关
+let mainMenuButtons = [];
+let fleetFormationSaveButton;
+
+// 抽卡和蓝图解锁按钮
+let fleetResearchButtons = []; // 存储抽卡和蓝图解锁按钮
+
+// 星球和轨道参数
+let radius = 200; 
+let centerX, centerY;
+let selectedOrbitIndex = 0;
+let rotationAngle = 0;
+const G = 6.67430e-11; 
+let planetMass = 5.972e24;
+
+// 战斗相关
+let satellites = [];
+let redPoints = [];
+let battleLog = [];
+const maxBattleLog = 100;
+const maxVisibleLogs = 15;
+
+// 属性克制关系
+const strongAgainst = {
+  'Water': ['Fire'],
+  'Fire': ['Poison'],
+  'Poison': ['Water'],
+  'Holy Light': ['Shadow'],
+  'Shadow': ['Energy'],
+  'Energy': ['Holy Light']
+};
+
+const weakAgainst = {
+  'Holy Light': ['Water', 'Fire', 'Poison'],
+  'Shadow': ['Water', 'Fire', 'Poison'],
+  'Energy': ['Normal']
+};
+
+// 文件路径
+const SHIP_DATA_FILE = 'ship.dat';
+const EQUIP_DATA_FILE = 'equipment.dat';
+const LEVEL_DATA_FILE = 'level.dat';
+const GACHA_DATA_FILE = 'gacha.dat';
+const INIT_DATA_FILE = 'init.dat'; // 新增 init.dat 文件路径
+
+// HTML文件中需要有一个隐藏的文件输入元素用于加载进度
+// <input type="file" id="fileInput" style="display:none" />
+
+// 对话脚本
+let dialogManager;
+
+
+// 语言相关
+let language = 'zh'; // 初始语言为中文
+const translations = {
+  en: {
+    mainMenuTitle: 'Fleet Battle Game',
+    mainMenuSelectLevel: 'Select Level',
+    mainMenuFleetFormation: 'Fleet Formation',
+    mainMenuFleetResearch: 'Fleet Research',
+    mainMenuSaveProgress: 'Save Progress',
+    mainMenuLoadProgress: 'Load Progress',
+    mainMenuExitGame: 'Exit Game',
+    resetGame: 'Reset Game',
+    resetGameConfirm: 'Are you sure you want to reset the game? This will erase all your progress.',
+    switchToEnglish: 'Switch to English',
+    switchToChinese: 'Switch to Chinese',
+    fleetFormationSave: 'Save Fleet',
+    fleetResearchGacha1: 'Gacha x1 (100 Coins)',
+    fleetResearchGacha5: 'Gacha x5 (500 Coins)',
+    fleetResearchUnlockShipBlueprint: 'Unlock Ship Blueprints',
+    fleetResearchUnlockEquipBlueprint: 'Unlock Equipment Blueprints',
+    infoClose: 'Close',
+    confirm: 'Confirm',
+    cancel: 'Cancel',
+    notEnoughCoins: 'Not enough coins.',
+    gachaResultHeader: 'Gacha Result:',
+    duplicate: 'Duplicate',
+    refund: 'Refund',
+    coins: 'Coins',
+    gachaResult: 'You have obtained',
+    newItem: 'New Item',
+    selectShip: 'Select Ship',
+    noShipSelected: 'No Ship Selected',
+    selectEquip: 'Select Equipment',
+    noEquipSelected: 'No Equipment Selected',
+    confirmSelection: 'Confirm Selection',
+    confirmEquip: 'Confirm Equipment',
+    confirmUnlock: 'Confirm Unlock',
+    noBlueprintSelected: 'No blueprint selected.',
+    blueprintUnlockSuccess: 'Blueprints unlocked successfully!',
+    shipBlueprint: 'Ship Blueprint',
+    equipBlueprint: 'Equipment Blueprint',
+    gachaResult: 'Gacha Result',
+    locked: 'Locked',
+    level: 'Level',
+    goodLuck: 'Good luck!',
+    selectBlueprints: 'Select Blueprints',
+    selected: 'Selected',
+    totalCost: 'Total Cost',
+    confirmUnlock: 'Confirm Unlock',
+    upgrade: 'Upgrade',
+    victory: 'Victory!',
+    defeat: 'Defeat!',
+    reward: 'Reward',
+    blueprintsUnlocked: 'Blueprints Unlocked',
+    congratulations: 'Congratulations!',
+    clickConfirmReturn: 'Click to confirm and return.',
+    damageCaused: 'damage caused',
+    damageUnits: 'units',
+    satellite: 'Satellite',
+    attackedRedPoint: 'attacked Red Point',
+    health: 'Health',
+    evadeAttack: 'evaded the attack',
+    destroyed: 'destroyed',
+    invalidDistance: 'Invalid distance',
+
+    loading: 'Loading…',
+    dialogNext: 'Next',
+    progressLoadSuccess: 'Progress loaded successfully.',
+    progressLoadFail: 'Failed to load progress.',
+    gameResetSuccess: 'Game progress reset.',
+    gameResetFail: 'Reset failed (init.dat missing).',
+    fleetSaveSuccess: 'Fleet saved.',
+    fleetOverloaded: 'Overloaded: equipment mass exceeds ship capacity.',
+    equipAlreadyEquipped: 'This equipment is already equipped.',
+    equipOverload: 'Over capacity. Choose lighter equipment or remove some.',
+    reserve: 'Reserve',
+    activeSlot: 'Active',
+    reserveSlot: 'Reserve',
+    back: 'Back',
+    noUnlockableBlueprints: 'No blueprints available to unlock.',
+    gachaUnknownItem: 'Unknown item in gacha pool:'
+  },
+  zh: {
+    mainMenuTitle: '舰队战斗游戏',
+    mainMenuSelectLevel: '选择关卡',
+    mainMenuFleetFormation: '舰队编成',
+    mainMenuFleetResearch: '舰队研发',
+    mainMenuSaveProgress: '保存进度',
+    mainMenuLoadProgress: '加载进度',
+    mainMenuExitGame: '退出游戏',
+    resetGame: '重置游戏',
+    resetGameConfirm: '确定要重置游戏吗？这将清除所有进度。',
+    switchToEnglish: 'Switch to English',
+    switchToChinese: '切换成中文',
+    fleetFormationSave: '保存舰队',
+    fleetResearchGacha1: '抽卡 x1 (100金币)',
+    fleetResearchGacha5: '抽卡 x5 (500金币)',
+    fleetResearchUnlockShipBlueprint: '解锁舰船图纸',
+    fleetResearchUnlockEquipBlueprint: '解锁装备图纸',
+    infoClose: '关闭',
+    confirm: '确认',
+    cancel: '取消',
+    notEnoughCoins: '金币不足。',
+    gachaResultHeader: '抽卡结果：',
+    duplicate: '重复',
+    refund: '返还',
+    coins: '金币',
+    gachaResult: '你获得了',
+    newItem: '新物品',
+    selectShip: '选择舰船',
+    noShipSelected: '未选择舰船',
+    selectEquip: '选择装备',
+    noEquipSelected: '未选择装备',
+    confirmSelection: '确认选择',
+    confirmEquip: '确认装备',
+    confirmUnlock: '确认解锁',
+    noBlueprintSelected: '未选择图纸。',
+    blueprintUnlockSuccess: '图纸解锁成功！',
+    shipBlueprint: '舰船图纸',
+    equipBlueprint: '装备图纸',
+    gachaResult: '抽卡结果',
+    locked: '未解锁',
+    level: '关卡',
+    goodLuck: '祝你好运！',
+    selectBlueprints: '选择图纸',
+    selected: '已选择',
+    totalCost: '总成本',
+    confirmUnlock: '确认解锁',
+    upgrade: '升级',
+    victory: '胜利！',
+    defeat: '失败！',
+    reward: '奖励',
+    blueprintsUnlocked: '解锁的图纸',
+    congratulations: '恭喜！',
+    clickConfirmReturn: '点击确认并返回。',
+    damageCaused: '造成伤害',
+    damageUnits: '点',
+    satellite: '卫星',
+    attackedRedPoint: '攻击了红点',
+    health: '健康',
+    evadeAttack: '闪避了攻击',
+    destroyed: '被摧毁',
+    invalidDistance: '无效的距离',
+
+    loading: '加载中…',
+    dialogNext: '下一句',
+    progressLoadSuccess: '进度加载成功。',
+    progressLoadFail: '进度加载失败。',
+    gameResetSuccess: '已重置游戏进度。',
+    gameResetFail: '重置失败（缺少 init.dat）。',
+    fleetSaveSuccess: '舰队已保存。',
+    fleetOverloaded: '舰队超载（装备质量超过载重）。',
+    equipAlreadyEquipped: '该装备已装备在此舰船上。',
+    equipOverload: '超出载重上限，请更换更轻的装备或移除装备。',
+    reserve: '预备',
+    activeSlot: '出战',
+    reserveSlot: '预备',
+    back: '返回',
+    noUnlockableBlueprints: '当前没有可解锁的图纸。',
+    gachaUnknownItem: '抽卡池存在未知物品：'
+  }
+};
+
+function getText(key) {
+  return translations[language][key] || key;
+}
+
+// ============ 数据与UI辅助工具（修复版新增） ============
+const PLAYER_DATA_VERSION = 2;
+
+function deepClone(obj) {
+  return JSON.parse(JSON.stringify(obj));
+}
+
+function uniqueArray(arr) {
+  return [...new Set((arr || []).filter(v => v !== null && v !== undefined))];
+}
+
+function normalizeFleet(fleet) {
+  // 统一为长度 6 的数组；每个槽位包含 ship(string|null), equipments(string[] length 4), totalEquipmentMass(number)
+  let out = Array.isArray(fleet) ? fleet : [];
+  out = out.map(slot => ({
+    ship: slot && slot.ship ? slot.ship : null,
+    equipments: Array.isArray(slot && slot.equipments) ? slot.equipments.map(v => v || null).slice(0, 4) : [null, null, null, null],
+    totalEquipmentMass: Number(slot && slot.totalEquipmentMass) || 0
+  }));
+  while (out.length < 6) out.push({ ship: null, equipments: [null, null, null, null], totalEquipmentMass: 0 });
+  if (out.length > 6) out = out.slice(0, 6);
+  // 修正 equipments 长度
+  for (let i = 0; i < out.length; i++) {
+    let eq = out[i].equipments;
+    while (eq.length < 4) eq.push(null);
+    if (eq.length > 4) out[i].equipments = eq.slice(0, 4);
+  }
+  return out;
+}
+
+function normalizePlayerData(raw) {
+  // 允许旧存档缺字段，做“迁移 + 修复”
+  let data = raw && typeof raw === 'object' ? raw : {};
+  let v = Number(data.version) || 1;
+
+  let normalized = {
+    version: PLAYER_DATA_VERSION,
+    coins: Number(data.coins) || 2000,
+    ownedShips: uniqueArray(data.ownedShips),
+    unlockedShipBlueprints: uniqueArray(data.unlockedShipBlueprints),
+    ownedEquipments: uniqueArray(data.ownedEquipments),
+    unlockedEquipBlueprints: uniqueArray(data.unlockedEquipBlueprints),
+    clearedLevels: uniqueArray(data.clearedLevels).map(n => Number(n)).filter(n => Number.isFinite(n)),
+    fleet: normalizeFleet(data.fleet || data.playerFleet || [])
+  };
+
+  // 兼容旧版本可能把 fleet 放在全局 playerFleet 里但没存：这里无法自动找回，只能保持空/默认。
+  return normalized;
+}
+
+
+
+function drawModalOverlay() {
+  push();
+  noStroke();
+  fill(0, 0, 0, 90);
+  rect(0, 0, width, height);
+  pop();
+}
+
+// 全局初始化数据
+let initData = null;
+
+// ============ preload ============
+function preload() {
+  
+
+  // 读取数据文件
+  loadShipData();
+  loadEquipmentData();
+  loadLevelData();
+  loadGachaData();
+
+  // 加载 init.dat
+  initData = loadJSON(INIT_DATA_FILE,
+    () => { console.log('init.dat 加载成功。'); },
+    () => { console.error('加载 init.dat 失败。'); }
+  );
+}
+
+// ============ setup ============
+function setup() {
+  createCanvas(1200, 900); // 设置画布大小
+  textAlign(CENTER, CENTER);
+  centerX = width / 2;
+  centerY = height / 2;
+
+  // 加载玩家数据
+  loadPlayerData();
+
+  // 初始化主菜单按钮
+  initMainMenuButtons();
+
+  // 初始化舰队研发按钮
+  initFleetResearchButtons();
+
+  // 初始化舰队编成保存按钮
+  fleetFormationSaveButton = new Button(centerX - 150, centerY + 150, 300, 50, 'fleetFormationSave', () => {
+    saveFleetFormation();
+  });
+
+  // 初始化舰队槽位
+  initFleetFormation();
+
+  // 初始化对话管理器
+  dialogManager = new DialogManager();
+
+  // 初始对话脚本
+  let initialDialog = [
+    "欢迎来到舰队战斗游戏！",
+    "在这里，你可以编成自己的舰队，研究新装备，挑战各种关卡。",
+    "让我们开始吧！"
+  ];
+  dialogManager.startDialog(initialDialog, () => {
+    gameState = 'mainMenu';
+  });
+}
+
+// ============ draw ============
+function draw() {
+  background(240); // 淡灰色背景
+  cursor(ARROW);   // 全局默认光标（按钮悬停时再改 HAND）
+  noStroke();
+  fill(0);
+
+  if (gameState === 'dialog') {
+    dialogManager.display();
+  } else if (gameState === 'mainMenu') {
+    drawMainMenu();
+  } else if (gameState === 'levelSelect') {
+    drawLevelSelect();
+  } else if (gameState === 'fleetFormation') {
+    drawFleetFormation();
+    if (currentModal) {
+      drawModalOverlay();
+      currentModal.update();
+      currentModal.display();
+    }
+    drawSelectedShipPreviewFleet();
+  } else if (gameState === 'fleetResearch') {
+    drawFleetResearch();
+    if (currentModal) {
+      drawModalOverlay();
+      currentModal.update();
+      currentModal.display();
+    }
+  } else if (gameState === 'battle') {
+    drawBattle();
+    drawBattleLog();
+    drawSelectedShipPreview();
+    drawMiniMap();
+    if (currentModal) {
+      drawModalOverlay();
+      currentModal.update();
+      currentModal.display();
+    }
+  } else if (gameState === 'victory') {
+    drawVictoryScreen();
+  } else if (gameState === 'defeat') {
+    drawDefeatScreen();
+  }
+}
+
+// ============ 数据加载与解析函数 ============
+function loadShipData() {
+  loadStrings(SHIP_DATA_FILE, parseShipData);
+}
+
+function parseShipData(data) {
+  ships = [];
+  for (let line of data) {
+    if (line.trim() === '' || line.startsWith('#')) continue;
+    let parts = line.split(',');
+    if (parts.length < 12) {
+      console.error('无效的舰船数据:', line);
+      continue;
+    }
+    let s = {
+      name: parts[0].trim(),
+      type: parts[1].trim(),
+      firepower: parseFloat(parts[2]),
+      aa: parseFloat(parts[3]),
+      endurance: parseFloat(parts[4]),
+      armor: parseFloat(parts[5]),
+      evasion: parseFloat(parts[6]),
+      carryCapacity: parseFloat(parts[7]),
+      range: parseFloat(parts[8]),
+      minOrbit: parseFloat(parts[9]),
+      price: parseFloat(parts[10]),
+      attribute: translateAttribute(parts[11].trim())
+    };
+    if (!s.name) {
+      console.error('舰船名称未定义:', line);
+      continue;
+    }
+    ships.push(s);
+  }
+}
+
+
+function loadEquipmentData() {
+  loadStrings(EQUIP_DATA_FILE, parseEquipmentData);
+}
+
+function parseEquipmentData(data) {
+  equipments = [];
+  for (let line of data) {
+    if (line.trim() === '' || line.startsWith('#')) continue;
+    let parts = line.split(',');
+    if (parts.length < 9) {
+      console.error('无效的装备数据:', line);
+      continue;
+    }
+    let e = {
+      name: parts[0].trim(),
+      firepower: parseFloat(parts[1]),
+      aa: parseFloat(parts[2]),
+      armor: parseFloat(parts[3]),
+      evasion: parseFloat(parts[4]),
+      range: parseFloat(parts[5]),
+      mass: parseFloat(parts[6]),
+      attribute: translateAttribute(parts[7].trim()),
+      price: parseFloat(parts[8])
+    };
+    if (!e.name) {
+      console.error('装备名称未定义:', line);
+      continue;
+    }
+    equipments.push(e);
+  }
+}
+
+function loadLevelData() {
+  loadStrings(LEVEL_DATA_FILE, parseLevelData);
+}
+
+function parseLevelData(data) {
+  levels = [];
+  let idx = 0;
+  while (idx < data.length) {
+    let levelLine = data[idx++].trim();
+    if (!levelLine || levelLine.startsWith('#')) {
+      continue; // 直接跳过空行或注释，不回退 idx
+    }
+    let parts = levelLine.split(',');
+    if (parts.length < 4) {
+      console.error('无效的关卡基本信息:', levelLine);
+      continue;
+    }
+
+    let lvl = {
+      id: parseInt(parts[0]),
+      planetMass: parseFloat(parts[1]),
+      planetRotationSpeed: parseFloat(parts[2]),
+      planetRadius: parseFloat(parts[3]),
+      redPoints: [],
+      drops: [],
+      rewardCoinsMin: 0,
+      rewardCoinsMax: 0
+    };
+
+    if (idx >= data.length) break;
+    let redCountLine = data[idx++].trim();
+    if (!redCountLine || redCountLine.startsWith('#')) {
+      continue; // 同样跳过
+    }
+    let redCount = parseInt(redCountLine);
+
+    // 读取红点信息
+    for (let i = 0; i < redCount; i++) {
+      if (idx >= data.length) break;
+      let rpLine = data[idx++].trim();
+      if (!rpLine || rpLine.startsWith('#')) {
+        // 不回退 i，不然会死循环
+        continue;
+      }
+      let rpParts = rpLine.split(',');
+      if (rpParts.length < 11) {
+        console.error('无效的红点数据:', rpLine);
+        continue;
+      }
+      let rpObj = {
+        id: i,
+        name: rpParts[0].trim(),
+        firepower: parseFloat(rpParts[1]),
+        aa: parseFloat(rpParts[2]),
+        endurance: parseFloat(rpParts[3]),
+        armor: parseFloat(rpParts[4]),
+        evasion: parseFloat(rpParts[5]),
+        range: parseFloat(rpParts[6]),
+        attribute: translateAttribute(rpParts[7].trim()),
+        lat: parseFloat(rpParts[8]),
+        lon: parseFloat(rpParts[9]),
+        minOrbit: parseFloat(rpParts[10]),
+        health: parseFloat(rpParts[3]) // 直接用endurance作为health
+      };
+      if (rpObj.minOrbit > 0) {
+        rpObj.orbitRadius = lvl.planetRadius + rpObj.minOrbit;
+        rpObj.orbitalSpeed = sqrt((G * lvl.planetMass) / (rpObj.orbitRadius * 1000)) * 10;
+        rpObj.orbitalSpeed *= 1e-6;
+        rpObj.angle = radians(rpObj.lon);
+      }
+      lvl.redPoints.push(rpObj);
+    }
+
+    if (idx >= data.length) break;
+    let rewardCoinsLine = data[idx++].trim();
+    if (!rewardCoinsLine || rewardCoinsLine.startsWith('#')) {
+      continue;
+    }
+    let rewardParts = rewardCoinsLine.split(',');
+    if (rewardParts.length >= 2) {
+      lvl.rewardCoinsMin = parseInt(rewardParts[0]);
+      lvl.rewardCoinsMax = parseInt(rewardParts[1]);
+    }
+
+    if (idx >= data.length) break;
+    let dropCountLine = data[idx++].trim();
+    if (!dropCountLine || dropCountLine.startsWith('#')) {
+      continue;
+    }
+    let dropCount = parseInt(dropCountLine);
+
+    for (let i = 0; i < dropCount; i++) {
+      if (idx >= data.length) break;
+      let dropLine = data[idx++].trim();
+      if (!dropLine || dropLine.startsWith('#')) {
+        continue;
+      }
+      let dropParts = dropLine.split(',');
+      if (dropParts.length < 2) {
+        console.error('无效的掉落数据:', dropLine);
+        continue;
+      }
+      lvl.drops.push({
+        name: dropParts[0].trim(),
+        probability: parseFloat(dropParts[1])
+      });
+    }
+
+    let totalProbability = lvl.drops.reduce((sum, item) => sum + item.probability, 0);
+    if (totalProbability === 0) {
+      console.error('抽卡池总概率为零。');
+      lvl.drops = [];
+    } else {
+      lvl.drops = lvl.drops.map(item => ({
+        name: item.name,
+        probability: item.probability / totalProbability
+      }));
+    }
+
+    levels.push(lvl);
+  }
+
+  levels.sort((a, b) => a.id - b.id);
+}
+
+function loadGachaData() {
+  loadStrings(GACHA_DATA_FILE, parseGachaData);
+}
+
+function parseGachaData(data) {
+  gachaPool = [];
+  for (let line of data) {
+    if (line.trim() === '' || line.startsWith('#')) continue;
+    let parts = line.split(',');
+    if (parts.length < 2) {
+      console.error('无效的抽卡数据:', line);
+      continue;
+    }
+    gachaPool.push({ name: parts[0].trim(), probability: parseFloat(parts[1]) });
+  }
+  let totalProbability = gachaPool.reduce((sum, item) => sum + item.probability, 0);
+  if (totalProbability === 0) {
+    console.error('抽卡池总概率为零。');
+    gachaPool = [];
+  } else {
+    gachaPool = gachaPool.map(item => ({
+      name: item.name,
+      probability: item.probability / totalProbability
+    }));
+  }
+}
+
+// ============ 玩家数据加载与保存（修复版） ============
+function loadPlayerData() {
+  let savedData = localStorage.getItem('playerData');
+  if (savedData) {
+    try {
+      let loadedRaw = JSON.parse(savedData);
+      playerData = normalizePlayerData(loadedRaw);
+      playerFleet = playerData.fleet; // 统一数据源
+      savePlayerDataToLocalStorage(); // 触发一次“迁移后重写”
+      return;
+    } catch (e) {
+      console.error('从 localStorage 解析 playerData 失败:', e);
+    }
+  }
+
+  // 无存档或解析失败：使用 initData（深拷贝）作为初始值
+  if (initData) {
+    playerData = normalizePlayerData(deepClone(initData));
+  } else {
+    playerData = normalizePlayerData(null);
+  }
+  playerFleet = playerData.fleet;
+  savePlayerDataToLocalStorage();
+}
+
+function savePlayerDataToLocalStorage() {
+  // 写回前再做一次规范化，避免数组里出现 null/重复/字段缺失
+  playerData = normalizePlayerData(playerData);
+  localStorage.setItem('playerData', JSON.stringify(playerData));
+}
+
+function saveProgressToFile() {
+  // 优先使用 FileSaver.js 的 saveAs；否则退化到 p5 的 saveJSON
+  try {
+    let payload = JSON.stringify(playerData, null, 2);
+    let blob = new Blob([payload], { type: 'application/json' });
+    if (typeof saveAs === 'function') {
+      saveAs(blob, 'playerProgress.json');
+    } else if (typeof saveJSON === 'function') {
+      saveJSON(playerData, 'playerProgress.json');
+    } else {
+      console.warn('saveAs/saveJSON 不可用，无法导出文件。');
+    }
+  } catch (e) {
+    console.error('保存进度到文件失败:', e);
+  }
+}
+
+function loadProgressFromFile(file) {
+  let reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      let loadedRaw = JSON.parse(e.target.result);
+      playerData = normalizePlayerData(loadedRaw);
+      playerFleet = playerData.fleet;
+      currentModal = new InfoModal('progressLoadSuccess');
+      savePlayerDataToLocalStorage();
+    } catch (err) {
+      console.error('加载玩家进度失败:', err);
+      currentModal = new InfoModal('progressLoadFail');
+    }
+  };
+  reader.readAsText(file);
+}
+
+function resetGame() {
+  if (initData) {
+    playerData = normalizePlayerData(deepClone(initData));
+    playerFleet = playerData.fleet;
+    savePlayerDataToLocalStorage();
+    currentModal = new InfoModal('gameResetSuccess');
+  } else {
+    console.error('init.dat 未加载，无法重置游戏。');
+    currentModal = new InfoModal('gameResetFail');
+  }
+}
+
+function saveFleetFormation() {
+  // 先做超载校验
+  for (let slot of fleetSlots) {
+    if (slot.ship && slot.totalEquipmentMass > slot.ship.carryCapacity) {
+      currentModal = new InfoModal('fleetOverloaded');
+      return;
+    }
+  }
+
+  // 将舰队写入“统一存档结构”
+  playerFleet = fleetSlots.map(slot => {
+    return {
+      ship: slot.ship ? slot.ship.name : null,
+      equipments: slot.equipments.map(eq => (eq ? eq.name : null)).slice(0, 4),
+      totalEquipmentMass: slot.totalEquipmentMass
+    };
+  });
+
+  playerData.fleet = normalizeFleet(playerFleet);
+  savePlayerDataToLocalStorage();
+  currentModal = new InfoModal('fleetSaveSuccess');
+}
+
+// ============ 类定义 ============
+class Button {
+  constructor(x, y, w, h, labelKey, onClick, options = {}) {
+    this.x = x;
+    this.y = y;
+    this.w = w;
+    this.h = h;
+    this.labelKey = labelKey;
+    this.onClick = onClick;
+    this.isHovered = false;
+    this.enabled = options.enabled !== undefined ? options.enabled : true;
+    this.subtitle = options.subtitle || null;
+  }
+
+  update() {
+    this.isHovered = this.enabled &&
+      mouseX >= this.x && mouseX <= this.x + this.w &&
+      mouseY >= this.y && mouseY <= this.y + this.h;
+
+    // 避免每个按钮都把 cursor 改回 ARROW 造成闪烁：全局默认 ARROW，只有悬停时改 HAND
+    if (this.isHovered) cursor(HAND);
+  }
+
+  display() {
+    push();
+    const r = 10;
+    let bg = 255;
+    let strokeCol = 0;
+
+    if (!this.enabled) {
+      bg = 235;
+      strokeCol = 120;
+    } else if (this.isHovered) {
+      bg = 210;
+    } else {
+      bg = 245;
+    }
+
+    stroke(strokeCol);
+    strokeWeight(1.5);
+    fill(bg);
+    rect(this.x, this.y, this.w, this.h, r);
+
+    fill(this.enabled ? 0 : 120);
+    noStroke();
+    textAlign(CENTER, CENTER);
+
+    textSize(16);
+    text(getText(this.labelKey), this.x + this.w / 2, this.y + this.h / 2 + (this.subtitle ? -6 : 0));
+
+    if (this.subtitle) {
+      textSize(11);
+      fill(80);
+      text(this.subtitle, this.x + this.w / 2, this.y + this.h / 2 + 12);
+    }
+    pop();
+  }
+
+  clicked() {
+    if (this.enabled && this.isHovered && this.onClick) this.onClick();
+  }
+}
+
+class FleetSlot {
+  constructor(x, y, w, h, type) {
+    this.x = x;
+    this.y = y;
+    this.w = w;
+    this.h = h;
+    this.type = type; // 'Active' 或 'Reserve'
+    this.ship = null;
+    this.equipments = [null, null, null, null];
+    this.totalEquipmentMass = 0;
+    this.isHovered = false;
+  }
+
+  update() {
+    if (
+      mouseX >= this.x &&
+      mouseX <= this.x + this.w &&
+      mouseY >= this.y &&
+      mouseY <= this.y + this.h
+    ) {
+      this.isHovered = true;
+    } else {
+      this.isHovered = false;
+    }
+  }
+
+  display() {
+    push();
+    fill(this.isHovered && !currentModal ? 220 : 255);
+    stroke(0);
+    rect(this.x, this.y, this.w, this.h);
+
+    fill(0);
+    textSize(16);
+    textAlign(CENTER, TOP);
+    text(this.type, this.x + this.w / 2, this.y + 10);
+
+    if (this.ship) {
+      // 显示舰船名称
+      textSize(14);
+      text(this.ship.name, this.x + this.w / 2, this.y + 40);
+
+      // 显示四个装备格子
+      let eqSize = 30;
+      for (let i = 0; i < 4; i++) {
+        let eqX = this.x + 10 + i * (eqSize + 10);
+        let eqY = this.y + 70;
+        let equip = this.equipments[i];
+        // 检测装备格子的悬停状态
+        let isEquipHovered = (mouseX >= eqX && mouseX <= eqX + eqSize &&
+                              mouseY >= eqY && mouseY <= eqY + eqSize && !currentModal);
+        fill(isEquipHovered ? 200 : (equip ? 180 : 240));
+        stroke(0);
+        rect(eqX, eqY, eqSize, eqSize);
+
+        if (equip) {
+          fill(0);
+          noStroke();
+          textSize(10);
+          textAlign(CENTER, CENTER);
+          text(equip.name.slice(0, 4), eqX + eqSize / 2, eqY + eqSize / 2);
+        }
+      }
+
+      // 显示属性
+      textSize(12);
+      textAlign(LEFT, TOP);
+      let attrs = this.calculateAttributes();
+      text(`FP: ${attrs.firepower.toFixed(1)} AA: ${attrs.aa.toFixed(1)}`, this.x + 10, this.y + 120);
+      text(`End: ${attrs.endurance} Armor: ${attrs.armor}`, this.x + 10, this.y + 135);
+      text(`Evade: ${attrs.evasion} Load: ${this.totalEquipmentMass}/${this.ship.carryCapacity}`, this.x + 10, this.y + 150);
+      text(`Range: ${attrs.range} Min Orbit: ${this.ship.minOrbit}`, this.x + 10, this.y + 165);
+    } else {
+      textSize(14);
+      textAlign(CENTER, CENTER);
+      text(getText('selectShip'), this.x + this.w / 2, this.y + this.h / 2);
+    }
+    pop();
+  }
+
+  clicked() {
+    // 检测装备格子的点击
+    if (this.ship) {
+      let eqSize = 30;
+      for (let i = 0; i < 4; i++) {
+        let eqX = this.x + 10 + i * (eqSize + 10);
+        let eqY = this.y + 70;
+        if (
+          mouseX >= eqX &&
+          mouseX <= eqX + eqSize &&
+          mouseY >= eqY &&
+          mouseY <= eqY + eqSize &&
+          !currentModal
+        ) {
+          // 显示装备选择弹窗
+          currentModal = new EquipmentSelectionModal(this, i);
+          return;
+        }
+      }
+    }
+
+    // 检测舰船槽位的点击
+    if (this.isHovered && !currentModal) {
+      // 显示舰船选择弹窗
+      currentModal = new ShipSelectionModal(this);
+    }
+  }
+
+  calculateAttributes() {
+    let attributes = {
+      firepower: this.ship.firepower,
+      aa: this.ship.aa,
+      endurance: this.ship.endurance,
+      armor: this.ship.armor,
+      evasion: this.ship.evasion,
+      range: this.ship.range,
+    };
+
+    this.totalEquipmentMass = 0;
+    for (let eq of this.equipments) {
+      if (eq) {
+        attributes.firepower += eq.firepower || 0;
+        attributes.aa += eq.aa || 0;
+        attributes.armor += eq.armor || 0;
+        attributes.evasion += eq.evasion || 0;
+        attributes.range += eq.range || 0;
+        this.totalEquipmentMass += eq.mass || 0;
+      }
+    }
+
+    return attributes;
+  }
+}
+
+class ShipSelectionModal {
+  constructor(fleetSlot) {
+    this.fleetSlot = fleetSlot;
+    this.selectedShip = null;
+    this.scrollOffset = 0;
+    this.itemHeight = 30;
+    this.visibleItems = 10;
+    this.width = 600;
+    this.height = 400;
+    this.x = centerX - this.width / 2;
+    this.y = centerY - this.height / 2;
+  }
+
+  update() {
+    // 不需要更新
+  }
+
+  display() {
+    push();
+    // 绘制模态框背景
+    fill(255);
+    stroke(0);
+    rect(this.x, this.y, this.width, this.height);
+
+    // 绘制舰船列表左侧
+    let listX = this.x + 10;
+    let listY = this.y + 10;
+    let listWidth = 200;
+    let listHeight = this.height - 20;
+
+    // 绘制滚动的舰船列表
+    textAlign(LEFT, TOP);
+    textSize(14);
+    fill(0);
+    text(getText('selectShip'), listX, listY - 20);
+    let ownedShips = playerData.ownedShips.filter(shipName => playerData.unlockedShipBlueprints.includes(shipName));
+    for (let i = 0; i < ownedShips.length; i++) { // 仅显示拥有并解锁图纸的舰船
+      let shipName = ownedShips[i];
+      let ship = ships.find(s => s.name === shipName);
+      if (!ship) continue;
+      let y = listY + (i - this.scrollOffset) * this.itemHeight;
+      if (y >= listY && y <= listY + listHeight - this.itemHeight) {
+        let isHovered = (mouseX >= listX && mouseX <= listX + listWidth &&
+                        mouseY >= y && mouseY <= y + this.itemHeight);
+        
+        if (isHovered) {
+          fill(200);
+        } else {
+          fill(255);
+        }
+        stroke(0);
+        fill(255);
+        rect(listX + 10, y + 7, 16, 16);
+        if (this.selectedEquip && this.selectedEquip.name === equip.name) {
+          noStroke();
+          fill(0);
+          rect(listX + 14, y + 11, 8, 8);
+        }
+
+        fill(0);
+        noStroke();
+        text(ship.name, listX + 5, y + this.itemHeight / 2 - 7);
+      }
+    }
+
+    // 绘制右侧选中舰船的信息与模型预览
+    let detailX = this.x + 220;
+    let detailY = this.y + 10;
+    let detailWidth = 370;
+    let detailHeight = this.height - 20;
+
+    if (this.selectedShip) {
+      fill(0);
+      textSize(16);
+      text(this.selectedShip.name, detailX + detailWidth / 2, detailY + 20);
+
+      // 显示舰船属性
+      textSize(14);
+      let attrs = [
+        `类型: ${this.selectedShip.type}`,
+        `火力: ${this.selectedShip.firepower}`,
+        `防空: ${this.selectedShip.aa}`,
+        `耐久: ${this.selectedShip.endurance}`,
+        `装甲: ${this.selectedShip.armor}`,
+        `闪避: ${this.selectedShip.evasion}`,
+        `载重: ${this.selectedShip.carryCapacity}`,
+        `射程: ${this.selectedShip.range}`,
+        `最小轨道: ${this.selectedShip.minOrbit}`,
+        `属性: ${this.selectedShip.attribute}`
+      ];
+      textAlign(LEFT, TOP);
+      for (let i = 0; i < attrs.length; i++) {
+        text(attrs[i], detailX + 20, detailY + 50 + i * 20);
+      }
+    } else {
+      fill(0);
+      textSize(16);
+      textAlign(CENTER, CENTER);
+      text(getText('noShipSelected'), detailX + detailWidth / 2, detailY + detailHeight / 2);
+    }
+
+    // 绘制确定按钮
+    let btnX = this.x + 250;
+    let btnY = this.y + this.height - 60;
+    let btnW = 200; // 拉长按钮宽度
+    let btnH = 40;
+    let isHovered = (mouseX >= btnX && mouseX <= btnX + btnW &&
+                    mouseY >= btnY && mouseY <= btnY + btnH);
+    if (isHovered) {
+      fill(200);
+    } else {
+      fill(255);
+    }
+    stroke(0);
+    rect(btnX, btnY, btnW, btnH);
+
+    fill(0);
+    noStroke();
+    textSize(14);
+    text(getText('confirmSelection'), btnX + btnW / 2, btnY + btnH / 2 - 7);
+
+    // 绘制关闭按钮
+    let closeBtnX = this.x + this.width - 50;
+    let closeBtnY = this.y + 10;
+    let closeBtnW = 30;
+    let closeBtnH = 30;
+    let isCloseHovered = (mouseX >= closeBtnX && mouseX <= closeBtnX + closeBtnW &&
+                         mouseY >= closeBtnY && mouseY <= closeBtnY + closeBtnH);
+    if (isCloseHovered) {
+      fill(200);
+    } else {
+      fill(255);
+    }
+    stroke(0);
+    ellipse(closeBtnX + closeBtnW / 2, closeBtnY + closeBtnH / 2, closeBtnW, closeBtnH);
+    fill(0);
+    textSize(20);
+    text('×', closeBtnX + closeBtnW / 2, closeBtnY + closeBtnH / 2 - 10);
+    pop();
+  }
+
+  mousePressed() {
+    // 获取可选择的舰船列表
+    let ownedShips = playerData.ownedShips.filter(shipName => playerData.unlockedShipBlueprints.includes(shipName));
+    for (let i = 0; i < ownedShips.length; i++) { // 仅处理拥有并解锁图纸的舰船
+      let shipName = ownedShips[i];
+      let ship = ships.find(s => s.name === shipName);
+      if (!ship) continue;
+      let y = this.y + 10 + (i - this.scrollOffset) * this.itemHeight;
+      if (y >= this.y + 10 && y <= this.y + this.height - 30) {
+        if (mouseX >= this.x + 10 && mouseX <= this.x + 210 &&
+            mouseY >= y && mouseY <= y + this.itemHeight) {
+          this.selectedShip = ship;
+        }
+      }
+    }
+
+    // 检测确定按钮点击
+    let btnX = this.x + 250;
+    let btnY = this.y + this.height - 60;
+    let btnW = 200; // 拉长按钮宽度
+    let btnH = 40;
+    if (mouseX >= btnX && mouseX <= btnX + btnW &&
+        mouseY >= btnY && mouseY <= btnY + btnH) {
+      if (this.selectedShip) {
+        this.fleetSlot.ship = this.selectedShip;
+        this.fleetSlot.equipments = [null, null, null, null];
+        this.fleetSlot.totalEquipmentMass = 0;
+        currentModal = null; // 关闭弹窗
+        savePlayerDataToLocalStorage();
+      }
+    }
+
+    // 检测关闭按钮点击
+    let closeBtnX = this.x + this.width - 50;
+    let closeBtnY = this.y + 10;
+    let closeBtnW = 30;
+    let closeBtnH = 30;
+    if (dist(mouseX, mouseY, closeBtnX + closeBtnW / 2, closeBtnY + closeBtnH / 2) <= closeBtnW / 2) {
+      currentModal = null; // 关闭弹窗
+    }
+  }
+
+  mouseWheel(event) {
+    // 处理滚动
+    let delta = event.delta;
+    this.scrollOffset += delta > 0 ? 1 : -1;
+    let ownedEquipments = playerData.ownedEquipments.filter(eqName => playerData.unlockedEquipBlueprints.includes(eqName));
+    let maxOffset = max(0, ownedEquipments.length - this.visibleItems);
+    this.scrollOffset = constrain(this.scrollOffset, 0, maxOffset);
+    return false; // 阻止默认行为
+  }
+}
+
+
+class EquipmentSelectionModal {
+  constructor(fleetSlot, equipIndex) {
+    this.fleetSlot = fleetSlot;
+    this.equipIndex = equipIndex;
+    this.selectedEquip = null;
+    this.scrollOffset = 0;
+    this.itemHeight = 30;
+    this.visibleItems = 10;
+    this.width = 600;
+    this.height = 400;
+    this.x = centerX - this.width / 2;
+    this.y = centerY - this.height / 2;
+  }
+
+  update() {
+    // 不需要更新
+  }
+
+  display() {
+    push();
+    // 绘制模态框背景
+    fill(255);
+    stroke(0);
+    rect(this.x, this.y, this.width, this.height);
+
+    // 绘制装备列表左侧
+    let listX = this.x + 10;
+    let listY = this.y + 10;
+    let listWidth = 200;
+    let listHeight = this.height - 20;
+
+    // 绘制滚动的装备列表
+    textAlign(LEFT, TOP);
+    textSize(14);
+    fill(0);
+    text(getText('selectEquip'), listX, listY - 20);
+    let ownedEquipments = playerData.ownedEquipments.filter(eqName => playerData.unlockedEquipBlueprints.includes(eqName));
+    for (let i = 0; i < ownedEquipments.length; i++) { // 仅显示拥有并解锁图纸的装备
+      let equipName = ownedEquipments[i];
+      let equip = equipments.find(e => e.name === equipName);
+      if (!equip) continue;
+      let y = listY + (i - this.scrollOffset) * this.itemHeight;
+      if (y >= listY && y <= listY + listHeight - this.itemHeight) {
+        let isHovered = (mouseX >= listX && mouseX <= listX + listWidth &&
+                        mouseY >= y && mouseY <= y + this.itemHeight);
+        
+        if (isHovered) {
+          fill(200);
+        } else {
+          fill(255);
+        }
+        stroke(0);
+        fill(255);
+        rect(listX + 10, y + 7, 16, 16);
+        if (this.selectedShip && this.selectedShip.name === ship.name) {
+          noStroke();
+          fill(0);
+          rect(listX + 14, y + 11, 8, 8);
+        }
+
+        fill(0);
+        noStroke();
+        text(equip.name, listX + 5, y + this.itemHeight / 2 - 7);
+      }
+    }
+
+    // 绘制右侧选中装备的信息与模型预览
+    let detailX = this.x + 220;
+    let detailY = this.y + 10;
+    let detailWidth = 370;
+    let detailHeight = this.height - 20;
+
+    if (this.selectedEquip) {
+      fill(0);
+      textSize(16);
+      text(this.selectedEquip.name, detailX + detailWidth / 2, detailY + 20);
+
+      // 显示装备属性
+      textSize(14);
+      let attrs = [
+        `火力: ${this.selectedEquip.firepower}`,
+        `防空: ${this.selectedEquip.aa}`,
+        `装甲: ${this.selectedEquip.armor}`,
+        `闪避: ${this.selectedEquip.evasion}`,
+        `射程: ${this.selectedEquip.range}`,
+        `质量: ${this.selectedEquip.mass}`,
+        `属性: ${this.selectedEquip.attribute}`,
+        `价格: ${this.selectedEquip.price}`
+      ];
+      textAlign(LEFT, TOP);
+      for (let i = 0; i < attrs.length; i++) {
+        text(attrs[i], detailX + 20, detailY + 50 + i * 20);
+      }
+    } else {
+      fill(0);
+      textSize(16);
+      textAlign(CENTER, CENTER);
+      text(getText('noEquipSelected'), detailX + detailWidth / 2, detailY + detailHeight / 2);
+    }
+
+    // 绘制确认装备按钮
+    let btnX = this.x + 250;
+    let btnY = this.y + this.height - 60;
+    let btnW = 200; // 拉长按钮宽度
+    let btnH = 40;
+    let isHovered = (mouseX >= btnX && mouseX <= btnX + btnW &&
+                    mouseY >= btnY && mouseY <= btnY + btnH);
+    if (isHovered) {
+      fill(200);
+    } else {
+      fill(255);
+    }
+    stroke(0);
+    rect(btnX, btnY, btnW, btnH);
+
+    fill(0);
+    noStroke();
+    textSize(14);
+    text(getText('confirmEquip'), btnX + btnW / 2, btnY + btnH / 2 - 7);
+
+    // 绘制取消按钮
+    let cancelBtnX = this.x + 420;
+    let cancelBtnY = this.y + this.height - 60;
+    let cancelBtnW = 150;
+    let cancelBtnH = 40;
+    let isCancelHovered = (mouseX >= cancelBtnX && mouseX <= cancelBtnX + cancelBtnW &&
+                          mouseY >= cancelBtnY && mouseY <= cancelBtnY + cancelBtnH);
+    if (isCancelHovered) {
+      fill(200);
+    } else {
+      fill(255);
+    }
+    stroke(0);
+    rect(cancelBtnX, cancelBtnY, cancelBtnW, cancelBtnH);
+
+    fill(0);
+    noStroke();
+    textSize(14);
+    text(getText('cancel'), cancelBtnX + cancelBtnW / 2, cancelBtnY + cancelBtnH / 2 - 7);
+
+    // 绘制关闭按钮
+    let closeBtnX = this.x + this.width - 40;
+    let closeBtnY = this.y + 10;
+    let closeBtnW = 30;
+    let closeBtnH = 30;
+    let isCloseHovered = (mouseX >= closeBtnX && mouseX <= closeBtnX + closeBtnW &&
+                         mouseY >= closeBtnY && mouseY <= closeBtnY + closeBtnH);
+    if (isCloseHovered) {
+      fill(200);
+    } else {
+      fill(255);
+    }
+    stroke(0);
+    ellipse(closeBtnX + closeBtnW / 2, closeBtnY + closeBtnH / 2, closeBtnW, closeBtnH);
+    fill(0);
+    textSize(20);
+    text('×', closeBtnX + closeBtnW / 2, closeBtnY + closeBtnH / 2 - 10);
+    pop();
+  }
+
+  mousePressed() {
+    // 获取可选择的装备列表
+    let ownedEquipments = playerData.ownedEquipments.filter(eqName => playerData.unlockedEquipBlueprints.includes(eqName));
+    for (let i = 0; i < ownedEquipments.length; i++) { // 仅处理拥有并解锁图纸的装备
+      let equipName = ownedEquipments[i];
+      let equip = equipments.find(e => e.name === equipName);
+      if (!equip) continue;
+      let y = this.y + 10 + (i - this.scrollOffset) * this.itemHeight;
+      if (y >= this.y + 10 && y <= this.y + this.height - 30) {
+        // 检测复选框点击
+        if (mouseX >= this.x + 20 && mouseX <= this.x + 36 &&
+            mouseY >= y + 7 && mouseY <= y + 23) {
+          if (this.selectedEquip === equip) {
+            this.selectedEquip = null;
+          } else {
+            this.selectedEquip = equip;
+          }
+        }
+
+        // 检测装备名称点击
+        if (mouseX >= this.x + 10 && mouseX <= this.x + 210 &&
+            mouseY >= y && mouseY <= y + this.itemHeight) {
+          // 点击装备名称同样可以选择
+          if (this.selectedEquip === equip) {
+            this.selectedEquip = null;
+          } else {
+            this.selectedEquip = equip;
+          }
+        }
+      }
+    }
+
+    // 检测确认装备按钮点击
+    let btnX = this.x + 250;
+    let btnY = this.y + this.height - 60;
+    let btnW = 200; // 拉长按钮宽度
+    let btnH = 40;
+    if (mouseX >= btnX && mouseX <= btnX + btnW &&
+        mouseY >= btnY && mouseY <= btnY + btnH) {
+      if (this.selectedEquip) {
+        // 检查是否已经装备此装备
+        if (this.fleetSlot.equipments.includes(this.selectedEquip)) {
+          currentModal = new InfoModal('equipAlreadyEquipped'); // 定义对应的翻译键
+          return;
+        }
+
+        // 检查是否超载
+        let newTotalMass = this.fleetSlot.totalEquipmentMass + this.selectedEquip.mass;
+        if (newTotalMass > this.fleetSlot.ship.carryCapacity) {
+          currentModal = new InfoModal('equipOverload'); // 定义对应的翻译键
+          return;
+        }
+
+        this.fleetSlot.equipments[this.equipIndex] = this.selectedEquip;
+        this.fleetSlot.totalEquipmentMass += this.selectedEquip.mass;
+        currentModal = null; // 关闭弹窗
+        savePlayerDataToLocalStorage();
+      }
+    }
+
+    // 检测取消按钮点击
+    let cancelBtnX = this.x + 420;
+    let cancelBtnY = this.y + this.height - 60;
+    let cancelBtnW = 150;
+    let cancelBtnH = 40;
+    if (mouseX >= cancelBtnX && mouseX <= cancelBtnX + cancelBtnW &&
+        mouseY >= cancelBtnY && mouseY <= cancelBtnY + cancelBtnH) {
+      this.selectedEquip = null;
+      currentModal = null; // 关闭弹窗
+    }
+
+    // 检测关闭按钮点击
+    let closeBtnX = this.x + this.width - 40;
+    let closeBtnY = this.y + 10;
+    let closeBtnW = 30;
+    let closeBtnH = 30;
+    if (dist(mouseX, mouseY, closeBtnX + closeBtnW / 2, closeBtnY + closeBtnH / 2) <= closeBtnW / 2) {
+      currentModal = null; // 关闭弹窗
+    }
+  }
+
+  mouseWheel(event) {
+    // 处理滚动
+    let delta = event.delta;
+    this.scrollOffset += delta > 0 ? 1 : -1;
+    let unlockableList = this.type === 'ship' ? 
+      ships.filter(s => playerData.ownedShips.includes(s.name) && !playerData.unlockedShipBlueprints.includes(s.name)) :
+      equipments.filter(e => playerData.ownedEquipments.includes(e.name) && !playerData.unlockedEquipBlueprints.includes(e.name));
+    unlockableList = [...new Set(unlockableList.map(item => item.name))].map(name => {
+      return this.type === 'ship' ? ships.find(s => s.name === name) : equipments.find(e => e.name === name);
+    });
+    let maxOffset = max(0, unlockableList.length - this.visibleItems);
+    this.scrollOffset = constrain(this.scrollOffset, 0, maxOffset);
+    return false; // 阻止默认行为
+  }
+}
+
+class InfoModal {
+  constructor(textKey) { // 修改为 textKey
+    this.textKey = textKey;
+    this.width = 300;
+    this.height = 200;
+    this.x = centerX - this.width / 2;
+    this.y = centerY - this.height / 2;
+  }
+
+  update() {
+    // 不需要更新
+  }
+
+  display() {
+    push();
+    // 绘制模态框背景
+    fill(255);
+    stroke(0);
+    rect(this.x, this.y, this.width, this.height);
+
+    // 绘制消息文本
+    fill(0);
+    textSize(14);
+    textAlign(CENTER, CENTER);
+    text(getText(this.textKey), this.x + this.width / 2, this.y + this.height / 2 - 30);
+
+    // 绘制关闭按钮
+    let btnW = 200; // 拉长按钮宽度
+    let btnH = 40;
+    let btnX = this.x + (this.width - btnW) / 2;
+    let btnY = this.y + this.height - 60;
+    let isHovered = (mouseX >= btnX && mouseX <= btnX + btnW &&
+                    mouseY >= btnY && mouseY <= btnY + btnH);
+    if (isHovered) {
+      fill(200);
+    } else {
+      fill(255);
+    }
+    stroke(0);
+    rect(btnX, btnY, btnW, btnH);
+
+    fill(0);
+    noStroke();
+    textSize(16);
+    textAlign(CENTER, CENTER);
+    text(getText('infoClose'), btnX + btnW / 2, btnY + btnH / 2 - 8);
+    pop();
+  }
+
+  mousePressed() {
+    // 检测关闭按钮点击
+    let btnW = 200; // 拉长按钮宽度
+    let btnH = 40;
+    let btnX = this.x + (this.width - btnW) / 2;
+    let btnY = this.y + this.height - 60;
+    if (mouseX >= btnX && mouseX <= btnX + btnW &&
+        mouseY >= btnY && mouseY <= btnY + btnH) {
+      currentModal = null;
+    }
+  }
+}
+
+// 新增：对话管理器类
+class DialogManager {
+  constructor() {
+    this.dialogs = []; // 对话内容
+    this.currentIndex = 0; // 当前对话索引
+    this.isActive = false; // 对话是否激活
+    this.onEndCallback = null; // 对话结束后的回调函数
+    this.width = width; // 对话框宽度
+    this.height = 150; // 对话框高度
+    this.x = 0;
+    this.y = height - this.height - 50; // 放在屏幕下半部分
+  }
+
+  startDialog(dialogArray, onEndCallback) {
+    this.dialogs = dialogArray;
+    this.currentIndex = 0;
+    this.isActive = true;
+    this.onEndCallback = onEndCallback;
+    gameState = 'dialog';
+  }
+
+  display() {
+    if (!this.isActive) return;
+    push();
+    // 绘制对话框背景
+    fill(255);
+    stroke(0);
+    rect(this.x, this.y, this.width, this.height);
+
+    // 绘制助手立绘
+    // 以下是用户提供的助手绘制代码，调整位置
+    push();
+    translate(this.x + 100, this.y + this.height / 2);
+    scale(0.5);
+    drawAssistantIllustration();
+    pop();
+
+    // 绘制对话文本
+    fill(0);
+    textSize(16);
+    textAlign(LEFT, CENTER);
+    text(this.dialogs[this.currentIndex], this.x + 220, this.y + this.height / 2);
+
+    // 绘制跳过按钮
+    let skipBtnW = 80;
+    let skipBtnH = 30;
+    let skipBtnX = this.x + this.width - skipBtnW - 10;
+    let skipBtnY = this.y + 10;
+    let isHovered = (mouseX >= skipBtnX && mouseX <= skipBtnX + skipBtnW &&
+                    mouseY >= skipBtnY && mouseY <= skipBtnY + skipBtnH);
+    if (isHovered) {
+      fill(200);
+    } else {
+      fill(255);
+    }
+    stroke(0);
+    rect(skipBtnX, skipBtnY, skipBtnW, skipBtnH);
+
+    fill(0);
+    noStroke();
+    textSize(14);
+    textAlign(CENTER, CENTER);
+    text(getText('dialogNext'), skipBtnX + skipBtnW / 2, skipBtnY + skipBtnH / 2 - 2);
+    pop();
+  }
+
+  nextDialog() {
+    this.currentIndex++;
+    if (this.currentIndex >= this.dialogs.length) {
+      this.isActive = false;
+      if (this.onEndCallback) {
+        this.onEndCallback();
+      }
+    }
+  }
+
+  mousePressed() {
+    if (!this.isActive) return;
+    // 检测跳过按钮点击
+    let skipBtnW = 80;
+    let skipBtnH = 30;
+    let skipBtnX = this.x + this.width - skipBtnW - 10;
+    let skipBtnY = this.y + 10;
+    if (mouseX >= skipBtnX && mouseX <= skipBtnX + skipBtnW &&
+        mouseY >= skipBtnY && mouseY <= skipBtnY + skipBtnH) {
+      this.nextDialog(); // 跳过当前对话
+      return;
+    }
+
+    // 点击对话框任意位置，进入下一句话
+    this.nextDialog();
+  }
+}
+
+// 新增：绘制助手立绘函数
+function drawAssistantIllustration() {
+  // 设置线条样式
+  stroke(0); // 黑色线条
+  strokeWeight(3);
+  noFill();
+
+  // 画女孩的头部
+  ellipse(0, -50, 100, 100);  // 头部
+
+  // 画女孩的眼睛
+  ellipse(-25, -60, 20, 20);  // 左眼
+  ellipse(25, -60, 20, 20);  // 右眼
+
+  // 画女孩的瞳孔
+  fill(0);
+  ellipse(-25, -60, 10, 10);  // 左瞳孔
+  ellipse(25, -60, 10, 10);  // 右瞳孔
+
+  // 画嘴巴
+  noFill();
+  arc(0, -40, 40, 30, 0, PI);  // 嘴巴
+
+  // 画女孩的头发（简化几何形状）
+  beginShape();
+  vertex(-50, -70);
+  vertex(-60, -110);
+  vertex(-40, -90);
+  vertex(-20, -100);
+  vertex(0, -90);
+  vertex(20, -100);
+  vertex(40, -90);
+  vertex(60, -110);
+  vertex(50, -70);
+  endShape(CLOSE);
+
+  // 画女孩的身体
+  rect(-30, -10, 60, 120);  // 身体
+
+  // 画裙子
+  beginShape();
+  vertex(-30, 110);
+  vertex(30, 110);
+  vertex(50, 170);
+  vertex(-50, 170);
+  endShape(CLOSE);
+
+  // 画舰娘风格的元素：例如舰炮，作为装饰
+  line(-20, 50, -20, 20);  // 画舰炮的管道
+  line(20, 50, 20, 20);  // 画舰炮的管道
+
+  // 画手臂
+  line(-30, -10, -70, 40);  // 左臂
+  line(30, -10, 70, 40);  // 右臂
+
+  // 画腿部
+  line(-20, 230, -20, 270);  // 左腿
+  line(20, 230, 20, 270);  // 右腿
+
+  // 绘制一些几何学元素：例如盾牌形状作为背景装饰
+  beginShape();
+  vertex(-200, 350);
+  vertex(-160, 380);
+  vertex(-120, 360);
+  vertex(-80, 380);
+  vertex(-40, 360);
+  vertex(0, 380);
+  vertex(40, 360);
+  vertex(80, 380);
+  vertex(120, 360);
+  vertex(160, 380);
+  vertex(200, 350);
+  vertex(170, 320);
+  vertex(130, 320);
+  vertex(90, 300);
+  vertex(50, 320);
+  vertex(10, 320);
+  endShape(CLOSE);
+}
+
+// ============ 类定义（续） ============
+class CustomTextModal {
+  constructor(text) {
+    this.text = text;
+    this.width = 400;
+    this.height = 300;
+    this.x = centerX - this.width / 2;
+    this.y = centerY - this.height / 2;
+    this.lines = this.text.split('\n');
+  }
+
+  update() {
+    // 不需要更新
+  }
+
+  display() {
+    push();
+    // 绘制模态框背景
+    fill(255);
+    stroke(0);
+    rect(this.x, this.y, this.width, this.height);
+
+    // 绘制文本
+    fill(0);
+    textSize(14);
+    textAlign(LEFT, TOP);
+    for (let i = 0; i < this.lines.length; i++) {
+      text(this.lines[i], this.x + 20, this.y + 20 + i * 20);
+    }
+
+    // 绘制关闭按钮
+    let btnW = 200; // 拉长按钮宽度
+    let btnH = 40;
+    let btnX = this.x + (this.width - btnW) / 2;
+    let btnY = this.y + this.height - 60;
+    let isHovered = (mouseX >= btnX && mouseX <= btnX + btnW &&
+                    mouseY >= btnY && mouseY <= btnY + btnH);
+    if (isHovered) {
+      fill(200);
+    } else {
+      fill(255);
+    }
+    stroke(0);
+    rect(btnX, btnY, btnW, btnH);
+
+    fill(0);
+    noStroke();
+    textSize(16);
+    textAlign(CENTER, CENTER);
+    text(getText('infoClose'), btnX + btnW / 2, btnY + btnH / 2 - 8);
+    pop();
+  }
+
+  mousePressed() {
+    // 检测关闭按钮点击
+    let btnW = 200; // 拉长按钮宽度
+    let btnH = 40;
+    let btnX = this.x + (this.width - btnW) / 2;
+    let btnY = this.y + this.height - 60;
+    if (mouseX >= btnX && mouseX <= btnX + btnW &&
+        mouseY >= btnY && mouseY <= btnY + btnH) {
+      currentModal = null;
+    }
+  }
+}
+
+class UnlockBlueprintModal {
+  constructor(type) {
+    this.type = type; // 'ship' 或 'equipment'
+    this.selectedItems = new Set(); // 用 Set 防重复
+    this.scrollOffset = 0;
+    this.itemHeight = 32;
+    this.visibleItems = 10;
+    this.width = 640;
+    this.height = 420;
+    this.x = centerX - this.width / 2;
+    this.y = centerY - this.height / 2;
+    this.costPerUnlock = 100;
+  }
+
+  update() {}
+
+  getUnlockableList() {
+    let list = [];
+    if (this.type === 'ship') {
+      list = ships.filter(s => s && playerData.ownedShips.includes(s.name) && !playerData.unlockedShipBlueprints.includes(s.name));
+    } else {
+      list = equipments.filter(e => e && playerData.ownedEquipments.includes(e.name) && !playerData.unlockedEquipBlueprints.includes(e.name));
+    }
+    // 去重（按 name）
+    let seen = new Set();
+    return list.filter(it => {
+      if (!it || !it.name) return false;
+      if (seen.has(it.name)) return false;
+      seen.add(it.name);
+      return true;
+    });
+  }
+
+  display() {
+    push();
+    fill(255);
+    stroke(0);
+    strokeWeight(1.5);
+    rect(this.x, this.y, this.width, this.height, 12);
+
+    // 标题
+    fill(0);
+    noStroke();
+    textSize(18);
+    textAlign(CENTER, TOP);
+    text(this.type === 'ship' ? getText('fleetResearchUnlockShipBlueprint') : getText('fleetResearchUnlockEquipBlueprint'),
+         this.x + this.width / 2, this.y + 12);
+
+    // 关闭按钮（右上角）
+    let closeBtnX = this.x + this.width - 42;
+    let closeBtnY = this.y + 12;
+    let closeBtnW = 28;
+    let closeBtnH = 28;
+    let isCloseHovered = (mouseX >= closeBtnX && mouseX <= closeBtnX + closeBtnW &&
+                          mouseY >= closeBtnY && mouseY <= closeBtnY + closeBtnH);
+    stroke(0);
+    fill(isCloseHovered ? 210 : 245);
+    rect(closeBtnX, closeBtnY, closeBtnW, closeBtnH, 8);
+    fill(0);
+    noStroke();
+    textAlign(CENTER, CENTER);
+    textSize(18);
+    text('×', closeBtnX + closeBtnW / 2, closeBtnY + closeBtnH / 2 - 1);
+
+    // 左侧列表
+    let listX = this.x + 16;
+    let listY = this.y + 56;
+    let listW = 260;
+    let listH = this.height - 120;
+
+    fill(0);
+    textAlign(LEFT, TOP);
+    textSize(13);
+    text(getText('selectBlueprints'), listX, listY - 22);
+
+    let unlockable = this.getUnlockableList();
+    if (unlockable.length === 0) {
+      fill(80);
+      text(getText('noUnlockableBlueprints'), listX, listY);
+    } else {
+      for (let i = 0; i < unlockable.length; i++) {
+        let item = unlockable[i];
+        let y = listY + (i - this.scrollOffset) * this.itemHeight;
+        if (y < listY || y > listY + listH - this.itemHeight) continue;
+
+        let rowHovered = (mouseX >= listX && mouseX <= listX + listW &&
+                          mouseY >= y && mouseY <= y + this.itemHeight);
+
+        stroke(0);
+        fill(rowHovered ? 220 : 250);
+        rect(listX, y, listW, this.itemHeight, 8);
+
+        // checkbox
+        let cbX = listX + 10;
+        let cbY = y + 8;
+        let cbS = 16;
+        stroke(0);
+        fill(255);
+        rect(cbX, cbY, cbS, cbS, 4);
+        if (this.selectedItems.has(item.name)) {
+          noStroke();
+          fill(0);
+          rect(cbX + 4, cbY + 4, cbS - 8, cbS - 8, 2);
+        }
+
+        // name
+        noStroke();
+        fill(0);
+        textAlign(LEFT, CENTER);
+        textSize(14);
+        text(item.name, cbX + cbS + 10, y + this.itemHeight / 2 + 1);
+      }
+    }
+
+    // 右侧详情
+    let detailX = this.x + 300;
+    let detailY = this.y + 56;
+    let detailW = this.width - 316;
+    let detailH = this.height - 120;
+
+    stroke(0);
+    fill(252);
+    rect(detailX, detailY, detailW, detailH, 10);
+
+    let selectedArr = [...this.selectedItems];
+    fill(0);
+    noStroke();
+    textAlign(LEFT, TOP);
+    textSize(14);
+    text(`${getText('selected')}: ${selectedArr.length}`, detailX + 14, detailY + 12);
+
+    // 列出部分信息（避免一屏塞爆）
+    textSize(12);
+    let yy = detailY + 40;
+    let maxShow = min(6, selectedArr.length);
+    for (let i = 0; i < maxShow; i++) {
+      let name = selectedArr[i];
+      text(`• ${name}`, detailX + 14, yy);
+      yy += 18;
+    }
+    if (selectedArr.length > maxShow) {
+      text(`… (+${selectedArr.length - maxShow})`, detailX + 14, yy);
+      yy += 18;
+    }
+
+    // 总价
+    let totalCost = selectedArr.length * this.costPerUnlock;
+    yy = detailY + detailH - 54;
+    text(`${getText('totalCost')}: ${totalCost} ${getText('coins')}`, detailX + 14, yy);
+
+    // 底部按钮
+    let btnY = this.y + this.height - 54;
+    let unlockBtnX = this.x + this.width - 320;
+    let unlockBtnW = 140;
+    let btnH = 36;
+
+    let canUnlock = selectedArr.length > 0 && playerData.coins >= totalCost;
+    let unlockHovered = (mouseX >= unlockBtnX && mouseX <= unlockBtnX + unlockBtnW &&
+                         mouseY >= btnY && mouseY <= btnY + btnH);
+
+    stroke(0);
+    fill(canUnlock ? (unlockHovered ? 210 : 245) : 235);
+    rect(unlockBtnX, btnY, unlockBtnW, btnH, 10);
+    fill(canUnlock ? 0 : 120);
+    noStroke();
+    textAlign(CENTER, CENTER);
+    textSize(13);
+    text(getText('confirmUnlock'), unlockBtnX + unlockBtnW / 2, btnY + btnH / 2 + 1);
+
+    let cancelBtnX = this.x + this.width - 168;
+    let cancelBtnW = 140;
+    let cancelHovered = (mouseX >= cancelBtnX && mouseX <= cancelBtnX + cancelBtnW &&
+                         mouseY >= btnY && mouseY <= btnY + btnH);
+    stroke(0);
+    fill(cancelHovered ? 210 : 245);
+    rect(cancelBtnX, btnY, cancelBtnW, btnH, 10);
+    fill(0);
+    noStroke();
+    text(getText('cancel'), cancelBtnX + cancelBtnW / 2, btnY + btnH / 2 + 1);
+
+    pop();
+  }
+
+  mousePressed() {
+    // close
+    let closeBtnX = this.x + this.width - 42;
+    let closeBtnY = this.y + 12;
+    let closeBtnW = 28;
+    let closeBtnH = 28;
+    if (mouseX >= closeBtnX && mouseX <= closeBtnX + closeBtnW &&
+        mouseY >= closeBtnY && mouseY <= closeBtnY + closeBtnH) {
+      currentModal = null;
+      return;
+    }
+
+    // list click toggles
+    let listX = this.x + 16;
+    let listY = this.y + 56;
+    let listW = 260;
+    let listH = this.height - 120;
+    let unlockable = this.getUnlockableList();
+
+    for (let i = 0; i < unlockable.length; i++) {
+      let item = unlockable[i];
+      let y = listY + (i - this.scrollOffset) * this.itemHeight;
+      if (y < listY || y > listY + listH - this.itemHeight) continue;
+
+      if (mouseX >= listX && mouseX <= listX + listW &&
+          mouseY >= y && mouseY <= y + this.itemHeight) {
+        if (this.selectedItems.has(item.name)) this.selectedItems.delete(item.name);
+        else this.selectedItems.add(item.name);
+        return;
+      }
+    }
+
+    // buttons
+    let btnY = this.y + this.height - 54;
+    let unlockBtnX = this.x + this.width - 320;
+    let unlockBtnW = 140;
+    let btnH = 36;
+
+    let selectedArr = [...this.selectedItems];
+    let totalCost = selectedArr.length * this.costPerUnlock;
+
+    // confirm unlock
+    if (mouseX >= unlockBtnX && mouseX <= unlockBtnX + unlockBtnW &&
+        mouseY >= btnY && mouseY <= btnY + btnH) {
+      if (selectedArr.length === 0) {
+        currentModal = new InfoModal('noBlueprintSelected');
+        return;
+      }
+      if (playerData.coins < totalCost) {
+        currentModal = new InfoModal('notEnoughCoins');
+        return;
+      }
+
+      for (let name of selectedArr) {
+        if (this.type === 'ship') {
+          if (!playerData.unlockedShipBlueprints.includes(name)) playerData.unlockedShipBlueprints.push(name);
+        } else {
+          if (!playerData.unlockedEquipBlueprints.includes(name)) playerData.unlockedEquipBlueprints.push(name);
+        }
+      }
+      playerData.coins -= totalCost;
+      savePlayerDataToLocalStorage();
+      currentModal = new InfoModal('blueprintUnlockSuccess');
+      initFleetResearchButtons();
+      return;
+    }
+
+    // cancel
+    let cancelBtnX = this.x + this.width - 168;
+    let cancelBtnW = 140;
+    if (mouseX >= cancelBtnX && mouseX <= cancelBtnX + cancelBtnW &&
+        mouseY >= btnY && mouseY <= btnY + btnH) {
+      currentModal = null;
+      return;
+    }
+  }
+
+  mouseWheel(event) {
+    let delta = event.delta;
+    this.scrollOffset += delta > 0 ? 1 : -1;
+    let unlockable = this.getUnlockableList();
+    let maxOffset = max(0, unlockable.length - this.visibleItems);
+    this.scrollOffset = constrain(this.scrollOffset, 0, maxOffset);
+    return false;
+  }
+}
+
+class ConfirmModal {
+  constructor(message, onConfirm) {
+    this.message = message;
+    this.onConfirm = onConfirm;
+    this.width = 300;
+    this.height = 200;
+    this.x = centerX - this.width / 2;
+    this.y = centerY - this.height / 2;
+  }
+
+  update() {
+    // 不需要更新
+  }
+
+  display() {
+    push();
+    // 绘制模态框背景
+    fill(255);
+    stroke(0);
+    rect(this.x, this.y, this.width, this.height);
+
+    // 绘制消息文本
+    fill(0);
+    textSize(16);
+    textAlign(CENTER, CENTER);
+    text(this.message, this.x + this.width / 2, this.y + this.height / 2 - 30);
+
+    // 绘制确认按钮
+    let confirmBtnW = 100;
+    let confirmBtnH = 40;
+    let confirmBtnX = this.x + this.width / 2 - confirmBtnW - 10;
+    let confirmBtnY = this.y + this.height - 60;
+    let isConfirmHovered = (mouseX >= confirmBtnX && mouseX <= confirmBtnX + confirmBtnW &&
+                           mouseY >= confirmBtnY && mouseY <= confirmBtnY + confirmBtnH);
+    if (isConfirmHovered) {
+      fill(200);
+    } else {
+      fill(255);
+    }
+    stroke(0);
+    rect(confirmBtnX, confirmBtnY, confirmBtnW, confirmBtnH);
+
+    fill(0);
+    noStroke();
+    textSize(14);
+    textAlign(CENTER, CENTER);
+    text(getText('confirm'), confirmBtnX + confirmBtnW / 2, confirmBtnY + confirmBtnH / 2 - 8);
+
+    // 绘制取消按钮
+    let cancelBtnX = this.x + this.width / 2 + 10;
+    let cancelBtnY = this.y + this.height - 60;
+    let cancelBtnW = 100;
+    let cancelBtnH = 40;
+    let isCancelHovered = (mouseX >= cancelBtnX && mouseX <= cancelBtnX + cancelBtnW &&
+                          mouseY >= cancelBtnY && mouseY <= cancelBtnY + cancelBtnH);
+    if (isCancelHovered) {
+      fill(200);
+    } else {
+      fill(255);
+    }
+    stroke(0);
+    rect(cancelBtnX, cancelBtnY, cancelBtnW, cancelBtnH);
+
+    fill(0);
+    noStroke();
+    textSize(14);
+    textAlign(CENTER, CENTER);
+    text(getText('cancel'), cancelBtnX + cancelBtnW / 2, cancelBtnY + cancelBtnH / 2 - 7);
+    pop();
+  }
+
+  mousePressed() {
+    // 检测确认按钮点击
+    let confirmBtnW = 100;
+    let confirmBtnH = 40;
+    let confirmBtnX = this.x + this.width / 2 - confirmBtnW - 10;
+    let confirmBtnY = this.y + this.height - 60;
+    if (mouseX >= confirmBtnX && mouseX <= confirmBtnX + confirmBtnW &&
+        mouseY >= confirmBtnY && mouseY <= confirmBtnY + confirmBtnH) {
+      if (this.onConfirm) {
+        this.onConfirm();
+      }
+      currentModal = null;
+    }
+
+    // 检测取消按钮点击
+    let cancelBtnW = 100;
+    let cancelBtnH = 40;
+    let cancelBtnX_pos = this.x + this.width / 2 + 10;
+    let cancelBtnY_pos = this.y + this.height - 60;
+    if (mouseX >= cancelBtnX_pos && mouseX <= cancelBtnX_pos + cancelBtnW &&
+        mouseY >= cancelBtnY_pos && mouseY <= cancelBtnY_pos + cancelBtnH) {
+      currentModal = null;
+    }
+  }
+}
+
+// ============ 初始化舰队编成槽位 ============
+function initFleetFormation() {
+  fleetSlots = [];
+  let margin = centerX - 300; // Positioned towards left
+  let spacing = 20;
+  let slotWidth = 200;
+  let slotHeight = 200;
+
+  for (let i = 0; i < 6; i++) {
+    let x = margin + (i % 3) * (slotWidth + spacing);
+    let y = centerY - 300 + Math.floor(i / 3) * (slotHeight + spacing);
+    let slotLabel = (i < 4) ? `${getText('activeSlot')} ${i + 1}` : `${getText('reserveSlot')} ${i - 3}`;
+    let slot = new FleetSlot(x, y, slotWidth, slotHeight, slotLabel);
+
+    // 如果有保存的舰队，加载舰船和装备
+    if (playerFleet && playerFleet[i]) {
+      let shipName = playerFleet[i].ship;
+      let ship = ships.find(s => s.name === shipName);
+      if (ship) {
+        slot.ship = ship;
+        slot.equipments = playerFleet[i].equipments.map(eqName => equipments.find(e => e && e.name === eqName));
+        slot.totalEquipmentMass = playerFleet[i].totalEquipmentMass;
+      }
+    }
+    fleetSlots.push(slot);
+  }
+}
+
+// ============ 按钮与UI相关函数 ============
+function initMainMenuButtons() {
+  mainMenuButtons = []; // 确保按钮数组为空
+
+  mainMenuButtons.push(new Button(centerX - 150, centerY - 250, 300, 50, 'mainMenuSelectLevel', () => {
+    // 开始关卡选择前的对话
+    let dialog = [
+      "选择关卡开始战斗。",
+      "每个关卡都有不同的挑战。",
+      "请选择一个关卡进行战斗。"
+    ];
+    dialogManager.startDialog(dialog, () => {
+      gameState = 'levelSelect';
+    });
+  }));
+  mainMenuButtons.push(new Button(centerX - 150, centerY - 170, 300, 50, 'mainMenuFleetFormation', () => {
+    // 开始舰队编成前的对话
+    let dialog = [
+      "在舰队编成界面中，你可以组建和管理你的舰队。",
+      "选择你拥有的舰船和装备，构建最强舰队。"
+    ];
+    dialogManager.startDialog(dialog, () => {
+      gameState = 'fleetFormation';
+      initFleetFormation();
+    });
+  }));
+  mainMenuButtons.push(new Button(centerX - 150, centerY - 90, 300, 50, 'mainMenuFleetResearch', () => {
+    // 开始舰队研发前的对话
+    let dialog = [
+      "在舰队研发界面中，你可以抽取新的舰船和装备。",
+      "解锁图纸以研究和装备更强大的武器。"
+    ];
+    dialogManager.startDialog(dialog, () => {
+      gameState = 'fleetResearch';
+      initFleetResearchButtons(); // 重新初始化以更新解锁按钮
+    });
+  }));
+  mainMenuButtons.push(new Button(centerX - 150, centerY - 10, 300, 50, 'mainMenuSaveProgress', () => {
+    saveProgressToFile();
+  }));
+  mainMenuButtons.push(new Button(centerX - 150, centerY + 70, 300, 50, 'mainMenuLoadProgress', () => {
+    document.getElementById('fileInput').click();
+  }));
+  mainMenuButtons.push(new Button(centerX - 150, centerY + 150, 300, 50, 'mainMenuExitGame', () => {
+    // 退出游戏，在浏览器中可以重载页面
+    window.location.reload();
+  }));
+  mainMenuButtons.push(new Button(centerX - 150, centerY + 230, 300, 50, 'resetGame', () => {
+    // 重置游戏前的确认对话
+    currentModal = new ConfirmModal(getText('resetGameConfirm'), () => {
+      resetGame();
+    });
+  }));
+
+  // 语言切换按钮
+  let languageButton = new Button(width - 150, 20, 140, 40, language === 'en' ? 'switchToChinese' : 'switchToEnglish', () => {
+    language = (language === 'en') ? 'zh' : 'en';
+    // 更新所有按钮以反映语言变化
+    initMainMenuButtons();
+    initFleetResearchButtons();
+    // 如果有弹窗，重新初始化其显示内容
+    if (currentModal && currentModal instanceof InfoModal) {
+      // Do nothing, as InfoModal uses getText
+    }
+  });
+  mainMenuButtons.push(languageButton);
+
+  // 监听文件输入变化
+  document.getElementById('fileInput').addEventListener('change', function(event) {
+    let file = event.target.files[0];
+    if (file) {
+      loadProgressFromFile(file);
+    }
+  });
+}
+
+function initFleetResearchButtons() {
+  fleetResearchButtons = []; // 清空按钮数组
+
+  // 抽卡按钮
+  fleetResearchButtons.push(new Button(centerX - 200, 250, 300, 50, 'fleetResearchGacha1', () => {
+    tryGacha(1);
+  }));
+  fleetResearchButtons.push(new Button(centerX + 50, 250, 300, 50, 'fleetResearchGacha5', () => {
+    tryGacha(5);
+  }));
+
+  // 解锁舰船图纸按钮
+  fleetResearchButtons.push(new Button(centerX - 150, 350, 300, 50, 'fleetResearchUnlockShipBlueprint', () => {
+    // 打开解锁舰船图纸的弹窗
+    currentModal = new UnlockBlueprintModal('ship');
+  }));
+
+  // 解锁装备图纸按钮
+  fleetResearchButtons.push(new Button(centerX - 150, 420, 300, 50, 'fleetResearchUnlockEquipBlueprint', () => {
+    // 打开解锁装备图纸的弹窗
+    currentModal = new UnlockBlueprintModal('equipment');
+  }));
+}
+
+// ============ 绘制主菜单 ============
+function drawMainMenu() {
+  push();
+  // 绘制标题
+  fill(0);
+  textSize(48);
+  textAlign(CENTER, CENTER);
+  text(getText('mainMenuTitle'), centerX, 150);
+
+  for (let btn of mainMenuButtons) {
+    btn.update();
+    btn.display();
+  }
+  pop();
+}
+
+// ============ 绘制关卡选择界面 ============
+function drawLevelSelect() {
+  push();
+  fill(0);
+  textSize(32);
+  textAlign(CENTER, CENTER);
+  text(getText('mainMenuSelectLevel'), centerX, 150);
+
+  // 绘制所有关卡
+  for (let i = 0; i < levels.length; i++) {
+    let lvl = levels[i];
+    // 检查关卡是否已解锁
+    if (lvl.id === 1 || playerData.clearedLevels.includes(lvl.id - 1)) {
+      if (!lvl.button) {
+        lvl.button = new Button(centerX - 100, 200 + i * 80, 200, 50, `关卡 ${lvl.id}`, () => {
+          // 开始战斗前的对话
+          let dialog = [
+            `准备进入关卡 ${lvl.id} 战斗。`,
+            getText('goodLuck')
+          ];
+          dialogManager.startDialog(dialog, () => {
+            // 设置当前关卡
+            currentLevel = lvl;
+
+            // 根据关卡数据初始化战斗场景
+            initBattle();
+
+            // 进入战斗状态
+            gameState = 'battle';
+          });
+        });
+      }
+      lvl.button.update();
+      lvl.button.display();
+    } else {
+      // 绘制未解锁的关卡
+      fill(150);
+      stroke(0);
+      rect(centerX - 100, 200 + i * 80, 200, 50);
+      fill(0);
+      noStroke();
+      textSize(16);
+      textAlign(CENTER, CENTER);
+      text(`${getText('level')} ${lvl.id} (${getText('locked')})`, centerX, 225 + i * 80);
+    }
+  }
+  pop();
+}
+
+// ============ 绘制舰队编成界面 ============
+function drawFleetFormation() {
+  push();
+  fill(0);
+  textSize(32);
+  textAlign(CENTER, CENTER);
+  text(getText('mainMenuFleetFormation'), centerX, 150);
+
+  // 绘制舰队槽位
+  for (let slot of fleetSlots) {
+    slot.update();
+    slot.display();
+  }
+
+  fleetFormationSaveButton.update();
+  fleetFormationSaveButton.display();
+
+  pop();
+}
+
+// ============ 绘制舰队研发界面 ============
+function drawFleetResearch() {
+  push();
+  fill(0);
+  textSize(32);
+  textAlign(CENTER, CENTER);
+  text(getText('mainMenuFleetResearch'), centerX, 150);
+
+  // 显示金币
+  fill(0);
+  textSize(20);
+  textAlign(LEFT, CENTER);
+  text(`${getText('coins')}: ${playerData.coins}`, centerX - 250, 200);
+
+  // 绘制抽卡和解锁蓝图按钮
+  for (let btn of fleetResearchButtons) {
+    btn.update();
+    btn.display();
+  }
+
+  // 图纸研发区域标题
+  fill(0);
+  textSize(24);
+  textAlign(CENTER, CENTER);
+  text(getText('blueprintsUnlocked'), centerX, 350);
+
+  pop();
+}
+
+// ============ 尝试抽卡（修复版） ============
+function tryGacha(times) {
+  const costPerDraw = 100;
+  const totalCost = times * costPerDraw;
+
+  if (playerData.coins < totalCost) {
+    currentModal = new InfoModal('notEnoughCoins');
+    return;
+  }
+
+  playerData.coins -= totalCost;
+  savePlayerDataToLocalStorage(); // 立即保存扣钱操作（防止刷新丢失）
+
+  // 抽取结果
+  let results = [];
+  for (let i = 0; i < times; i++) {
+    let r = random();
+    let cum = 0;
+    let chosen = null;
+    for (let item of gachaPool) {
+      cum += item.probability;
+      if (r <= cum) { chosen = item.name; break; }
+    }
+    if (!chosen && gachaPool.length > 0) chosen = gachaPool[gachaPool.length - 1].name;
+    if (chosen) results.push(chosen);
+  }
+
+  // 结算：重复返还（每个重复都返还），新物品入库（去重）
+  const refundPerDuplicate = 50; // 50% of 100
+  let refundedAmount = 0;
+  let lines = [];
+  for (let res of results) {
+    let isShip = ships.some(s => s && s.name === res);
+    let isEquip = equipments.some(e => e && e.name === res);
+
+    if (!isShip && !isEquip) {
+      lines.push(`${getText('gachaUnknownItem')} ${res}`);
+      continue;
+    }
+
+    if (isShip) {
+      if (playerData.ownedShips.includes(res)) {
+        playerData.coins += refundPerDuplicate;
+        refundedAmount += refundPerDuplicate;
+        lines.push(`${res} (${getText('duplicate')}, ${getText('refund')} ${refundPerDuplicate} ${getText('coins')})`);
+      } else {
+        playerData.ownedShips.push(res);
+        lines.push(`${res} (${getText('newItem')})`);
+      }
+    } else {
+      if (playerData.ownedEquipments.includes(res)) {
+        playerData.coins += refundPerDuplicate;
+        refundedAmount += refundPerDuplicate;
+        lines.push(`${res} (${getText('duplicate')}, ${getText('refund')} ${refundPerDuplicate} ${getText('coins')})`);
+      } else {
+        playerData.ownedEquipments.push(res);
+        lines.push(`${res} (${getText('newItem')})`);
+      }
+    }
+  }
+
+  // 强制去重，避免“库存管理”越抽越脏
+  playerData.ownedShips = uniqueArray(playerData.ownedShips);
+  playerData.ownedEquipments = uniqueArray(playerData.ownedEquipments);
+
+  let finalResultMsg = `${getText('gachaResultHeader')}\n${lines.join('\n')}`;
+  currentModal = new CustomTextModal(finalResultMsg.trim());
+
+  savePlayerDataToLocalStorage();
+  initFleetResearchButtons(); // 更新按钮（例如显示可解锁数量）
+}
+
+// ============ 数据翻译 ============
+function translateAttribute(attr) {
+  const translation = {
+    '火': 'Fire',
+    '水': 'Water',
+    '毒': 'Poison',
+    '圣光': 'Holy Light',
+    '暗影': 'Shadow',
+    '幽能': 'Energy',
+    '普通': 'Normal',
+    '火&毒': 'Fire&Poison',
+    'Fire': 'Fire',
+    'Water': 'Water',
+    'Poison': 'Poison',
+    'Holy Light': 'Holy Light',
+    'Shadow': 'Shadow',
+    'Energy': 'Energy',
+    'Normal': 'Normal',
+    'Fire&Poison': 'Fire&Poison'
+  };
+  return translation[attr] || attr;
+}
+
+function initFleetResearchButtons() {
+  fleetResearchButtons = []; // 清空按钮数组
+
+  // 抽卡按钮
+  fleetResearchButtons.push(new Button(centerX - 200, 250, 300, 50, 'fleetResearchGacha1', () => {
+    tryGacha(1);
+  }));
+  fleetResearchButtons.push(new Button(centerX + 50, 250, 300, 50, 'fleetResearchGacha5', () => {
+    tryGacha(5);
+  }));
+
+  // 解锁舰船图纸按钮
+  fleetResearchButtons.push(new Button(centerX - 150, 350, 300, 50, 'fleetResearchUnlockShipBlueprint', () => {
+    // 打开解锁舰船图纸的弹窗
+    currentModal = new UnlockBlueprintModal('ship');
+  }));
+
+  // 解锁装备图纸按钮
+  fleetResearchButtons.push(new Button(centerX - 150, 420, 300, 50, 'fleetResearchUnlockEquipBlueprint', () => {
+    // 打开解锁装备图纸的弹窗
+    currentModal = new UnlockBlueprintModal('equipment');
+  }));
+}
+
+
+// ============ 绘制小地图 ============
+function drawMiniMap() {
+  // 绘制小地图区域
+  push();
+  noStroke();
+  fill(230);
+  rect(width - 300, 50, 280, 280); // 调整小地图位置
+
+  // 绘制星球外轮廓
+  fill(255);
+  stroke(0);
+  ellipse(width - 150, 190, 180, 180); // 星球外轮廓
+
+  // 绘制卫星和红点的位置
+  for (let satellite of satellites) {
+    if (!satellite.ship || satellite.health <= 0) continue;
+    let x = satellite.absX;
+    let y = satellite.absY;
+
+    // 缩放位置以适应小地图
+    let scaleFactor = 90 / (radius + 300); // 调整比例因子
+
+    let mapX = width - 150 + (x) * scaleFactor;
+    let mapY = 190 + (y) * scaleFactor; // 调整y位置以匹配星球外轮廓位置
+
+    fill(0, 0, 255); // 蓝色表示舰船
+    noStroke();
+    ellipse(mapX, mapY, 6, 6);
+    fill(0);
+    textSize(10);
+    textAlign(LEFT, CENTER);
+    text(satellite.ship.name, mapX + 5, mapY - 5);
+  }
+
+  for (let point of redPoints) {
+    let x = point.absX;
+    let y = point.absY;
+
+    // 缩放位置以适应小地图
+    let scaleFactor = 90 / (radius + 300); // 调整比例因子
+
+    let mapX = width - 150 + (x) * scaleFactor;
+    let mapY = 190 + (y) * scaleFactor; // 调整y位置以匹配星球外轮廓位置
+
+    fill(255, 0, 0); // 红色表示红点
+    noStroke();
+    ellipse(mapX, mapY, 6, 6);
+    fill(0);
+    textSize(10);
+    textAlign(LEFT, CENTER);
+    text(point.name, mapX + 5, mapY - 5);
+  }
+
+  pop();
+}
+
+// ============ 绘制胜利界面 ============
+function drawVictoryScreen() {
+  push();
+  fill(0, 255, 0);
+  textSize(48);
+  textAlign(CENTER, CENTER);
+  text(getText('victory'), centerX, centerY);
+  pop();
+}
+
+// ============ 绘制失败界面 ============
+function drawDefeatScreen() {
+  push();
+  fill(255, 0, 0);
+  textSize(48);
+  textAlign(CENTER, CENTER);
+  text(getText('defeat'), centerX, centerY);
+  pop();
+}
+
+// ============ 战斗相关函数 ============
+let currentLevel = null; // 当前关卡
+
+function initBattle() {
+  // 初始化星球参数
+  radius = currentLevel.planetRadius;
+  planetMass = currentLevel.planetMass;
+  rotationAngle = 0; // 重置自转角度
+
+  // 初始化轨道和卫星
+  satellites = [];
+  selectedOrbitIndex = 0;
+
+  // 使用玩家保存的舰队数据
+  if (playerFleet && playerFleet.length > 0) {
+    for (let i = 0; i < playerFleet.length; i++) {
+      let shipSlot = playerFleet[i];
+      if (shipSlot && shipSlot.ship) {
+        let ship = ships.find(s => s.name === shipSlot.ship);
+        if (ship) {
+          let orbitRadius = radius + ship.minOrbit; // 正确计算轨道半径
+          let satellite = {
+            orbitRadius: orbitRadius,
+            orbitQuat: { x: 0, y: 0, z: 0, w: 1 },
+            satelliteAngle: 0,
+            ship: ship,
+            equipments: shipSlot.equipments.map(eqName => equipments.find(e => e && e.name === eqName)),
+            orbitalSpeed: 0, // 新增属性
+            health: ship.endurance, // 初始化舰船健康值
+            attackCooldown: 0 // 攻击冷却
+          };
+          calculateOrbitalSpeed(satellite); // 计算轨道速度
+          satellites.push(satellite);
+        }
+      }
+    }
+  } else {
+    // 如果没有保存的舰队，初始化默认的卫星
+    for (let i = 0; i < 4; i++) {
+      let orbitRadius = radius + 250 + i * 50; // 正确计算轨道半径
+      let satellite = {
+        orbitRadius: orbitRadius,
+        orbitQuat: { x: 0, y: 0, z: 0, w: 1 },
+        satelliteAngle: 0,
+        ship: null,
+        equipments: [],
+        orbitalSpeed: 0, // 新增属性
+        health: 0,
+        attackCooldown: 0
+      };
+      calculateOrbitalSpeed(satellite); // 计算轨道速度
+      satellites.push(satellite);
+    }
+  }
+
+  // 初始化红点
+  redPoints = [];
+  for (let point of currentLevel.redPoints) {
+    let rp = { ...point };
+    if (rp.minOrbit > 0) {
+      rp.orbitRadius = radius + rp.minOrbit;
+      rp.orbitalSpeed = sqrt((G * currentLevel.planetMass) / (rp.orbitRadius * 1000)) * 10;
+      rp.orbitalSpeed *= 1e-6;
+      rp.angle = radians(rp.lon);
+    }
+    redPoints.push(rp);
+  }
+
+  battleLog = []; // 重置战斗日志
+}
+
+function drawBattle() {
+  rotationAngle = (rotationAngle + currentLevel.planetRotationSpeed) % TWO_PI; // 星球自转速度
+
+  // 处理按键持续按下的旋转
+  handleOrbitRotation();
+
+  // 绘制星球
+  push();
+  translate(centerX, centerY);
+  
+  noFill(); // 确保星球不被填充
+  stroke(0);
+  ellipse(0, 0, radius * 2);
+
+  // 绘制纬线和经线
+  drawLatitudeLines();
+  drawLongitudeLines();
+  pop();
+
+  // 更新并绘制红点
+  updateAndDrawRedPoints();
+
+  // 绘制轨道和卫星
+  let satellitePositions3D = [];
+  for (let i = 0; i < satellites.length; i++) {
+    let satellite = satellites[i];
+    drawOrbitAndSatellite(satellite, satellitePositions3D);
+  }
+
+  // 计算并显示卫星与红点之间的3D距离以及处理攻击
+  processAttacks(satellitePositions3D, redPoints);
+
+  // 检查战斗结束条件
+  if (redPoints.length === 0) {
+    gameState = 'victory';
+    handleVictory();
+  }
+
+  // 检查是否所有卫星健康低于等于0，可能导致失败
+  let allSatellitesDefeated = satellites.every(sat => !sat.ship || sat.health <=0);
+  if (allSatellitesDefeated && redPoints.length >0) {
+    gameState = 'defeat';
+    handleDefeat();
+  }
+}
+function handleVictory() {
+  let rewardCoins = floor(random(currentLevel.rewardCoinsMin, currentLevel.rewardCoinsMax + 1));
+  playerData.coins += rewardCoins;
+
+  let unlockedBlueprints = [];
+  for (let drop of currentLevel.drops) {
+    let isShip = ships.some(s => s.name === drop.name);
+    let isEquip = equipments.some(e => e.name === drop.name);
+    if (isShip) {
+      // 如果想让玩家直接获得该船
+      if (!playerData.ownedShips.includes(drop.name)) {
+        playerData.ownedShips.push(drop.name);
+      }
+      // 同时解锁图纸
+      if (!playerData.unlockedShipBlueprints.includes(drop.name)) {
+        playerData.unlockedShipBlueprints.push(drop.name);
+        unlockedBlueprints.push(`${drop.name} ${getText('shipBlueprint')}`);
+      }
+    } else if (isEquip) {
+      if (!playerData.ownedEquipments.includes(drop.name)) {
+        playerData.ownedEquipments.push(drop.name);
+      }
+      if (!playerData.unlockedEquipBlueprints.includes(drop.name)) {
+        playerData.unlockedEquipBlueprints.push(drop.name);
+        unlockedBlueprints.push(`${drop.name} ${getText('equipBlueprint')}`);
+      }
+    }
+  }
+
+  if (!playerData.clearedLevels.includes(currentLevel.id)) {
+    playerData.clearedLevels.push(currentLevel.id);
+  }
+
+  let nextLevel = levels.find(l => l.id === currentLevel.id + 1);
+  // ...如果需要自动解锁下一关可继续
+
+  let victoryDialog = [
+    `${getText('victory')}!`,
+    `${getText('reward')} ${rewardCoins} ${getText('coins')}.`
+  ];
+  if (unlockedBlueprints.length > 0) {
+    victoryDialog.push(`${getText('blueprintsUnlocked')}: ${unlockedBlueprints.join('、')}。`);
+  }
+  victoryDialog.push(getText('congratulations'));
+  victoryDialog.push(getText('clickConfirmReturn'));
+
+  currentModal = null;
+  dialogManager.startDialog(victoryDialog, () => {
+    gameState = 'levelSelect';
+    savePlayerDataToLocalStorage();
+  });
+}
+
+function handleDefeat() {
+  // 构建失败对话
+  let defeatDialog = [
+    `${getText('defeat')}.`,
+    `${getText('noRewards')}.`,
+    getText('clickConfirmReturn')
+  ];
+
+  // 显示失败信息
+  currentModal = null; // 关闭战斗中的任何弹窗
+  dialogManager.startDialog(defeatDialog, () => {
+    gameState = 'levelSelect';
+    savePlayerDataToLocalStorage();
+  });
+}
+
+function drawLatitudeLines() {
+  for (let lat = -80; lat <= 80; lat += 20) {
+    beginShape();
+    for (let lon = 0; lon <= 360; lon += 5) {
+      let latRadian = radians(lat);
+      let lonRadian = radians(lon);
+      let x0 = radius * cos(latRadian) * cos(lonRadian);
+      let y0 = radius * sin(latRadian);
+      let z0 = radius * cos(latRadian) * sin(lonRadian);
+
+      // 使用星球自转的四元数旋转点
+      let rotationAxis = { x: 0, y: 1, z: 0 };
+      let planetRotationQuat = rotateQuaternion({ x: 0, y: 0, z: 0, w: 1 }, rotationAxis, rotationAngle);
+      let rotatedPoint = rotateVectorByQuaternion({ x: x0, y: y0, z: z0 }, planetRotationQuat);
+
+      let x = rotatedPoint.x;
+      let y = rotatedPoint.y;
+      let z = rotatedPoint.z;
+
+      // 根据 x 值设置透明度
+      let alphaValue = map(x, -radius, radius, 255, 50); // 前方更亮，后方更暗
+      stroke(200, alphaValue);
+
+      vertex(z, -y); // z 轴映射到屏幕的 x 轴，y 轴映射到屏幕的 y 轴
+    }
+    endShape();
+  }
+}
+
+function drawLongitudeLines() {
+  for (let lon = 0; lon < 360; lon += 20) {
+    beginShape();
+    for (let lat = -90; lat <= 90; lat += 1) {
+      let latRadian = radians(lat);
+      let lonRadian = radians(lon);
+      let x0 = radius * cos(latRadian) * cos(lonRadian);
+      let y0 = radius * sin(latRadian);
+      let z0 = radius * cos(latRadian) * sin(lonRadian);
+
+      // 使用星球自转的四元数旋转点
+      let rotationAxis = { x: 0, y: 1, z: 0 };
+      let planetRotationQuat = rotateQuaternion({ x: 0, y: 0, z: 0, w: 1 }, rotationAxis, rotationAngle);
+      let rotatedPoint = rotateVectorByQuaternion({ x: x0, y: y0, z: z0 }, planetRotationQuat);
+
+      let x = rotatedPoint.x;
+      let y = rotatedPoint.y;
+      let z = rotatedPoint.z;
+
+      // 根据 x 值设置透明度
+      let alphaValue = map(x, -radius, radius, 255, 50);
+      stroke(200, alphaValue);
+
+      vertex(z, -y); // z 轴映射到屏幕的 x 轴，y 轴映射到屏幕的 y 轴
+    }
+    endShape();
+  }
+}
+
+// 更新并绘制红点
+function updateAndDrawRedPoints() {
+  for (let i = redPoints.length - 1; i >= 0; i--) {
+    let point = redPoints[i];
+    let latRadian = radians(point.lat);
+    let lonRadian = radians(point.lon);
+
+    // 计算红点在星球坐标系中的位置
+    let x0 = (radius + point.range) * cos(latRadian) * cos(lonRadian);
+    let y0 = (radius + point.range) * sin(latRadian);
+    let z0 = (radius + point.range) * cos(latRadian) * sin(lonRadian);
+
+    // 使用星球自转的四元数旋转点
+    let rotationAxis = { x: 0, y: 1, z: 0 };
+    let planetRotationQuat = rotateQuaternion({ x: 0, y: 0, z: 0, w: 1 }, rotationAxis, rotationAngle);
+    let rotatedPoint = rotateVectorByQuaternion({ x: x0, y: y0, z: z0 }, planetRotationQuat);
+
+    // 更新红点的绝对坐标
+    point.absX = rotatedPoint.x;
+    point.absY = rotatedPoint.y;
+    point.absZ = rotatedPoint.z;
+
+    // 投影到屏幕坐标
+    let screenX = centerX + rotatedPoint.z;
+    let screenY = centerY - rotatedPoint.y;
+
+    // 根据 x 值设置透明度
+    let alphaValue = map(rotatedPoint.x, -radius, radius, 255, 50);
+    fill(255, 0, 0, alphaValue);
+
+    ellipse(screenX, screenY, 10, 10); // 绘制红点
+    noFill();
+  }
+}
+
+// 绘制轨道和卫星
+function drawOrbitAndSatellite(satellite, satellitePositions3D) {
+  let orbitRadius = satellite.orbitRadius;
+  let orbitQuat = satellite.orbitQuat;
+  let satelliteAngle = satellite.satelliteAngle;
+
+  // 绘制轨道
+  let angleIncrement = 1; // 角度增量
+  let prevVisible = false;
+  let currentShapeStarted = false;
+
+  beginShape();
+  for (let angle = 0; angle <= 360; angle += angleIncrement) {
+    let angleRadian = radians(angle);
+    let localPoint = { x: orbitRadius * cos(angleRadian), y: 0, z: orbitRadius * sin(angleRadian) };
+    let rotatedPoint = rotateVectorByQuaternion(localPoint, orbitQuat);
+    let x = rotatedPoint.x;
+    let y = rotatedPoint.y;
+    let z = rotatedPoint.z;
+
+    // 判断轨道点是否被星球遮挡
+    let y2z2 = y * y + z * z;
+    let visible = false;
+    if (y2z2 <= radius * radius) {
+      let x_p = sqrt(radius * radius - y2z2);
+      if (x >= x_p) {
+        // 点在星球后面
+        visible = false;
+      } else {
+        // 点在星球前面
+        visible = true;
+      }
+    } else {
+      // 点不在星球投影范围内，显示
+      visible = true;
+    }
+
+    if (visible) {
+      if (!prevVisible) {
+        // 开始新的形状
+        beginShape();
+        currentShapeStarted = true;
+      }
+      let screenX = centerX + z;
+      let screenY = centerY - y;
+
+      let alphaValue = map(x, -orbitRadius, orbitRadius, 255, 50);
+      stroke(150, alphaValue);
+
+      vertex(screenX, screenY);
+    } else {
+      if (prevVisible && currentShapeStarted) {
+        // 结束当前形状
+        endShape();
+        currentShapeStarted = false;
+      }
+    }
+
+    prevVisible = visible;
+  }
+  if (currentShapeStarted) {
+    endShape();
+  }
+
+  // 更新卫星位置
+  satellite.satelliteAngle += satellite.orbitalSpeed / orbitRadius;
+  let satellitePoint = { x: orbitRadius * cos(satellite.satelliteAngle), y: 0, z: orbitRadius * sin(satellite.satelliteAngle) };
+  let rotatedSatellitePoint = rotateVectorByQuaternion(satellitePoint, orbitQuat);
+
+  // 保存卫星的绝对坐标
+  let satelliteX = rotatedSatellitePoint.x;
+  let satelliteY = rotatedSatellitePoint.y;
+  let satelliteZ = rotatedSatellitePoint.z;
+
+  satellitePositions3D.push({ x: satelliteX, y: satelliteY, z: satelliteZ });
+
+  // 投影到屏幕坐标
+  let screenSatelliteX = centerX + satelliteZ;
+  let screenSatelliteY = centerY - satelliteY;
+
+  // 根据 x 值设置透明度
+  let alphaValue = map(satelliteX, -orbitRadius, orbitRadius, 255, 50);
+
+  // 判断卫星是否被星球遮挡
+  let satY2Z2 = satelliteY * satelliteY + satelliteZ * satelliteZ;
+  let satelliteVisible = false;
+  if (satY2Z2 <= radius * radius) {
+    let x_p = sqrt(radius * radius - satY2Z2);
+    if (satelliteX >= x_p) {
+      // 卫星在星球后面
+      satelliteVisible = false;
+    } else {
+      // 卫星在星球前面
+      satelliteVisible = true;
+    }
+  } else {
+    // 卫星不在星球投影范围内，显示
+    satelliteVisible = true;
+  }
+
+  if (satelliteVisible) {
+    // 绘制卫星
+    fill(0, 0, 255, alphaValue);
+    ellipse(screenSatelliteX, screenSatelliteY, 10, 10);
+    noFill();
+
+    // 绘制卫星编号或舰船名称
+    fill(0);
+    textSize(12);
+    let label = satellite.ship ? satellite.ship.name : `${getText('satellite')} ${satellites.indexOf(satellite) + 1}`;
+    text(label, screenSatelliteX + 10, screenSatelliteY - 5);
+    noFill();
+  } else {
+    // 绘制被遮挡的卫星（虚线描边，白色填充）
+    stroke(0);
+    strokeWeight(1);
+    drawingContext.setLineDash([5, 5]); // 虚线
+    fill(255, 255, 255, 0); // 透明填充
+    ellipse(screenSatelliteX, screenSatelliteY, 10, 10);
+    drawingContext.setLineDash([]);
+    noFill();
+
+    // 绘制卫星编号或舰船名称
+    fill(0);
+    textSize(12);
+    let label = satellite.ship ? satellite.ship.name : `${getText('satellite')} ${satellites.indexOf(satellite) + 1}`;
+    text(label, screenSatelliteX + 10, screenSatelliteY - 5);
+    noFill();
+  }
+
+  // 绘制射程区域
+  drawSatelliteRangeArea(satellite, satellitePositions3D[satellites.indexOf(satellite)], satellites.indexOf(satellite));
+}
+
+// 绘制卫星射程区域
+function drawSatelliteRangeArea(satellite, satellitePos, satelliteIndex) {
+  let R1 = radius; // 星球半径
+  let R2 = satellite.ship ? satellite.ship.range : 0; // 射程
+  let P1 = { x: 0, y: 0, z: 0 }; // 星球中心
+
+  // 获取星球自转四元数和其逆
+  let rotationAxis = { x: 0, y: 1, z: 0 };
+  let planetRotationQuat = rotateQuaternion({ x: 0, y: 0, z: 0, w: 1 }, rotationAxis, rotationAngle);
+  let planetRotationQuatInverse = { x: -planetRotationQuat.x, y: -planetRotationQuat.y, z: -planetRotationQuat.z, w: planetRotationQuat.w };
+
+  // 将卫星位置旋转到星球坐标系
+  let satellitePosInPlanetFrame = rotateVectorByQuaternion(satellitePos, planetRotationQuatInverse);
+
+  let P2 = satellitePosInPlanetFrame; // 卫星在星球坐标系中的位置
+
+  // 计算卫星与星球中心的距离
+  let d = dist3D(P1, P2);
+
+  // 检查是否有交集
+  if (d > R1 + R2 || d < abs(R1 - R2)) {
+    // 没有交集，不绘制
+    return;
+  }
+
+  // 计算 a 和 h
+  let a = (R1 * R1 - R2 * R2 + d * d) / (2 * d);
+  let h = sqrt(R1 * R1 - a * a);
+
+  // 计算交圈的中心点
+  let P_c = {
+    x: P1.x + a * (P2.x - P1.x) / d,
+    y: P1.y + a * (P2.y - P1.y) / d,
+    z: P1.z + a * (P2.z - P1.z) / d
+  };
+
+  // 计算法向量 n
+  let n = {
+    x: (P2.x - P1.x) / d,
+    y: (P2.y - P1.y) / d,
+    z: (P2.z - P1.z) / d
+  };
+
+  // 计算正交基 (u, v)
+  let arbitraryVector = { x: 1, y: 0, z: 0 };
+  if (abs(n.x) > 0.99) {
+    arbitraryVector = { x: 0, y: 1, z: 0 };
+  }
+  let u = crossProduct(n, arbitraryVector);
+  let u_mag = sqrt(u.x * u.x + u.y * u.y + u.z * u.z);
+  u = { x: u.x / u_mag, y: u.y / u_mag, z: u.z / u_mag };
+
+  let v = crossProduct(n, u);
+
+  // 采样点
+  let numPoints = 100;
+  let angleStep = TWO_PI / numPoints;
+
+  let frontVertices = [];
+  let backVertices = [];
+
+  for (let i = 0; i <= numPoints; i++) {
+    let angle = i * angleStep;
+    let point = {
+      x: P_c.x + h * (cos(angle) * u.x + sin(angle) * v.x),
+      y: P_c.y + h * (cos(angle) * u.y + sin(angle) * v.y),
+      z: P_c.z + h * (cos(angle) * u.z + sin(angle) * v.z)
+    };
+
+    // 应用星球自转，将点旋转回世界坐标系
+    let rotatedPoint = rotateVectorByQuaternion(point, planetRotationQuat);
+
+    // 投影到屏幕坐标
+    let x = rotatedPoint.x;
+    let y = rotatedPoint.y;
+    let z = rotatedPoint.z;
+
+    // 判断点是否在前面
+    let normal = { x: rotatedPoint.x, y: rotatedPoint.y, z: rotatedPoint.z };
+    let normalMag = sqrt(normal.x * normal.x + normal.y * normal.y + normal.z * normal.z);
+    normal = { x: normal.x / normalMag, y: normal.y / normalMag, z: normal.z / normalMag };
+
+    let viewDir = { x: -1, y: 0, z: 0 }; // 视线方向
+
+    let dotProduct = normal.x * viewDir.x + normal.y * viewDir.y + normal.z * viewDir.z;
+
+    if (dotProduct > 0) {
+      frontVertices.push({ x: centerX + z, y: centerY - y });
+    } else {
+      backVertices.push({ x: centerX + z, y: centerY - y });
+    }
+  }
+
+  // 绘制前面的区域
+  if (frontVertices.length > 2) {
+    fill(150, 150, 150, 100); // 灰色填充
+    stroke(0); // 黑色细线
+    strokeWeight(1);
+    beginShape();
+    for (let v of frontVertices) {
+      vertex(v.x, v.y);
+    }
+    endShape(CLOSE);
+    noFill();
+  }
+
+  // 绘制后面的区域
+  if (backVertices.length > 2) {
+    fill(255, 255, 255, 0); // 透明填充
+    stroke(0);
+    strokeWeight(1);
+    drawingContext.setLineDash([5, 5]); // 虚线
+    beginShape();
+    for (let v of backVertices) {
+      vertex(v.x, v.y);
+    }
+    endShape(CLOSE);
+    drawingContext.setLineDash([]);
+    noFill();
+  }
+}
+
+// 计算卫星与红点之间的距离并处理攻击
+function processAttacks(satellitePositions3D, redPoints) {
+  fill(0);
+  textSize(12);
+  let yOffset = 20;
+  let textX = 810;
+
+  // 显示每个红点的血量
+  for (let i = 0; i < redPoints.length; i++) {
+    let point = redPoints[i];
+    text(`${getText('redPoint')} ${point.id + 1} (${point.attribute}) ${getText('health')}: ${point.health}`, textX, yOffset);
+    yOffset += 15;
+  }
+
+  // 计算卫星与红点之间的距离并处理攻击
+  for (let i = 0; i < satellites.length; i++) {
+    let satellite = satellites[i];
+    for (let j = redPoints.length - 1; j >= 0; j--) {
+      let point = redPoints[j];
+
+      // 计算距离
+      let distance = dist3D(
+        satellitePositions3D[i],
+        { x: point.absX, y: point.absY, z: point.absZ }
+      );
+
+      // 检查距离是否有效
+      if (isNaN(distance)) {
+        text(`${getText('satellite')} ${i + 1} ${getText('attackedRedPoint')} ${point.id + 1}: ${getText('invalidDistance')}`, textX, yOffset);
+        yOffset += 15;
+        continue;
+      }
+
+      text(`${getText('satellite')} ${i + 1} ${getText('attackedRedPoint')} ${point.id + 1}: ${distance.toFixed(2)} ${getText('units')}`, textX, yOffset);
+      yOffset += 15;
+
+      // 如果在射程内，绘制虚线并减少红点血量
+      if (distance <= (satellite.ship ? satellite.ship.range : 0)) {
+        // 判断攻击是否被闪避
+        let evadeChance = point.evasion / 200;
+        if (random(1) < evadeChance) {
+          // 被闪避
+          text(`${getText('redPoint')} ${point.id + 1} ${getText('evadeAttack')}`, textX, yOffset);
+          yOffset += 15;
+          continue;
+        }
+
+        // 计算伤害
+        let damage = calculateDamage(satellite, point);
+
+        // 应用伤害
+        point.health -= damage;
+
+        // 绘制虚线连接
+        stroke(0);
+        strokeWeight(1);
+        drawingContext.setLineDash([5, 5]); // 虚线
+
+        // 投影到屏幕坐标
+        let screenSatelliteX = centerX + satellitePositions3D[i].z;
+        let screenSatelliteY = centerY - satellitePositions3D[i].y;
+
+        let screenRedPointX = centerX + point.absZ;
+        let screenRedPointY = centerY - point.absY;
+
+        line(screenSatelliteX, screenSatelliteY, screenRedPointX, screenRedPointY);
+
+        drawingContext.setLineDash([]);
+        noFill();
+
+        // 记录攻击事件
+        addBattleLog(`${satellite.ship.name} ${getText('attackedRedPoint')} ${point.id + 1} ${getText('damageCaused')}: ${damage.toFixed(2)} ${getText('damageUnits')}.`);
+
+        // 如果血量小于等于0，移除红点
+        if (point.health <= 0) {
+          addBattleLog(`${getText('redPoint')} ${point.id + 1} ${getText('destroyed')}`);
+          redPoints.splice(j, 1);
+        }
+      }
+    }
+  }
+}
+
+// 计算伤害函数
+function calculateDamage(satellite, redPoint) {
+  let totalDamage = 0;
+
+  // 获取卫星的所有攻击属性（舰船和装备）
+  let attackerAttributes = [];
+  if (satellite.ship && satellite.ship.attribute) {
+    attackerAttributes = attackerAttributes.concat(satellite.ship.attribute.split('&'));
+  }
+  for (let eq of satellite.equipments) {
+    if (eq && eq.attribute) {
+      attackerAttributes = attackerAttributes.concat(eq.attribute.split('&'));
+    }
+  }
+
+  // 获取红点的属性
+  let targetAttributes = redPoint.attribute.split('&');
+
+  // 计算火力伤害
+  if (satellite.ship && satellite.ship.firepower) {
+    let multiplier = getAttributeMultiplier(attackerAttributes, targetAttributes);
+    totalDamage += satellite.ship.firepower * multiplier;
+  }
+
+  // 计算装备的火力伤害
+  for (let eq of satellite.equipments) {
+    if (eq && eq.firepower) {
+      let multiplier = getAttributeMultiplier(attackerAttributes, targetAttributes);
+      totalDamage += eq.firepower * multiplier;
+    }
+  }
+
+  // 减去红点的装甲
+  totalDamage -= redPoint.armor * 0.01;
+
+  // 确保伤害不为负
+  totalDamage = max(0, totalDamage);
+
+  return totalDamage;
+}
+
+// 获取属性克制倍数
+function getAttributeMultiplier(attackerAttrs, targetAttrs) {
+  let multiplier = 1;
+
+  for (let aAttr of attackerAttrs) {
+    for (let tAttr of targetAttrs) {
+      if (strongAgainst[aAttr] && strongAgainst[aAttr].includes(tAttr)) {
+        multiplier *= 2;
+      } else if (weakAgainst[aAttr] && weakAgainst[aAttr].includes(tAttr)) {
+        multiplier *= 1.5;
+      }
+
+      // 被克制
+      if (strongAgainst[tAttr] && strongAgainst[tAttr].includes(aAttr)) {
+        multiplier *= 0.5;
+      }
+    }
+  }
+
+  return multiplier;
+}
+
+// 计算3D向量的叉积
+function crossProduct(a, b) {
+  return {
+    x: a.y * b.z - a.z * b.y,
+    y: a.z * b.x - a.x * b.z,
+    z: a.x * b.y - a.y * b.x
+  };
+}
+
+// 处理轨道旋转的按键持续检测
+function handleOrbitRotation() {
+  let rotationSpeed = 0.02; // 调整旋转速度
+  let axis;
+
+  if (keyIsDown(87)) { // 'W' 键
+    // 绕 Z 轴旋转（水平轴翻转）
+    axis = { x: 0, y: 0, z: 1 };
+    if (satellites[selectedOrbitIndex]) {
+      satellites[selectedOrbitIndex].orbitQuat = rotateQuaternion(satellites[selectedOrbitIndex].orbitQuat, axis, -rotationSpeed);
+    }
+  }
+  if (keyIsDown(83)) { // 'S' 键
+    // 绕 Z 轴旋转（水平轴翻转）
+    axis = { x: 0, y: 0, z: 1 };
+    if (satellites[selectedOrbitIndex]) {
+      satellites[selectedOrbitIndex].orbitQuat = rotateQuaternion(satellites[selectedOrbitIndex].orbitQuat, axis, rotationSpeed);
+    }
+  }
+  if (keyIsDown(65)) { // 'A' 键
+    // 绕 X 轴旋转（里-外轴翻转）
+    axis = { x: 1, y: 0, z: 0 };
+    if (satellites[selectedOrbitIndex]) {
+      satellites[selectedOrbitIndex].orbitQuat = rotateQuaternion(satellites[selectedOrbitIndex].orbitQuat, axis, -rotationSpeed);
+    }
+  }
+  if (keyIsDown(68)) { // 'D' 键
+    // 绕 X 轴旋转（里-外轴翻转）
+    axis = { x: 1, y: 0, z: 0 };
+    if (satellites[selectedOrbitIndex]) {
+      satellites[selectedOrbitIndex].orbitQuat = rotateQuaternion(satellites[selectedOrbitIndex].orbitQuat, axis, rotationSpeed);
+    }
+  }
+}
+
+// 计算3D空间中两点之间的距离
+function dist3D(p1, p2) {
+  return sqrt(pow(p2.x - p1.x, 2) + pow(p2.y - p1.y, 2) + pow(p2.z - p1.z, 2));
+}
+
+// 计算轨道速度
+function calculateOrbitalSpeed(satellite) {
+  // 使用万有引力公式计算轨道速度 v = sqrt(G * M / r)
+  satellite.orbitalSpeed = sqrt((G * planetMass) / (satellite.orbitRadius * 1000)) * 10; // 将轨道半径从像素转换为米
+  satellite.orbitalSpeed *= 1e-6; // 缩放速度
+}
+
+// 四元数旋转相关函数
+function rotateQuaternion(q, axis, angle) {
+  let halfAngle = angle / 2;
+  let s = sin(halfAngle);
+  let rotationQuat = {
+    x: axis.x * s,
+    y: axis.y * s,
+    z: axis.z * s,
+    w: cos(halfAngle)
+  };
+  return multiplyQuaternions(q, rotationQuat);
+}
+
+function multiplyQuaternions(q1, q2) {
+  return {
+    w: q1.w * q2.w - q1.x * q2.x - q1.y * q2.y - q1.z * q2.z,
+    x: q1.w * q2.x + q1.x * q2.w + q1.y * q2.z - q1.z * q2.y,
+    y: q1.w * q2.y - q1.x * q2.z + q1.y * q2.w + q1.z * q2.x,
+    z: q1.w * q2.z + q1.x * q2.y - q1.y * q2.x + q1.z * q2.w
+  };
+}
+
+function rotateVectorByQuaternion(v, q) {
+  let qConjugate = { x: -q.x, y: -q.y, z: -q.z, w: q.w };
+  let qv = { x: v.x, y: v.y, z: v.z, w: 0 };
+  let resultQuat = multiplyQuaternions(multiplyQuaternions(q, qv), qConjugate);
+  return { x: resultQuat.x, y: resultQuat.y, z: resultQuat.z };
+}
+
+function addBattleLog(message) {
+  battleLog.push(message);
+  // 自动移除最老的日志以限制数量
+  if (battleLog.length > maxBattleLog) { // 保留最近 maxBattleLog 条
+    battleLog.shift();
+  }
+  savePlayerDataToLocalStorage();
+}
+
+// ============ 战斗日志及其他 UI 绘制 ============
+function drawBattleLog() {
+  // 绘制日志区域（2D）
+  push();
+  noStroke();
+  fill(230);
+  rect(width - 300, 50, 280, 800);
+
+  // 显示最近15条日志
+  let displayLogs = battleLog.slice(-maxVisibleLogs);
+  fill(0);
+  textSize(12);
+  textAlign(LEFT, TOP);
+  for (let i = 0; i < displayLogs.length; i++) {
+    text(displayLogs[i], width - 290, 60 + i * 15);
+  }
+  pop();
+}
+
+function drawSelectedShipPreviewFleet() {
+  // 模型预览已移除（不再加载/显示3D模型）
+}
+
+function drawSelectedShipPreview() {
+  // 模型预览已移除（不再加载/显示3D模型）
+}
+
+// ============ 全局鼠标事件处理 ============
+function mousePressed() {
+  if (gameState === 'dialog') {
+    // 如果是对话界面
+    dialogManager.mousePressed();
+  } else if (currentModal) {
+    // 如果有弹窗，传递事件给弹窗
+    currentModal.mousePressed();
+  } else {
+    // 否则，根据游戏状态处理点击事件
+    if (gameState === 'mainMenu') {
+      for (let btn of mainMenuButtons) {
+        btn.clicked();
+      }
+    } else if (gameState === 'levelSelect') {
+      for (let lvl of levels) {
+        if (lvl.button && (lvl.id === 1 || playerData.clearedLevels.includes(lvl.id - 1))) {
+          lvl.button.clicked();
+        }
+      }
+    } else if (gameState === 'fleetFormation') {
+      for (let slot of fleetSlots) {
+        slot.clicked();
+      }
+      fleetFormationSaveButton.clicked();
+    } else if (gameState === 'fleetResearch') {
+      for (let btn of fleetResearchButtons) {
+        btn.clicked();
+      }
+    } else if (gameState === 'battle') {
+      // 如果需要在战斗中处理点击事件，可以在这里添加
+    }
+  }
+}
+
+function keyPressed() {
+  if (gameState === 'battle') {
+    if (key === 'q') {
+      // 示例功能：增加轨道半径
+      if (satellites[selectedOrbitIndex]) {
+        satellites[selectedOrbitIndex].orbitRadius += 5;
+        calculateOrbitalSpeed(satellites[selectedOrbitIndex]);
+      }
+    } else if (key === 'e') {
+      // 示例功能：减少轨道半径
+      if (satellites[selectedOrbitIndex]) {
+        satellites[selectedOrbitIndex].orbitRadius = max(radius + 30, satellites[selectedOrbitIndex].orbitRadius - 5);
+        calculateOrbitalSpeed(satellites[selectedOrbitIndex]);
+      }
+    } else if (key === ' ') {
+      // 示例功能：切换选中的轨道
+      if (satellites.length > 0) {
+        selectedOrbitIndex = (selectedOrbitIndex + 1) % satellites.length;
+      }
+    } else if (keyCode === ESCAPE) {
+      // 如果有弹窗，关闭弹窗
+      if (currentModal) {
+        currentModal = null;
+      } else {
+        gameState = 'levelSelect';
+      }
+    }
+  } else if (gameState === 'levelSelect' && keyCode === ESCAPE) {
+    gameState = 'mainMenu';
+  } else if (gameState === 'fleetResearch' && keyCode === ESCAPE) {
+    gameState = 'mainMenu';
+  } else if (gameState === 'fleetFormation' && keyCode === ESCAPE) {
+    gameState = 'mainMenu';
+  }
+
+  // 如果有弹窗，按 ESC 也可以关闭
+  if (currentModal && keyCode === ESCAPE) {
+    currentModal = null;
+  }
+}
