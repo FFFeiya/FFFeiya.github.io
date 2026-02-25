@@ -1,0 +1,1013 @@
+
+<!DOCTYPE html><html lang="en" data-theme="dark">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="hexo-theme" content="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.33.1" theme-name="Stellar" theme-version="1.33.1">
+  
+  
+  <meta name="generator" content="Hexo 7.3.0">
+  <meta http-equiv='x-dns-prefetch-control' content='on' />
+  
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000">
+  <meta name="theme-color" content="#f9fafb">
+  <title>NXA Studios 实习：用 Python 把 FTP 资产交付流程“工程化” - FFFeiya</title>
+
+  
+    <meta name="description" content="NXA Studios 实习：用 Python 把 FTP 资产交付流程“工程化”（可追溯 &#x2F; 可复现 &#x2F; 可回滚） 岗位：Pipeline Tools &#x2F; 技术支持（工具与流程）实习生时间：2024.07 – 2024.08关键词：资产交付标准化、自动校验、manifest&#x2F;hash、版本化发布、备份回滚、元数据检索适用场景：团队以 FTP 为交付通道，资">
+<meta property="og:type" content="article">
+<meta property="og:title" content="NXA Studios 实习：用 Python 把 FTP 资产交付流程“工程化”">
+<meta property="og:url" content="http://example.com/2025/01/08/NXA_Pipeline_FTP_Tech_Blog/">
+<meta property="og:site_name" content="FFFeiya">
+<meta property="og:description" content="NXA Studios 实习：用 Python 把 FTP 资产交付流程“工程化”（可追溯 &#x2F; 可复现 &#x2F; 可回滚） 岗位：Pipeline Tools &#x2F; 技术支持（工具与流程）实习生时间：2024.07 – 2024.08关键词：资产交付标准化、自动校验、manifest&#x2F;hash、版本化发布、备份回滚、元数据检索适用场景：团队以 FTP 为交付通道，资">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2025-01-08T17:00:00.000Z">
+<meta property="article:modified_time" content="2026-02-25T05:23:10.688Z">
+<meta property="article:author" content="FFFeiya">
+<meta property="article:tag" content="Toolchain">
+<meta property="article:tag" content="FTP">
+<meta property="article:tag" content="Python">
+<meta name="twitter:card" content="summary">
+  
+  
+  
+  <meta name="keywords" content="Toolchain,FTP,Python">
+
+  <!-- feed -->
+  
+
+  <link rel="stylesheet" href="/css/main.css?v=1.33.1">
+
+
+  
+
+  
+    
+<link rel="stylesheet" href="https://gcore.jsdelivr.net/gh/highlightjs/cdn-release@11.9/build/styles/atom-one-dark.min.css">
+
+  
+
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"FFFeiya","sameAs":[]},"dateCreated":"2025-01-08T10:00:00-07:00","dateModified":"2026-02-24T22:23:10-07:00","datePublished":"2025-01-08T10:00:00-07:00","description":"","headline":"NXA Studios 实习：用 Python 把 FTP 资产交付流程“工程化”","mainEntityOfPage":{"@type":"WebPage","@id":"http://example.com/2025/01/08/NXA_Pipeline_FTP_Tech_Blog/"},"publisher":{"@type":"Organization","name":"FFFeiya","sameAs":[]},"url":"http://example.com/2025/01/08/NXA_Pipeline_FTP_Tech_Blog/","keywords":"Toolchain, FTP, Python","image":[]}</script>
+  <link rel="stylesheet" href="/css/custom.css">
+</head>
+<body><div class="sitebg"><div class="siteblur"></div></div>
+
+<div class="l_body content" id="start" layout="post" type="tech" ><aside class="l_left"><div class="sidebg"></div><div class="leftbar-container">
+
+
+<header class="header"><div class="logo-wrap"><a class="avatar" href="/about/"><div class="bg" style="opacity:0;background-image:url(https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/rainbow64@3x.webp);"></div><img no-lazy class="avatar" src="/images/Putin.png" onerror="javascript:this.classList.add('error');this.src='https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/image/2659360.svg';"></a><a class="title" href="/"><div class="main">FFFeiya</div><div class="sub normal cap">Portfolio</div><div class="sub hover cap" style="opacity:0"> UE / Unity / Tools</div></a></div></header>
+
+<div class="nav-area">
+
+<nav class="menu dis-select"><a class="nav-item" title="Projects" href="/projects/" style="color:#E0E0E0">项目列表</a><a class="nav-item" title="Tech Blog" href="/blog/" style="color:#E0E0E0">技术博客</a><a class="nav-item" title="Play" href="/p5game/" style="color:#E0E0E0">在线游玩</a><a class="nav-item" title="(Tech) Art" href="/art/" style="color:#E0E0E0">技术美术</a><a class="nav-item" title="Design" href="/design/" style="color:#E0E0E0">请输入文本</a><a class="nav-item" title="About / Resume" href="/about/" style="color:#E0E0E0">关于</a></nav>
+</div>
+<div class="widgets">
+<div class="search-wrapper" id="search-wrapper"><form class="search-form"><a class="search-button" onclick="document.getElementById(&quot;search-input&quot;).focus();"><svg t="1705074644177" viewBox="0 0 1025 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1560" width="200" height="200"><path d="M1008.839137 935.96571L792.364903 719.491476a56.783488 56.783488 0 0 0-80.152866 0 358.53545 358.53545 0 1 1 100.857314-335.166073 362.840335 362.840335 0 0 1-3.689902 170.145468 51.248635 51.248635 0 1 0 99.217358 26.444296 462.057693 462.057693 0 1 0-158.255785 242.303546l185.930047 185.725053a51.248635 51.248635 0 0 0 72.568068 0 51.248635 51.248635 0 0 0 0-72.978056z" p-id="1561"></path><path d="M616.479587 615.969233a50.428657 50.428657 0 0 0-61.498362-5.534852 174.655348 174.655348 0 0 1-177.525271 3.484907 49.403684 49.403684 0 0 0-58.833433 6.76482l-3.074918 2.869923a49.403684 49.403684 0 0 0 8.609771 78.10292 277.767601 277.767601 0 0 0 286.992355-5.739847 49.403684 49.403684 0 0 0 8.404776-76.667958z" p-id="1562"></path></svg></a><input type="text" class="search-input" id="search-input" placeholder="Search"></form><div id="search-result"></div><div class="search-no-result">No Results!</div></div>
+
+
+
+<widget class="widget-wrapper recent post-list"><div class="widget-header dis-select"><span class="name">Recent Update</span></div><div class="widget-body fs14"><a class="item title" href="/2025/01/08/NXA_Pipeline_FTP_Tech_Blog/"><span class="title">NXA Studios 实习：用 Python 把 FTP 资产交付流程“工程化”</span></a><a class="item title" href="/2026/02/24/UE5.6_GAS_Enemy_AI_Stage_Summary/"><span class="title">用 UE5.6 + GAS 搭一个可迭代的敌人近战 AI：从状态机图到可调试行为树</span></a><a class="item title" href="/2025/01/08/Building%20Real-Time%20NPC%20Dialogue%20in%20Unity%20with%20Large%20Language%20Models.zh-CN/"><span class="title">在 Unity 中用大语言模型构建实时 NPC 对话</span></a><a class="item title" href="/2024/12/08/Bridging%20Unity%20with%20Python%20and%20ChatGPT.zh-CN/"><span class="title">Unity 对接 Python 与 ChatGPT：综合指南</span></a><a class="item title" href="/2024/12/08/Building%20a%20Dynamic%20Planetary%20Battle%20System.zh-CN/"><span class="title">用 p5.js 做太空可视化：构建动态行星战斗系统</span></a><a class="item title" href="/2026/02/24/tech_blog_hexo_stellar_portfolio_safe/"><span class="title">用 Hexo + Stellar 搭一个作品展柜：卡片入口、主题配色与 CSS 覆盖</span></a><a class="item title" href="/2025/01/08/Using%20iFlytek's%20Speech%20Model%20in%20Unity%20for%20Text-to-Speech%20(TTS)%20Playback/"><span class="title">Using iFlytek's Speech Model in Unity for Text-to-Speech (TTS) Playback</span></a><a class="item title" href="/2024/12/08/Game%20Demo%20of%20Star%20Annihilator%20-%20A%20Tower%20Defense%20Game%20Developing/"><span class="title">Game Demo of *Star Annihilator*: A Tower Defense Game Developing</span></a><a class="item title" href="/2024/12/08/How%20to%20Convert%20a%20p5.js%20Game%20into%20Java%20(JavaFX)/"><span class="title">How to Convert a p5.js Game into Java (JavaFX)</span></a></div></widget>
+</div>
+
+</div></aside><div class="l_main" id="main">
+
+
+
+
+
+<div class="article banner top">
+  <div class="content">
+    <div class="top bread-nav footnote"><div class="left"><div class="flex-row" id="breadcrumb"><a class="cap breadcrumb" href="/">Home</a>
+<span class="sep"></span><a class="cap breadcrumb" href="/blog/">Blog</a><span class="sep"></span><a class="cap breadcrumb-link" href="/categories/Programming/">Programming</a></div>
+<div class="flex-row" id="post-meta"><span class="text created">Posted on: <time datetime="2025-01-08T17:00:00.000Z">2025-01-08</time></span><span class="sep updated"></span><span class="text updated">Updated on: <time datetime="2026-02-25T05:23:10.688Z">2026-02-24</time></span></div></div></div>
+    
+    <div class="bottom only-title">
+      
+      <div class="text-area">
+        <h1 class="text title"><span>NXA Studios 实习：用 Python 把 FTP 资产交付流程“工程化”</span></h1>
+        
+      </div>
+    </div>
+    
+  </div>
+  </div><article class="md-text content"><h1 id="NXA-Studios-实习：用-Python-把-FTP-资产交付流程“工程化”（可追溯-可复现-可回滚）"><a href="#NXA-Studios-实习：用-Python-把-FTP-资产交付流程“工程化”（可追溯-可复现-可回滚）" class="headerlink" title="NXA Studios 实习：用 Python 把 FTP 资产交付流程“工程化”（可追溯 &#x2F; 可复现 &#x2F; 可回滚）"></a>NXA Studios 实习：用 Python 把 FTP 资产交付流程“工程化”（可追溯 &#x2F; 可复现 &#x2F; 可回滚）</h1><blockquote>
+<p><strong>岗位</strong>：Pipeline Tools &#x2F; 技术支持（工具与流程）实习生<br><strong>时间</strong>：2024.07 – 2024.08<br><strong>关键词</strong>：资产交付标准化、自动校验、manifest&#x2F;hash、版本化发布、备份回滚、元数据检索<br><strong>适用场景</strong>：团队以 <strong>FTP</strong> 为交付通道，资产来自 DCC（如 Maya&#x2F;Max&#x2F;Blender）导出（如 FBX&#x2F;纹理），需要在交付前“把返工前置”。</p>
+</blockquote>
+<h2 id="这篇文章把我在-NXA-Studios-的实习工作，用工程化视角梳理一遍：我做了什么、为什么这么做、哪些是核心设计点、常见坑怎么兜底。"><a href="#这篇文章把我在-NXA-Studios-的实习工作，用工程化视角梳理一遍：我做了什么、为什么这么做、哪些是核心设计点、常见坑怎么兜底。" class="headerlink" title="这篇文章把我在 NXA Studios 的实习工作，用工程化视角梳理一遍：我做了什么、为什么这么做、哪些是核心设计点、常见坑怎么兜底。"></a>这篇文章把我在 NXA Studios 的实习工作，用<strong>工程化</strong>视角梳理一遍：我做了什么、为什么这么做、哪些是核心设计点、常见坑怎么兜底。</h2><h2 id="1-背景：为什么-FTP-交付一定会变成“返工制造机”？"><a href="#1-背景：为什么-FTP-交付一定会变成“返工制造机”？" class="headerlink" title="1. 背景：为什么 FTP 交付一定会变成“返工制造机”？"></a>1. 背景：为什么 FTP 交付一定会变成“返工制造机”？</h2><p>很多内容团队一开始都用 FTP：简单、可用、谁都懂。但 FTP 有几个天然问题：</p>
+<ol>
+<li><strong>“上传完成”不是原子事件</strong>：半截文件、覆盖上传、断点续传、网络抖动，都可能导致“看似存在、实际损坏&#x2F;不完整”。</li>
+<li><strong>没有天然的版本与审计</strong>：同名覆盖会污染历史，出问题难追溯。</li>
+<li><strong>校验靠人肉</strong>：命名、依赖、导出参数、目录结构……靠经验和记忆检查，规模一大必炸。</li>
+<li><strong>下游才发现问题</strong>：资产进引擎或集成阶段才报错，返工成本最高（来回导出&#x2F;重传&#x2F;沟通）。</li>
+</ol>
+<p>所以我做的核心目标就是一句话：</p>
+<blockquote>
+<p><strong>把“人肉检查 + 事后返工”的流程，变成“自动校验 + 版本化发布 + 可回滚”的闭环。</strong></p>
+</blockquote>
+<hr>
+<h2 id="2-我做了什么"><a href="#2-我做了什么" class="headerlink" title="2. 我做了什么"></a>2. 我做了什么</h2><h3 id="2-1-自动化校验工具（Python）：命名-依赖-导出配置-→-报告-清单"><a href="#2-1-自动化校验工具（Python）：命名-依赖-导出配置-→-报告-清单" class="headerlink" title="2.1 自动化校验工具（Python）：命名 &#x2F; 依赖 &#x2F; 导出配置 → 报告 + 清单"></a>2.1 自动化校验工具（Python）：命名 &#x2F; 依赖 &#x2F; 导出配置 → 报告 + 清单</h3><ul>
+<li>校验命名规范（路径、前后缀、镜头&#x2F;角色编码等）</li>
+<li>校验依赖关系（缺失贴图、引用绝对路径、漏文件、非法目录等）</li>
+<li>校验导出配置（能从文件读到的就硬校验；读不到的就做结果校验 + 流程约束）</li>
+<li>输出两类产物：<ul>
+<li><strong>manifest（交付清单）</strong>：结构化清单，用于对账&#x2F;校验&#x2F;回滚</li>
+<li><strong>report（错误报告）</strong>：对非程序可读，fatal&#x2F;warn 分级，给出修复建议</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-2-元数据表与版本记录：按项目-镜头-角色检索与回溯"><a href="#2-2-元数据表与版本记录：按项目-镜头-角色检索与回溯" class="headerlink" title="2.2 元数据表与版本记录：按项目&#x2F;镜头&#x2F;角色检索与回溯"></a>2.2 元数据表与版本记录：按项目&#x2F;镜头&#x2F;角色检索与回溯</h3><ul>
+<li>为交付批次建立可追溯的索引（项目&#x2F;镜头&#x2F;角色 → 对应批次&#x2F;目录&#x2F;文件集合）</li>
+<li>支持按关键维度快速反查：<br>“某镜头用到了哪些资产？”、“某贴图被哪些模型引用？”、“某角色最近一次交付是哪一批？”</li>
+</ul>
+<h3 id="2-3-发布-归档与回滚：让交付“可追溯、可复现、可回滚”"><a href="#2-3-发布-归档与回滚：让交付“可追溯、可复现、可回滚”" class="headerlink" title="2.3 发布&#x2F;归档与回滚：让交付“可追溯、可复现、可回滚”"></a>2.3 发布&#x2F;归档与回滚：让交付“可追溯、可复现、可回滚”</h3><ul>
+<li>FTP 上采用 <strong>版本化批次目录</strong>（不可变），避免同名覆盖污染历史</li>
+<li>通过 <strong>current 指针</strong>（或 Current 目录）实现快速切换与回滚</li>
+<li>发布前做完整性校验（hash&#x2F;大小&#x2F;清单一致性），发布后做冒烟验证</li>
+</ul>
+<hr>
+<h2 id="3-设计：把-FTP-变成“可控的交付流水线”"><a href="#3-设计：把-FTP-变成“可控的交付流水线”" class="headerlink" title="3. 设计：把 FTP 变成“可控的交付流水线”"></a>3. 设计：把 FTP 变成“可控的交付流水线”</h2><h3 id="3-1-FTP-目录分区"><a href="#3-1-FTP-目录分区" class="headerlink" title="3.1 FTP 目录分区"></a>3.1 FTP 目录分区</h3><blockquote>
+<p>目录名字不重要，<strong>分区语义</strong>最重要。下面是我实习中采用的典型分层方式。</p>
+</blockquote>
+<ul>
+<li><code>incoming/</code>：允许上传（可能半截、可能乱、可能不完整）</li>
+<li><code>staging/</code>：通过自动校验后的候选交付（可供集成侧验证）</li>
+<li><code>release/</code>：正式可用交付（只允许少数账号写&#x2F;切换）</li>
+</ul>
+<p><strong>关键规则</strong>：</p>
+<ul>
+<li>任何资产<strong>先落 incoming</strong>，校验通过后才能进入 staging&#x2F;release。</li>
+<li>release 不允许覆盖同名文件：每次发布是一个新的“批次目录”。</li>
+</ul>
+<h3 id="3-2-“不可变批次目录”与“current-指针”"><a href="#3-2-“不可变批次目录”与“current-指针”" class="headerlink" title="3.2 “不可变批次目录”与“current 指针”"></a>3.2 “不可变批次目录”与“current 指针”</h3><p>FTP 没有 Git 的版本控制能力，因此发布策略要靠目录约束：</p>
+<ul>
+<li>每次交付创建一个批次目录，例如：</li>
+</ul>
+<figure class="highlight apache"><table><tr><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">release</span>/ProjectA/<span class="hljs-number">2024</span>-<span class="hljs-number">08</span>-<span class="hljs-number">15</span>_build042/<br>  <span class="hljs-attribute">Assets</span>/...<br>  <span class="hljs-attribute">manifest</span>.json<br>  <span class="hljs-attribute">report</span>.html<br>  <span class="hljs-attribute">checksums</span>.txt<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>外部消费者只看一个入口：<ul>
+<li><code>release/ProjectA/current.txt</code>（写着当前批次名），或</li>
+<li><code>release/ProjectA/Current/</code>（内容来自某批次复制&#x2F;映射）</li>
+</ul>
+</li>
+</ul>
+<p><strong>回滚策略</strong>：<br>不是删文件，而是把 <code>current</code> 指回上一批次（或用上一批次覆盖 Current），并且保留历史目录不动。</p>
+<hr>
+<h2 id="4-Manifest-Hash：让“传输完整性”可验证"><a href="#4-Manifest-Hash：让“传输完整性”可验证" class="headerlink" title="4. Manifest&#x2F;Hash：让“传输完整性”可验证"></a>4. Manifest&#x2F;Hash：让“传输完整性”可验证</h2><h3 id="4-1-单文件-hash-批次-hash（两层设计）"><a href="#4-1-单文件-hash-批次-hash（两层设计）" class="headerlink" title="4.1 单文件 hash + 批次 hash（两层设计）"></a>4.1 单文件 hash + 批次 hash（两层设计）</h3><p><strong>单文件 hash</strong>（用于完整性与定位传坏）  </p>
+<ul>
+<li>建议：hash 输入只取<strong>文件内容 bytes</strong>，路径&#x2F;大小&#x2F;mtime 放到 manifest 当元信息  </li>
+<li>常用算法：MD5 &#x2F; SHA-256（用途是完整性校验，不是对抗攻击）</li>
+</ul>
+<p><strong>批次 hash</strong>（用于快速判断“是不是同一批交付”）  </p>
+<ul>
+<li>对 manifest 做<strong>规范化序列化</strong>（如按路径排序后再序列化）再 hash  </li>
+<li>避免 manifest 顺序变化导致批次 hash 变化</li>
+</ul>
+<h3 id="4-2-防半截文件：DONE-标记-tmp-后缀-大小稳定性检查"><a href="#4-2-防半截文件：DONE-标记-tmp-后缀-大小稳定性检查" class="headerlink" title="4.2 防半截文件：DONE 标记 &#x2F; tmp 后缀 &#x2F; 大小稳定性检查"></a>4.2 防半截文件：DONE 标记 &#x2F; tmp 后缀 &#x2F; 大小稳定性检查</h3><p>FTP 上最大坑是“文件还没传完就被校验&#x2F;发布”：</p>
+<ul>
+<li>上传时使用 <code>.tmp</code> 后缀，传完 rename 成正式文件名  </li>
+<li>或者上传者完成后放置 <code>DONE</code> 标记文件  </li>
+<li>校验脚本只处理：  <ul>
+<li>无 <code>.tmp</code> 文件  </li>
+<li>文件大小在短时间窗口内稳定  </li>
+<li>且与 manifest 记录一致（大小&#x2F;hash）</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="5-Python-工具的部署：让“大家跑得起来”比“写得漂亮”重要"><a href="#5-Python-工具的部署：让“大家跑得起来”比“写得漂亮”重要" class="headerlink" title="5. Python 工具的部署：让“大家跑得起来”比“写得漂亮”重要"></a>5. Python 工具的部署：让“大家跑得起来”比“写得漂亮”重要</h2><p>“你怎么给大家配 Python 环境？”<br>这在公司里是现实问题：同事不一定有 Python，内网不一定能 pip 外网。</p>
+<p>我想到的三种部署形态，从“最现实”到“最省心”：</p>
+<h3 id="5-1-工具机集中跑（最稳妥）"><a href="#5-1-工具机集中跑（最稳妥）" class="headerlink" title="5.1 工具机集中跑（最稳妥）"></a>5.1 工具机集中跑（最稳妥）</h3><ul>
+<li>大家只管把批次传到 <code>incoming/</code></li>
+<li>工具机（固定环境）运行校验脚本，把 report&#x2F;manifest 回写到 FTP</li>
+<li>优点：环境统一、最少沟通成本、结果一致</li>
+<li>缺点：需要一台稳定机器&#x2F;权限</li>
+</ul>
+<h3 id="5-2-Zip-工具包-venv-离线-wheelhouse（工程化、可扩展）"><a href="#5-2-Zip-工具包-venv-离线-wheelhouse（工程化、可扩展）" class="headerlink" title="5.2 Zip 工具包 + venv + 离线 wheelhouse（工程化、可扩展）"></a>5.2 Zip 工具包 + venv + 离线 wheelhouse（工程化、可扩展）</h3><p>工具包结构示例：</p>
+<figure class="highlight nix"><table><tr><td class="code"><pre><code class="hljs nix">PipelineCheck<span class="hljs-symbol">/</span><br>  run.bat<br>  requirements.txt<br>  wheels<span class="hljs-symbol">/</span>            <span class="hljs-comment"># 离线 .whl</span><br>  rules<span class="hljs-symbol">/</span>             <span class="hljs-comment"># 规则配置</span><br>  checker.py<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><code>run.bat</code>：自动创建 venv，然后 <code>pip --no-index --find-links=./wheels -r requirements.txt</code></li>
+<li>输出 report 头部写入 tool&#x2F;rules version，避免“版本分裂导致结果不一致”</li>
+</ul>
+<h3 id="5-3-PyInstaller-打包成-exe（内容团队最爱）"><a href="#5-3-PyInstaller-打包成-exe（内容团队最爱）" class="headerlink" title="5.3 PyInstaller 打包成 exe（内容团队最爱）"></a>5.3 PyInstaller 打包成 exe（内容团队最爱）</h3><ul>
+<li>直接双击运行，无需 Python</li>
+<li>更新就是替换 exe（体积会大一些）</li>
+</ul>
+<h3 id="最终我采用的是1-3的方案。"><a href="#最终我采用的是1-3的方案。" class="headerlink" title="最终我采用的是1+3的方案。"></a>最终我采用的是1+3的方案。</h3><hr>
+<h2 id="6-依赖与导出配置：从“能读到的硬校验”到“读不到的流程约束”"><a href="#6-依赖与导出配置：从“能读到的硬校验”到“读不到的流程约束”" class="headerlink" title="6. 依赖与导出配置：从“能读到的硬校验”到“读不到的流程约束”"></a>6. 依赖与导出配置：从“能读到的硬校验”到“读不到的流程约束”</h2><p><strong>你依赖是怎么读的？单位&#x2F;轴向怎么读？</strong></p>
+<p>我把它拆成三类：</p>
+<h3 id="6-1-规则层（快速拦截，覆盖-80-返工）"><a href="#6-1-规则层（快速拦截，覆盖-80-返工）" class="headerlink" title="6.1 规则层（快速拦截，覆盖 80% 返工）"></a>6.1 规则层（快速拦截，覆盖 80% 返工）</h3><ul>
+<li>文件必须落在约定目录：<code>Meshes/Textures/Materials/...</code></li>
+<li>只允许相对路径引用（绝对路径直接 fatal 或强 warning）</li>
+<li>必备资源集合齐全：如模型必须配套贴图目录（按规则）</li>
+<li>命名必须包含项目&#x2F;镜头&#x2F;角色关键信息（可配置）</li>
+</ul>
+<blockquote>
+<p>规则层优点：不用解析复杂格式，速度快、落地强。缺点：不是 100% 语义引用验证。</p>
+</blockquote>
+<h3 id="6-2-解析层（对关键资产深校验）"><a href="#6-2-解析层（对关键资产深校验）" class="headerlink" title="6.2 解析层（对关键资产深校验）"></a>6.2 解析层（对关键资产深校验）</h3><p>对关键资产（角色&#x2F;主道具&#x2F;重要镜头）做更深解析（具体取决于你们的资产格式）：</p>
+<ul>
+<li>读取模型文件中的材质&#x2F;贴图引用路径（若格式允许）</li>
+<li>校验贴图是否存在，引用路径是否可 resolve</li>
+<li>单位&#x2F;轴向能读到则硬校验；读不到则做结果校验</li>
+</ul>
+<h3 id="6-3-结果校验（读取不到参数时的兜底）"><a href="#6-3-结果校验（读取不到参数时的兜底）" class="headerlink" title="6.3 结果校验（读取不到参数时的兜底）"></a>6.3 结果校验（读取不到参数时的兜底）</h3><ul>
+<li>通过 bounding box &#x2F; 尺寸阈值发现明显单位错误（例如角色模型尺寸离谱）</li>
+<li>通过骨骼层级&#x2F;节点命名特征发现导出错误</li>
+<li>最终：把“必须一致的导出参数”固化为导出预设&#x2F;按钮流程（流程约束比脚本猜测更可靠）</li>
+</ul>
+<hr>
+<h2 id="7-元数据表：为什么“检索”比“规范”更能推动落地"><a href="#7-元数据表：为什么“检索”比“规范”更能推动落地" class="headerlink" title="7. 元数据表：为什么“检索”比“规范”更能推动落地"></a>7. 元数据表：为什么“检索”比“规范”更能推动落地</h2><p>很多流程工具推广失败，是因为它只会“拦”，不会“帮”。</p>
+<p>元数据表（或索引）做得好，会直接提升协作效率：</p>
+<ul>
+<li>内容同学能快速查：某镜头交付包含哪些资源</li>
+<li>集成同学能快速查：某贴图&#x2F;材质被哪些模型引用（依赖反查）</li>
+<li>出问题时能快速定位：坏的是哪一批、谁交付的、manifest&#x2F;hash 是否匹配</li>
+</ul>
+<p>实现形态不一定复杂：<br><strong>每批次一个 manifest + 全局一个索引文件</strong> 就能解决大部分问题。</p>
+<hr>
+<h2 id="8-发布-归档-回滚：最怕的不是失败，而是“半一致”"><a href="#8-发布-归档-回滚：最怕的不是失败，而是“半一致”" class="headerlink" title="8. 发布&#x2F;归档&#x2F;回滚：最怕的不是失败，而是“半一致”"></a>8. 发布&#x2F;归档&#x2F;回滚：最怕的不是失败，而是“半一致”</h2><p>在 FTP 体系里，最危险的是“某人拿到了半旧半新的混合状态”。</p>
+<p>我用的发布原则是“原子切换”：</p>
+<ol>
+<li>先把新批次目录完整上传到 <code>staging/</code></li>
+<li>在 staging 对照 manifest 做完整性校验（大小&#x2F;hash&#x2F;文件数）</li>
+<li>校验通过后再切 <code>current</code> 指向  </li>
+<li>发布后做最小冒烟验证（关键资源是否可读、目录结构是否符合约定）</li>
+</ol>
+<p>这样即使有人在下载：</p>
+<ul>
+<li>要么拿到旧批次</li>
+<li>要么拿到新批次<br>不会拿到混合版本。</li>
+</ul>
+<hr>
+<h2 id="9-我踩过-重点防的坑"><a href="#9-我踩过-重点防的坑" class="headerlink" title="9. 我踩过&#x2F;重点防的坑"></a>9. 我踩过&#x2F;重点防的坑</h2><ul>
+<li><strong>“规则过严导致全红”</strong>：先 warning 灰度，再逐步收紧 fatal；给历史资产白名单但可追踪</li>
+<li><strong>“同名覆盖污染历史”</strong>：不可变批次目录 + current 指针切换</li>
+<li><strong>“半截文件被当成可用”</strong>：tmp&#x2F;DONE + 大小稳定性 + hash 校验</li>
+<li><strong>“报告写给程序看，内容团队看不懂”</strong>：错误必须是人话，给出期望与修复建议</li>
+<li><strong>“版本分裂导致结果不一致”</strong>：报告头写 tool&#x2F;rules version + 固定 latest 入口</li>
+</ul>
+<hr>
+<h2 id="10-QA"><a href="#10-QA" class="headerlink" title="10. QA"></a>10. QA</h2><h3 id="10-1-「你们用-FTP，怎么做版本和回滚？」"><a href="#10-1-「你们用-FTP，怎么做版本和回滚？」" class="headerlink" title="10.1 「你们用 FTP，怎么做版本和回滚？」"></a>10.1 「你们用 FTP，怎么做版本和回滚？」</h3><p><strong>答：</strong><br>“我们发布不做覆盖，每次交付都是一个不可变批次目录，目录里有 assets + manifest + 校验结果。对外只暴露一个 current 指针（或 Current 目录）。回滚不是删文件，而是把 current 指回上一批次，切换前后都会对照 manifest 做完整性校验，避免半一致。”</p>
+<h3 id="10-2-「manifest-里记什么？hash-怎么算？」"><a href="#10-2-「manifest-里记什么？hash-怎么算？」" class="headerlink" title="10.2 「manifest 里记什么？hash 怎么算？」"></a>10.2 「manifest 里记什么？hash 怎么算？」</h3><p><strong>答：</strong><br>“manifest 里至少记相对路径、大小、内容 hash、以及批次版本信息。单文件 hash 我只算内容 bytes，用来发现传坏&#x2F;漏传；批次 hash 是对规范化后的 manifest 做 hash，用来快速确认是不是同一批交付。这样 FTP 上文件传坏或混合版本都能立刻被拦住。”</p>
+<h3 id="10-3-「FTP-半截文件怎么防？」"><a href="#10-3-「FTP-半截文件怎么防？」" class="headerlink" title="10.3 「FTP 半截文件怎么防？」"></a>10.3 「FTP 半截文件怎么防？」</h3><p><strong>答：</strong><br>“我们不会直接在上传目录做发布判断。文件先落 incoming，并且用 tmp 后缀或 DONE 标记表示上传完成；校验脚本只处理‘无 tmp、大小稳定、且与 manifest 一致’的文件，通过后才允许进入 staging&#x2F;release。”</p>
+<h3 id="10-4-「Python-环境怎么给大家配？公司不能-pip-外网怎么办？」"><a href="#10-4-「Python-环境怎么给大家配？公司不能-pip-外网怎么办？」" class="headerlink" title="10.4 「Python 环境怎么给大家配？公司不能 pip 外网怎么办？」"></a>10.4 「Python 环境怎么给大家配？公司不能 pip 外网怎么办？」</h3><p><strong>答：</strong><br>“我优先用工具机集中跑，保证环境一致；如果要分发给多人跑，我会用 zip 工具包 + venv，并带离线 wheels，安装依赖不需要外网。报告里会写 tool&#x2F;rules 版本，避免版本分裂导致结果不一致。再省心就 PyInstaller 打 exe。”</p>
+<h3 id="10-5-「你怎么读取美术依赖？单位-轴向怎么校验？」"><a href="#10-5-「你怎么读取美术依赖？单位-轴向怎么校验？」" class="headerlink" title="10.5 「你怎么读取美术依赖？单位&#x2F;轴向怎么校验？」"></a>10.5 「你怎么读取美术依赖？单位&#x2F;轴向怎么校验？」</h3><p><strong>答：</strong><br>“依赖校验分层：规则层先拦目录结构、命名和必备文件齐全；关键资产再做解析层，从模型文件里读材质&#x2F;贴图引用并校验存在性和相对路径。单位&#x2F;轴向能从文件读到就硬校验，读不到就做结果校验，比如 bounding box 尺寸阈值和骨骼层级特征，同时把导出参数固化成预设流程，减少靠猜。”</p>
+<h3 id="10-6-「你怎么证明减少返工？」"><a href="#10-6-「你怎么证明减少返工？」" class="headerlink" title="10.6 「你怎么证明减少返工？」"></a>10.6 「你怎么证明减少返工？」</h3><p><strong>答：</strong><br>“FTP 场景里返工最贵的是‘进工程才发现缺依赖&#x2F;命名乱’，因为要重导出重传。我把这些问题前移到 incoming 阶段拦住，staging&#x2F;release 的包基本可直接消费。效果上最直观的是：打回原因里‘缺依赖&#x2F;路径错&#x2F;导出不一致’明显减少；如果要量化，我会用抽样统计一段时间的打回原因占比变化。”</p>
+<h3 id="10-7-「你作为实习生，做到哪一步？哪些不是你能改的？」"><a href="#10-7-「你作为实习生，做到哪一步？哪些不是你能改的？」" class="headerlink" title="10.7 「你作为实习生，做到哪一步？哪些不是你能改的？」"></a>10.7 「你作为实习生，做到哪一步？哪些不是你能改的？」</h3><p><strong>答：</strong><br>“我主要做工具和流程约束，把问题前移到交付入口。权限体系、下游引擎接入属于更大的系统，我不会硬改；我会通过 manifest、规则分级和回滚策略，让交付链路先稳定运转，再逐步推进标准化。”</p>
+<hr>
+<h2 id="11-小结：我的收获"><a href="#11-小结：我的收获" class="headerlink" title="11. 小结：我的收获"></a>11. 小结：我的收获</h2><p>这段工作表面是 pipeline，但本质训练的是客户端工程能力：</p>
+<ul>
+<li>对“输入不可信”的防御式编程：校验、容错、分级、降级</li>
+<li>对“版本与回滚”的工程意识：不可变发布、原子切换、可追溯</li>
+<li>对“跨团队协作”的落地能力：报告可读、规则灰度、推动采用</li>
+<li>对“规模化资产”的性能意识：增量扫描、缓存、瓶颈在 IO</li>
+</ul>
+<hr>
+<p><strong>作者</strong>：Feiya<br><strong>更新日期</strong>：2026-02-24</p>
+</article>
+<div class="article-footer">
+    <section id="license">
+      <div class="header"><span>License</span></div>
+      <div class="body"><p>本文采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">署名-非商业性使用-相同方式共享 4.0 国际</a> 许可协议，转载请注明出处。</p>
+</div>
+    </section>
+    
+
+</div>
+
+<div class="related-wrap" id="read-next"><section class="body"><div class="item" id="prev"><div class="note">Newer</div><a href="/2025/01/08/Building%20Real-Time%20NPC%20Dialogue%20in%20Unity%20with%20Large%20Language%20Models.zh-CN/">在 Unity 中用大语言模型构建实时 NPC 对话</a></div><div class="item" id="next"><div class="note">Older</div><a href="/2025/01/08/Using%20iFlytek's%20Speech%20Model%20in%20Unity%20for%20Text-to-Speech%20(TTS)%20Playback/">Using iFlytek's Speech Model in Unity for Text-to-Speech (TTS) Playback</a></div></section></div>
+
+
+
+
+
+
+<footer class="page-footer footnote"><hr><div class="text"><p>本站由 <a href="/">FFFeiya</a> 使用 <a target="_blank" rel="noopener" href="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.33.1">Stellar 1.33.1</a> 主题创建。<br>本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处。</p>
+</div></footer>
+<div class="main-mask" onclick="sidebar.dismiss()"></div></div><aside class="l_right">
+<div class="widgets">
+
+
+
+<widget class="widget-wrapper toc" id="data-toc" collapse="false"><div class="widget-header dis-select"><span class="name">On This Page</span><a class="cap-action" onclick="sidebar.toggleTOC()" ><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg></a></div><div class="widget-body"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#NXA-Studios-%E5%AE%9E%E4%B9%A0%EF%BC%9A%E7%94%A8-Python-%E6%8A%8A-FTP-%E8%B5%84%E4%BA%A7%E4%BA%A4%E4%BB%98%E6%B5%81%E7%A8%8B%E2%80%9C%E5%B7%A5%E7%A8%8B%E5%8C%96%E2%80%9D%EF%BC%88%E5%8F%AF%E8%BF%BD%E6%BA%AF-%E5%8F%AF%E5%A4%8D%E7%8E%B0-%E5%8F%AF%E5%9B%9E%E6%BB%9A%EF%BC%89"><span class="toc-text">NXA Studios 实习：用 Python 把 FTP 资产交付流程“工程化”（可追溯 &#x2F; 可复现 &#x2F; 可回滚）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%99%E7%AF%87%E6%96%87%E7%AB%A0%E6%8A%8A%E6%88%91%E5%9C%A8-NXA-Studios-%E7%9A%84%E5%AE%9E%E4%B9%A0%E5%B7%A5%E4%BD%9C%EF%BC%8C%E7%94%A8%E5%B7%A5%E7%A8%8B%E5%8C%96%E8%A7%86%E8%A7%92%E6%A2%B3%E7%90%86%E4%B8%80%E9%81%8D%EF%BC%9A%E6%88%91%E5%81%9A%E4%BA%86%E4%BB%80%E4%B9%88%E3%80%81%E4%B8%BA%E4%BB%80%E4%B9%88%E8%BF%99%E4%B9%88%E5%81%9A%E3%80%81%E5%93%AA%E4%BA%9B%E6%98%AF%E6%A0%B8%E5%BF%83%E8%AE%BE%E8%AE%A1%E7%82%B9%E3%80%81%E5%B8%B8%E8%A7%81%E5%9D%91%E6%80%8E%E4%B9%88%E5%85%9C%E5%BA%95%E3%80%82"><span class="toc-text">这篇文章把我在 NXA Studios 的实习工作，用工程化视角梳理一遍：我做了什么、为什么这么做、哪些是核心设计点、常见坑怎么兜底。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E8%83%8C%E6%99%AF%EF%BC%9A%E4%B8%BA%E4%BB%80%E4%B9%88-FTP-%E4%BA%A4%E4%BB%98%E4%B8%80%E5%AE%9A%E4%BC%9A%E5%8F%98%E6%88%90%E2%80%9C%E8%BF%94%E5%B7%A5%E5%88%B6%E9%80%A0%E6%9C%BA%E2%80%9D%EF%BC%9F"><span class="toc-text">1. 背景：为什么 FTP 交付一定会变成“返工制造机”？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E6%88%91%E5%81%9A%E4%BA%86%E4%BB%80%E4%B9%88"><span class="toc-text">2. 我做了什么</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E8%87%AA%E5%8A%A8%E5%8C%96%E6%A0%A1%E9%AA%8C%E5%B7%A5%E5%85%B7%EF%BC%88Python%EF%BC%89%EF%BC%9A%E5%91%BD%E5%90%8D-%E4%BE%9D%E8%B5%96-%E5%AF%BC%E5%87%BA%E9%85%8D%E7%BD%AE-%E2%86%92-%E6%8A%A5%E5%91%8A-%E6%B8%85%E5%8D%95"><span class="toc-text">2.1 自动化校验工具（Python）：命名 &#x2F; 依赖 &#x2F; 导出配置 → 报告 + 清单</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E5%85%83%E6%95%B0%E6%8D%AE%E8%A1%A8%E4%B8%8E%E7%89%88%E6%9C%AC%E8%AE%B0%E5%BD%95%EF%BC%9A%E6%8C%89%E9%A1%B9%E7%9B%AE-%E9%95%9C%E5%A4%B4-%E8%A7%92%E8%89%B2%E6%A3%80%E7%B4%A2%E4%B8%8E%E5%9B%9E%E6%BA%AF"><span class="toc-text">2.2 元数据表与版本记录：按项目&#x2F;镜头&#x2F;角色检索与回溯</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-%E5%8F%91%E5%B8%83-%E5%BD%92%E6%A1%A3%E4%B8%8E%E5%9B%9E%E6%BB%9A%EF%BC%9A%E8%AE%A9%E4%BA%A4%E4%BB%98%E2%80%9C%E5%8F%AF%E8%BF%BD%E6%BA%AF%E3%80%81%E5%8F%AF%E5%A4%8D%E7%8E%B0%E3%80%81%E5%8F%AF%E5%9B%9E%E6%BB%9A%E2%80%9D"><span class="toc-text">2.3 发布&#x2F;归档与回滚：让交付“可追溯、可复现、可回滚”</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E8%AE%BE%E8%AE%A1%EF%BC%9A%E6%8A%8A-FTP-%E5%8F%98%E6%88%90%E2%80%9C%E5%8F%AF%E6%8E%A7%E7%9A%84%E4%BA%A4%E4%BB%98%E6%B5%81%E6%B0%B4%E7%BA%BF%E2%80%9D"><span class="toc-text">3. 设计：把 FTP 变成“可控的交付流水线”</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-FTP-%E7%9B%AE%E5%BD%95%E5%88%86%E5%8C%BA"><span class="toc-text">3.1 FTP 目录分区</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-%E2%80%9C%E4%B8%8D%E5%8F%AF%E5%8F%98%E6%89%B9%E6%AC%A1%E7%9B%AE%E5%BD%95%E2%80%9D%E4%B8%8E%E2%80%9Ccurrent-%E6%8C%87%E9%92%88%E2%80%9D"><span class="toc-text">3.2 “不可变批次目录”与“current 指针”</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-Manifest-Hash%EF%BC%9A%E8%AE%A9%E2%80%9C%E4%BC%A0%E8%BE%93%E5%AE%8C%E6%95%B4%E6%80%A7%E2%80%9D%E5%8F%AF%E9%AA%8C%E8%AF%81"><span class="toc-text">4. Manifest&#x2F;Hash：让“传输完整性”可验证</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-%E5%8D%95%E6%96%87%E4%BB%B6-hash-%E6%89%B9%E6%AC%A1-hash%EF%BC%88%E4%B8%A4%E5%B1%82%E8%AE%BE%E8%AE%A1%EF%BC%89"><span class="toc-text">4.1 单文件 hash + 批次 hash（两层设计）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-%E9%98%B2%E5%8D%8A%E6%88%AA%E6%96%87%E4%BB%B6%EF%BC%9ADONE-%E6%A0%87%E8%AE%B0-tmp-%E5%90%8E%E7%BC%80-%E5%A4%A7%E5%B0%8F%E7%A8%B3%E5%AE%9A%E6%80%A7%E6%A3%80%E6%9F%A5"><span class="toc-text">4.2 防半截文件：DONE 标记 &#x2F; tmp 后缀 &#x2F; 大小稳定性检查</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-Python-%E5%B7%A5%E5%85%B7%E7%9A%84%E9%83%A8%E7%BD%B2%EF%BC%9A%E8%AE%A9%E2%80%9C%E5%A4%A7%E5%AE%B6%E8%B7%91%E5%BE%97%E8%B5%B7%E6%9D%A5%E2%80%9D%E6%AF%94%E2%80%9C%E5%86%99%E5%BE%97%E6%BC%82%E4%BA%AE%E2%80%9D%E9%87%8D%E8%A6%81"><span class="toc-text">5. Python 工具的部署：让“大家跑得起来”比“写得漂亮”重要</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#5-1-%E5%B7%A5%E5%85%B7%E6%9C%BA%E9%9B%86%E4%B8%AD%E8%B7%91%EF%BC%88%E6%9C%80%E7%A8%B3%E5%A6%A5%EF%BC%89"><span class="toc-text">5.1 工具机集中跑（最稳妥）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-2-Zip-%E5%B7%A5%E5%85%B7%E5%8C%85-venv-%E7%A6%BB%E7%BA%BF-wheelhouse%EF%BC%88%E5%B7%A5%E7%A8%8B%E5%8C%96%E3%80%81%E5%8F%AF%E6%89%A9%E5%B1%95%EF%BC%89"><span class="toc-text">5.2 Zip 工具包 + venv + 离线 wheelhouse（工程化、可扩展）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-3-PyInstaller-%E6%89%93%E5%8C%85%E6%88%90-exe%EF%BC%88%E5%86%85%E5%AE%B9%E5%9B%A2%E9%98%9F%E6%9C%80%E7%88%B1%EF%BC%89"><span class="toc-text">5.3 PyInstaller 打包成 exe（内容团队最爱）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%80%E7%BB%88%E6%88%91%E9%87%87%E7%94%A8%E7%9A%84%E6%98%AF1-3%E7%9A%84%E6%96%B9%E6%A1%88%E3%80%82"><span class="toc-text">最终我采用的是1+3的方案。</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-%E4%BE%9D%E8%B5%96%E4%B8%8E%E5%AF%BC%E5%87%BA%E9%85%8D%E7%BD%AE%EF%BC%9A%E4%BB%8E%E2%80%9C%E8%83%BD%E8%AF%BB%E5%88%B0%E7%9A%84%E7%A1%AC%E6%A0%A1%E9%AA%8C%E2%80%9D%E5%88%B0%E2%80%9C%E8%AF%BB%E4%B8%8D%E5%88%B0%E7%9A%84%E6%B5%81%E7%A8%8B%E7%BA%A6%E6%9D%9F%E2%80%9D"><span class="toc-text">6. 依赖与导出配置：从“能读到的硬校验”到“读不到的流程约束”</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#6-1-%E8%A7%84%E5%88%99%E5%B1%82%EF%BC%88%E5%BF%AB%E9%80%9F%E6%8B%A6%E6%88%AA%EF%BC%8C%E8%A6%86%E7%9B%96-80-%E8%BF%94%E5%B7%A5%EF%BC%89"><span class="toc-text">6.1 规则层（快速拦截，覆盖 80% 返工）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-2-%E8%A7%A3%E6%9E%90%E5%B1%82%EF%BC%88%E5%AF%B9%E5%85%B3%E9%94%AE%E8%B5%84%E4%BA%A7%E6%B7%B1%E6%A0%A1%E9%AA%8C%EF%BC%89"><span class="toc-text">6.2 解析层（对关键资产深校验）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-3-%E7%BB%93%E6%9E%9C%E6%A0%A1%E9%AA%8C%EF%BC%88%E8%AF%BB%E5%8F%96%E4%B8%8D%E5%88%B0%E5%8F%82%E6%95%B0%E6%97%B6%E7%9A%84%E5%85%9C%E5%BA%95%EF%BC%89"><span class="toc-text">6.3 结果校验（读取不到参数时的兜底）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-%E5%85%83%E6%95%B0%E6%8D%AE%E8%A1%A8%EF%BC%9A%E4%B8%BA%E4%BB%80%E4%B9%88%E2%80%9C%E6%A3%80%E7%B4%A2%E2%80%9D%E6%AF%94%E2%80%9C%E8%A7%84%E8%8C%83%E2%80%9D%E6%9B%B4%E8%83%BD%E6%8E%A8%E5%8A%A8%E8%90%BD%E5%9C%B0"><span class="toc-text">7. 元数据表：为什么“检索”比“规范”更能推动落地</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-%E5%8F%91%E5%B8%83-%E5%BD%92%E6%A1%A3-%E5%9B%9E%E6%BB%9A%EF%BC%9A%E6%9C%80%E6%80%95%E7%9A%84%E4%B8%8D%E6%98%AF%E5%A4%B1%E8%B4%A5%EF%BC%8C%E8%80%8C%E6%98%AF%E2%80%9C%E5%8D%8A%E4%B8%80%E8%87%B4%E2%80%9D"><span class="toc-text">8. 发布&#x2F;归档&#x2F;回滚：最怕的不是失败，而是“半一致”</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-%E6%88%91%E8%B8%A9%E8%BF%87-%E9%87%8D%E7%82%B9%E9%98%B2%E7%9A%84%E5%9D%91"><span class="toc-text">9. 我踩过&#x2F;重点防的坑</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10-QA"><span class="toc-text">10. QA</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#10-1-%E3%80%8C%E4%BD%A0%E4%BB%AC%E7%94%A8-FTP%EF%BC%8C%E6%80%8E%E4%B9%88%E5%81%9A%E7%89%88%E6%9C%AC%E5%92%8C%E5%9B%9E%E6%BB%9A%EF%BC%9F%E3%80%8D"><span class="toc-text">10.1 「你们用 FTP，怎么做版本和回滚？」</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#10-2-%E3%80%8Cmanifest-%E9%87%8C%E8%AE%B0%E4%BB%80%E4%B9%88%EF%BC%9Fhash-%E6%80%8E%E4%B9%88%E7%AE%97%EF%BC%9F%E3%80%8D"><span class="toc-text">10.2 「manifest 里记什么？hash 怎么算？」</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#10-3-%E3%80%8CFTP-%E5%8D%8A%E6%88%AA%E6%96%87%E4%BB%B6%E6%80%8E%E4%B9%88%E9%98%B2%EF%BC%9F%E3%80%8D"><span class="toc-text">10.3 「FTP 半截文件怎么防？」</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#10-4-%E3%80%8CPython-%E7%8E%AF%E5%A2%83%E6%80%8E%E4%B9%88%E7%BB%99%E5%A4%A7%E5%AE%B6%E9%85%8D%EF%BC%9F%E5%85%AC%E5%8F%B8%E4%B8%8D%E8%83%BD-pip-%E5%A4%96%E7%BD%91%E6%80%8E%E4%B9%88%E5%8A%9E%EF%BC%9F%E3%80%8D"><span class="toc-text">10.4 「Python 环境怎么给大家配？公司不能 pip 外网怎么办？」</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#10-5-%E3%80%8C%E4%BD%A0%E6%80%8E%E4%B9%88%E8%AF%BB%E5%8F%96%E7%BE%8E%E6%9C%AF%E4%BE%9D%E8%B5%96%EF%BC%9F%E5%8D%95%E4%BD%8D-%E8%BD%B4%E5%90%91%E6%80%8E%E4%B9%88%E6%A0%A1%E9%AA%8C%EF%BC%9F%E3%80%8D"><span class="toc-text">10.5 「你怎么读取美术依赖？单位&#x2F;轴向怎么校验？」</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#10-6-%E3%80%8C%E4%BD%A0%E6%80%8E%E4%B9%88%E8%AF%81%E6%98%8E%E5%87%8F%E5%B0%91%E8%BF%94%E5%B7%A5%EF%BC%9F%E3%80%8D"><span class="toc-text">10.6 「你怎么证明减少返工？」</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#10-7-%E3%80%8C%E4%BD%A0%E4%BD%9C%E4%B8%BA%E5%AE%9E%E4%B9%A0%E7%94%9F%EF%BC%8C%E5%81%9A%E5%88%B0%E5%93%AA%E4%B8%80%E6%AD%A5%EF%BC%9F%E5%93%AA%E4%BA%9B%E4%B8%8D%E6%98%AF%E4%BD%A0%E8%83%BD%E6%94%B9%E7%9A%84%EF%BC%9F%E3%80%8D"><span class="toc-text">10.7 「你作为实习生，做到哪一步？哪些不是你能改的？」</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#11-%E5%B0%8F%E7%BB%93%EF%BC%9A%E6%88%91%E7%9A%84%E6%94%B6%E8%8E%B7"><span class="toc-text">11. 小结：我的收获</span></a></li></ol></li></ol></div><div class="widget-footer"><a class="top" onclick="util.scrollTop()"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path stroke-linejoin="round" d="m9 15.5l3-3l3 3m-6-4l3-3l3 3"/><path d="M7 3.338A9.95 9.95 0 0 1 12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12c0-1.821.487-3.53 1.338-5"/></g></svg><span>Scroll to Top</span></a></div></widget>
+</div></aside><div class='float-panel'>
+  <button type='button' style='display:none' class='laptop-only rightbar-toggle mobile' onclick='sidebar.rightbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg>
+  </button>
+  <button type='button' style='display:none' class='mobile-only leftbar-toggle mobile' onclick='sidebar.leftbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 11c0-3.771 0-5.657 1.172-6.828C4.343 3 6.229 3 10 3h4c3.771 0 5.657 0 6.828 1.172C22 5.343 22 7.229 22 11v2c0 3.771 0 5.657-1.172 6.828C19.657 21 17.771 21 14 21h-4c-3.771 0-5.657 0-6.828-1.172C2 18.657 2 16.771 2 13z"/><path id="sep" stroke-linecap="round" d="M5.5 10h6m-5 4h4m4.5 7V3"/></g></svg>
+  </button>
+</div>
+</div><div class="scripts">
+
+
+<script type="text/javascript">
+  window.canonical = {"originalHost":null,"officialHosts":["localhost"],"encoded":""};
+  const ctx = {
+    date_suffix: {
+      just: `Just`,
+      min: `minutes ago`,
+      hour: `hours ago`,
+      day: `days ago`,
+    },
+    root : `/`,
+    tag_plugins: {
+      chat: Object.assign({"api":"https://siteinfo.listentothewind.cn/api/v1"}),
+    }
+  };
+
+  // required plugins (only load if needs)
+  if (`local_search`) {
+    ctx.search = {};
+    ctx.search.service = `local_search`;
+    if (ctx.search.service == 'local_search') {
+      let service_obj = Object.assign({}, `{"field":"all","path":"/search.json","content":true,"skip_search":null,"sort":"-date"}`);
+      ctx.search[ctx.search.service] = service_obj;
+    }
+  }
+  const def = {
+    avatar: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/3442075.svg`,
+    cover: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/cover/76b86c0226ffd.svg`,
+    loading: `https://api.iconify.design/eos-icons:three-dots-loading.svg?color=%231cd0fd`,
+  };
+  const deps = {
+    jquery: `https://gcore.jsdelivr.net/npm/jquery@3.7/dist/jquery.min.js`,
+    marked: `https://gcore.jsdelivr.net/npm/marked@13.0/lib/marked.umd.min.js`,
+    lazyload: `/%5Bobject%20Object%5D`
+  }
+  
+
+</script>
+
+<script type="text/javascript">
+  
+  function RunItem() {
+    this.list = []; // 存放回调函数
+    this.start = () => {
+      for (var i = 0; i < this.list.length; i++) {
+        this.list[i].run();
+      }
+    };
+    this.push = (fn, name, setRequestAnimationFrame = true) => {
+      let myfn = fn
+      if (setRequestAnimationFrame) {
+        myfn = () => {
+          utils.requestAnimationFrame(fn)
+        }
+      }
+      var f = new Item(myfn, name);
+      this.list.push(f);
+    };
+    this.remove = (name) => {
+      for (let index = 0; index < this.list.length; index++) {
+        const e = this.list[index];
+        if (e.name == name) {
+          this.list.splice(index, 1);
+        }
+      }
+    }
+    // 构造一个可以run的对象
+    function Item(fn, name) {
+      // 函数名称
+      this.name = name || fn.name;
+      // run方法
+      this.run = () => {
+        try {
+          fn()
+        } catch (error) {
+          console.log(error);
+        }
+      };
+    }
+  }
+
+  const utils = {
+    // 懒加载 css https://github.com/filamentgroup/loadCSS
+    css: (href, before, media, attributes) => {
+      var doc = window.document;
+      var ss = doc.createElement("link");
+      var ref;
+      if (before) {
+        ref = before;
+      } else {
+        var refs = (doc.body || doc.getElementsByTagName("head")[0]).childNodes;
+        ref = refs[refs.length - 1];
+      }
+      var sheets = doc.styleSheets;
+      if (attributes) {
+        for (var attributeName in attributes) {
+          if (attributes.hasOwnProperty(attributeName)) {
+            ss.setAttribute(attributeName, attributes[attributeName]);
+          }
+        }
+      }
+      ss.rel = "stylesheet";
+      ss.href = href;
+      ss.media = "only x";
+      function ready(cb) {
+        if (doc.body) {
+          return cb();
+        }
+        setTimeout(function () {
+          ready(cb);
+        });
+      }
+      ready(function () {
+        ref.parentNode.insertBefore(ss, before ? ref : ref.nextSibling);
+      });
+      var onloadcssdefined = function (cb) {
+        var resolvedHref = ss.href;
+        var i = sheets.length;
+        while (i--) {
+          if (sheets[i].href === resolvedHref) {
+            return cb();
+          }
+        }
+        setTimeout(function () {
+          onloadcssdefined(cb);
+        });
+      };
+      function loadCB() {
+        if (ss.addEventListener) {
+          ss.removeEventListener("load", loadCB);
+        }
+        ss.media = media || "all";
+      }
+      if (ss.addEventListener) {
+        ss.addEventListener("load", loadCB);
+      }
+      ss.onloadcssdefined = onloadcssdefined;
+      onloadcssdefined(loadCB);
+      return ss;
+    },
+
+    js: (src, opt) => new Promise((resolve, reject) => {
+      var script = document.createElement('script');
+      if (src.startsWith('/')) {
+        src = ctx.root + src.substring(1);
+      }
+      script.src = src;
+      if (opt) {
+        for (let key of Object.keys(opt)) {
+          script[key] = opt[key]
+        }
+      } else {
+        // 默认异步，如果需要同步，第二个参数传入 {} 即可
+        script.async = true
+      }
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function () {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    }),
+
+    jq: (fn) => {
+      if (typeof jQuery === 'undefined') {
+        utils.js(deps.jquery).then(fn)
+      } else {
+        fn()
+      }
+    },
+
+    onLoading: (el) => {
+      if (el) {
+        $(el).append('<div class="loading-wrap"><svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" stroke-opacity=".3" d="M12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="1.3s" values="60;0"/></path><path stroke-dasharray="15" stroke-dashoffset="15" d="M12 3C16.9706 3 21 7.02944 21 12"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="15;0"/><animateTransform attributeName="transform" dur="1.5s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"/></path></g></svg></div>');
+      }
+    },
+    onLoadSuccess: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap').remove();
+      }
+    },
+    onLoadFailure: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap svg').remove();
+        $(el).find('.loading-wrap').append('<svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" d="M12 3L21 20H3L12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.5s" values="60;0"/></path><path stroke-dasharray="6" stroke-dashoffset="6" d="M12 10V14"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.6s" dur="0.2s" values="6;0"/></path></g><circle cx="12" cy="17" r="1" fill="currentColor" fill-opacity="0"><animate fill="freeze" attributeName="fill-opacity" begin="0.8s" dur="0.4s" values="0;1"/></circle></svg>');
+        $(el).find('.loading-wrap').addClass('error');
+      }
+    },
+    request: (el, url, callback, onFailure) => {
+      const maxRetry = 3;
+      let retryCount = 0;
+
+      return new Promise((resolve, reject) => {
+        const load = () => {
+          utils.onLoading?.(el);
+
+          let timedOut = false;
+          const timeout = setTimeout(() => {
+            timedOut = true;
+            console.warn('[request] 超时:', url);
+
+            if (++retryCount >= maxRetry) {
+              utils.onLoadFailure?.(el);
+              onFailure?.();
+              reject('请求超时');
+            } else {
+              setTimeout(load, 1000);
+            }
+          }, 5000);
+
+          fetch(url).then(resp => {
+            if (timedOut) return;
+            clearTimeout(timeout);
+
+            if (!resp.ok) throw new Error('响应失败');
+            return resp;
+          }).then(data => {
+            if (timedOut) return;
+            utils.onLoadSuccess?.(el);
+            callback(data);
+            resolve(data);
+          }).catch(err => {
+            clearTimeout(timeout);
+            console.warn('[request] 错误:', err);
+
+            if (++retryCount >= maxRetry) {
+              utils.onLoadFailure?.(el);
+              onFailure?.();
+              reject(err);
+            } else {
+              setTimeout(load, 1000);
+            }
+          });
+        };
+
+        load();
+      });
+    },
+    requestWithoutLoading: (url, options = {}, maxRetry = 2, timeout = 5000) => {
+      return new Promise((resolve, reject) => {
+        let retryCount = 0;
+
+        const tryRequest = () => {
+          let timedOut = false;
+          const timer = setTimeout(() => {
+            timedOut = true;
+            if (++retryCount > maxRetry) reject('timeout');
+            else tryRequest();
+          }, timeout);
+
+          fetch(url, options)
+            .then(resp => {
+              clearTimeout(timer);
+              if (!resp.ok) throw new Error('bad response');
+              resolve(resp);
+            })
+            .catch(err => {
+              clearTimeout(timer);
+              if (++retryCount > maxRetry) reject(err);
+              else setTimeout(tryRequest, 500);
+            });
+        };
+
+        tryRequest();
+      });
+    },
+    /********************** requestAnimationFrame ********************************/
+    // 1、requestAnimationFrame 会把每一帧中的所有 DOM 操作集中起来，在一次重绘或回流中就完成，并且重绘或回流的时间间隔紧紧跟随浏览器的刷新频率，一般来说，这个频率为每秒60帧。
+    // 2、在隐藏或不可见的元素中，requestAnimationFrame 将不会进行重绘或回流，这当然就意味着更少的的 cpu，gpu 和内存使用量。
+    requestAnimationFrame: (fn) => {
+      if (!window.requestAnimationFrame) {
+        window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame;
+      }
+      window.requestAnimationFrame(fn)
+    },
+    dark: {},
+  };
+
+  // utils.dark.mode 当前模式 dark or light
+  // utils.dark.toggle() 暗黑模式触发器
+  // utils.dark.push(callBack[,"callBackName"]) 传入触发器回调函数
+  utils.dark.method = {
+    toggle: new RunItem(),
+  };
+  utils.dark = Object.assign(utils.dark, {
+    push: utils.dark.method.toggle.push,
+  });
+</script>
+<script>
+  const sidebar = {
+    leftbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    rightbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('rightbar');
+        l_body.removeAttribute('leftbar');
+      }
+    },
+    dismiss: () => {
+      if (l_body) {
+        l_body.removeAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    toggleTOC: () => {
+      document.querySelector('#data-toc').classList.toggle('collapse');
+    }
+  }
+</script>
+<script type="text/javascript">
+  (() => {
+    const tagSwitchers = document.querySelectorAll('.tag-subtree.parent-tag > a > .tag-switcher-wrapper')
+    for (const tagSwitcher of tagSwitchers) {
+      tagSwitcher.addEventListener('click', (e) => {
+        const parent = e.target.closest('.tag-subtree.parent-tag')
+        parent.classList.toggle('expanded')
+        e.preventDefault()
+      })
+    }
+
+    // Get active tag from query string, then activate it.
+    const urlParams = new URLSearchParams(window.location.search)
+    const activeTag = urlParams.get('tag')
+    if (activeTag) {
+      let tag = document.querySelector(`.tag-subtree[data-tag="${activeTag}"]`)
+      if (tag) {
+        tag.querySelector('a').classList.add('active')
+        
+        while (tag) {
+          tag.classList.add('expanded')
+          tag = tag.parentElement.closest('.tag-subtree.parent-tag')
+        }
+      }
+    }
+  })()
+</script>
+
+<script async src="https://gcore.jsdelivr.net/npm/vanilla-lazyload@19.1/dist/lazyload.min.js"></script>
+<script>
+  // https://www.npmjs.com/package/vanilla-lazyload
+  // Set the options globally
+  // to make LazyLoad self-initialize
+  window.lazyLoadOptions = {
+    elements_selector: ".lazy",
+    callback_loaded: (el) => {
+      el.classList.add('loaded');
+      const wrapper = el.closest('.lazy-box');
+      const icon = wrapper?.querySelector('.lazy-icon');
+      if (icon) icon.remove();
+    }
+  };
+  // Listen to the initialization event
+  // and get the instance of LazyLoad
+  window.addEventListener(
+    "LazyLoad::Initialized",
+    function (event) {
+      window.lazyLoadInstance = event.detail.instance;
+    },
+    false
+  );
+  document.addEventListener('DOMContentLoaded', function () {
+    window.lazyLoadInstance?.update();
+  });
+
+  window.wrapLazyloadImages = (container) => {
+    if (typeof container === 'string') {
+      container = document.querySelector(container);
+    }
+    if (!container) return;
+    
+    const images = container.querySelectorAll('img');
+    images.forEach((img) => {
+      if (img.classList.contains('lazy')) return;
+
+      const src = img.getAttribute('src');
+      if (!src) return;
+
+      const wrapper = document.createElement('div');
+      wrapper.className = 'lazy-box';
+
+      const newImg = img.cloneNode();
+      newImg.removeAttribute('src');
+      newImg.setAttribute('data-src', src);
+      newImg.classList.add('lazy');
+
+      const icon = document.createElement('div');
+      icon.className = 'lazy-icon';
+      if (def.loading) {
+        icon.style.backgroundImage = `url("${def.loading}")`;
+      }
+
+      wrapper.appendChild(newImg);
+      wrapper.appendChild(icon);
+
+      img.replaceWith(wrapper);
+    });
+
+    // 通知 LazyLoad 更新
+    if (window.lazyLoadInstance?.update) {
+      window.lazyLoadInstance.update();
+    }
+  }
+  
+</script>
+
+<!-- required -->
+<script src="/js/main.js?v=1.33.1" defer></script>
+
+<script type="text/javascript">
+  const applyTheme = (theme) => {
+    if (theme === 'auto') {
+      document.documentElement.removeAttribute('data-theme')
+    } else {
+      document.documentElement.setAttribute('data-theme', theme)
+    }
+
+    // applyThemeToGiscus(theme)
+  }
+
+  // FIXME: 这会导致无法使用 preferred_color_scheme 以外的主题
+  const applyThemeToGiscus = (theme) => {
+    // theme = theme === 'auto' ? 'preferred_color_scheme' : theme
+    const cmt = document.getElementById('giscus')
+    if (cmt) {
+      // This works before giscus load.
+      cmt.setAttribute('data-theme', theme)
+    }
+
+    const iframe = document.querySelector('#comments > section.giscus > iframe')
+    if (iframe) {
+      // This works after giscus loaded.
+      const src = iframe.src
+      const newSrc = src.replace(/theme=[\w]+/, `theme=${theme}`)
+      iframe.src = newSrc
+    }
+  }
+
+  const switchTheme = () => {
+    // light -> dark -> auto -> light -> ...
+    const currentTheme = document.documentElement.getAttribute('data-theme')
+    let newTheme;
+    switch (currentTheme) {
+      case 'light':
+        newTheme = 'dark'
+        break
+      case 'dark':
+        newTheme = 'auto'
+        break
+      default:
+        newTheme = 'light'
+    }
+    applyTheme(newTheme)
+    window.localStorage.setItem('Stellar.theme', newTheme)
+    utils.dark.mode = newTheme === 'auto' ? (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light") : newTheme;
+    utils.dark.method.toggle.start();
+
+    const messages = {
+      light: `Switched to Light Mode`,
+      dark: `Switched to Dark Mode`,
+      auto: `Switched to Auto Mode`,
+    }
+    hud?.toast?.(messages[newTheme])
+  }
+
+  (() => {
+    // Apply user's preferred theme, if any.
+    const theme = window.localStorage.getItem('Stellar.theme')
+    if (theme !== null) {
+      applyTheme(theme)
+    } else {
+      utils.dark.mode = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    }
+    utils.dark.method.toggle.start();
+  })()
+</script>
+
+
+<!-- optional -->
+
+
+
+<script defer>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.services = Object.assign({}, JSON.parse(`{"mdrender":{"js":"/js/services/mdrender.js"},"siteinfo":{"js":"/js/services/siteinfo.js","api":null},"ghinfo":{"js":"/js/services/ghinfo.js"},"rating":{"js":"/js/services/rating.js","api":"https://star-vote.xaox.cc/api/rating"},"vote":{"js":"/js/services/vote.js","api":"https://star-vote.xaox.cc/api/vote"},"sites":{"js":"/js/services/sites.js"},"friends":{"js":"/js/services/friends.js"},"friends_and_posts":{"js":"/js/services/friends_and_posts.js"},"timeline":{"js":"/js/services/timeline.js"},"fcircle":{"js":"/js/services/fcircle.js"},"weibo":{"js":"/js/services/weibo.js"},"memos":{"js":"/js/services/memos.js"},"voice":{"js":"/js/plugins/voice.js"},"video":{"js":"/js/plugins/video.js"},"download-file":{"js":"/js/plugins/download-file.js"},"twikoo":{"js":"/js/services/twikoo_latest_comment.js"},"waline":{"js":"/js/services/waline_latest_comment.js"},"artalk":{"js":"/js/services/artalk_latest_comment.js"},"giscus":{"js":"/js/services/giscus_latest_comment.js"},"contributors":{"edit_this_page":{"_posts/":null,"wiki/stellar/":"https://github.com/xaoxuu/hexo-theme-stellar-docs/blob/main/"},"js":"/js/services/contributors.js"}}`));
+    for (let id of Object.keys(ctx.services)) {
+      const js = ctx.services[id].js;
+      if (id == 'siteinfo') {
+        ctx.cardlinks = document.querySelectorAll('a.link-card[cardlink]');
+        if (ctx.cardlinks?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            setCardLink(ctx.cardlinks);
+          });
+        }
+      } else if (id == 'voice') {
+        ctx.voiceAudios = document.querySelectorAll('.voice>audio');
+        if (ctx.voiceAudios?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            createVoiceDom(ctx.voiceAudios);
+          });
+        }
+      } else if (id == 'video') {
+        ctx.videos = document.querySelectorAll('.video>video');
+        if (ctx.videos?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            videoEvents(ctx.videos);
+          });
+        }
+      } else if (id == 'download-file') {
+        ctx.files = document.querySelectorAll('.file');
+        if (ctx.files?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            downloadFileEvent(ctx.files);
+          });
+        }
+      } else {
+        const els = document.getElementsByClassName(`ds-${id}`);
+        if (els?.length > 0) {
+          utils.jq(() => {
+            if (id == 'timeline' || 'memos' || 'marked') {
+              utils.js(deps.marked).then(function () {
+                utils.js(js, { defer: true });
+              });
+            } else {
+              utils.js(js, { defer: true });
+            }
+          });
+        }
+      }
+    }
+
+    // chat iphone time
+    let phoneTimes = document.querySelectorAll('.chat .status-bar .time');
+
+    if (phoneTimes.length > 0) {
+      NowTime();
+      var date = new Date();
+      var sec = date.getSeconds();
+      var firstAdjustInterval = setInterval(firstAdjustTime, 1000 * (60 - sec));
+    }
+
+    function firstAdjustTime() {
+      NowTime();
+      clearInterval(firstAdjustInterval);
+      setInterval(NowTime, 1000 * 60);
+    }
+
+    function NowTime() {
+      for (let i = 0; i < phoneTimes.length; ++i) {
+        var timeSpan = phoneTimes[i];
+        var date = new Date();
+        var hour = date.getHours();
+        var min = date.getMinutes();
+        timeSpan.innerHTML = check(hour) + ":" + check(min);
+      }
+    };
+
+    function check(val) {
+      if (val < 10) {
+        return ("0" + val);
+      }
+      return (val);
+    }
+
+    // chat quote
+    const chat_quote_obverser = new IntersectionObserver((entries, observer) => {
+      entries.filter((entry) => { return entry.isIntersecting }).sort((a, b) => a.intersectionRect.y !== b.intersectionRect.y ? a.intersectionRect.y - b.intersectionRect.y : a.intersectionRect.x - b.intersectionRect.x).forEach((entry, index) => {
+          observer.unobserve(entry.target);
+          setTimeout(() => {
+            entry.target.classList.add('quote-blink');
+            setTimeout(() => {
+              entry.target.classList.remove('quote-blink');
+            }, 1000);
+          }, Math.max(100, 16) * (index + 1));
+        });
+    });
+
+    var chatQuotes = document.querySelectorAll(".chat .talk .quote");
+    chatQuotes.forEach((quote) => {
+      quote.addEventListener('click', function () {
+        var chatCellDom = document.getElementById("quote-" + quote.getAttribute("quotedCellTag"));
+        if (chatCellDom) {
+          var chatDiv = chatCellDom.parentElement;
+          var mid = chatDiv.clientHeight / 2;
+          var offsetTop = chatCellDom.offsetTop;
+          if (offsetTop > mid - chatCellDom.clientHeight / 2) {
+            chatDiv.scrollTo({
+              top: chatCellDom.offsetTop - mid + chatCellDom.clientHeight / 2,
+              behavior: "smooth"
+            });
+          } else {
+            chatDiv.scrollTo({
+              top: 0,
+              behavior: "smooth"
+            });
+          }
+          chat_quote_obverser.observe(chatCellDom);
+        }
+      });
+    });
+  });
+</script>
+
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.search = {
+      path: `/search.json`,
+    }
+    utils.js('/js/search/local-search.js', { defer: true });
+  });
+</script><script>
+  window.FPConfig = {
+    delay: 0,
+    ignoreKeywords: [],
+    maxRPS: 5,
+    hoverDelay: 25
+  };
+</script>
+<script defer src="https://gcore.jsdelivr.net/npm/flying-pages@2/flying-pages.min.js"></script><script>
+  ctx.fancybox = {
+    selector: `.timenode p>img`,
+    css: `https://gcore.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css`,
+    js: `https://gcore.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js`
+  };
+  var selector = '[data-fancybox]:not(.error), .with-fancybox .atk-content img:not([atk-emoticon])';
+  if (ctx.fancybox.selector) {
+    selector += `, ${ctx.fancybox.selector}`
+  }
+  var needFancybox = document.querySelectorAll(selector).length !== 0;
+  if (!needFancybox) {
+    const memos = document.getElementsByClassName('ds-memos');
+    if (memos != undefined && memos.length > 0) {
+      needFancybox = true;
+    }
+    const fancybox = document.getElementsByClassName('with-fancybox');
+    if (fancybox != undefined && fancybox.length > 0) {
+      needFancybox = true;
+    }
+  }
+  if (needFancybox) {
+    utils.css(ctx.fancybox.css);
+    utils.js(ctx.fancybox.js, { defer: true }).then(function () {
+      Fancybox.bind(selector, {
+        hideScrollbar: false,
+        Thumbs: {
+          autoStart: false,
+        },
+        caption: (fancybox, slide) => {
+          return slide.triggerEl.alt || slide.triggerEl.dataset.caption || null
+        }
+      });
+    })
+  }
+</script>
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    const swiper_api = document.getElementById('swiper-api');
+    if (swiper_api != undefined) {
+      utils.css(`https://unpkg.com/swiper@10.3/swiper-bundle.min.css`);
+      utils.js(`https://unpkg.com/swiper@10.3/swiper-bundle.min.js`, { defer: true }).then(function () {
+        const effect = swiper_api.getAttribute('effect') || '';
+        var swiper = new Swiper('.swiper#swiper-api', {
+          slidesPerView: 'auto',
+          spaceBetween: 8,
+          centeredSlides: true,
+          effect: effect,
+          rewind: true,
+          pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+          },
+          navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+          },
+        });
+      })
+    }
+  });
+</script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    window.codeElements = document.querySelectorAll('.code');
+    if (window.codeElements.length > 0) {
+      ctx.copycode = {
+        default_text: `Copy`,
+        success_text: `Copied`,
+        toast: `复制成功`,
+      };
+      utils.js('/js/plugins/copycode.js');
+    }
+  });
+</script>
+
+
+<!-- inject -->
+
+</div></body></html>
