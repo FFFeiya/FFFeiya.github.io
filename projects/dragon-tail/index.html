@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="hexo-theme" content="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.33.1" theme-name="Stellar" theme-version="1.33.1">
   
-  <meta name="robots" content="noindex,follow">
+  
   <meta name="generator" content="Hexo 7.3.0">
   <meta http-equiv='x-dns-prefetch-control' content='on' />
   
@@ -17,20 +17,31 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000">
   <meta name="theme-color" content="#f9fafb">
-  <title>Archives - FFFeiya</title>
+  <title>Dragon Tail（Unity）— 双人 IMU 协作龙对战原型：头尾分工、手势协作与技能交互 - FFFeiya</title>
 
   
-    <meta property="og:type" content="website">
-<meta property="og:title" content="Archives">
-<meta property="og:url" content="http://example.com/archives/2025/">
+    <meta name="description" content="这是一个“硬件输入驱动玩法”的 Unity 原型：每条龙由两名玩家协作控制（头 + 尾），用 IMU 陀螺仪角速度（deg&#x2F;s）通过串口输入来驱动转向、加速、90°协作转向、跳&#x2F;蹲以及近战技能与拾取触发。目标是把「输入 → 行为 → 反馈 → 对抗&#x2F;协作」做成可调参、可复用、可扩展的玩法骨架，而不是一次性的 Demo。   给面试官的亮点关键词（可直接贴简历&amp;#x2">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Dragon Tail（Unity）— 双人 IMU 协作龙对战原型：头尾分工、手势协作与技能交互">
+<meta property="og:url" content="http://example.com/projects/dragon-tail/">
 <meta property="og:site_name" content="FFFeiya">
+<meta property="og:description" content="这是一个“硬件输入驱动玩法”的 Unity 原型：每条龙由两名玩家协作控制（头 + 尾），用 IMU 陀螺仪角速度（deg&#x2F;s）通过串口输入来驱动转向、加速、90°协作转向、跳&#x2F;蹲以及近战技能与拾取触发。目标是把「输入 → 行为 → 反馈 → 对抗&#x2F;协作」做成可调参、可复用、可扩展的玩法骨架，而不是一次性的 Demo。   给面试官的亮点关键词（可直接贴简历&amp;#x2">
 <meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-02-25T07:00:00.000Z">
+<meta property="article:modified_time" content="2026-02-25T04:56:30.375Z">
 <meta property="article:author" content="FFFeiya">
+<meta property="article:tag" content="Unity">
+<meta property="article:tag" content="CSharp">
+<meta property="article:tag" content="IMU">
+<meta property="article:tag" content="SerialPort">
+<meta property="article:tag" content="Co-op">
+<meta property="article:tag" content="Gameplay">
+<meta property="article:tag" content="Input">
 <meta name="twitter:card" content="summary">
   
   
   
-  
+  <meta name="keywords" content=",,,,,,">
 
   <!-- feed -->
   
@@ -46,12 +57,12 @@
 
   
 
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Website","@id":"http://example.com","author":{"@type":"Person","name":"FFFeiya","sameAs":[]},"name":"FFFeiya","description":"","url":"http://example.com"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Website","@id":"http://example.com/projects/dragon-tail/","author":{"@type":"Person","name":"FFFeiya","sameAs":[]},"name":"Dragon Tail（Unity）— 双人 IMU 协作龙对战原型：头尾分工、手势协作与技能交互","description":"\n这是一个“硬件输入驱动玩法”的 Unity 原型：每条龙由两名玩家协作控制（头 + 尾），用 IMU 陀螺仪角速度（deg&#x2F;s）通过串口输入来驱动转向、加速、90°协作转向、跳&#x2F;蹲以及近战技能与拾取触发。目标是把「输入 → 行为 → 反馈 → 对抗&#x2F;协作」做成可调参、可复用、可扩展的玩法骨架，而不是一次性的 Demo。\n\n\n给面试官的亮点关键词（可直接贴简历&...","url":"http://example.com/projects/dragon-tail/"}</script>
   <link rel="stylesheet" href="/css/custom.css">
 </head>
 <body><div class="sitebg"><div class="siteblur"></div></div>
 
-<div class="l_body index" id="start" layout="undefined" type="undefined" ><aside class="l_left"><div class="sidebg"></div><div class="leftbar-container">
+<div class="l_body content" id="start" layout="page" type="tech" ><aside class="l_left"><div class="sidebg"></div><div class="leftbar-container">
 
 
 <header class="header"><div class="logo-wrap"><a class="avatar" href="/about/"><div class="bg" style="opacity:0;background-image:url(https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/rainbow64@3x.webp);"></div><img no-lazy class="avatar" src="/images/Putin.png" onerror="javascript:this.classList.add('error');this.src='https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/image/2659360.svg';"></a><a class="title" href="/"><div class="main">FFFeiya</div><div class="sub normal cap">Portfolio</div><div class="sub hover cap" style="opacity:0"> UE / Unity / Tools</div></a></div></header>
@@ -68,16 +79,162 @@
 
 </div></aside><div class="l_main" id="main">
 
-<header class="header mobile-only"><div class="logo-wrap"><a class="avatar" href="/about/"><div class="bg" style="opacity:0;background-image:url(https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/rainbow64@3x.webp);"></div><img no-lazy class="avatar" src="/images/Putin.png" onerror="javascript:this.classList.add('error');this.src='https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/image/2659360.svg';"></a><a class="title" href="/"><div class="main">FFFeiya</div><div class="sub normal cap">Portfolio</div><div class="sub hover cap" style="opacity:0"> UE / Unity / Tools</div></a></div></header>
-
- 
 
 
-<div class="navbar top"><div class="navbar-blur"><div class="navbar-container"><nav class="post"><a href="/blog/">Recent</a><a href="/categories/">Categories</a><a href="/tags/">Tags</a><a class="active" href="/archives/">Archives</a></nav></div></div></div><div class="post-list archives"><article class="" id="archive"><div class='archive-header h4'>2026</div><div class="archive-list"><a class='post fs14' href="/2026/02/24/UE5.6_GAS_Enemy_AI_Stage_Summary/"><time>02-24</time><span>用 UE5.6 + GAS 搭一个可迭代的敌人近战 AI：从状态机图到可调试行为树</span></a></div><div class="archive-list"><a class='post fs14' href="/2026/02/24/tech_blog_hexo_stellar_portfolio_safe/"><time>02-24</time><span>用 Hexo + Stellar 搭一个作品展柜：卡片入口、主题配色与 CSS 覆盖</span></a></div></article><article class="" id="archive"><div class='archive-header h4'>2025</div><div class="archive-list"><a class='post fs14' href="/2025/01/08/Building%20Real-Time%20NPC%20Dialogue%20in%20Unity%20with%20Large%20Language%20Models.zh-CN/"><time>01-08</time><span>在 Unity 中用大语言模型构建实时 NPC 对话</span></a></div><div class="archive-list"><a class='post fs14' href="/2025/01/08/Using%20iFlytek's%20Speech%20Model%20in%20Unity%20for%20Text-to-Speech%20(TTS)%20Playback/"><time>01-08</time><span>Using iFlytek's Speech Model in Unity for Text-to-Speech (TTS) Playback</span></a></div></article><article class="" id="archive"><div class='archive-header h4'>2024</div><div class="archive-list"><a class='post fs14' href="/2024/12/08/Bridging%20Unity%20with%20Python%20and%20ChatGPT.zh-CN/"><time>12-08</time><span>Unity 对接 Python 与 ChatGPT：综合指南</span></a></div><div class="archive-list"><a class='post fs14' href="/2024/12/08/Building%20a%20Dynamic%20Planetary%20Battle%20System.zh-CN/"><time>12-08</time><span>用 p5.js 做太空可视化：构建动态行星战斗系统</span></a></div><div class="archive-list"><a class='post fs14' href="/2024/12/08/Game%20Demo%20of%20Star%20Annihilator%20-%20A%20Tower%20Defense%20Game%20Developing/"><time>12-08</time><span>Game Demo of *Star Annihilator*: A Tower Defense Game Developing</span></a></div><div class="archive-list"><a class='post fs14' href="/2024/12/08/How%20to%20Convert%20a%20p5.js%20Game%20into%20Java%20(JavaFX)/"><time>12-08</time><span>How to Convert a p5.js Game into Java (JavaFX)</span></a></div></article></div>
+
+
+<div class="article banner top">
+  <div class="content">
+    <div class="top bread-nav footnote"><div class="left"><div class="flex-row" id="breadcrumb"><a class="cap breadcrumb" href="/">Home</a>
+
+  <span class="sep"></span>
+  <a class="cap breadcrumb" href="/projects/dragon-tail/">Dragon Tail（Unity）— 双人 IMU 协作龙对战原型：头尾分工、手势协作与技能交互</a>
+  </div>
+<div class="flex-row" id="post-meta"><span class="text created">Posted on: <time datetime="2026-02-25T07:00:00.000Z">2026-02-25</time></span><span class="sep updated"></span><span class="text updated">Updated on: <time datetime="2026-02-25T04:56:30.375Z">2026-02-24</time></span></div></div></div>
+    
+    <div class="bottom only-title">
+      
+      <div class="text-area">
+        <h1 class="text title"><span>Dragon Tail（Unity）— 双人 IMU 协作龙对战原型：头尾分工、手势协作与技能交互</span></h1>
+        
+      </div>
+    </div>
+    
+  </div>
+  </div><article class="md-text content"><blockquote>
+<p>这是一个“硬件输入驱动玩法”的 Unity 原型：每条龙由两名玩家协作控制（<strong>头 + 尾</strong>），用 IMU 陀螺仪角速度（deg&#x2F;s）通过串口输入来驱动<strong>转向、加速、90°协作转向、跳&#x2F;蹲</strong>以及<strong>近战技能</strong>与<strong>拾取触发</strong>。<br>目标是把「输入 → 行为 → 反馈 → 对抗&#x2F;协作」做成可调参、可复用、可扩展的玩法骨架，而不是一次性的 Demo。</p>
+</blockquote>
+<hr>
+<h2 id="给面试官的亮点关键词（可直接贴简历-卡片）"><a href="#给面试官的亮点关键词（可直接贴简历-卡片）" class="headerlink" title="给面试官的亮点关键词（可直接贴简历&#x2F;卡片）"></a>给面试官的亮点关键词（可直接贴简历&#x2F;卡片）</h2><ul>
+<li><strong>硬件输入工程化</strong>：Windows <code>System.IO.Ports</code> 串口读取 IMU（后台线程 + 队列），支持 3&#x2F;4 列 CSV，容错忽略噪声&#x2F;头信息</li>
+<li><strong>双人协作输入映射</strong>：头控方向（±35°偏移），尾控速度（sweep 检测加速），双人手势触发 90°转向 &#x2F; 跳跃 &#x2F; 下蹲</li>
+<li><strong>可调参的运动系统</strong>：deadzone &#x2F; smoothing &#x2F; 灵敏度 &#x2F; 最大转向速度 &#x2F; 速度衰减 &#x2F; 冷却窗口等参数全部 Inspector 可调</li>
+<li><strong>对抗技能系统</strong>：Attack（咬住挂载 + 挣脱窗口）、Interfere（毒&#x2F;反转控制）、Protect（护盾自动触发）</li>
+<li><strong>拾取与场景互动</strong>：技能拾取（SkillPickup）、加速环（SpeedRing）、陷阱环 QTE（TrapRing）、阻挡器（Blocker）</li>
+<li><strong>运行时设备配置</strong>：串口选择菜单（F1）支持双龙四个 COM（A&#x2F;B 的 head&#x2F;tail），并用 PlayerPrefs 记忆配置</li>
+<li><strong>可测试性</strong>：完整键盘测试方案（无硬件也能复现逻辑），并支持每龙独立键位映射</li>
+<li><strong>风险清单与规避</strong>：Trigger 不触发、模型轴向不一致、串口被占用、Y 轴锁定被物理破坏、咬住挂载抖动等都有明确规避策略</li>
+</ul>
+<hr>
+<h2 id="项目概述"><a href="#项目概述" class="headerlink" title="项目概述"></a>项目概述</h2><ul>
+<li>两条龙（Dragon A &#x2F; Dragon B），每条龙由两名玩家控制：<ul>
+<li><strong>Head IMU</strong>：控制朝向（小幅连续转向 + 协作手势）</li>
+<li><strong>Tail IMU</strong>：控制速度（扫尾频率&#x2F;幅度→加速）+ 协作手势</li>
+</ul>
+</li>
+<li>支持键盘替代输入：便于无硬件时调试&#x2F;演示</li>
+<li>技能系统采用“单槽位”设计：拾取后占用当前技能；Protect 立即触发护盾；Attack&#x2F;Interfere 近距离瞄准触发</li>
+</ul>
+<p>Unity 版本：<strong>2023.1.22f1</strong>（Windows Editor&#x2F;Standalone 推荐，串口仅 Windows 可用）。</p>
+<hr>
+<h2 id="核心系统拆解（对应代码）"><a href="#核心系统拆解（对应代码）" class="headerlink" title="核心系统拆解（对应代码）"></a>核心系统拆解（对应代码）</h2><h3 id="1-运动系统：CoopDragonMovement"><a href="#1-运动系统：CoopDragonMovement" class="headerlink" title="1) 运动系统：CoopDragonMovement"></a>1) 运动系统：<code>CoopDragonMovement</code></h3><p><strong>输入 → 运动</strong>的主链路：</p>
+<ol>
+<li><strong>串口 IMU 数据读取</strong>（或键盘模拟）  </li>
+<li><strong>滤波与 deadzone</strong>：平滑角速度，过滤抖动  </li>
+<li><strong>头部→方向</strong>：将 yaw 角速度映射成 <code>headOffsetDeg</code>（夹在 ±35°），驱动 <code>yawRotateTarget</code> 转向  </li>
+<li><strong>尾部→速度</strong>：用 sweep 检测器识别“扫尾峰值与频率”，提升 forward speed，并在无扫尾时指数衰减回基础速度  </li>
+<li><strong>协作手势</strong>：在时间窗内检测头尾反向配对，触发 <strong>90°转向</strong>；头尾同时上&#x2F;下触发 <strong>跳跃&#x2F;下蹲</strong></li>
+<li><strong>工程化接口</strong>：外部系统可叠加 <code>externalSpeedAdd / externalSpeedMultiplier</code>（用于加速、减速、眩晕等效果）</li>
+</ol>
+<p>设计要点：</p>
+<ul>
+<li>所有关键阈值（deadzone、sweep threshold、turn window、cooldown、最大速度、衰减速度等）都可调，利于做“手感调参”。</li>
+</ul>
+<hr>
+<h3 id="2-串口协议与容错：内置解析器（Movement-内的-SerialIMU）"><a href="#2-串口协议与容错：内置解析器（Movement-内的-SerialIMU）" class="headerlink" title="2) 串口协议与容错：内置解析器（Movement 内的 SerialIMU）"></a>2) 串口协议与容错：内置解析器（Movement 内的 SerialIMU）</h3><p>支持两种 CSV 格式：</p>
+<ul>
+<li><code>time_ms,gx,gy,gz</code>（推荐）</li>
+<li><code>gx,gy,gz</code></li>
+</ul>
+<p>并会忽略：</p>
+<ul>
+<li>以 <code>time</code> 开头的 header 行</li>
+<li>含有 <code>WHO_AM_I / I2C</code> 的调试行</li>
+</ul>
+<p>实现方式：</p>
+<ul>
+<li>后台线程 <code>ReadLoop()</code> 读串口行 → 入队列  </li>
+<li>主线程 <code>DrainLatest()</code> 每帧取“最新有效一条”，避免堆积造成延迟</li>
+</ul>
+<hr>
+<h3 id="3-技能系统：CoopDragonSkills-SkillPickup"><a href="#3-技能系统：CoopDragonSkills-SkillPickup" class="headerlink" title="3) 技能系统：CoopDragonSkills + SkillPickup"></a>3) 技能系统：<code>CoopDragonSkills</code> + <code>SkillPickup</code></h3><p>技能槽位枚举：</p>
+<ul>
+<li><code>Attack</code>：咬住挂载（latch）+ 挣脱窗口（escape sweeps &#x2F; timing window）</li>
+<li><code>Interfere</code>：施加干扰（毒&#x2F;控制反转等负面效果；护盾可抵消）</li>
+<li><code>Protect</code>：护盾（拾取后立即触发，持续指定秒数）</li>
+</ul>
+<p>关键工程点：</p>
+<ul>
+<li>近战技能不是“按一下就中”，而是有 <strong>距离</strong> + <strong>朝向角</strong> + <strong>按住触发时长</strong> 的判定，减少误触、便于调参。</li>
+<li>挂载跟随放在 <code>LateUpdate()</code>：保证受害者先移动完，降低抖动。</li>
+</ul>
+<hr>
+<h3 id="4-场景互动脚本：环-陷阱-阻挡"><a href="#4-场景互动脚本：环-陷阱-阻挡" class="headerlink" title="4) 场景互动脚本：环&#x2F;陷阱&#x2F;阻挡"></a>4) 场景互动脚本：环&#x2F;陷阱&#x2F;阻挡</h3><ul>
+<li><code>SpeedRing</code>：触发后调用 <code>ApplySpeedBoost(additive, duration)</code>，并带 cooldown + 特效重启</li>
+<li><code>TrapRing</code>：触发后 <code>StopForStun(stunDuration, qteTarget)</code>，通过 QTE 挣脱</li>
+<li><code>Blocker</code>：短暂阻挡（Blocked），触发后销毁自身</li>
+<li><code>SkillPickup</code>：拾取技能，支持拾取特效 pulse、销毁&#x2F;禁用两种模式</li>
+</ul>
+<p>这些脚本都遵循同一模式：<strong>OnTriggerEnter → 找到龙的 Skills 组件 → 调用统一 API</strong>，保持系统边界干净。</p>
+<hr>
+<h3 id="5-运行时串口选择菜单：CoopSerialPortMenu"><a href="#5-运行时串口选择菜单：CoopSerialPortMenu" class="headerlink" title="5) 运行时串口选择菜单：CoopSerialPortMenu"></a>5) 运行时串口选择菜单：<code>CoopSerialPortMenu</code></h3><ul>
+<li>F1 弹出配置 UI（支持暂停 Time.timeScale）</li>
+<li>自动读取 COM 列表，分别设置 Dragon A&#x2F;B 的 head&#x2F;tail</li>
+<li>可选自动保存&#x2F;自动应用（PlayerPrefs）</li>
+</ul>
+<p><strong>价值</strong>：演示与部署友好——换一台机器只要重新选 COM，不需要改 Inspector 或重新打包。</p>
+<hr>
+<h2 id="快速上手（复现路径）"><a href="#快速上手（复现路径）" class="headerlink" title="快速上手（复现路径）"></a>快速上手（复现路径）</h2><ol>
+<li>Windows 打开 Unity 项目（2023.1.22f1）</li>
+<li>场景中放置两条龙（A&#x2F;B），每条龙根节点挂：<ul>
+<li><code>CoopDragonMovement</code></li>
+<li><code>CoopDragonSkills</code></li>
+</ul>
+</li>
+<li>互相绑定 opponent 引用：A.opponent → B，B.opponent → A</li>
+<li>F1 打开串口菜单，为 A&#x2F;B 分别选择 head&#x2F;tail COM 并 Apply<br>（无硬件：开启键盘方案，A 用 WASD，B 用方向键）</li>
+<li>放置 <code>SkillPickup / SpeedRing / TrapRing / Blocker</code> 测试拾取与交互</li>
+</ol>
+<hr>
+<h2 id="已知风险点（以及我如何规避）"><a href="#已知风险点（以及我如何规避）" class="headerlink" title="已知风险点（以及我如何规避）"></a>已知风险点（以及我如何规避）</h2><ul>
+<li><strong>拾取触发不生效</strong>：Trigger 需要至少一方有 Rigidbody；检查 IsTrigger 与 Layer Collision</li>
+<li><strong>模型轴向不一致</strong>：不要直接驱动模型子物体；驱动 parent，并正确设置 <code>forwardAxis</code></li>
+<li><strong>串口被占用&#x2F;无数据</strong>：关闭 Arduino Serial Monitor；确认波特率与输出格式一致</li>
+<li><strong>Y 轴锁被物理破坏</strong>：尽量避免在运动根节点挂 Rigidbody；必要时在 FixedUpdate 锁 Y</li>
+<li><strong>咬住挂载抖动</strong>：挂载跟随放 LateUpdate；避免物理力干扰；必要时冻结攻击方输入&#x2F;移动</li>
+</ul>
+<hr>
+<h2 id="技术栈"><a href="#技术栈" class="headerlink" title="技术栈"></a>技术栈</h2><ul>
+<li>Unity 2023.1.22f1</li>
+<li>C#（MonoBehaviour 系统）</li>
+<li>Windows <code>System.IO.Ports</code>（串口）</li>
+<li>多线程读串口（Thread + ConcurrentQueue）</li>
+<li>PlayerPrefs（配置持久化）</li>
+</ul>
+<hr>
+<h2 id="下一步迭代方向（如果继续产品化）"><a href="#下一步迭代方向（如果继续产品化）" class="headerlink" title="下一步迭代方向（如果继续产品化）"></a>下一步迭代方向（如果继续产品化）</h2><ul>
+<li>抽离输入层接口：IMU &#x2F; 键盘 &#x2F; 手柄统一为同一套 Input Provider</li>
+<li>引入确定性回放（record&#x2F;replay）：记录 IMU 输入序列，便于回归测试与演示</li>
+<li>技能系统数据驱动：把参数从 Inspector 迁到 ScriptableObject，方便做平衡表</li>
+<li>更完善的 UI&#x2F;反馈：命中提示、挣脱计数、护盾剩余时间、控制反转提示等</li>
+</ul>
+<hr>
+<h2 id="链接"><a href="#链接" class="headerlink" title="链接"></a>链接</h2><ul>
+<li>Demo 视频：TODO</li>
+<li>Repo：TODO</li>
+<li>设计说明：TODO</li>
+</ul>
+</article>
+
+
+
 <footer class="page-footer footnote"><hr><div class="text"><p>本站由 <a href="/">FFFeiya</a> 使用 <a target="_blank" rel="noopener" href="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.33.1">Stellar 1.33.1</a> 主题创建。<br>本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处。</p>
 </div></footer>
 <div class="main-mask" onclick="sidebar.dismiss()"></div></div><aside class="l_right">
-</aside><div class='float-panel'>
+<div class="widgets">
+
+<widget class="widget-wrapper toc" id="data-toc" collapse="false"><div class="widget-header dis-select"><span class="name">On This Page</span><a class="cap-action" onclick="sidebar.toggleTOC()" ><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg></a></div><div class="widget-body"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%99%E9%9D%A2%E8%AF%95%E5%AE%98%E7%9A%84%E4%BA%AE%E7%82%B9%E5%85%B3%E9%94%AE%E8%AF%8D%EF%BC%88%E5%8F%AF%E7%9B%B4%E6%8E%A5%E8%B4%B4%E7%AE%80%E5%8E%86-%E5%8D%A1%E7%89%87%EF%BC%89"><span class="toc-text">给面试官的亮点关键词（可直接贴简历&#x2F;卡片）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%A1%B9%E7%9B%AE%E6%A6%82%E8%BF%B0"><span class="toc-text">项目概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83%E7%B3%BB%E7%BB%9F%E6%8B%86%E8%A7%A3%EF%BC%88%E5%AF%B9%E5%BA%94%E4%BB%A3%E7%A0%81%EF%BC%89"><span class="toc-text">核心系统拆解（对应代码）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E8%BF%90%E5%8A%A8%E7%B3%BB%E7%BB%9F%EF%BC%9ACoopDragonMovement"><span class="toc-text">1) 运动系统：CoopDragonMovement</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E4%B8%B2%E5%8F%A3%E5%8D%8F%E8%AE%AE%E4%B8%8E%E5%AE%B9%E9%94%99%EF%BC%9A%E5%86%85%E7%BD%AE%E8%A7%A3%E6%9E%90%E5%99%A8%EF%BC%88Movement-%E5%86%85%E7%9A%84-SerialIMU%EF%BC%89"><span class="toc-text">2) 串口协议与容错：内置解析器（Movement 内的 SerialIMU）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E6%8A%80%E8%83%BD%E7%B3%BB%E7%BB%9F%EF%BC%9ACoopDragonSkills-SkillPickup"><span class="toc-text">3) 技能系统：CoopDragonSkills + SkillPickup</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E5%9C%BA%E6%99%AF%E4%BA%92%E5%8A%A8%E8%84%9A%E6%9C%AC%EF%BC%9A%E7%8E%AF-%E9%99%B7%E9%98%B1-%E9%98%BB%E6%8C%A1"><span class="toc-text">4) 场景互动脚本：环&#x2F;陷阱&#x2F;阻挡</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-%E8%BF%90%E8%A1%8C%E6%97%B6%E4%B8%B2%E5%8F%A3%E9%80%89%E6%8B%A9%E8%8F%9C%E5%8D%95%EF%BC%9ACoopSerialPortMenu"><span class="toc-text">5) 运行时串口选择菜单：CoopSerialPortMenu</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BF%AB%E9%80%9F%E4%B8%8A%E6%89%8B%EF%BC%88%E5%A4%8D%E7%8E%B0%E8%B7%AF%E5%BE%84%EF%BC%89"><span class="toc-text">快速上手（复现路径）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B7%B2%E7%9F%A5%E9%A3%8E%E9%99%A9%E7%82%B9%EF%BC%88%E4%BB%A5%E5%8F%8A%E6%88%91%E5%A6%82%E4%BD%95%E8%A7%84%E9%81%BF%EF%BC%89"><span class="toc-text">已知风险点（以及我如何规避）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8A%80%E6%9C%AF%E6%A0%88"><span class="toc-text">技术栈</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%8B%E4%B8%80%E6%AD%A5%E8%BF%AD%E4%BB%A3%E6%96%B9%E5%90%91%EF%BC%88%E5%A6%82%E6%9E%9C%E7%BB%A7%E7%BB%AD%E4%BA%A7%E5%93%81%E5%8C%96%EF%BC%89"><span class="toc-text">下一步迭代方向（如果继续产品化）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%93%BE%E6%8E%A5"><span class="toc-text">链接</span></a></li></ol></div><div class="widget-footer"><a class="top" onclick="util.scrollTop()"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path stroke-linejoin="round" d="m9 15.5l3-3l3 3m-6-4l3-3l3 3"/><path d="M7 3.338A9.95 9.95 0 0 1 12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12c0-1.821.487-3.53 1.338-5"/></g></svg><span>Scroll to Top</span></a></div></widget>
+</div></aside><div class='float-panel'>
   <button type='button' style='display:none' class='laptop-only rightbar-toggle mobile' onclick='sidebar.rightbar()'>
     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg>
   </button>

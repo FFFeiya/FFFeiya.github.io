@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="hexo-theme" content="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.33.1" theme-name="Stellar" theme-version="1.33.1">
   
-  <meta name="robots" content="noindex,follow">
+  
   <meta name="generator" content="Hexo 7.3.0">
   <meta http-equiv='x-dns-prefetch-control' content='on' />
   
@@ -17,20 +17,31 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000">
   <meta name="theme-color" content="#f9fafb">
-  <title>Archives - FFFeiya</title>
+  <title>项目介绍：The Perfect Crime（Rapid Prototype）— 潜行 + 物理解谜关卡系统（Unreal） - FFFeiya</title>
 
   
-    <meta property="og:type" content="website">
-<meta property="og:title" content="Archives">
-<meta property="og:url" content="http://example.com/archives/2025/">
+    <meta name="description" content="我在 Unreal 中主导实现了 潜行警戒系统、镜子-灯光反射解谜、怀表&#x2F;时钟时间解谜 三套核心机制，并把它们做成“可调参、可复用、易集成”的工程化系统，支撑团队快速迭代关卡与体验。   项目一句话The Perfect Crime 是一款以“潜行 + 多阶段解谜”为核心的关卡原型：玩家需要躲避安保视野，在场景中利用光线反射与时间调节触发关键事件，并通过清晰的 UI 反馈与失败重置机制">
+<meta property="og:type" content="website">
+<meta property="og:title" content="项目介绍：The Perfect Crime（Rapid Prototype）— 潜行 + 物理解谜关卡系统（Unreal）">
+<meta property="og:url" content="http://example.com/projects/the-perfect-crime/">
 <meta property="og:site_name" content="FFFeiya">
+<meta property="og:description" content="我在 Unreal 中主导实现了 潜行警戒系统、镜子-灯光反射解谜、怀表&#x2F;时钟时间解谜 三套核心机制，并把它们做成“可调参、可复用、易集成”的工程化系统，支撑团队快速迭代关卡与体验。   项目一句话The Perfect Crime 是一款以“潜行 + 多阶段解谜”为核心的关卡原型：玩家需要躲避安保视野，在场景中利用光线反射与时间调节触发关键事件，并通过清晰的 UI 反馈与失败重置机制">
 <meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-02-25T07:00:00.000Z">
+<meta property="article:modified_time" content="2026-02-25T01:12:13.830Z">
 <meta property="article:author" content="FFFeiya">
+<meta property="article:tag" content="Unreal Engine">
+<meta property="article:tag" content="Cpp">
+<meta property="article:tag" content="Blueprint">
+<meta property="article:tag" content="Gameplay">
+<meta property="article:tag" content="Puzzle">
+<meta property="article:tag" content="UI">
+<meta property="article:tag" content="AI">
 <meta name="twitter:card" content="summary">
   
   
   
-  
+  <meta name="keywords" content=",,,,,,">
 
   <!-- feed -->
   
@@ -46,12 +57,12 @@
 
   
 
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Website","@id":"http://example.com","author":{"@type":"Person","name":"FFFeiya","sameAs":[]},"name":"FFFeiya","description":"","url":"http://example.com"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Website","@id":"http://example.com/projects/the-perfect-crime/","author":{"@type":"Person","name":"FFFeiya","sameAs":[]},"name":"项目介绍：The Perfect Crime（Rapid Prototype）— 潜行 + 物理解谜关卡系统（Unreal）","description":"\n我在 Unreal 中主导实现了 潜行警戒系统、镜子-灯光反射解谜、怀表&#x2F;时钟时间解谜 三套核心机制，并把它们做成“可调参、可复用、易集成”的工程化系统，支撑团队快速迭代关卡与体验。\n\n\n项目一句话The Perfect Crime 是一款以“潜行 + 多阶段解谜”为核心的关卡原型：玩家需要躲避安保视野，在场景中利用光线反射与时间调节触发关键事件，并通过清晰的 UI 反馈与失败重...","url":"http://example.com/projects/the-perfect-crime/"}</script>
   <link rel="stylesheet" href="/css/custom.css">
 </head>
 <body><div class="sitebg"><div class="siteblur"></div></div>
 
-<div class="l_body index" id="start" layout="undefined" type="undefined" ><aside class="l_left"><div class="sidebg"></div><div class="leftbar-container">
+<div class="l_body content" id="start" layout="page" type="tech" ><aside class="l_left"><div class="sidebg"></div><div class="leftbar-container">
 
 
 <header class="header"><div class="logo-wrap"><a class="avatar" href="/about/"><div class="bg" style="opacity:0;background-image:url(https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/rainbow64@3x.webp);"></div><img no-lazy class="avatar" src="/images/Putin.png" onerror="javascript:this.classList.add('error');this.src='https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/image/2659360.svg';"></a><a class="title" href="/"><div class="main">FFFeiya</div><div class="sub normal cap">Portfolio</div><div class="sub hover cap" style="opacity:0"> UE / Unity / Tools</div></a></div></header>
@@ -68,16 +79,135 @@
 
 </div></aside><div class="l_main" id="main">
 
-<header class="header mobile-only"><div class="logo-wrap"><a class="avatar" href="/about/"><div class="bg" style="opacity:0;background-image:url(https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/rainbow64@3x.webp);"></div><img no-lazy class="avatar" src="/images/Putin.png" onerror="javascript:this.classList.add('error');this.src='https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/image/2659360.svg';"></a><a class="title" href="/"><div class="main">FFFeiya</div><div class="sub normal cap">Portfolio</div><div class="sub hover cap" style="opacity:0"> UE / Unity / Tools</div></a></div></header>
-
- 
 
 
-<div class="navbar top"><div class="navbar-blur"><div class="navbar-container"><nav class="post"><a href="/blog/">Recent</a><a href="/categories/">Categories</a><a href="/tags/">Tags</a><a class="active" href="/archives/">Archives</a></nav></div></div></div><div class="post-list archives"><article class="" id="archive"><div class='archive-header h4'>2026</div><div class="archive-list"><a class='post fs14' href="/2026/02/24/UE5.6_GAS_Enemy_AI_Stage_Summary/"><time>02-24</time><span>用 UE5.6 + GAS 搭一个可迭代的敌人近战 AI：从状态机图到可调试行为树</span></a></div><div class="archive-list"><a class='post fs14' href="/2026/02/24/tech_blog_hexo_stellar_portfolio_safe/"><time>02-24</time><span>用 Hexo + Stellar 搭一个作品展柜：卡片入口、主题配色与 CSS 覆盖</span></a></div></article><article class="" id="archive"><div class='archive-header h4'>2025</div><div class="archive-list"><a class='post fs14' href="/2025/01/08/Building%20Real-Time%20NPC%20Dialogue%20in%20Unity%20with%20Large%20Language%20Models.zh-CN/"><time>01-08</time><span>在 Unity 中用大语言模型构建实时 NPC 对话</span></a></div><div class="archive-list"><a class='post fs14' href="/2025/01/08/Using%20iFlytek's%20Speech%20Model%20in%20Unity%20for%20Text-to-Speech%20(TTS)%20Playback/"><time>01-08</time><span>Using iFlytek's Speech Model in Unity for Text-to-Speech (TTS) Playback</span></a></div></article><article class="" id="archive"><div class='archive-header h4'>2024</div><div class="archive-list"><a class='post fs14' href="/2024/12/08/Bridging%20Unity%20with%20Python%20and%20ChatGPT.zh-CN/"><time>12-08</time><span>Unity 对接 Python 与 ChatGPT：综合指南</span></a></div><div class="archive-list"><a class='post fs14' href="/2024/12/08/Building%20a%20Dynamic%20Planetary%20Battle%20System.zh-CN/"><time>12-08</time><span>用 p5.js 做太空可视化：构建动态行星战斗系统</span></a></div><div class="archive-list"><a class='post fs14' href="/2024/12/08/Game%20Demo%20of%20Star%20Annihilator%20-%20A%20Tower%20Defense%20Game%20Developing/"><time>12-08</time><span>Game Demo of *Star Annihilator*: A Tower Defense Game Developing</span></a></div><div class="archive-list"><a class='post fs14' href="/2024/12/08/How%20to%20Convert%20a%20p5.js%20Game%20into%20Java%20(JavaFX)/"><time>12-08</time><span>How to Convert a p5.js Game into Java (JavaFX)</span></a></div></article></div>
+
+
+<div class="article banner top">
+  <div class="content">
+    <div class="top bread-nav footnote"><div class="left"><div class="flex-row" id="breadcrumb"><a class="cap breadcrumb" href="/">Home</a>
+
+  <span class="sep"></span>
+  <a class="cap breadcrumb" href="/projects/the-perfect-crime/">项目介绍：The Perfect Crime（Rapid Prototype）— 潜行 + 物理解谜关卡系统（Unreal）</a>
+  </div>
+<div class="flex-row" id="post-meta"><span class="text created">Posted on: <time datetime="2026-02-25T07:00:00.000Z">2026-02-25</time></span><span class="sep updated"></span><span class="text updated">Updated on: <time datetime="2026-02-25T01:12:13.830Z">2026-02-24</time></span></div></div></div>
+    
+    <div class="bottom only-title">
+      
+      <div class="text-area">
+        <h1 class="text title"><span>项目介绍：The Perfect Crime（Rapid Prototype）— 潜行 + 物理解谜关卡系统（Unreal）</span></h1>
+        
+      </div>
+    </div>
+    
+  </div>
+  </div><article class="md-text content"><blockquote>
+<p>我在 Unreal 中主导实现了 <strong>潜行警戒系统</strong>、<strong>镜子-灯光反射解谜</strong>、<strong>怀表&#x2F;时钟时间解谜</strong> 三套核心机制，并把它们做成“可调参、可复用、易集成”的工程化系统，支撑团队快速迭代关卡与体验。</p>
+</blockquote>
+<hr>
+<h2 id="项目一句话"><a href="#项目一句话" class="headerlink" title="项目一句话"></a>项目一句话</h2><p><strong>The Perfect Crime</strong> 是一款以“潜行 + 多阶段解谜”为核心的关卡原型：玩家需要躲避安保视野，在场景中利用<strong>光线反射</strong>与<strong>时间调节</strong>触发关键事件，并通过清晰的 UI 反馈与失败重置机制形成可学习的规则闭环。</p>
+<hr>
+<h2 id="我的职责（Gameplay-Engineer）"><a href="#我的职责（Gameplay-Engineer）" class="headerlink" title="我的职责（Gameplay Engineer）"></a>我的职责（Gameplay Engineer）</h2><p>我主要负责三套系统，并从 <strong>C++ 原型 → 关卡集成 → 试玩反馈迭代 → 末期 polish</strong> 全链路推进：</p>
+<ol>
+<li><strong>Security Guard Vision &#x2F; Stealth（安保视野与潜行）</strong>  </li>
+<li><strong>Mirror–Lamp Light Reflection Puzzle（镜子-灯光反射解谜）</strong>  </li>
+<li><strong>Pocket-Watch &#x2F; Clock Time Puzzle（怀表&#x2F;时钟时间解谜）</strong></li>
+</ol>
+<p>同时，我也承担了大量“集成后才会暴露”的问题修复：交互提示、输入手感、碰撞&#x2F;朝向、渲染显示等。</p>
+<hr>
+<h2 id="核心系统亮点"><a href="#核心系统亮点" class="headerlink" title="核心系统亮点"></a>核心系统亮点</h2><ul>
+<li><strong>可配置视野锥（Vision Cone）+ 扫描逻辑</strong>：角度 &#x2F; 距离 &#x2F; 扫描速度可调，带可视化调参辅助  </li>
+<li><strong>检测计时器（Detection Timer）</strong>：进入视野累积、超阈值触发失败与重置，形成可学习的潜行规则  </li>
+<li><strong>镜面反射解谜工程化</strong>：镜子旋转 + 光线射线检测 + 命中判定 + 关卡可预测行为  </li>
+<li><strong>把“手感”当作系统的一部分</strong>：从“狂点旋转”迭代到“按住旋转”，并调整起始角&#x2F;旋转范围降低挫败  </li>
+<li><strong>怀表解谜（时间记忆&#x2F;目标时间&#x2F;行动点扣除）</strong>：内部时间状态、目标时间判定、操作扣 AP（Action Points）  </li>
+<li><strong>Blueprint 友好 API</strong>：把复杂逻辑封装成“能不能过关”的简单查询接口（例如是否停在目标时间）  </li>
+<li><strong>分层架构</strong>：玩法逻辑在 World Actor（AActor），视觉与提示在 UI Widget（UUserWidget），接口清晰  </li>
+<li><strong>团队协作可落地</strong>：提交到 P4（Perforce），附 demo 视频与使用说明，便于设计与技术美术接入</li>
+</ul>
+<hr>
+<h2 id="我具体做了什么（系统拆解）"><a href="#我具体做了什么（系统拆解）" class="headerlink" title="我具体做了什么（系统拆解）"></a>我具体做了什么（系统拆解）</h2><h3 id="1-安保视野与潜行：SecurityScanner"><a href="#1-安保视野与潜行：SecurityScanner" class="headerlink" title="1) 安保视野与潜行：SecurityScanner"></a>1) 安保视野与潜行：SecurityScanner</h3><ul>
+<li>用 C++ 实现安保“扇形视野锥”，支持扫描摆动（sweep），并暴露可调参数：  <ul>
+<li>视野角度、距离、摆动速度</li>
+</ul>
+</li>
+<li>增加“检测计时器”：玩家在视野内停留过久触发失败，并执行 reset  </li>
+<li>增加可视化&#x2F;调试显示：让设计同学能直接在关卡里看见视野范围并调整参数</li>
+</ul>
+<p><strong>价值</strong>：不仅“能用”，而且能被关卡设计快速复用与调参，减少反复改代码的沟通成本。</p>
+<hr>
+<h3 id="2-镜子-灯光反射解谜：MirrorPuzzleActor"><a href="#2-镜子-灯光反射解谜：MirrorPuzzleActor" class="headerlink" title="2) 镜子-灯光反射解谜：MirrorPuzzleActor"></a>2) 镜子-灯光反射解谜：MirrorPuzzleActor</h3><ul>
+<li>集成并优化镜子光源系统，使其在当前关卡中可用  </li>
+<li>调整光线射线逻辑与镜子旋转规则，让解法更“可预测”  </li>
+<li>解决试玩反馈中的关键体验问题：  <ul>
+<li>需要旋转接近 360° 才能解谜 → 通过调整起始角&#x2F;旋转范围降低操作负担  </li>
+<li>操作从“点按刷输入”逐步改为“按住旋转”，更符合玩家预期</li>
+</ul>
+</li>
+</ul>
+<p><strong>价值</strong>：把“物理&#x2F;射线类谜题”从演示版变成可交付的关卡玩法组件。</p>
+<hr>
+<h3 id="3-怀表-时钟解谜：ClockWidget-底层-C-系统"><a href="#3-怀表-时钟解谜：ClockWidget-底层-C-系统" class="headerlink" title="3) 怀表&#x2F;时钟解谜：ClockWidget + 底层 C++ 系统"></a>3) 怀表&#x2F;时钟解谜：ClockWidget + 底层 C++ 系统</h3><ul>
+<li>C++ 设计并实现怀表解谜系统：  <ul>
+<li>内部时间状态（memory）  </li>
+<li>目标时间检测（target-time checking）  </li>
+<li>调整指针时正确扣除行动点 AP（Action Points）</li>
+</ul>
+</li>
+<li>对上提供 Blueprint 友好接口：让设计侧能直接查询“是否到达目标时间”，无需自写时间逻辑  </li>
+<li>统一输入交互（贴合全局交互方案）：  <ul>
+<li>A&#x2F;D 调整当前指针  </li>
+<li>E 切换指针  </li>
+<li>F 退出交互</li>
+</ul>
+</li>
+<li>修复集成后的真实问题：交互提示不出现、指针渲染异常、怀表朝向&#x2F;碰撞导致难以观察等</li>
+</ul>
+<p><strong>价值</strong>：把“一个谜题点”做成可复用的系统，并确保与 UI&#x2F;交互规范一致。</p>
+<hr>
+<h2 id="工程与协作方式"><a href="#工程与协作方式" class="headerlink" title="工程与协作方式"></a>工程与协作方式</h2><ul>
+<li><strong>端到端负责</strong>：不是交付一次代码就结束，而是持续跟进集成、试玩、修复与 polish  </li>
+<li><strong>设计友好</strong>：接口清晰、调试可视化、参数可调  </li>
+<li><strong>沟通与交付</strong>：P4 提交 + demo 视频 + 简短文档，保证队友能快速接入并继续做关卡  </li>
+<li><strong>模块分层</strong>：Actor 负责玩法，Widget 负责 UI&#x2F;反馈，减少耦合、利于扩展</li>
+</ul>
+<hr>
+<h2 id="技术栈"><a href="#技术栈" class="headerlink" title="技术栈"></a>技术栈</h2><ul>
+<li>Unreal Engine  </li>
+<li>C++（核心系统与状态逻辑）  </li>
+<li>Blueprint（关卡集成与事件驱动）  </li>
+<li>UMG &#x2F; UUserWidget（UI 反馈、提示、状态展示）  </li>
+<li>Raycast &#x2F; Trace（光线判定与交互检测）  </li>
+<li>Perforce（团队协作与版本管理）</li>
+</ul>
+<hr>
+<h2 id="可量化的“结果”"><a href="#可量化的“结果”" class="headerlink" title="可量化的“结果”"></a>可量化的“结果”</h2><ul>
+<li>关键玩法系统稳定集成到关卡，支持多轮试玩迭代  </li>
+<li>输入手感与可视化反馈改进后，解谜挫败感显著降低  </li>
+<li>通过封装 Blueprint API 与调试可视化，提高设计侧迭代速度</li>
+</ul>
+<hr>
+<h2 id="QA（TODO）"><a href="#QA（TODO）" class="headerlink" title="QA（TODO）"></a>QA（TODO）</h2><ul>
+<li>为什么把逻辑放 Actor、UI 放 Widget？接口怎么设计？  </li>
+<li>Detection Timer 的阈值与重置策略如何避免“误判&#x2F;误杀”？  </li>
+<li>光线反射如何保证可预测性？怎么避免浮点误差带来的边缘失败？  </li>
+<li>怀表系统如何处理多指针状态、AP 扣除与撤销？  </li>
+<li>如何与设计一起定义“旋转范围&#x2F;起始角&#x2F;输入方式”以控制难度？</li>
+</ul>
+<hr>
+<h2 id="链接"><a href="#链接" class="headerlink" title="链接"></a>链接</h2><p>Demo下载：<a target="_blank" rel="noopener" href="https://jalper1.itch.io/the-perfect-crime">Sherlock Holmes: The Perfect Crime</a></p>
+<hr>
+</article>
+
+
+
 <footer class="page-footer footnote"><hr><div class="text"><p>本站由 <a href="/">FFFeiya</a> 使用 <a target="_blank" rel="noopener" href="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.33.1">Stellar 1.33.1</a> 主题创建。<br>本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处。</p>
 </div></footer>
 <div class="main-mask" onclick="sidebar.dismiss()"></div></div><aside class="l_right">
-</aside><div class='float-panel'>
+<div class="widgets">
+
+<widget class="widget-wrapper toc" id="data-toc" collapse="false"><div class="widget-header dis-select"><span class="name">On This Page</span><a class="cap-action" onclick="sidebar.toggleTOC()" ><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg></a></div><div class="widget-body"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%A1%B9%E7%9B%AE%E4%B8%80%E5%8F%A5%E8%AF%9D"><span class="toc-text">项目一句话</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%88%91%E7%9A%84%E8%81%8C%E8%B4%A3%EF%BC%88Gameplay-Engineer%EF%BC%89"><span class="toc-text">我的职责（Gameplay Engineer）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83%E7%B3%BB%E7%BB%9F%E4%BA%AE%E7%82%B9"><span class="toc-text">核心系统亮点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%88%91%E5%85%B7%E4%BD%93%E5%81%9A%E4%BA%86%E4%BB%80%E4%B9%88%EF%BC%88%E7%B3%BB%E7%BB%9F%E6%8B%86%E8%A7%A3%EF%BC%89"><span class="toc-text">我具体做了什么（系统拆解）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%AE%89%E4%BF%9D%E8%A7%86%E9%87%8E%E4%B8%8E%E6%BD%9C%E8%A1%8C%EF%BC%9ASecurityScanner"><span class="toc-text">1) 安保视野与潜行：SecurityScanner</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E9%95%9C%E5%AD%90-%E7%81%AF%E5%85%89%E5%8F%8D%E5%B0%84%E8%A7%A3%E8%B0%9C%EF%BC%9AMirrorPuzzleActor"><span class="toc-text">2) 镜子-灯光反射解谜：MirrorPuzzleActor</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E6%80%80%E8%A1%A8-%E6%97%B6%E9%92%9F%E8%A7%A3%E8%B0%9C%EF%BC%9AClockWidget-%E5%BA%95%E5%B1%82-C-%E7%B3%BB%E7%BB%9F"><span class="toc-text">3) 怀表&#x2F;时钟解谜：ClockWidget + 底层 C++ 系统</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B7%A5%E7%A8%8B%E4%B8%8E%E5%8D%8F%E4%BD%9C%E6%96%B9%E5%BC%8F"><span class="toc-text">工程与协作方式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8A%80%E6%9C%AF%E6%A0%88"><span class="toc-text">技术栈</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%AF%E9%87%8F%E5%8C%96%E7%9A%84%E2%80%9C%E7%BB%93%E6%9E%9C%E2%80%9D"><span class="toc-text">可量化的“结果”</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#QA%EF%BC%88TODO%EF%BC%89"><span class="toc-text">QA（TODO）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%93%BE%E6%8E%A5"><span class="toc-text">链接</span></a></li></ol></div><div class="widget-footer"><a class="top" onclick="util.scrollTop()"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path stroke-linejoin="round" d="m9 15.5l3-3l3 3m-6-4l3-3l3 3"/><path d="M7 3.338A9.95 9.95 0 0 1 12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12c0-1.821.487-3.53 1.338-5"/></g></svg><span>Scroll to Top</span></a></div></widget>
+</div></aside><div class='float-panel'>
   <button type='button' style='display:none' class='laptop-only rightbar-toggle mobile' onclick='sidebar.rightbar()'>
     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg>
   </button>
