@@ -17,26 +17,29 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000">
   <meta name="theme-color" content="#f9fafb">
-  <title>Real-time Voice Interactive Movie Game - THE Circle - FFFeiya</title>
+  <title>Unreal 5 源码阅读笔记，大纲 - FFFeiya</title>
 
   
-    <meta name="description" content="Real-time Voice Interactive Movie Game - THE Circle Here is the intro of this project. Cas it my graduation project, so this project is not only a real-time voice interactive movie game but also a liv">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Real-time Voice Interactive Movie Game - THE Circle">
-<meta property="og:url" content="http://example.com/Circle/">
+    <meta name="description" content="关键词：Unreal Engine 5.6、源码、C++、Runtime、Engine、引擎开发和优化   Engine&#x2F;Source 顶层结构 **Runtime&#x2F;**：打进游戏、运行时用到的模块 **Editor&#x2F;**：编辑器专用（UnrealEd、各种资产编辑器、蓝图编辑器） **Developer&#x2F;**：开发期工具与基础设施（DDC、性能分析、源控">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Unreal 5 源码阅读笔记，大纲">
+<meta property="og:url" content="http://example.com/2026/01/24/UE5.6_GAS_Enemy_AI_Stage_Summary%20-%20%E5%89%AF%E6%9C%AC/">
 <meta property="og:site_name" content="FFFeiya">
-<meta property="og:description" content="Real-time Voice Interactive Movie Game - THE Circle Here is the intro of this project. Cas it my graduation project, so this project is not only a real-time voice interactive movie game but also a liv">
+<meta property="og:description" content="关键词：Unreal Engine 5.6、源码、C++、Runtime、Engine、引擎开发和优化   Engine&#x2F;Source 顶层结构 **Runtime&#x2F;**：打进游戏、运行时用到的模块 **Editor&#x2F;**：编辑器专用（UnrealEd、各种资产编辑器、蓝图编辑器） **Developer&#x2F;**：开发期工具与基础设施（DDC、性能分析、源控">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="http://example.com/images/CirclePostEN.png">
-<meta property="article:published_time" content="2025-01-14T17:00:00.000Z">
-<meta property="article:modified_time" content="2025-01-13T20:36:32.806Z">
+<meta property="article:published_time" content="2026-01-24T07:00:00.000Z">
+<meta property="article:modified_time" content="2026-03-07T07:47:42.244Z">
 <meta property="article:author" content="FFFeiya">
+<meta property="article:tag" content="Unreal">
+<meta property="article:tag" content="Source">
+<meta property="article:tag" content="Runtime">
+<meta property="article:tag" content="C++">
+<meta property="article:tag" content="Engine">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://example.com/images/CirclePostEN.png">
   
   
   
-  
+  <meta name="keywords" content="Unreal,Source,Runtime,C++,Engine">
 
   <!-- feed -->
   
@@ -52,12 +55,12 @@
 
   
 
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Website","@id":"http://example.com/Circle/","author":{"@type":"Person","name":"FFFeiya","sameAs":[]},"name":"Real-time Voice Interactive Movie Game - THE Circle","description":"Real-time Voice Interactive Movie Game - THE Circle\nHere is the intro of this project. Cas it my graduation project, so this project is not only a real-time voice interactive movie game but also a ...","url":"http://example.com/Circle/"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"FFFeiya","sameAs":[]},"dateCreated":"2026-01-24T00:00:00-07:00","dateModified":"2026-03-07T00:47:42-07:00","datePublished":"2026-01-24T00:00:00-07:00","description":"","headline":"Unreal 5 源码阅读笔记，大纲","mainEntityOfPage":{"@type":"WebPage","@id":"http://example.com/2026/01/24/UE5.6_GAS_Enemy_AI_Stage_Summary%20-%20%E5%89%AF%E6%9C%AC/"},"publisher":{"@type":"Organization","name":"FFFeiya","sameAs":[]},"url":"http://example.com/2026/01/24/UE5.6_GAS_Enemy_AI_Stage_Summary%20-%20%E5%89%AF%E6%9C%AC/","keywords":"Unreal, Source, Runtime, C++, Engine","image":[]}</script>
   <link rel="stylesheet" href="/css/custom.css">
 </head>
 <body><div class="sitebg"><div class="siteblur"></div></div>
 
-<div class="l_body content" id="start" layout="page" type="tech" ><aside class="l_left"><div class="sidebg"></div><div class="leftbar-container">
+<div class="l_body content" id="start" layout="post" type="tech" ><aside class="l_left"><div class="sidebg"></div><div class="leftbar-container">
 
 
 <header class="header"><div class="logo-wrap"><a class="avatar" href="/about/"><div class="bg" style="opacity:0;background-image:url(https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/rainbow64@3x.webp);"></div><img no-lazy class="avatar" src="/images/Putin.png" onerror="javascript:this.classList.add('error');this.src='https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/image/2659360.svg';"></a><a class="title" href="/"><div class="main">FFFeiya</div><div class="sub normal cap">Portfolio</div><div class="sub hover cap" style="opacity:0"> UE / Unity / Tools</div></a></div></header>
@@ -68,6 +71,8 @@
 </div>
 <div class="widgets">
 <div class="search-wrapper" id="search-wrapper"><form class="search-form"><a class="search-button" onclick="document.getElementById(&quot;search-input&quot;).focus();"><svg t="1705074644177" viewBox="0 0 1025 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1560" width="200" height="200"><path d="M1008.839137 935.96571L792.364903 719.491476a56.783488 56.783488 0 0 0-80.152866 0 358.53545 358.53545 0 1 1 100.857314-335.166073 362.840335 362.840335 0 0 1-3.689902 170.145468 51.248635 51.248635 0 1 0 99.217358 26.444296 462.057693 462.057693 0 1 0-158.255785 242.303546l185.930047 185.725053a51.248635 51.248635 0 0 0 72.568068 0 51.248635 51.248635 0 0 0 0-72.978056z" p-id="1561"></path><path d="M616.479587 615.969233a50.428657 50.428657 0 0 0-61.498362-5.534852 174.655348 174.655348 0 0 1-177.525271 3.484907 49.403684 49.403684 0 0 0-58.833433 6.76482l-3.074918 2.869923a49.403684 49.403684 0 0 0 8.609771 78.10292 277.767601 277.767601 0 0 0 286.992355-5.739847 49.403684 49.403684 0 0 0 8.404776-76.667958z" p-id="1562"></path></svg></a><input type="text" class="search-input" id="search-input" placeholder="Search"></form><div id="search-result"></div><div class="search-no-result">No Results!</div></div>
+
+
 
 <widget class="widget-wrapper recent post-list"><div class="widget-header dis-select"><span class="name">Recent Update</span></div><div class="widget-body fs14"><a class="item title" href="/2026/01/24/UE5.6_GAS_Enemy_AI_Stage_Summary%20-%20%E5%89%AF%E6%9C%AC/"><span class="title">Unreal 5 源码阅读笔记，大纲</span></a><a class="item title" href="/2026/01/02/UE5.6_GAS_Enemy_AI_Stage_Summary/"><span class="title">用 UE5.6 + GAS 搭一个可迭代的敌人近战 AI：从状态机图到可调试行为树</span></a><a class="item title" href="/2026/02/24/tech_blog_hexo_stellar_portfolio_safe/"><span class="title">用 Hexo + Stellar 搭一个作品展柜：卡片入口、主题配色与 CSS 覆盖</span></a><a class="item title" href="/2025/01/08/NXA_Pipeline_FTP_Tech_Blog/"><span class="title">NXA Studios 实习：用 Python 把 FTP 资产交付流程“工程化”</span></a><a class="item title" href="/2025/01/08/Building%20Real-Time%20NPC%20Dialogue%20in%20Unity%20with%20Large%20Language%20Models.zh-CN/"><span class="title">在 Unity 中用大语言模型构建实时 NPC 对话</span></a><a class="item title" href="/2024/12/08/Bridging%20Unity%20with%20Python%20and%20ChatGPT.zh-CN/"><span class="title">Unity 对接 Python 与 ChatGPT：综合指南</span></a><a class="item title" href="/2024/12/08/Building%20a%20Dynamic%20Planetary%20Battle%20System.zh-CN/"><span class="title">用 p5.js 做太空可视化：构建动态行星战斗系统</span></a><a class="item title" href="/2025/01/08/Using%20iFlytek's%20Speech%20Model%20in%20Unity%20for%20Text-to-Speech%20(TTS)%20Playback/"><span class="title">Using iFlytek's Speech Model in Unity for Text-to-Speech (TTS) Playback</span></a><a class="item title" href="/2024/12/08/Game%20Demo%20of%20Star%20Annihilator%20-%20A%20Tower%20Defense%20Game%20Developing/"><span class="title">Game Demo of *Star Annihilator*: A Tower Defense Game Developing</span></a><a class="item title" href="/2024/12/08/How%20to%20Convert%20a%20p5.js%20Game%20into%20Java%20(JavaFX)/"><span class="title">How to Convert a p5.js Game into Java (JavaFX)</span></a></div></widget>
 </div>
@@ -81,36 +86,121 @@
 <div class="article banner top">
   <div class="content">
     <div class="top bread-nav footnote"><div class="left"><div class="flex-row" id="breadcrumb"><a class="cap breadcrumb" href="/">Home</a>
-
-  <span class="sep"></span>
-  <a class="cap breadcrumb" href="/Circle/">Real-time Voice Interactive Movie Game - THE Circle</a>
-  </div>
-<div class="flex-row" id="post-meta"><span class="text created">Posted on: <time datetime="2025-01-14T17:00:00.000Z">2025-01-14</time></span><span class="sep updated"></span><span class="text updated">Updated on: <time datetime="2025-01-13T20:36:32.806Z">2025-01-13</time></span></div></div></div>
+<span class="sep"></span><a class="cap breadcrumb" href="/blog/">Blog</a><span class="sep"></span><a class="cap breadcrumb-link" href="/categories/Tech-Blog/">Tech Blog</a></div>
+<div class="flex-row" id="post-meta"><span class="text created">Posted on: <time datetime="2026-01-24T07:00:00.000Z">2026-01-24</time></span><span class="sep updated"></span><span class="text updated">Updated on: <time datetime="2026-03-07T07:47:42.244Z">2026-03-07</time></span></div></div></div>
     
     <div class="bottom only-title">
       
       <div class="text-area">
-        <h1 class="text title"><span>Real-time Voice Interactive Movie Game - THE Circle</span></h1>
+        <h1 class="text title"><span>Unreal 5 源码阅读笔记，大纲</span></h1>
         
       </div>
     </div>
     
   </div>
-  </div><article class="md-text content"><p><strong>Real-time Voice Interactive Movie Game - THE Circle</strong></p>
-<p>Here is the intro of this project. Cas it my graduation project, so this project is not only a real-time voice interactive movie game but also a live installation art piece.</p>
-<p><img src="/images/CirclePostEN.png"></p>
-<p>I will put video soon.</p>
-<ul>
-<li></li>
+  </div><article class="md-text content"><blockquote>
+<p>关键词：Unreal Engine 5.6、源码、C++、Runtime、Engine、引擎开发和优化</p>
+</blockquote>
+<hr>
+<h2 id="Engine-Source-顶层结构"><a href="#Engine-Source-顶层结构" class="headerlink" title="Engine&#x2F;Source 顶层结构"></a>Engine&#x2F;Source 顶层结构</h2><ul>
+<li>**Runtime&#x2F;**：打进游戏、运行时用到的模块</li>
+<li>**Editor&#x2F;**：编辑器专用（UnrealEd、各种资产编辑器、蓝图编辑器）</li>
+<li>**Developer&#x2F;**：开发期工具与基础设施（DDC、性能分析、源控、Cook 辅助）</li>
+<li>**Programs&#x2F;**：独立可执行工具源码（UBT&#x2F;UHT&#x2F;ShaderCompileWorker&#x2F;UnrealPak&#x2F;Insights…）</li>
+<li>**ThirdParty&#x2F;**：第三方库接入（压缩、图像、音频、网络、平台 SDK…）</li>
 </ul>
+<hr>
+<h2 id="Runtime-里的“骨架模块组”（按用途分区）"><a href="#Runtime-里的“骨架模块组”（按用途分区）" class="headerlink" title="Runtime&#x2F; 里的“骨架模块组”（按用途分区）"></a>Runtime&#x2F; 里的“骨架模块组”（按用途分区）</h2><h3 id="1-基础设施层（“C-标准库-平台层-日志-任务-模块系统”）"><a href="#1-基础设施层（“C-标准库-平台层-日志-任务-模块系统”）" class="headerlink" title="1) 基础设施层（“C++ 标准库 + 平台层 + 日志&#x2F;任务&#x2F;模块系统”）"></a>1) 基础设施层（“C++ 标准库 + 平台层 + 日志&#x2F;任务&#x2F;模块系统”）</h3><ul>
+<li>**Core&#x2F;**：容器、字符串、内存、线程、日志、配置、模块加载</li>
+<li>**Projects&#x2F;**：<code>.uproject</code> &#x2F; 插件 &#x2F; 项目描述与加载</li>
+<li>**TraceLog&#x2F;**：追踪与事件记录（和 Insights 相关）</li>
+<li>**ApplicationCore&#x2F;**：窗口&#x2F;输入&#x2F;平台事件（更贴近 OS）</li>
+<li>**Json&#x2F;<strong>、</strong>JsonUtilities&#x2F;**：JSON 解析与反射映射</li>
+<li>**PakFile&#x2F;**：Pak 包读写（资源打包与运行时加载底座之一）</li>
+<li>**AssetRegistry&#x2F;**：资产注册表（编辑器与运行时都会依赖一些能力）</li>
+</ul>
+<hr>
+<h3 id="2-对象系统与世界框架（“UObject、反射、GC、世界与Actor生命周期”）"><a href="#2-对象系统与世界框架（“UObject、反射、GC、世界与Actor生命周期”）" class="headerlink" title="2) 对象系统与世界框架（“UObject、反射、GC、世界与Actor生命周期”）"></a>2) 对象系统与世界框架（“UObject、反射、GC、世界与Actor生命周期”）</h3><ul>
+<li>**CoreUObject&#x2F;**：UObject&#x2F;UClass&#x2F;反射&#x2F;序列化&#x2F;GC</li>
+<li>**Engine&#x2F;**：UWorld、Actor&#x2F;Component、Tick、GameFramework 基本件</li>
+<li>**GameplayTags&#x2F;**：GameplayTag（GAS&#x2F;系统标记常用）</li>
+<li>**GameplayTasks&#x2F;**：GameplayTask（GAS 的 task、AI 行为等会用）</li>
+<li>**PhysicsCore&#x2F;**：物理抽象与基础类型（Chaos 也会挂钩）</li>
+<li>**NetCore&#x2F;**：网络底层公共件（复制系统会用到一些通用结构）</li>
+</ul>
+<hr>
+<h3 id="3-渲染与图形（“从-API-抽象到真正出画面”）"><a href="#3-渲染与图形（“从-API-抽象到真正出画面”）" class="headerlink" title="3) 渲染与图形（“从 API 抽象到真正出画面”）"></a>3) 渲染与图形（“从 API 抽象到真正出画面”）</h3><ul>
+<li>**RHI&#x2F;**：Render Hardware Interface（图形 API 抽象层：DX12&#x2F;Vulkan&#x2F;Metal…的统一接口）</li>
+<li>**RenderCore&#x2F;**：渲染核心通用逻辑（资源、渲染线程交互等）</li>
+<li>**Renderer&#x2F;**：默认渲染器实现（很多你听过的渲染特性在这附近落地）</li>
+<li>**RHICore&#x2F;**（部分版本存在）：RHI 辅助&#x2F;公共部分</li>
+<li>**SlateCore&#x2F;<strong>、</strong>Slate&#x2F;**：UI 框架底座与实现（编辑器和运行时 UI 都靠它）</li>
+<li>**UMG&#x2F;**：更上层的 UI（蓝图 UI &#x2F; Widget）</li>
+</ul>
+<p>记忆钩子：<strong>“RHI 是‘我能对显卡说话’，RenderCore 是‘说话的语法’，Renderer 是‘要说什么画面’。”</strong></p>
+<hr>
+<h3 id="4-网络（“连接、复制、RPC、会话”）"><a href="#4-网络（“连接、复制、RPC、会话”）" class="headerlink" title="4) 网络（“连接、复制、RPC、会话”）"></a>4) 网络（“连接、复制、RPC、会话”）</h3><ul>
+<li>**Networking&#x2F;<strong>、</strong>Sockets&#x2F;**：套接字与网络基础设施（UDP&#x2F;TCP等封装）</li>
+<li>**OnlineSubsystem&#x2F;**（以及 Online 子模块）：账号、会话、匹配等</li>
+<li><strong>NetCore&#x2F;</strong> + **Engine&#x2F;**：复制&#x2F;RPC&#x2F;ActorChannel 等大量逻辑其实在 Engine 里</li>
+</ul>
+<hr>
+<h3 id="5-音频（“混音、设备、格式”）"><a href="#5-音频（“混音、设备、格式”）" class="headerlink" title="5) 音频（“混音、设备、格式”）"></a>5) 音频（“混音、设备、格式”）</h3><ul>
+<li>**AudioMixer&#x2F;**：现代音频混音核心</li>
+<li><strong>Sound…</strong>（很多相关内容也在 Engine&#x2F; 下的 Audio 目录结构里）</li>
+</ul>
+<hr>
+<h3 id="6-物理（“Chaos-系列”）"><a href="#6-物理（“Chaos-系列”）" class="headerlink" title="6) 物理（“Chaos 系列”）"></a>6) 物理（“Chaos 系列”）</h3><ul>
+<li><strong>Chaos&#x2F;<strong>、</strong>ChaosCore&#x2F;</strong></li>
+<li>**PhysicsCore&#x2F;**（前面提到的抽象层）</li>
+</ul>
+<hr>
+<h3 id="7-动画（常见落点）"><a href="#7-动画（常见落点）" class="headerlink" title="7) 动画（常见落点）"></a>7) 动画（常见落点）</h3><p>动画相关大量在 <strong>Engine&#x2F;</strong> 以及一些专门模块&#x2F;目录中（例如 AnimGraphRuntime 等可能在 Runtime 下以模块形式存在，具体取决于版本与裁剪）。</p>
+<hr>
+<h2 id="Editor-Developer-Programs：你要怎么“按需看”"><a href="#Editor-Developer-Programs：你要怎么“按需看”" class="headerlink" title="Editor &#x2F; Developer &#x2F; Programs：你要怎么“按需看”"></a>Editor &#x2F; Developer &#x2F; Programs：你要怎么“按需看”</h2><ul>
+<li><p>**Editor&#x2F;*<em>：</em>“功能大多在 Editor&#x2F;，运行时不带；但会和 Runtime 的资产系统&#x2F;反射系统强耦合。”*</p>
+</li>
+<li><p>**Developer&#x2F;**： <strong>DDC、Cook 管线、命令行工具支持、性能诊断</strong> 。</p>
+</li>
+<li><p>**Programs&#x2F;**：“UBT&#x2F;UHT&#x2F;ShaderCompileWorker&#x2F;UnrealPak 是啥、编译和打包怎么跑”。</p>
+</li>
+</ul>
+<hr>
+<h2 id="目录的最小路线"><a href="#目录的最小路线" class="headerlink" title="目录的最小路线"></a>目录的最小路线</h2><ol>
+<li><strong>Runtime&#x2F;Core</strong>（看引擎怎么活：模块&#x2F;日志&#x2F;容器&#x2F;线程）</li>
+<li><strong>Runtime&#x2F;CoreUObject</strong>（看反射&#x2F;GC：UCLASS&#x2F;UPROPERTY 的落点）</li>
+<li><strong>Runtime&#x2F;Engine</strong>（看世界：UWorld、Actor&#x2F;Component 生命周期、Tick）</li>
+<li><strong>Runtime&#x2F;NetCore + Engine 网络相关</strong>（看复制&#x2F;RPC 是怎么挂在 Actor 上的）</li>
+<li><strong>Runtime&#x2F;RHI → RenderCore → Renderer</strong>（看渲染分层）</li>
+<li><strong>Runtime&#x2F;Slate&#x2F;UMG</strong>（看 UI 分层）</li>
+</ol>
 </article>
+<div class="article-footer">
+    <section id="license">
+      <div class="header"><span>License</span></div>
+      <div class="body"><p>本文采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">署名-非商业性使用-相同方式共享 4.0 国际</a> 许可协议，转载请注明出处。</p>
+</div>
+    </section>
+    
+
+</div>
+
+<div class="related-wrap" id="read-next"><section class="body"><div class="item" id="prev"><div class="note">Newer</div><a href="/2026/02/24/tech_blog_hexo_stellar_portfolio_safe/">用 Hexo + Stellar 搭一个作品展柜：卡片入口、主题配色与 CSS 覆盖</a></div><div class="item" id="next"><div class="note">Older</div><a href="/2026/01/02/UE5.6_GAS_Enemy_AI_Stage_Summary/">用 UE5.6 + GAS 搭一个可迭代的敌人近战 AI：从状态机图到可调试行为树</a></div></section></div>
+
+
+
 
 
 
 <footer class="page-footer footnote"><hr><div class="text"><p>本站由 <a href="/">FFFeiya</a> 使用 <a target="_blank" rel="noopener" href="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.33.1">Stellar 1.33.1</a> 主题创建。<br>本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处。</p>
 </div></footer>
 <div class="main-mask" onclick="sidebar.dismiss()"></div></div><aside class="l_right">
-</aside><div class='float-panel'>
+<div class="widgets">
+
+
+
+<widget class="widget-wrapper toc" id="data-toc" collapse="false"><div class="widget-header dis-select"><span class="name">On This Page</span><a class="cap-action" onclick="sidebar.toggleTOC()" ><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg></a></div><div class="widget-body"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Engine-Source-%E9%A1%B6%E5%B1%82%E7%BB%93%E6%9E%84"><span class="toc-text">Engine&#x2F;Source 顶层结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Runtime-%E9%87%8C%E7%9A%84%E2%80%9C%E9%AA%A8%E6%9E%B6%E6%A8%A1%E5%9D%97%E7%BB%84%E2%80%9D%EF%BC%88%E6%8C%89%E7%94%A8%E9%80%94%E5%88%86%E5%8C%BA%EF%BC%89"><span class="toc-text">Runtime&#x2F; 里的“骨架模块组”（按用途分区）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%9F%BA%E7%A1%80%E8%AE%BE%E6%96%BD%E5%B1%82%EF%BC%88%E2%80%9CC-%E6%A0%87%E5%87%86%E5%BA%93-%E5%B9%B3%E5%8F%B0%E5%B1%82-%E6%97%A5%E5%BF%97-%E4%BB%BB%E5%8A%A1-%E6%A8%A1%E5%9D%97%E7%B3%BB%E7%BB%9F%E2%80%9D%EF%BC%89"><span class="toc-text">1) 基础设施层（“C++ 标准库 + 平台层 + 日志&#x2F;任务&#x2F;模块系统”）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%AF%B9%E8%B1%A1%E7%B3%BB%E7%BB%9F%E4%B8%8E%E4%B8%96%E7%95%8C%E6%A1%86%E6%9E%B6%EF%BC%88%E2%80%9CUObject%E3%80%81%E5%8F%8D%E5%B0%84%E3%80%81GC%E3%80%81%E4%B8%96%E7%95%8C%E4%B8%8EActor%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E2%80%9D%EF%BC%89"><span class="toc-text">2) 对象系统与世界框架（“UObject、反射、GC、世界与Actor生命周期”）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E6%B8%B2%E6%9F%93%E4%B8%8E%E5%9B%BE%E5%BD%A2%EF%BC%88%E2%80%9C%E4%BB%8E-API-%E6%8A%BD%E8%B1%A1%E5%88%B0%E7%9C%9F%E6%AD%A3%E5%87%BA%E7%94%BB%E9%9D%A2%E2%80%9D%EF%BC%89"><span class="toc-text">3) 渲染与图形（“从 API 抽象到真正出画面”）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E7%BD%91%E7%BB%9C%EF%BC%88%E2%80%9C%E8%BF%9E%E6%8E%A5%E3%80%81%E5%A4%8D%E5%88%B6%E3%80%81RPC%E3%80%81%E4%BC%9A%E8%AF%9D%E2%80%9D%EF%BC%89"><span class="toc-text">4) 网络（“连接、复制、RPC、会话”）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-%E9%9F%B3%E9%A2%91%EF%BC%88%E2%80%9C%E6%B7%B7%E9%9F%B3%E3%80%81%E8%AE%BE%E5%A4%87%E3%80%81%E6%A0%BC%E5%BC%8F%E2%80%9D%EF%BC%89"><span class="toc-text">5) 音频（“混音、设备、格式”）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-%E7%89%A9%E7%90%86%EF%BC%88%E2%80%9CChaos-%E7%B3%BB%E5%88%97%E2%80%9D%EF%BC%89"><span class="toc-text">6) 物理（“Chaos 系列”）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-%E5%8A%A8%E7%94%BB%EF%BC%88%E5%B8%B8%E8%A7%81%E8%90%BD%E7%82%B9%EF%BC%89"><span class="toc-text">7) 动画（常见落点）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Editor-Developer-Programs%EF%BC%9A%E4%BD%A0%E8%A6%81%E6%80%8E%E4%B9%88%E2%80%9C%E6%8C%89%E9%9C%80%E7%9C%8B%E2%80%9D"><span class="toc-text">Editor &#x2F; Developer &#x2F; Programs：你要怎么“按需看”</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9B%AE%E5%BD%95%E7%9A%84%E6%9C%80%E5%B0%8F%E8%B7%AF%E7%BA%BF"><span class="toc-text">目录的最小路线</span></a></li></ol></div><div class="widget-footer"><a class="top" onclick="util.scrollTop()"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path stroke-linejoin="round" d="m9 15.5l3-3l3 3m-6-4l3-3l3 3"/><path d="M7 3.338A9.95 9.95 0 0 1 12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12c0-1.821.487-3.53 1.338-5"/></g></svg><span>Scroll to Top</span></a></div></widget>
+</div></aside><div class='float-panel'>
   <button type='button' style='display:none' class='laptop-only rightbar-toggle mobile' onclick='sidebar.rightbar()'>
     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg>
   </button>
