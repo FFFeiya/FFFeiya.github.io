@@ -1,24 +1,32 @@
-Yamato,5
-Akashi,4
-Atago,4
-Ayanami,3
-Fubuki,3
-Shimakaze,3
-Kagerou,2
-Mutsuki,2
-Heavy Cannon,4
-Light AA Gun,3
-Torpedo Launcher,4
-Advanced Radar,3
-Enhanced Engine,3
-Shield Generator,4
-Missile Pod,4
-Laser Cannon,5
-Stealth Module,3
-Anti-Air Missile,3
-Flamethrower,3
-Sonar System,2
-Plasma Rifle,4
-Bio Armor,3
-Nano Repair Kit,2
-Quantum Disruptor,5
+ship-01,3
+ship-02,3
+ship-03,2
+ship-04,5
+ship-05,4
+ship-06,2
+ship-07,3
+ship-08,4
+ship-09,4
+ship-10,3
+ship-11,3
+ship-12,2
+ship-13,2
+ship-14,2
+ship-15,1
+ship-16,1
+equip-01,4
+equip-02,3
+equip-03,4
+equip-04,3
+equip-05,3
+equip-06,4
+equip-07,4
+equip-08,5
+equip-09,3
+equip-10,3
+equip-11,3
+equip-12,2
+equip-13,4
+equip-14,3
+equip-15,2
+equip-16,5

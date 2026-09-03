@@ -1,0 +1,12 @@
+{
+  "id": 0,
+  "planetRadius": 200,
+  "countdownTurns": 30,
+  "energyStart": 2,
+  "rewardCoins": 100,
+  "spawnBand": "E",
+  "nodes": [
+    { "type": "shield", "band": "N", "lon": 2, "hp": 3, "period": 1, "duration": 1, "phase": 0 },
+    { "type": "core", "band": "E", "lon": 0, "hp": 5, "period": 0, "duration": 0, "phase": 0 }
+  ]
+}

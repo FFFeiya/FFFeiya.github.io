@@ -1,8 +1,12 @@
 {
+  "version": 3,
   "coins": 2000,
-  "ownedShips": [],
-  "unlockedShipBlueprints": [],
-  "ownedEquipments": [],
-  "unlockedEquipBlueprints": [],
-  "clearedLevels": []
+  "ownedShips": ["ST-001", "ST-002", "ST-003"],
+  "ownedEquipments": ["equip-01", "equip-02", "equip-06"],
+  "clearedLevels": [],
+  "fleet": [
+    { "shipId": "ST-001", "equipIds": ["equip-01"] },
+    { "shipId": "ST-002", "equipIds": ["equip-02"] },
+    { "shipId": "ST-003", "equipIds": ["equip-06"] }
+  ]
 }
