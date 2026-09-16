@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="hexo-theme" content="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.33.1" theme-name="Stellar" theme-version="1.33.1">
   
-  <meta name="robots" content="noindex,follow">
+  
   <meta name="generator" content="Hexo 7.3.0">
   <meta http-equiv='x-dns-prefetch-control' content='on' />
   
@@ -17,20 +17,33 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000">
   <meta name="theme-color" content="#f9fafb">
-  <title>归档 - FFFeiya</title>
+  <title>P4 Review Bot - FFFeiya</title>
 
   
-    <meta property="og:type" content="website">
-<meta property="og:title" content="归档">
-<meta property="og:url" content="http://example.com/archives/2026/01/">
+    <meta name="description" content="Standalone Perforce changelist review bot for the Ceramica project.  P4 Review Bot 是一个独立运行的 Perforce changelist 审查工具。它轮询已提交的 changelist，读取描述、文件列表和文本 diff，加载 TechDoc.rules.yaml 中的确定性规则并逐条评估，把结果写入 revi">
+<meta property="og:type" content="website">
+<meta property="og:title" content="P4 Review Bot">
+<meta property="og:url" content="http://example.com/tools/p4-review-bot/">
 <meta property="og:site_name" content="FFFeiya">
+<meta property="og:description" content="Standalone Perforce changelist review bot for the Ceramica project.  P4 Review Bot 是一个独立运行的 Perforce changelist 审查工具。它轮询已提交的 changelist，读取描述、文件列表和文本 diff，加载 TechDoc.rules.yaml 中的确定性规则并逐条评估，把结果写入 revi">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/images/tools/p4-review-bot-flow.svg">
+<meta property="og:image" content="http://example.com/images/P4ReviewBot/example.png">
+<meta property="article:published_time" content="2026-09-15T06:00:00.000Z">
+<meta property="article:modified_time" content="2026-09-16T04:02:53.420Z">
 <meta property="article:author" content="FFFeiya">
+<meta property="article:tag" content="Perforce">
+<meta property="article:tag" content="PowerShell">
+<meta property="article:tag" content="Node.js">
+<meta property="article:tag" content="Toolchain">
+<meta property="article:tag" content="Automation">
+<meta property="article:tag" content="Discord">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/images/tools/p4-review-bot-flow.svg">
   
   
   
-  
+  <meta name="keywords" content=",,,,,">
 
   <!-- feed -->
   
@@ -48,12 +61,12 @@
 
   
 
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Website","@id":"http://example.com","author":{"@type":"Person","name":"FFFeiya","sameAs":[]},"name":"FFFeiya","description":"","url":"http://example.com"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Website","@id":"http://example.com/tools/p4-review-bot/","author":{"@type":"Person","name":"FFFeiya","sameAs":[]},"name":"P4 Review Bot","description":"\nStandalone Perforce changelist review bot for the Ceramica project.\n\nP4 Review Bot 是一个独立运行的 Perforce changelist 审查工具。它轮询已提交的 changelist，读取描述、文件列表和文本 diff，加载 TechDoc.rules.yaml 中的确定性规则并逐条评估，把结果写入 r...","url":"http://example.com/tools/p4-review-bot/"}</script>
   <link rel="stylesheet" href="/css/custom.css">
 </head>
 <body>
 
-<div class="l_body index" id="start" layout="undefined" type="undefined" ><aside class="l_left"><div class="sidebg"></div><div class="leftbar-container">
+<div class="l_body content" id="start" layout="page" type="tech" ><aside class="l_left"><div class="sidebg"></div><div class="leftbar-container">
 
 
 <header class="header"><div class="logo-wrap"><a class="avatar" href="/"><div class="bg" style="opacity:0;background-image:url(https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/rainbow64@3x.webp);"></div><img no-lazy class="avatar" src="/brand/fffeiya-mark.png" onerror="javascript:this.classList.add('error');this.src='https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/image/2659360.svg';"></a><a class="title" href="/"><div class="main">FFFeiya</div><div class="sub cap">游戏开发 · 作品集</div></a></div></header>
@@ -70,16 +83,92 @@
 
 </div></aside><div class="l_main" id="main">
 
-<header class="header mobile-only"><div class="logo-wrap"><a class="avatar" href="/"><div class="bg" style="opacity:0;background-image:url(https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/rainbow64@3x.webp);"></div><img no-lazy class="avatar" src="/brand/fffeiya-mark.png" onerror="javascript:this.classList.add('error');this.src='https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/image/2659360.svg';"></a><a class="title" href="/"><div class="main">FFFeiya</div><div class="sub cap">游戏开发 · 作品集</div></a></div></header>
-
- 
 
 
-<div class="navbar top"><div class="navbar-blur"><div class="navbar-container"><nav class="post"><a href="/blog/">近期发布</a><a href="/categories/">分类</a><a href="/tags/">标签</a><a class="active" href="/archives/">归档</a></nav></div></div></div><div class="post-list archives"><article class="" id="archive"><div class='archive-header h4'>2026</div><div class="archive-list"><a class='post fs14' href="/2026/09/15/game-engineering-ii-assignment-03/"><time>09-15</time><span>Game Engineering II - Assignment 03</span></a></div><div class="archive-list"><a class='post fs14' href="/2026/09/08/game-engineering-ii-assignment-02/"><time>09-08</time><span>Game Engineering II - Assignment 02</span></a></div><div class="archive-list"><a class='post fs14' href="/2026/09/01/game-engineering-ii-assignment-01/"><time>09-01</time><span>Game Engineering II - Assignment 01</span></a></div><div class="archive-list"><a class='post fs14' href="/2026/02/24/tech_blog_hexo_stellar_portfolio_safe/"><time>02-24</time><span>用 Hexo + Stellar 搭一个作品展柜：卡片入口、主题配色与 CSS 覆盖</span></a></div><div class="archive-list"><a class='post fs14' href="/2026/01/24/UE5.6_GAS_Enemy_AI_Stage_Summary%20-%20%E5%89%AF%E6%9C%AC/"><time>01-24</time><span>Unreal 5 源码阅读笔记，大纲</span></a></div><div class="archive-list"><a class='post fs14' href="/2026/01/02/UE5.6_GAS_Enemy_AI_Stage_Summary/"><time>01-02</time><span>用 UE5.6 + GAS 搭一个可迭代的敌人近战 AI：从状态机图到可调试行为树</span></a></div></article><article class="" id="archive"><div class='archive-header h4'>2025</div><div class="archive-list"><a class='post fs14' href="/2025/01/08/Building%20Real-Time%20NPC%20Dialogue%20in%20Unity%20with%20Large%20Language%20Models.zh-CN/"><time>01-08</time><span>在 Unity 中用大语言模型构建实时 NPC 对话</span></a></div><div class="archive-list"><a class='post fs14' href="/2025/01/08/NXA_Pipeline_FTP_Tech_Blog/"><time>01-08</time><span>NXA Studios 实习：用 Python 把 FTP 资产交付流程“工程化”</span></a></div><div class="archive-list"><a class='post fs14' href="/2025/01/08/Using%20iFlytek's%20Speech%20Model%20in%20Unity%20for%20Text-to-Speech%20(TTS)%20Playback/"><time>01-08</time><span>Using iFlytek's Speech Model in Unity for Text-to-Speech (TTS) Playback</span></a></div></article><article class="" id="archive"><div class='archive-header h4'>2024</div><div class="archive-list"><a class='post fs14' href="/2024/12/08/Bridging%20Unity%20with%20Python%20and%20ChatGPT.zh-CN/"><time>12-08</time><span>Unity 对接 Python 与 ChatGPT：综合指南</span></a></div><div class="archive-list"><a class='post fs14' href="/2024/12/08/Building%20a%20Dynamic%20Planetary%20Battle%20System.zh-CN/"><time>12-08</time><span>用 p5.js 做太空可视化：构建动态行星战斗系统</span></a></div><div class="archive-list"><a class='post fs14' href="/2024/12/08/How%20to%20Convert%20a%20p5.js%20Game%20into%20Java%20(JavaFX)/"><time>12-08</time><span>How to Convert a p5.js Game into Java (JavaFX)</span></a></div><div class="archive-list"><a class='post fs14' href="/2024/12/08/Game%20Demo%20of%20Star%20Annihilator%20-%20A%20Tower%20Defense%20Game%20Developing/"><time>12-08</time><span>Game Demo of *Star Annihilator*: A Tower Defense Game Developing</span></a></div></article></div>
+
+
+<div class="article banner top">
+  <div class="content">
+    <div class="top bread-nav footnote"><div class="left"><div class="flex-row" id="breadcrumb"><a class="cap breadcrumb" href="/">主页</a>
+
+  <span class="sep"></span>
+  <a class="cap breadcrumb" href="/tools/p4-review-bot/">P4 Review Bot</a>
+  </div>
+<div class="flex-row" id="post-meta"><span class="text created">发布于：<time datetime="2026-09-15T06:00:00.000Z">2026.09.15</time></span><span class="sep updated"></span><span class="text updated">更新于：<time datetime="2026-09-16T04:02:53.420Z">2026.09.15</time></span></div></div></div>
+    
+    <div class="bottom only-title">
+      
+      <div class="text-area">
+        <h1 class="text title"><span>P4 Review Bot</span></h1>
+        
+      </div>
+    </div>
+    
+  </div>
+  </div><article class="md-text content"><blockquote>
+<p>Standalone Perforce changelist review bot for the Ceramica project.</p>
+</blockquote>
+<p><strong>P4 Review Bot</strong> 是一个独立运行的 Perforce changelist 审查工具。它轮询已提交的 changelist，读取描述、文件列表和文本 diff，加载 <code>TechDoc.rules.yaml</code> 中的确定性规则并逐条评估，把结果写入 <code>review-last.json</code>，最后按 changelist 向 Discord 发送通知。</p>
+<h2 id="工作原理"><a href="#工作原理" class="headerlink" title="工作原理"></a>工作原理</h2><p><img src="/images/tools/p4-review-bot-flow.svg"></p>
+<p>工具把“人肉检查 changelist”变成一条可复现的流水线：</p>
+<ol>
+<li><strong>轮询 Perforce</strong>：通过 <code>p4 changes -s submitted</code> 获取已提交的 changelist。</li>
+<li><strong>读取提交内容</strong>：提取 changelist 描述、涉及文件路径、文本 diff。</li>
+<li><strong>加载规则</strong>：用 Node.js + <code>js-yaml</code> 把 <code>TechDoc.rules.yaml</code> 解析成规则集合。</li>
+<li><strong>规则评估</strong>：按 <code>submission / naming / organization</code> 分类逐条检查。</li>
+<li><strong>写回结果</strong>：输出到 <code>review-last.json</code>，便于后续读取和回放。</li>
+<li><strong>发送通知</strong>：可选把结果发到 Discord，并按 <code>warning / error / blocker</code> 分级展示。</li>
+</ol>
+<h2 id="规则系统"><a href="#规则系统" class="headerlink" title="规则系统"></a>规则系统</h2><p>规则不是写死在 PowerShell 里，而是从 YAML 动态加载。每条规则包含：</p>
+<ul>
+<li><code>id</code></li>
+<li><code>category</code></li>
+<li><code>severity</code></li>
+<li><code>applies_to</code></li>
+<li><code>check</code></li>
+<li><code>exceptions</code></li>
+<li><code>message</code></li>
+</ul>
+<p>以三个提交规则为例：</p>
+<ul>
+<li><code>CER-SUBMIT-001</code>：changelist 描述必须以作者名结尾。</li>
+<li><code>CER-SUBMIT-002</code>：描述不能为空或使用默认文本。</li>
+<li><code>CER-SUBMIT-003</code>：生成的本地文件不得提交到 depot。</li>
+</ul>
+<p>这种结构让规则可以独立修改，而不需要改动主脚本。</p>
+<h2 id="输出与通知"><a href="#输出与通知" class="headerlink" title="输出与通知"></a>输出与通知</h2><ul>
+<li>没有 <code>warning / error / blocker</code>：发送绿色 success embed。</li>
+<li>有 <code>warning</code>：黄色 embed。</li>
+<li>有 <code>error</code>：红色 embed。</li>
+<li>有 <code>blocker</code>：加粗红色错误。</li>
+<li><code>info</code>：写入 <code>review-last.json</code>，但不发到 Discord。</li>
+</ul>
+<p>每个 changelist 会单独发一条消息，并在对应 embed 上方 @ 作者。</p>
+<h2 id="运行示例"><a href="#运行示例" class="headerlink" title="运行示例"></a>运行示例</h2><p><img src="/images/P4ReviewBot/example.png" alt="P4 Review Bot 运行示例"></p>
+<h2 id="运行"><a href="#运行" class="headerlink" title="运行"></a>运行</h2><figure class="highlight powershell"><table><tr><td class="code"><pre><code class="hljs powershell"><span class="hljs-comment"># 单次审查</span><br>.\P4Poller.ps1 <span class="hljs-literal">-Once</span><br><br><span class="hljs-comment"># 持续轮询</span><br>.\P4Poller.ps1 <span class="hljs-literal">-LoopSeconds</span> <span class="hljs-number">60</span><br><br><span class="hljs-comment"># 单次审查并发送 Discord</span><br>.\P4Poller.ps1 <span class="hljs-literal">-Once</span> <span class="hljs-literal">-PostToDiscord</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="技术栈"><a href="#技术栈" class="headerlink" title="技术栈"></a>技术栈</h2><ul>
+<li>Windows PowerShell 5.1+</li>
+<li>Perforce <code>p4.exe</code></li>
+<li>Node.js &#x2F; <code>js-yaml</code></li>
+<li>Discord Webhook</li>
+</ul>
+<h2 id="链接"><a href="#链接" class="headerlink" title="链接"></a>链接</h2><ul>
+<li>GitHub 仓库：<a target="_blank" rel="noopener" href="https://github.com/FFFeiya/P4ReviewBot">https://github.com/FFFeiya/P4ReviewBot</a></li>
+<li>项目规则来源：<code>rules/TechDoc.rules.yaml</code></li>
+<li>项目说明：<code>README.md</code></li>
+</ul>
+</article>
+
+
+
 <footer class="page-footer footnote"><hr><div class="text"><p>本站由 <a href="/">FFFeiya</a> 使用 <a target="_blank" rel="noopener" href="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.33.1">Stellar 1.33.1</a> 主题创建。<br>本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处。</p>
 </div></footer>
 <div class="main-mask" onclick="sidebar.dismiss()"></div></div><aside class="l_right">
-</aside><div class='float-panel'>
+<div class="widgets">
+
+<widget class="widget-wrapper toc" id="data-toc" collapse="false"><div class="widget-header dis-select"><span class="name">本文目录</span><a class="cap-action" onclick="sidebar.toggleTOC()" ><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg></a></div><div class="widget-body"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86"><span class="toc-text">工作原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A7%84%E5%88%99%E7%B3%BB%E7%BB%9F"><span class="toc-text">规则系统</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BE%93%E5%87%BA%E4%B8%8E%E9%80%9A%E7%9F%A5"><span class="toc-text">输出与通知</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%90%E8%A1%8C%E7%A4%BA%E4%BE%8B"><span class="toc-text">运行示例</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%90%E8%A1%8C"><span class="toc-text">运行</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8A%80%E6%9C%AF%E6%A0%88"><span class="toc-text">技术栈</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%93%BE%E6%8E%A5"><span class="toc-text">链接</span></a></li></ol></div><div class="widget-footer"><a class="top" onclick="util.scrollTop()"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path stroke-linejoin="round" d="m9 15.5l3-3l3 3m-6-4l3-3l3 3"/><path d="M7 3.338A9.95 9.95 0 0 1 12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12c0-1.821.487-3.53 1.338-5"/></g></svg><span>回到顶部</span></a></div></widget>
+</div></aside><div class='float-panel'>
   <button type='button' style='display:none' class='laptop-only rightbar-toggle mobile' onclick='sidebar.rightbar()'>
     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg>
   </button>
