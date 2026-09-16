@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="hexo-theme" content="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.33.1" theme-name="Stellar" theme-version="1.33.1">
   
-  <meta name="robots" content="noindex,follow">
+  
   <meta name="generator" content="Hexo 7.3.0">
   <meta http-equiv='x-dns-prefetch-control' content='on' />
   
@@ -17,20 +17,33 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000">
   <meta name="theme-color" content="#f9fafb">
-  <title>归档 - FFFeiya</title>
+  <title>DragonRider — Unreal Engine 5.6 多人动作 / 飞行 / Alt-Control 原型 - FFFeiya</title>
 
   
-    <meta property="og:type" content="website">
-<meta property="og:title" content="归档">
-<meta property="og:url" content="http://example.com/archives/2025/01/">
+    <meta name="description" content="DragonRider 是一个高保真第三人称动作 &#x2F; 飞行游戏原型，基于 Unreal Engine 5.6。它不是只做“龙在飞”的演出，而是把三件最难的事情同时按工程标准串起来：同步多人环境、ESP32 实体控制器，以及 Gameplay Ability System（GAS）驱动的战斗。 玩家同时控制两个存在：  龙：由两枚 MPU6050 感知倾角和加速度，用身体动作控制速度与方向">
+<meta property="og:type" content="website">
+<meta property="og:title" content="DragonRider — Unreal Engine 5.6 多人动作 &#x2F; 飞行 &#x2F; Alt-Control 原型">
+<meta property="og:url" content="http://example.com/projects/dragon-rider/">
 <meta property="og:site_name" content="FFFeiya">
+<meta property="og:description" content="DragonRider 是一个高保真第三人称动作 &#x2F; 飞行游戏原型，基于 Unreal Engine 5.6。它不是只做“龙在飞”的演出，而是把三件最难的事情同时按工程标准串起来：同步多人环境、ESP32 实体控制器，以及 Gameplay Ability System（GAS）驱动的战斗。 玩家同时控制两个存在：  龙：由两枚 MPU6050 感知倾角和加速度，用身体动作控制速度与方向">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/images/projects/dragon-rider-onesheet.jpg">
+<meta property="article:published_time" content="2026-04-25T06:00:00.000Z">
+<meta property="article:modified_time" content="2026-09-16T04:05:50.359Z">
 <meta property="article:author" content="FFFeiya">
+<meta property="article:tag" content="Unreal">
+<meta property="article:tag" content="C++">
+<meta property="article:tag" content="GAS">
+<meta property="article:tag" content="Multiplayer">
+<meta property="article:tag" content="Alt-Control">
+<meta property="article:tag" content="ESP32">
+<meta property="article:tag" content="Physics">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/images/projects/dragon-rider-onesheet.jpg">
   
   
   
-  
+  <meta name="keywords" content=",,,,,,">
 
   <!-- feed -->
   
@@ -48,12 +61,12 @@
 
   
 
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Website","@id":"http://example.com","author":{"@type":"Person","name":"FFFeiya","sameAs":[]},"name":"FFFeiya","description":"","url":"http://example.com"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Website","@id":"http://example.com/projects/dragon-rider/","author":{"@type":"Person","name":"FFFeiya","sameAs":[]},"name":"DragonRider — Unreal Engine 5.6 多人动作 / 飞行 / Alt-Control 原型","description":"DragonRider 是一个高保真第三人称动作 &#x2F; 飞行游戏原型，基于 Unreal Engine 5.6。它不是只做“龙在飞”的演出，而是把三件最难的事情同时按工程标准串起来：同步多人环境、ESP32 实体控制器，以及 Gameplay Ability System（GAS）驱动的战斗。\n玩家同时控制两个存在：\n\n龙：由两枚 MPU6050 感知倾角和加速度，用身体动作控制速度...","url":"http://example.com/projects/dragon-rider/"}</script>
   <link rel="stylesheet" href="/css/custom.css">
 </head>
 <body>
 
-<div class="l_body index" id="start" layout="undefined" type="undefined" ><aside class="l_left"><div class="sidebg"></div><div class="leftbar-container">
+<div class="l_body content" id="start" layout="page" type="tech" ><aside class="l_left"><div class="sidebg"></div><div class="leftbar-container">
 
 
 <header class="header"><div class="logo-wrap"><a class="avatar" href="/"><div class="bg" style="opacity:0;background-image:url(https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/rainbow64@3x.webp);"></div><img no-lazy class="avatar" src="/brand/fffeiya-mark.png" onerror="javascript:this.classList.add('error');this.src='https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/image/2659360.svg';"></a><a class="title" href="/"><div class="main">FFFeiya</div><div class="sub cap">游戏开发 · 作品集</div></a></div></header>
@@ -70,16 +83,166 @@
 
 </div></aside><div class="l_main" id="main">
 
-<header class="header mobile-only"><div class="logo-wrap"><a class="avatar" href="/"><div class="bg" style="opacity:0;background-image:url(https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/rainbow64@3x.webp);"></div><img no-lazy class="avatar" src="/brand/fffeiya-mark.png" onerror="javascript:this.classList.add('error');this.src='https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/image/2659360.svg';"></a><a class="title" href="/"><div class="main">FFFeiya</div><div class="sub cap">游戏开发 · 作品集</div></a></div></header>
-
- 
 
 
-<div class="navbar top"><div class="navbar-blur"><div class="navbar-container"><nav class="post"><a href="/blog/">近期发布</a><a href="/categories/">分类</a><a href="/tags/">标签</a><a class="active" href="/archives/">归档</a></nav></div></div></div><div class="post-list archives"><article class="" id="archive"><div class='archive-header h4'>2026</div><div class="archive-list"><a class='post fs14' href="/2026/09/15/game-engineering-ii-assignment-03/"><time>09-15</time><span>Game Engineering II - Assignment 03</span></a></div><div class="archive-list"><a class='post fs14' href="/2026/09/08/game-engineering-ii-assignment-02/"><time>09-08</time><span>Game Engineering II - Assignment 02</span></a></div><div class="archive-list"><a class='post fs14' href="/2026/09/01/game-engineering-ii-assignment-01/"><time>09-01</time><span>Game Engineering II - Assignment 01</span></a></div><div class="archive-list"><a class='post fs14' href="/2026/02/24/tech_blog_hexo_stellar_portfolio_safe/"><time>02-24</time><span>用 Hexo + Stellar 搭一个作品展柜：卡片入口、主题配色与 CSS 覆盖</span></a></div><div class="archive-list"><a class='post fs14' href="/2026/01/24/UE5.6_GAS_Enemy_AI_Stage_Summary%20-%20%E5%89%AF%E6%9C%AC/"><time>01-24</time><span>Unreal 5 源码阅读笔记，大纲</span></a></div><div class="archive-list"><a class='post fs14' href="/2026/01/02/UE5.6_GAS_Enemy_AI_Stage_Summary/"><time>01-02</time><span>用 UE5.6 + GAS 搭一个可迭代的敌人近战 AI：从状态机图到可调试行为树</span></a></div></article><article class="" id="archive"><div class='archive-header h4'>2025</div><div class="archive-list"><a class='post fs14' href="/2025/01/08/Building%20Real-Time%20NPC%20Dialogue%20in%20Unity%20with%20Large%20Language%20Models.zh-CN/"><time>01-08</time><span>在 Unity 中用大语言模型构建实时 NPC 对话</span></a></div><div class="archive-list"><a class='post fs14' href="/2025/01/08/NXA_Pipeline_FTP_Tech_Blog/"><time>01-08</time><span>NXA Studios 实习：用 Python 把 FTP 资产交付流程“工程化”</span></a></div><div class="archive-list"><a class='post fs14' href="/2025/01/08/Using%20iFlytek's%20Speech%20Model%20in%20Unity%20for%20Text-to-Speech%20(TTS)%20Playback/"><time>01-08</time><span>Using iFlytek's Speech Model in Unity for Text-to-Speech (TTS) Playback</span></a></div></article><article class="" id="archive"><div class='archive-header h4'>2024</div><div class="archive-list"><a class='post fs14' href="/2024/12/08/Bridging%20Unity%20with%20Python%20and%20ChatGPT.zh-CN/"><time>12-08</time><span>Unity 对接 Python 与 ChatGPT：综合指南</span></a></div><div class="archive-list"><a class='post fs14' href="/2024/12/08/Game%20Demo%20of%20Star%20Annihilator%20-%20A%20Tower%20Defense%20Game%20Developing/"><time>12-08</time><span>Game Demo of *Star Annihilator*: A Tower Defense Game Developing</span></a></div><div class="archive-list"><a class='post fs14' href="/2024/12/08/Building%20a%20Dynamic%20Planetary%20Battle%20System.zh-CN/"><time>12-08</time><span>用 p5.js 做太空可视化：构建动态行星战斗系统</span></a></div><div class="archive-list"><a class='post fs14' href="/2024/12/08/How%20to%20Convert%20a%20p5.js%20Game%20into%20Java%20(JavaFX)/"><time>12-08</time><span>How to Convert a p5.js Game into Java (JavaFX)</span></a></div></article></div>
+
+
+<div class="article banner top">
+  <div class="content">
+    <div class="top bread-nav footnote"><div class="left"><div class="flex-row" id="breadcrumb"><a class="cap breadcrumb" href="/">主页</a>
+
+  <span class="sep"></span>
+  <a class="cap breadcrumb" href="/projects/dragon-rider/">DragonRider — Unreal Engine 5.6 多人动作 / 飞行 / Alt-Control 原型</a>
+  </div>
+<div class="flex-row" id="post-meta"><span class="text created">发布于：<time datetime="2026-04-25T06:00:00.000Z">2026.04.25</time></span><span class="sep updated"></span><span class="text updated">更新于：<time datetime="2026-09-16T04:05:50.359Z">2026.09.15</time></span></div></div></div>
+    
+    <div class="bottom only-title">
+      
+      <div class="text-area">
+        <h1 class="text title"><span>DragonRider — Unreal Engine 5.6 多人动作 / 飞行 / Alt-Control 原型</span></h1>
+        
+      </div>
+    </div>
+    
+  </div>
+  </div><article class="md-text content"><p><strong>DragonRider</strong> 是一个高保真第三人称动作 &#x2F; 飞行游戏原型，基于 <strong>Unreal Engine 5.6</strong>。它不是只做“龙在飞”的演出，而是把三件最难的事情同时按工程标准串起来：<strong>同步多人环境</strong>、<strong>ESP32 实体控制器</strong>，以及 <strong>Gameplay Ability System（GAS）驱动的战斗</strong>。</p>
+<p>玩家同时控制两个存在：</p>
+<ul>
+<li><strong>龙</strong>：由两枚 MPU6050 感知倾角和加速度，用身体动作控制速度与方向。</li>
+<li><strong>骑手</strong>：用拇指摇杆移动，用压力传感器触发动作。</li>
+</ul>
+<p>这让“骑龙”从按键抽象变成了真正需要身体参与的体验。</p>
+<p><img src="/images/projects/dragon-rider-onesheet.jpg"></p>
+<h2 id="关键词"><a href="#关键词" class="headerlink" title="关键词"></a>关键词</h2><ul>
+<li><strong>Alt-Control</strong>：ESP32 + 双 MPU6050 + 摇杆 + 压力传感器，115200 波特率串流</li>
+<li><strong>GAS</strong>：玩家和敌人都挂载 AbilitySystemComponent，属性用 AttributeSet 复制</li>
+<li><strong>物理飞行</strong>：<code>UDragonBounceComponent</code> 做速度反射，碰撞像弹性体而不是硬停</li>
+<li><strong>多人同步</strong>：网络复制的属性和状态，团队 ID 识别敌我</li>
+<li>**模块化 C++**：输入、运动、战斗拆成独立组件，方便并行开发和新人 onboarding</li>
+</ul>
+<h2 id="实体控制器怎么工作"><a href="#实体控制器怎么工作" class="headerlink" title="实体控制器怎么工作"></a>实体控制器怎么工作</h2><p>控制器不是简单的“一个按钮触发一个动作”。它是一块 ESP32，把多种物理输入融合成 19 字节的二进制包，每 10ms 通过 UART Serial 发一次：</p>
+<table>
+<thead>
+<tr>
+<th>Offset</th>
+<th>类型</th>
+<th>字段</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0</td>
+<td>uint8</td>
+<td>Header 1</td>
+<td>固定 <code>0xAA</code></td>
+</tr>
+<tr>
+<td>1</td>
+<td>uint8</td>
+<td>Header 2</td>
+<td>固定 <code>0xBB</code></td>
+</tr>
+<tr>
+<td>2</td>
+<td>float</td>
+<td>Dragon Speed</td>
+<td>0.0–1.0 归一化力度</td>
+</tr>
+<tr>
+<td>6</td>
+<td>float</td>
+<td>Dragon Dir</td>
+<td>-1.0–1.0 归一化倾角</td>
+</tr>
+<tr>
+<td>10</td>
+<td>float</td>
+<td>Rider X</td>
+<td>-1.0–1.0</td>
+</tr>
+<tr>
+<td>14</td>
+<td>float</td>
+<td>Rider Y</td>
+<td>-1.0–1.0</td>
+</tr>
+<tr>
+<td>18</td>
+<td>uint8</td>
+<td>Events</td>
+<td>位掩码动作</td>
+</tr>
+</tbody></table>
+<p>硬件映射上：</p>
+<ul>
+<li><code>MPU6050 #1</code>（地址 <code>0x68</code>）作为“龙翼传感器”，用总加速度决定速度：低于 <code>10.5g</code> 不动，最高到 <code>30.0g</code>。</li>
+<li><code>MPU6050 #2</code>（地址 <code>0x69</code>）作为“身体传感器”，用 Roll 角控制方向，最大 ±30° 映射到 ±1.0。</li>
+<li>骑手摇杆用 <code>A0 / A1 / D10</code>，Y 轴在固件里反相。</li>
+<li>压力传感器接 <code>A2</code>，超过阈值时置位 <code>EVENT_BIT_RIGHT_ROPE</code>。</li>
+</ul>
+<p>开机时固件会做 500 次采样校准陀螺仪零点；如果两块 MPU 都没找到，LED 会一直闪，明确拒绝进入“能跑但输入是错”的状态。</p>
+<h2 id="Unreal-侧的桥接"><a href="#Unreal-侧的桥接" class="headerlink" title="Unreal 侧的桥接"></a>Unreal 侧的桥接</h2><p>UE5 通过 <code>UAltControlClientComponent</code> 用高频 HTTP polling（默认 100Hz）从本地地址拉取二进制包，解析成 <code>FAltGamePacket</code>：</p>
+<ul>
+<li><code>DragonSpeed</code> &#x2F; <code>DragonDirection</code> 驱动龙的飞行输入</li>
+<li><code>RiderDirectionX/Y</code> 驱动骑手移动</li>
+<li><code>ActionEvents</code> 映射到具体玩法动作</li>
+</ul>
+<p>输入进入 Unreal 后，<code>BP_ThirdPersonCharacter_Keyboard</code> 监听 <code>OnPacketUpdated</code>，用 <code>FInterp To</code> 对 Yaw &#x2F; Pitch &#x2F; Roll 做平滑，避免原始传感器噪声让龙“抽搐”。</p>
+<h2 id="龙不是“飞机”，是有弹性的身体"><a href="#龙不是“飞机”，是有弹性的身体" class="headerlink" title="龙不是“飞机”，是有弹性的身体"></a>龙不是“飞机”，是有弹性的身体</h2><p><code>UDragonBounceComponent</code> 负责飞行中撞到地形时的响应。它做的是<strong>速度反射</strong>，而不是简单停止：</p>
+<ul>
+<li><code>BounceStrength</code> 控制碰撞后的弹性</li>
+<li><code>MinImpactSpeed</code> 是抑制阈值：低速擦碰不会被误判成“撞墙”</li>
+<li>碰撞后通过 <code>LaunchCharacter</code> 施加反射速度</li>
+</ul>
+<p>这样高速俯冲擦过岩壁时，龙会顺着几何体弹开，而不是像砖块一样卡住。工程文档里特别提到“Fixed dragon bounce jitter on low-speed impacts”，说明低速抖动是被专门压掉的。</p>
+<h2 id="GAS-战斗结构"><a href="#GAS-战斗结构" class="headerlink" title="GAS 战斗结构"></a>GAS 战斗结构</h2><p>玩家和敌人都不靠临时 <code>if-else</code> 堆战斗。项目用 GAS 管理属性、效果和能力：</p>
+<ul>
+<li><code>AGASDragonCharacterBase</code>：实现 <code>IAbilitySystemInterface</code>，初始化 ASC 和 <code>UGASBaseAttributeSet</code></li>
+<li><code>UGASBaseAttributeSet</code>：<code>Health / MaxHealth / Energy / MaxEnergy / Gold</code>，通过 RepNotify 网络复制</li>
+<li><code>AEnemyBase</code>：管理 <code>Patrol / Chase</code> AI 状态、死亡逻辑和 GAS 初始化</li>
+<li><code>UEnemyAttributeSet</code>：敌人的 <code>Health</code> 和 <code>AttackPower</code></li>
+</ul>
+<p>能力层用 Blueprint 组合，例如：</p>
+<ul>
+<li><code>GA_Boss_ArcaneBarrage</code>：<code>PlayMontageAndWait + GE</code></li>
+<li><code>GA_Boss_ArcaneBombardment</code>：随机 AOE 落点</li>
+<li><code>GA_Boss_FocusedBeam</code>：tick 型射线检测，周期性施加伤害</li>
+<li><code>GA_Boss_HomingOrb</code>：生成追踪弹</li>
+</ul>
+<p>数值与状态都从 Blueprint 里抽到 GameplayEffect：</p>
+<ul>
+<li><code>GE_Dmg_Boss_*</code>：Boss 瞬时伤害</li>
+<li><code>GE_InitBoss / GE_InitPlayer</code>：生成时初始化属性</li>
+<li><code>GE_SwitchStatus</code>：用 Gameplay Tag 管理二阶段和无敌状态</li>
+</ul>
+<h2 id="多人同步"><a href="#多人同步" class="headerlink" title="多人同步"></a>多人同步</h2><p>这是一个“同步 co-op”原型，而不是只在本机运行：</p>
+<ul>
+<li>属性通过 RepNotify 复制</li>
+<li>输入、移动和战斗分层，减少同步耦合</li>
+<li>敌我识别走 Generic Team ID，而不是硬编码阵营</li>
+</ul>
+<h2 id="技术栈"><a href="#技术栈" class="headerlink" title="技术栈"></a>技术栈</h2><ul>
+<li>Unreal Engine 5.6</li>
+<li>C++ &#x2F; Blueprint</li>
+<li>Gameplay Ability System + GameplayEffects</li>
+<li>ESP32 &#x2F; MPU6050 &#x2F; Joystick &#x2F; Pressure Sensor</li>
+<li>UART Serial 115200 &#x2F; HTTP polling</li>
+<li>Perforce 版本控制</li>
+</ul>
+<h2 id="链接"><a href="#链接" class="headerlink" title="链接"></a>链接</h2><ul>
+<li>项目技术文档与 OneSheet 来自本地课程项目文档目录。</li>
+</ul>
+</article>
+
+
+
 <footer class="page-footer footnote"><hr><div class="text"><p>本站由 <a href="/">FFFeiya</a> 使用 <a target="_blank" rel="noopener" href="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.33.1">Stellar 1.33.1</a> 主题创建。<br>本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处。</p>
 </div></footer>
 <div class="main-mask" onclick="sidebar.dismiss()"></div></div><aside class="l_right">
-</aside><div class='float-panel'>
+<div class="widgets">
+
+<widget class="widget-wrapper toc" id="data-toc" collapse="false"><div class="widget-header dis-select"><span class="name">本文目录</span><a class="cap-action" onclick="sidebar.toggleTOC()" ><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg></a></div><div class="widget-body"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E9%94%AE%E8%AF%8D"><span class="toc-text">关键词</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9E%E4%BD%93%E6%8E%A7%E5%88%B6%E5%99%A8%E6%80%8E%E4%B9%88%E5%B7%A5%E4%BD%9C"><span class="toc-text">实体控制器怎么工作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Unreal-%E4%BE%A7%E7%9A%84%E6%A1%A5%E6%8E%A5"><span class="toc-text">Unreal 侧的桥接</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%BE%99%E4%B8%8D%E6%98%AF%E2%80%9C%E9%A3%9E%E6%9C%BA%E2%80%9D%EF%BC%8C%E6%98%AF%E6%9C%89%E5%BC%B9%E6%80%A7%E7%9A%84%E8%BA%AB%E4%BD%93"><span class="toc-text">龙不是“飞机”，是有弹性的身体</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#GAS-%E6%88%98%E6%96%97%E7%BB%93%E6%9E%84"><span class="toc-text">GAS 战斗结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%9A%E4%BA%BA%E5%90%8C%E6%AD%A5"><span class="toc-text">多人同步</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8A%80%E6%9C%AF%E6%A0%88"><span class="toc-text">技术栈</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%93%BE%E6%8E%A5"><span class="toc-text">链接</span></a></li></ol></div><div class="widget-footer"><a class="top" onclick="util.scrollTop()"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path stroke-linejoin="round" d="m9 15.5l3-3l3 3m-6-4l3-3l3 3"/><path d="M7 3.338A9.95 9.95 0 0 1 12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12c0-1.821.487-3.53 1.338-5"/></g></svg><span>回到顶部</span></a></div></widget>
+</div></aside><div class='float-panel'>
   <button type='button' style='display:none' class='laptop-only rightbar-toggle mobile' onclick='sidebar.rightbar()'>
     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg>
   </button>
