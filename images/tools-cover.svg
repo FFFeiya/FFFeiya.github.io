@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="Toolchain">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0a0a12"/>
+      <stop offset="1" stop-color="#17060d"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.8" cy="0.15" r="0.9">
+      <stop offset="0" stop-color="#ff3347" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#ff3347" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+
+  <g fill="none" stroke="#ff3347" stroke-opacity="0.5">
+    <circle cx="1030" cy="150" r="104" stroke-width="3"/>
+    <circle cx="1030" cy="150" r="66" stroke-width="2"/>
+    <path d="M1030 46 V28 M1030 254 V272 M926 150 H908 M1134 150 H1152" stroke-width="3"/>
+    <path d="M958 78 L946 66 M1102 78 L1114 66 M958 222 L946 234 M1102 222 L1114 234" stroke-width="3"/>
+  </g>
+
+  <text x="70" y="360" font-family="Segoe UI, Arial, sans-serif" font-size="116" font-weight="800" letter-spacing="4" fill="#ff3347">TOOLCHAIN</text>
+  <text x="72" y="424" font-family="Segoe UI, Arial, sans-serif" font-size="34" fill="#ffffff" fill-opacity="0.72">Pipeline / Automation / Build Tools</text>
+  <rect x="70" y="462" width="120" height="6" rx="3" fill="#ff3347"/>
+</svg>

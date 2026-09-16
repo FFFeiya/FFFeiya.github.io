@@ -1,0 +1,994 @@
+
+<!DOCTYPE html><html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="hexo-theme" content="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.33.1" theme-name="Stellar" theme-version="1.33.1">
+  
+  
+  <meta name="generator" content="Hexo 7.3.0">
+  <meta http-equiv='x-dns-prefetch-control' content='on' />
+  
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000">
+  <meta name="theme-color" content="#f9fafb">
+  <title>Game Engineering II - Assignment 03 - FFFeiya</title>
+
+  
+    <meta name="description" content="This is the write-up for Assignment 03 of GAMES 6320 (Game Engineering II). Assignment 02 introduced cMesh and cEffect but still had platform-specific Graphics.d3d.cpp and Graphics.gl.cpp files. Assig">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Game Engineering II - Assignment 03">
+<meta property="og:url" content="http://example.com/2026/09/15/game-engineering-ii-assignment-03/">
+<meta property="og:site_name" content="FFFeiya">
+<meta property="og:description" content="This is the write-up for Assignment 03 of GAMES 6320 (Game Engineering II). Assignment 02 introduced cMesh and cEffect but still had platform-specific Graphics.d3d.cpp and Graphics.gl.cpp files. Assig">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://fffeiya.github.io/images/assignment03/d3d_game_running.png">
+<meta property="og:image" content="https://fffeiya.github.io/images/assignment03/gl_game_running.png">
+<meta property="article:published_time" content="2026-09-15T06:00:00.000Z">
+<meta property="article:modified_time" content="2026-09-16T03:40:22.054Z">
+<meta property="article:author" content="FFFeiya">
+<meta property="article:tag" content="C++">
+<meta property="article:tag" content="Game Engineering">
+<meta property="article:tag" content="Graphics">
+<meta property="article:tag" content="Direct3D">
+<meta property="article:tag" content="OpenGL">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://fffeiya.github.io/images/assignment03/d3d_game_running.png">
+  
+  
+  
+  <meta name="keywords" content="C++,Game Engineering,Graphics,Direct3D,OpenGL">
+
+  <!-- feed -->
+  
+
+  <link rel="stylesheet" href="/css/main.css?v=1.33.1">
+
+
+  
+    <link rel="shortcut icon" href="/brand/favicon.png">
+  
+
+  
+    
+<link rel="stylesheet" href="https://gcore.jsdelivr.net/gh/highlightjs/cdn-release@11.9/build/styles/atom-one-dark.min.css">
+
+  
+
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"FFFeiya","sameAs":[]},"dateCreated":"2026-09-15T00:00:00-06:00","dateModified":"2026-09-15T21:40:22-06:00","datePublished":"2026-09-15T00:00:00-06:00","description":"","headline":"Game Engineering II - Assignment 03","mainEntityOfPage":{"@type":"WebPage","@id":"http://example.com/2026/09/15/game-engineering-ii-assignment-03/"},"publisher":{"@type":"Organization","name":"FFFeiya","sameAs":[]},"url":"http://example.com/2026/09/15/game-engineering-ii-assignment-03/","keywords":"C++, Game Engineering, Graphics, Direct3D, OpenGL","image":[]}</script>
+  <link rel="stylesheet" href="/css/custom.css">
+</head>
+<body>
+
+<div class="l_body content" id="start" layout="post" type="tech" ><aside class="l_left"><div class="sidebg"></div><div class="leftbar-container">
+
+
+<header class="header"><div class="logo-wrap"><a class="avatar" href="/"><div class="bg" style="opacity:0;background-image:url(https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/rainbow64@3x.webp);"></div><img no-lazy class="avatar" src="/brand/fffeiya-mark.png" onerror="javascript:this.classList.add('error');this.src='https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/image/2659360.svg';"></a><a class="title" href="/"><div class="main">FFFeiya</div><div class="sub cap">游戏开发 · 作品集</div></a></div></header>
+
+<div class="nav-area">
+
+<nav class="menu dis-select"><a class="nav-item" title="作品" href="/projects/">作品</a><a class="nav-item" title="技术" href="/blog/">技术</a><a class="nav-item" title="游戏" href="/p5game/">游戏</a><a class="nav-item" title="工具" href="/tools/">工具</a><a class="nav-item" title="关于" href="/about/">关于</a></nav>
+</div>
+<div class="widgets">
+<div class="search-wrapper" id="search-wrapper"><form class="search-form"><a class="search-button" onclick="document.getElementById(&quot;search-input&quot;).focus();"><svg t="1705074644177" viewBox="0 0 1025 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1560" width="200" height="200"><path d="M1008.839137 935.96571L792.364903 719.491476a56.783488 56.783488 0 0 0-80.152866 0 358.53545 358.53545 0 1 1 100.857314-335.166073 362.840335 362.840335 0 0 1-3.689902 170.145468 51.248635 51.248635 0 1 0 99.217358 26.444296 462.057693 462.057693 0 1 0-158.255785 242.303546l185.930047 185.725053a51.248635 51.248635 0 0 0 72.568068 0 51.248635 51.248635 0 0 0 0-72.978056z" p-id="1561"></path><path d="M616.479587 615.969233a50.428657 50.428657 0 0 0-61.498362-5.534852 174.655348 174.655348 0 0 1-177.525271 3.484907 49.403684 49.403684 0 0 0-58.833433 6.76482l-3.074918 2.869923a49.403684 49.403684 0 0 0 8.609771 78.10292 277.767601 277.767601 0 0 0 286.992355-5.739847 49.403684 49.403684 0 0 0 8.404776-76.667958z" p-id="1562"></path></svg></a><input type="text" class="search-input" id="search-input" placeholder="站内搜索"></form><div id="search-result"></div><div class="search-no-result">没有找到内容！</div></div>
+
+
+
+<widget class="widget-wrapper recent post-list"><div class="widget-header dis-select"><span class="name">最近更新</span></div><div class="widget-body fs14"><a class="item title" href="/2026/09/15/game-engineering-ii-assignment-03/"><span class="title">Game Engineering II - Assignment 03</span></a><a class="item title" href="/2026/09/08/game-engineering-ii-assignment-02/"><span class="title">Game Engineering II - Assignment 02</span></a><a class="item title" href="/2026/09/01/game-engineering-ii-assignment-01/"><span class="title">Game Engineering II - Assignment 01</span></a><a class="item title" href="/2026/01/24/UE5.6_GAS_Enemy_AI_Stage_Summary%20-%20%E5%89%AF%E6%9C%AC/"><span class="title">Unreal 5 源码阅读笔记，大纲</span></a><a class="item title" href="/2026/01/02/UE5.6_GAS_Enemy_AI_Stage_Summary/"><span class="title">用 UE5.6 + GAS 搭一个可迭代的敌人近战 AI：从状态机图到可调试行为树</span></a><a class="item title" href="/2026/02/24/tech_blog_hexo_stellar_portfolio_safe/"><span class="title">用 Hexo + Stellar 搭一个作品展柜：卡片入口、主题配色与 CSS 覆盖</span></a><a class="item title" href="/2025/01/08/NXA_Pipeline_FTP_Tech_Blog/"><span class="title">NXA Studios 实习：用 Python 把 FTP 资产交付流程“工程化”</span></a><a class="item title" href="/2025/01/08/Building%20Real-Time%20NPC%20Dialogue%20in%20Unity%20with%20Large%20Language%20Models.zh-CN/"><span class="title">在 Unity 中用大语言模型构建实时 NPC 对话</span></a><a class="item title" href="/2024/12/08/Bridging%20Unity%20with%20Python%20and%20ChatGPT.zh-CN/"><span class="title">Unity 对接 Python 与 ChatGPT：综合指南</span></a><a class="item title" href="/2024/12/08/Building%20a%20Dynamic%20Planetary%20Battle%20System.zh-CN/"><span class="title">用 p5.js 做太空可视化：构建动态行星战斗系统</span></a></div></widget>
+</div>
+
+</div></aside><div class="l_main" id="main">
+
+
+
+
+
+<div class="article banner top">
+  <div class="content">
+    <div class="top bread-nav footnote"><div class="left"><div class="flex-row" id="breadcrumb"><a class="cap breadcrumb" href="/">主页</a>
+<span class="sep"></span><a class="cap breadcrumb" href="/blog/">文章</a><span class="sep"></span><a class="cap breadcrumb-link" href="/categories/Programming/">Programming</a></div>
+<div class="flex-row" id="post-meta"><span class="text created">发布于：<time datetime="2026-09-15T06:00:00.000Z">2026.09.15</time></span><span class="sep updated"></span><span class="text updated">更新于：<time datetime="2026-09-16T03:40:22.054Z">2026.09.15</time></span></div></div></div>
+    
+    <div class="bottom only-title">
+      
+      <div class="text-area">
+        <h1 class="text title"><span>Game Engineering II - Assignment 03</span></h1>
+        
+      </div>
+    </div>
+    
+  </div>
+  </div><article class="md-text content"><p>This is the write-up for Assignment 03 of GAMES 6320 (Game Engineering II). Assignment 02 introduced <code>cMesh</code> and <code>cEffect</code> but still had platform-specific <code>Graphics.d3d.cpp</code> and <code>Graphics.gl.cpp</code> files. Assignment 03 removes those two files completely by moving the remaining platform-specific frame work behind a small <code>sContext</code> abstraction. It also adds <code>uint16_t</code> index buffers to <code>cMesh</code>, makes both <code>cMesh</code> and <code>cEffect</code> initialize from caller-provided data, and renders two objects with two effects.</p>
+<hr>
+<h2 id="Download"><a href="#Download" class="headerlink" title="Download"></a>Download</h2><blockquote>
+<p><strong>Release build (Direct3D x64):</strong> <a target="_blank" rel="noopener" href="https://fffeiya.github.io/files/MyGame_Assignment03_Release_x64.zip">MyGame_Assignment03_Release_x64.zip</a></p>
+<p>The ZIP contains a <strong>Direct3D Release</strong> build (<code>x64</code>). Unzip it and run <code>MyGame.exe</code>.<br><strong>Controls:</strong> none for this assignment (press <code>Esc</code> to close the window).</p>
+</blockquote>
+<hr>
+<h2 id="What-changed"><a href="#What-changed" class="headerlink" title="What changed"></a>What changed</h2><p>Assignment 03 removes the last two duplicated graphics frame files (<code>Graphics.d3d.cpp</code> and <code>Graphics.gl.cpp</code>) and replaces them with a single <code>Graphics.cpp</code> that contains <strong>no platform-specific macros or API calls</strong>.</p>
+<p>The project now has:</p>
+<ul>
+<li>one platform-independent <code>Graphics.cpp</code>;</li>
+<li>indexed meshes using <code>uint16_t</code> indices;</li>
+<li>effect initialization driven by caller-provided data;</li>
+<li>mesh initialization driven by caller-provided vertex&#x2F;index data;</li>
+<li>two meshes and two effects, drawn with two distinct colors;</li>
+<li>a configurable clear color instead of hard-coded black.</li>
+</ul>
+<h2 id="Platform-independent-Graphics-cpp"><a href="#Platform-independent-Graphics-cpp" class="headerlink" title="Platform-independent Graphics.cpp"></a>Platform-independent Graphics.cpp</h2><h3 id="New-interfaces"><a href="#New-interfaces" class="headerlink" title="New interfaces"></a>New interfaces</h3><p>I added the following platform-independent interfaces:</p>
+<table>
+<thead>
+<tr>
+<th>Interface</th>
+<th>Declared in</th>
+<th>Platform implementation</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>Graphics::sColor</code> and <code>Graphics::SubmitClearColor()</code></td>
+<td><code>Engine/Graphics/Graphics.h</code> &#x2F; <code>Graphics.cpp</code></td>
+<td>shared</td>
+</tr>
+<tr>
+<td><code>sContext::InitializeViews()</code></td>
+<td><code>Engine/Graphics/sContext.h</code></td>
+<td><code>Direct3D/sContext.d3d.cpp</code>, <code>OpenGL/sContext.gl.cpp</code></td>
+</tr>
+<tr>
+<td><code>sContext::ClearBackBuffer()</code></td>
+<td><code>Engine/Graphics/sContext.h</code></td>
+<td><code>Direct3D/sContext.d3d.cpp</code>, <code>OpenGL/sContext.gl.cpp</code></td>
+</tr>
+<tr>
+<td><code>sContext::Present()</code></td>
+<td><code>Engine/Graphics/sContext.h</code></td>
+<td><code>Direct3D/sContext.d3d.cpp</code>, <code>OpenGL/sContext.gl.cpp</code></td>
+</tr>
+<tr>
+<td><code>sContext::UsesLeftHandedWinding()</code></td>
+<td><code>Engine/Graphics/sContext.h</code></td>
+<td><code>Direct3D/sContext.d3d.cpp</code>, <code>OpenGL/sContext.gl.cpp</code></td>
+</tr>
+</tbody></table>
+<p>The Direct3D render-target&#x2F;depth views also moved out of <code>Graphics.d3d.cpp</code> and into <code>Direct3D/sContext.d3d.cpp</code>. OpenGL simply implements the same interface with <code>glClearColor()</code>, <code>glClear()</code>, and <code>SwapBuffers()</code>.</p>
+<h3 id="Clear-color"><a href="#Clear-color" class="headerlink" title="Clear color"></a>Clear color</h3><p><code>Graphics.cpp</code> specifies the background color and submits it through the new platform-independent interface:</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">constexpr</span> eae6320::Graphics::sColor s_clearColor = &#123; <span class="hljs-number">0.0f</span>, <span class="hljs-number">0.0f</span>, <span class="hljs-number">0.25f</span>, <span class="hljs-number">1.0f</span> &#125;;<br></code></pre></td></tr></table></figure>
+
+<p>At render time, the code in <code>Graphics.cpp</code> uses only the context interface:</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><code class="hljs cpp">sContext::g_context.<span class="hljs-built_in">ClearBackBuffer</span>( dataRequiredToRenderFrame-&gt;clearColor );<br></code></pre></td></tr></table></figure>
+
+<p>Changing <code>s_clearColor</code> to <code>&#123; 1, 0, 0, 1 &#125;</code>, <code>&#123; 0, 1, 0, 1 &#125;</code>, or <code>&#123; 0, 0, 1, 1 &#125;</code> changes the background to red, green, or blue respectively.</p>
+<h2 id="Effect-initialization-with-data"><a href="#Effect-initialization-with-data" class="headerlink" title="Effect initialization with data"></a>Effect initialization with data</h2><p>The effect interface no longer hard-codes shader paths:</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">struct</span> <span class="hljs-title class_">sEffectData</span><br>&#123;<br>    <span class="hljs-type">const</span> <span class="hljs-type">char</span>* vertexShaderPath = <span class="hljs-literal">nullptr</span>;<br>    <span class="hljs-type">const</span> <span class="hljs-type">char</span>* fragmentShaderPath = <span class="hljs-literal">nullptr</span>;<br>    <span class="hljs-type">uint8_t</span> renderStateBits = <span class="hljs-number">0</span>;<br>&#125;;<br><br><span class="hljs-function">cResult <span class="hljs-title">Initialize</span><span class="hljs-params">( <span class="hljs-type">const</span> sEffectData&amp; i_effectData )</span></span>;<br></code></pre></td></tr></table></figure>
+
+<p>The caller must provide:</p>
+<ul>
+<li>a path to a vertex shader;</li>
+<li>a path to a fragment shader;</li>
+<li>the render-state bits for this effect.</li>
+</ul>
+<p>These values are used only during initialization. <code>cEffect</code> stores the loaded shader objects and render-state object, not the paths or the raw input arrays.</p>
+<p>This is the relevant code in <code>Graphics.cpp</code>:</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><code class="hljs cpp"><span class="hljs-type">const</span> sEffectData effectData_animated =<br>&#123;<br>    s_vertexShaderPath,<br>    s_fragmentShaderPath_animated,<br>    s_renderStateBits,<br>&#125;;<br><span class="hljs-keyword">if</span> ( !( result = s_effect_animated.<span class="hljs-built_in">Initialize</span>( effectData_animated ) ) )<br>&#123;<br>    <span class="hljs-built_in">EAE6320_ASSERTF</span>( <span class="hljs-literal">false</span>, <span class="hljs-string">&quot;Can&#x27;t initialize Graphics without the animated shading data&quot;</span> );<br>    <span class="hljs-keyword">return</span> result;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="Effect-memory"><a href="#Effect-memory" class="headerlink" title="Effect memory"></a>Effect memory</h3><p>I measured these values with a small <code>sizeof()</code> program compiled against the same headers and platform macros.</p>
+<table>
+<thead>
+<tr>
+<th>Object</th>
+<th align="right">Direct3D x64</th>
+<th align="right">OpenGL x86</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>cEffect</code></td>
+<td align="right">48 bytes</td>
+<td align="right">16 bytes</td>
+</tr>
+<tr>
+<td><code>cRenderState</code></td>
+<td align="right">32 bytes</td>
+<td align="right">1 byte</td>
+</tr>
+</tbody></table>
+<p>On Direct3D, <code>cEffect</code> stores two shader pointers and a <code>cRenderState</code>. <code>cRenderState</code> stores three Direct3D state-object pointers plus one byte of render-state bits. On OpenGL, <code>cRenderState</code> needs only the one render-state byte; <code>cEffect</code> stores two shader pointers, that byte, and the OpenGL program ID.</p>
+<p>The values cannot easily be smaller because the active graphics API requires either COM state objects (Direct3D) or an OpenGL program ID and state bits. Shader paths are deliberately not stored after initialization.</p>
+<h2 id="Mesh-initialization-with-data-and-indexed-rendering"><a href="#Mesh-initialization-with-data-and-indexed-rendering" class="headerlink" title="Mesh initialization with data and indexed rendering"></a>Mesh initialization with data and indexed rendering</h2><p>The mesh interface now accepts vertex and index data:</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">struct</span> <span class="hljs-title class_">sMeshData</span><br>&#123;<br>    <span class="hljs-type">const</span> VertexFormats::sVertex_mesh* vertexData = <span class="hljs-literal">nullptr</span>;<br>    <span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> vertexCount = <span class="hljs-number">0</span>;<br>    <span class="hljs-type">const</span> <span class="hljs-type">uint16_t</span>* indexData = <span class="hljs-literal">nullptr</span>;<br>    <span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> indexCount = <span class="hljs-number">0</span>;<br>&#125;;<br><br><span class="hljs-function">cResult <span class="hljs-title">Initialize</span><span class="hljs-params">( <span class="hljs-type">const</span> sMeshData&amp; i_meshData )</span></span>;<br></code></pre></td></tr></table></figure>
+
+<p>The caller must provide:</p>
+<ul>
+<li>vertex data (<code>x</code>, <code>y</code>, <code>z</code>);</li>
+<li>the number of vertices;</li>
+<li><code>uint16_t</code> index data;</li>
+<li>the number of indices.</li>
+</ul>
+<p>The public mesh API uses <strong>right-handed winding order</strong>. <code>cMesh.cpp</code> asks the active platform whether it expects left-handed winding:</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">if</span> ( sContext::g_context.<span class="hljs-built_in">UsesLeftHandedWinding</span>() )<br>&#123;<br>    <span class="hljs-comment">// Direct3D expects left-handed winding, so reverse each triangle.</span><br>    std::<span class="hljs-built_in">swap</span>( triangle[<span class="hljs-number">1</span>], triangle[<span class="hljs-number">2</span>] );<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><code>Direct3D/sContext.d3d.cpp</code> returns <code>true</code>; <code>OpenGL/sContext.gl.cpp</code> returns <code>false</code>. Therefore the same vertex&#x2F;index data can be used regardless of platform.</p>
+<p>This is the relevant code in <code>Graphics.cpp</code>:</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><code class="hljs cpp"><span class="hljs-type">const</span> sMeshData rectangleData =<br>&#123;<br>    s_rectangleVertices,<br>    <span class="hljs-built_in">static_cast</span>&lt;<span class="hljs-type">unsigned</span> <span class="hljs-type">int</span>&gt;( <span class="hljs-built_in">sizeof</span>( s_rectangleVertices ) / <span class="hljs-built_in">sizeof</span>( s_rectangleVertices[<span class="hljs-number">0</span>] ) ),<br>    s_rectangleIndices,<br>    <span class="hljs-built_in">static_cast</span>&lt;<span class="hljs-type">unsigned</span> <span class="hljs-type">int</span>&gt;( <span class="hljs-built_in">sizeof</span>( s_rectangleIndices ) / <span class="hljs-built_in">sizeof</span>( s_rectangleIndices[<span class="hljs-number">0</span>] ) ),<br>&#125;;<br><span class="hljs-keyword">if</span> ( !( result = s_mesh_rectangle.<span class="hljs-built_in">Initialize</span>( rectangleData ) ) )<br>&#123;<br>    <span class="hljs-built_in">EAE6320_ASSERTF</span>( <span class="hljs-literal">false</span>, <span class="hljs-string">&quot;Can&#x27;t initialize Graphics without the rectangle geometry&quot;</span> );<br>    <span class="hljs-keyword">return</span> result;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="Mesh-memory"><a href="#Mesh-memory" class="headerlink" title="Mesh memory"></a>Mesh memory</h3><table>
+<thead>
+<tr>
+<th>Object</th>
+<th align="right">Direct3D x64</th>
+<th align="right">OpenGL x86</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>cMesh</code></td>
+<td align="right">32 bytes</td>
+<td align="right">20 bytes</td>
+</tr>
+</tbody></table>
+<p>On Direct3D, <code>cMesh</code> stores a vertex-format pointer, a vertex-buffer pointer, an index-buffer pointer, and two counts. On OpenGL, it stores a VAO ID, a VBO ID, an IBO ID, and two counts. The vertex&#x2F;index arrays themselves are copied into GPU buffers and are not stored on the CPU after initialization.</p>
+<h2 id="Two-objects-and-two-effects"><a href="#Two-objects-and-two-effects" class="headerlink" title="Two objects and two effects"></a>Two objects and two effects</h2><p><code>Graphics.cpp</code> creates:</p>
+<ul>
+<li>a <strong>rectangle</strong> using the animated-color fragment shader;</li>
+<li>a <strong>triangle</strong> using the standard white fragment shader.</li>
+</ul>
+<p>Per frame:</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><code class="hljs cpp">s_effect_animated.<span class="hljs-built_in">Bind</span>();<br>s_mesh_rectangle.<span class="hljs-built_in">Draw</span>();<br><br>s_effect_standard.<span class="hljs-built_in">Bind</span>();<br>s_mesh_triangle.<span class="hljs-built_in">Draw</span>();<br></code></pre></td></tr></table></figure>
+
+<p>The two objects occupy different areas of the screen, so both are clearly visible.</p>
+<h2 id="Screenshots"><a href="#Screenshots" class="headerlink" title="Screenshots"></a>Screenshots</h2><h3 id="Direct3D-Debug-x64"><a href="#Direct3D-Debug-x64" class="headerlink" title="Direct3D Debug (x64)"></a>Direct3D Debug (x64)</h3><p><img src="https://fffeiya.github.io/images/assignment03/d3d_game_running.png" alt="Direct3D running game"></p>
+<h3 id="OpenGL-Debug-x86"><a href="#OpenGL-Debug-x86" class="headerlink" title="OpenGL Debug (x86)"></a>OpenGL Debug (x86)</h3><p><img src="https://fffeiya.github.io/images/assignment03/gl_game_running.png" alt="OpenGL running game"></p>
+<p>Both screenshots show two distinct objects on a non-black blue background.</p>
+<h2 id="Build-test"><a href="#Build-test" class="headerlink" title="Build &#x2F; test"></a>Build &#x2F; test</h2><p>All four configurations were built cleanly with warnings treated as errors:</p>
+<ul>
+<li><code>Debug|x64</code> (Direct3D)</li>
+<li><code>Release|x64</code> (Direct3D)</li>
+<li><code>Debug|x86</code> (OpenGL)</li>
+<li><code>Release|x86</code> (OpenGL)</li>
+</ul>
+<p>The solution targets <code>PlatformToolset=v143</code>. The Visual Studio 2026 installation now has the v143 MSVC component (<code>Microsoft.VisualStudio.Component.VC.14.44.17.14.x86.x64</code>) installed, so the builds above were run <strong>without</strong> any command-line <code>PlatformToolset</code> override.</p>
+<p>The downloadable ZIP is the <strong>Direct3D Release</strong> build.</p>
+<h2 id="Reflection"><a href="#Reflection" class="headerlink" title="Reflection"></a>Reflection</h2><p>The important design choice was to stop treating the graphics context as raw API data and start treating it as an abstraction boundary. <code>Graphics.cpp</code> now sees only <code>InitializeViews()</code>, <code>ClearBackBuffer()</code>, <code>Present()</code>, and the winding-order query. That is enough to remove both platform-specific frame files completely.</p>
+<p>Moving winding-order conversion into <code>cMesh.cpp</code> keeps the public mesh interface simple. Callers provide indices once using one documented convention; the engine performs the tiny per-triangle swap only for the platform that needs it. This is intentionally simple and is exactly the kind of runtime conversion that can later move to the asset-build step.</p>
+</article>
+<div class="article-footer">
+    <section id="license">
+      <div class="header"><span>许可协议</span></div>
+      <div class="body"><p>本文采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">署名-非商业性使用-相同方式共享 4.0 国际</a> 许可协议，转载请注明出处。</p>
+</div>
+    </section>
+    
+
+</div>
+
+<div class="related-wrap" id="read-next"><section class="body"><div class="item" id="prev"></div><div class="item" id="next"><div class="note">较早文章</div><a href="/2026/09/08/game-engineering-ii-assignment-02/">Game Engineering II - Assignment 02</a></div></section></div>
+
+
+
+
+
+
+<footer class="page-footer footnote"><hr><div class="text"><p>本站由 <a href="/">FFFeiya</a> 使用 <a target="_blank" rel="noopener" href="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.33.1">Stellar 1.33.1</a> 主题创建。<br>本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处。</p>
+</div></footer>
+<div class="main-mask" onclick="sidebar.dismiss()"></div></div><aside class="l_right">
+<div class="widgets">
+
+
+
+<widget class="widget-wrapper toc" id="data-toc" collapse="false"><div class="widget-header dis-select"><span class="name">本文目录</span><a class="cap-action" onclick="sidebar.toggleTOC()" ><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg></a></div><div class="widget-body"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Download"><span class="toc-text">Download</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#What-changed"><span class="toc-text">What changed</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Platform-independent-Graphics-cpp"><span class="toc-text">Platform-independent Graphics.cpp</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#New-interfaces"><span class="toc-text">New interfaces</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Clear-color"><span class="toc-text">Clear color</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Effect-initialization-with-data"><span class="toc-text">Effect initialization with data</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Effect-memory"><span class="toc-text">Effect memory</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Mesh-initialization-with-data-and-indexed-rendering"><span class="toc-text">Mesh initialization with data and indexed rendering</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Mesh-memory"><span class="toc-text">Mesh memory</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Two-objects-and-two-effects"><span class="toc-text">Two objects and two effects</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Screenshots"><span class="toc-text">Screenshots</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Direct3D-Debug-x64"><span class="toc-text">Direct3D Debug (x64)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#OpenGL-Debug-x86"><span class="toc-text">OpenGL Debug (x86)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Build-test"><span class="toc-text">Build &#x2F; test</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Reflection"><span class="toc-text">Reflection</span></a></li></ol></div><div class="widget-footer"><a class="top" onclick="util.scrollTop()"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path stroke-linejoin="round" d="m9 15.5l3-3l3 3m-6-4l3-3l3 3"/><path d="M7 3.338A9.95 9.95 0 0 1 12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12c0-1.821.487-3.53 1.338-5"/></g></svg><span>回到顶部</span></a></div></widget>
+</div></aside><div class='float-panel'>
+  <button type='button' style='display:none' class='laptop-only rightbar-toggle mobile' onclick='sidebar.rightbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg>
+  </button>
+  <button type='button' style='display:none' class='mobile-only leftbar-toggle mobile' onclick='sidebar.leftbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 11c0-3.771 0-5.657 1.172-6.828C4.343 3 6.229 3 10 3h4c3.771 0 5.657 0 6.828 1.172C22 5.343 22 7.229 22 11v2c0 3.771 0 5.657-1.172 6.828C19.657 21 17.771 21 14 21h-4c-3.771 0-5.657 0-6.828-1.172C2 18.657 2 16.771 2 13z"/><path id="sep" stroke-linecap="round" d="M5.5 10h6m-5 4h4m4.5 7V3"/></g></svg>
+  </button>
+</div>
+</div><div class="scripts">
+
+
+<script type="text/javascript">
+  window.canonical = {"originalHost":null,"officialHosts":["localhost"],"encoded":""};
+  const ctx = {
+    date_suffix: {
+      just: `刚刚`,
+      min: `分钟前`,
+      hour: `小时前`,
+      day: `天前`,
+    },
+    root : `/`,
+    tag_plugins: {
+      chat: Object.assign({"api":"https://siteinfo.listentothewind.cn/api/v1"}),
+    }
+  };
+
+  // required plugins (only load if needs)
+  if (`local_search`) {
+    ctx.search = {};
+    ctx.search.service = `local_search`;
+    if (ctx.search.service == 'local_search') {
+      let service_obj = Object.assign({}, `{"field":"all","path":"/search.json","content":true,"skip_search":null,"sort":"-date"}`);
+      ctx.search[ctx.search.service] = service_obj;
+    }
+  }
+  const def = {
+    avatar: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/3442075.svg`,
+    cover: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/cover/76b86c0226ffd.svg`,
+    loading: `https://api.iconify.design/eos-icons:three-dots-loading.svg?color=%231cd0fd`,
+  };
+  const deps = {
+    jquery: `https://gcore.jsdelivr.net/npm/jquery@3.7/dist/jquery.min.js`,
+    marked: `https://gcore.jsdelivr.net/npm/marked@13.0/lib/marked.umd.min.js`,
+    lazyload: `/%5Bobject%20Object%5D`
+  }
+  
+
+</script>
+
+<script type="text/javascript">
+  
+  function RunItem() {
+    this.list = []; // 存放回调函数
+    this.start = () => {
+      for (var i = 0; i < this.list.length; i++) {
+        this.list[i].run();
+      }
+    };
+    this.push = (fn, name, setRequestAnimationFrame = true) => {
+      let myfn = fn
+      if (setRequestAnimationFrame) {
+        myfn = () => {
+          utils.requestAnimationFrame(fn)
+        }
+      }
+      var f = new Item(myfn, name);
+      this.list.push(f);
+    };
+    this.remove = (name) => {
+      for (let index = 0; index < this.list.length; index++) {
+        const e = this.list[index];
+        if (e.name == name) {
+          this.list.splice(index, 1);
+        }
+      }
+    }
+    // 构造一个可以run的对象
+    function Item(fn, name) {
+      // 函数名称
+      this.name = name || fn.name;
+      // run方法
+      this.run = () => {
+        try {
+          fn()
+        } catch (error) {
+          console.log(error);
+        }
+      };
+    }
+  }
+
+  const utils = {
+    // 懒加载 css https://github.com/filamentgroup/loadCSS
+    css: (href, before, media, attributes) => {
+      var doc = window.document;
+      var ss = doc.createElement("link");
+      var ref;
+      if (before) {
+        ref = before;
+      } else {
+        var refs = (doc.body || doc.getElementsByTagName("head")[0]).childNodes;
+        ref = refs[refs.length - 1];
+      }
+      var sheets = doc.styleSheets;
+      if (attributes) {
+        for (var attributeName in attributes) {
+          if (attributes.hasOwnProperty(attributeName)) {
+            ss.setAttribute(attributeName, attributes[attributeName]);
+          }
+        }
+      }
+      ss.rel = "stylesheet";
+      ss.href = href;
+      ss.media = "only x";
+      function ready(cb) {
+        if (doc.body) {
+          return cb();
+        }
+        setTimeout(function () {
+          ready(cb);
+        });
+      }
+      ready(function () {
+        ref.parentNode.insertBefore(ss, before ? ref : ref.nextSibling);
+      });
+      var onloadcssdefined = function (cb) {
+        var resolvedHref = ss.href;
+        var i = sheets.length;
+        while (i--) {
+          if (sheets[i].href === resolvedHref) {
+            return cb();
+          }
+        }
+        setTimeout(function () {
+          onloadcssdefined(cb);
+        });
+      };
+      function loadCB() {
+        if (ss.addEventListener) {
+          ss.removeEventListener("load", loadCB);
+        }
+        ss.media = media || "all";
+      }
+      if (ss.addEventListener) {
+        ss.addEventListener("load", loadCB);
+      }
+      ss.onloadcssdefined = onloadcssdefined;
+      onloadcssdefined(loadCB);
+      return ss;
+    },
+
+    js: (src, opt) => new Promise((resolve, reject) => {
+      var script = document.createElement('script');
+      if (src.startsWith('/')) {
+        src = ctx.root + src.substring(1);
+      }
+      script.src = src;
+      if (opt) {
+        for (let key of Object.keys(opt)) {
+          script[key] = opt[key]
+        }
+      } else {
+        // 默认异步，如果需要同步，第二个参数传入 {} 即可
+        script.async = true
+      }
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function () {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    }),
+
+    jq: (fn) => {
+      if (typeof jQuery === 'undefined') {
+        utils.js(deps.jquery).then(fn)
+      } else {
+        fn()
+      }
+    },
+
+    onLoading: (el) => {
+      if (el) {
+        $(el).append('<div class="loading-wrap"><svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" stroke-opacity=".3" d="M12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="1.3s" values="60;0"/></path><path stroke-dasharray="15" stroke-dashoffset="15" d="M12 3C16.9706 3 21 7.02944 21 12"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="15;0"/><animateTransform attributeName="transform" dur="1.5s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"/></path></g></svg></div>');
+      }
+    },
+    onLoadSuccess: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap').remove();
+      }
+    },
+    onLoadFailure: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap svg').remove();
+        $(el).find('.loading-wrap').append('<svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" d="M12 3L21 20H3L12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.5s" values="60;0"/></path><path stroke-dasharray="6" stroke-dashoffset="6" d="M12 10V14"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.6s" dur="0.2s" values="6;0"/></path></g><circle cx="12" cy="17" r="1" fill="currentColor" fill-opacity="0"><animate fill="freeze" attributeName="fill-opacity" begin="0.8s" dur="0.4s" values="0;1"/></circle></svg>');
+        $(el).find('.loading-wrap').addClass('error');
+      }
+    },
+    request: (el, url, callback, onFailure) => {
+      const maxRetry = 3;
+      let retryCount = 0;
+
+      return new Promise((resolve, reject) => {
+        const load = () => {
+          utils.onLoading?.(el);
+
+          let timedOut = false;
+          const timeout = setTimeout(() => {
+            timedOut = true;
+            console.warn('[request] 超时:', url);
+
+            if (++retryCount >= maxRetry) {
+              utils.onLoadFailure?.(el);
+              onFailure?.();
+              reject('请求超时');
+            } else {
+              setTimeout(load, 1000);
+            }
+          }, 5000);
+
+          fetch(url).then(resp => {
+            if (timedOut) return;
+            clearTimeout(timeout);
+
+            if (!resp.ok) throw new Error('响应失败');
+            return resp;
+          }).then(data => {
+            if (timedOut) return;
+            utils.onLoadSuccess?.(el);
+            callback(data);
+            resolve(data);
+          }).catch(err => {
+            clearTimeout(timeout);
+            console.warn('[request] 错误:', err);
+
+            if (++retryCount >= maxRetry) {
+              utils.onLoadFailure?.(el);
+              onFailure?.();
+              reject(err);
+            } else {
+              setTimeout(load, 1000);
+            }
+          });
+        };
+
+        load();
+      });
+    },
+    requestWithoutLoading: (url, options = {}, maxRetry = 2, timeout = 5000) => {
+      return new Promise((resolve, reject) => {
+        let retryCount = 0;
+
+        const tryRequest = () => {
+          let timedOut = false;
+          const timer = setTimeout(() => {
+            timedOut = true;
+            if (++retryCount > maxRetry) reject('timeout');
+            else tryRequest();
+          }, timeout);
+
+          fetch(url, options)
+            .then(resp => {
+              clearTimeout(timer);
+              if (!resp.ok) throw new Error('bad response');
+              resolve(resp);
+            })
+            .catch(err => {
+              clearTimeout(timer);
+              if (++retryCount > maxRetry) reject(err);
+              else setTimeout(tryRequest, 500);
+            });
+        };
+
+        tryRequest();
+      });
+    },
+    /********************** requestAnimationFrame ********************************/
+    // 1、requestAnimationFrame 会把每一帧中的所有 DOM 操作集中起来，在一次重绘或回流中就完成，并且重绘或回流的时间间隔紧紧跟随浏览器的刷新频率，一般来说，这个频率为每秒60帧。
+    // 2、在隐藏或不可见的元素中，requestAnimationFrame 将不会进行重绘或回流，这当然就意味着更少的的 cpu，gpu 和内存使用量。
+    requestAnimationFrame: (fn) => {
+      if (!window.requestAnimationFrame) {
+        window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame;
+      }
+      window.requestAnimationFrame(fn)
+    },
+    dark: {},
+  };
+
+  // utils.dark.mode 当前模式 dark or light
+  // utils.dark.toggle() 暗黑模式触发器
+  // utils.dark.push(callBack[,"callBackName"]) 传入触发器回调函数
+  utils.dark.method = {
+    toggle: new RunItem(),
+  };
+  utils.dark = Object.assign(utils.dark, {
+    push: utils.dark.method.toggle.push,
+  });
+</script>
+<script>
+  const sidebar = {
+    leftbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    rightbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('rightbar');
+        l_body.removeAttribute('leftbar');
+      }
+    },
+    dismiss: () => {
+      if (l_body) {
+        l_body.removeAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    toggleTOC: () => {
+      document.querySelector('#data-toc').classList.toggle('collapse');
+    }
+  }
+</script>
+<script type="text/javascript">
+  (() => {
+    const tagSwitchers = document.querySelectorAll('.tag-subtree.parent-tag > a > .tag-switcher-wrapper')
+    for (const tagSwitcher of tagSwitchers) {
+      tagSwitcher.addEventListener('click', (e) => {
+        const parent = e.target.closest('.tag-subtree.parent-tag')
+        parent.classList.toggle('expanded')
+        e.preventDefault()
+      })
+    }
+
+    // Get active tag from query string, then activate it.
+    const urlParams = new URLSearchParams(window.location.search)
+    const activeTag = urlParams.get('tag')
+    if (activeTag) {
+      let tag = document.querySelector(`.tag-subtree[data-tag="${activeTag}"]`)
+      if (tag) {
+        tag.querySelector('a').classList.add('active')
+        
+        while (tag) {
+          tag.classList.add('expanded')
+          tag = tag.parentElement.closest('.tag-subtree.parent-tag')
+        }
+      }
+    }
+  })()
+</script>
+
+<script async src="https://gcore.jsdelivr.net/npm/vanilla-lazyload@19.1/dist/lazyload.min.js"></script>
+<script>
+  // https://www.npmjs.com/package/vanilla-lazyload
+  // Set the options globally
+  // to make LazyLoad self-initialize
+  window.lazyLoadOptions = {
+    elements_selector: ".lazy",
+    callback_loaded: (el) => {
+      el.classList.add('loaded');
+      const wrapper = el.closest('.lazy-box');
+      const icon = wrapper?.querySelector('.lazy-icon');
+      if (icon) icon.remove();
+    }
+  };
+  // Listen to the initialization event
+  // and get the instance of LazyLoad
+  window.addEventListener(
+    "LazyLoad::Initialized",
+    function (event) {
+      window.lazyLoadInstance = event.detail.instance;
+    },
+    false
+  );
+  document.addEventListener('DOMContentLoaded', function () {
+    window.lazyLoadInstance?.update();
+  });
+
+  window.wrapLazyloadImages = (container) => {
+    if (typeof container === 'string') {
+      container = document.querySelector(container);
+    }
+    if (!container) return;
+    
+    const images = container.querySelectorAll('img');
+    images.forEach((img) => {
+      if (img.classList.contains('lazy')) return;
+
+      const src = img.getAttribute('src');
+      if (!src) return;
+
+      const wrapper = document.createElement('div');
+      wrapper.className = 'lazy-box';
+
+      const newImg = img.cloneNode();
+      newImg.removeAttribute('src');
+      newImg.setAttribute('data-src', src);
+      newImg.classList.add('lazy');
+
+      const icon = document.createElement('div');
+      icon.className = 'lazy-icon';
+      if (def.loading) {
+        icon.style.backgroundImage = `url("${def.loading}")`;
+      }
+
+      wrapper.appendChild(newImg);
+      wrapper.appendChild(icon);
+
+      img.replaceWith(wrapper);
+    });
+
+    // 通知 LazyLoad 更新
+    if (window.lazyLoadInstance?.update) {
+      window.lazyLoadInstance.update();
+    }
+  }
+  
+</script>
+
+<!-- required -->
+<script src="/js/main.js?v=1.33.1" defer></script>
+
+<script type="text/javascript">
+  const applyTheme = (theme) => {
+    if (theme === 'auto') {
+      document.documentElement.removeAttribute('data-theme')
+    } else {
+      document.documentElement.setAttribute('data-theme', theme)
+    }
+
+    // applyThemeToGiscus(theme)
+  }
+
+  // FIXME: 这会导致无法使用 preferred_color_scheme 以外的主题
+  const applyThemeToGiscus = (theme) => {
+    // theme = theme === 'auto' ? 'preferred_color_scheme' : theme
+    const cmt = document.getElementById('giscus')
+    if (cmt) {
+      // This works before giscus load.
+      cmt.setAttribute('data-theme', theme)
+    }
+
+    const iframe = document.querySelector('#comments > section.giscus > iframe')
+    if (iframe) {
+      // This works after giscus loaded.
+      const src = iframe.src
+      const newSrc = src.replace(/theme=[\w]+/, `theme=${theme}`)
+      iframe.src = newSrc
+    }
+  }
+
+  const switchTheme = () => {
+    // light -> dark -> auto -> light -> ...
+    const currentTheme = document.documentElement.getAttribute('data-theme')
+    let newTheme;
+    switch (currentTheme) {
+      case 'light':
+        newTheme = 'dark'
+        break
+      case 'dark':
+        newTheme = 'auto'
+        break
+      default:
+        newTheme = 'light'
+    }
+    applyTheme(newTheme)
+    window.localStorage.setItem('Stellar.theme', newTheme)
+    utils.dark.mode = newTheme === 'auto' ? (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light") : newTheme;
+    utils.dark.method.toggle.start();
+
+    const messages = {
+      light: `切换到浅色模式`,
+      dark: `切换到深色模式`,
+      auto: `切换到跟随系统配色`,
+    }
+    hud?.toast?.(messages[newTheme])
+  }
+
+  (() => {
+    // Apply user's preferred theme, if any.
+    const theme = window.localStorage.getItem('Stellar.theme')
+    if (theme !== null) {
+      applyTheme(theme)
+    } else {
+      utils.dark.mode = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    }
+    utils.dark.method.toggle.start();
+  })()
+</script>
+
+
+<!-- optional -->
+
+
+
+<script defer>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.services = Object.assign({}, JSON.parse(`{"mdrender":{"js":"/js/services/mdrender.js"},"siteinfo":{"js":"/js/services/siteinfo.js","api":null},"ghinfo":{"js":"/js/services/ghinfo.js"},"rating":{"js":"/js/services/rating.js","api":"https://star-vote.xaox.cc/api/rating"},"vote":{"js":"/js/services/vote.js","api":"https://star-vote.xaox.cc/api/vote"},"sites":{"js":"/js/services/sites.js"},"friends":{"js":"/js/services/friends.js"},"friends_and_posts":{"js":"/js/services/friends_and_posts.js"},"timeline":{"js":"/js/services/timeline.js"},"fcircle":{"js":"/js/services/fcircle.js"},"weibo":{"js":"/js/services/weibo.js"},"memos":{"js":"/js/services/memos.js"},"voice":{"js":"/js/plugins/voice.js"},"video":{"js":"/js/plugins/video.js"},"download-file":{"js":"/js/plugins/download-file.js"},"twikoo":{"js":"/js/services/twikoo_latest_comment.js"},"waline":{"js":"/js/services/waline_latest_comment.js"},"artalk":{"js":"/js/services/artalk_latest_comment.js"},"giscus":{"js":"/js/services/giscus_latest_comment.js"},"contributors":{"edit_this_page":{"_posts/":null,"wiki/stellar/":"https://github.com/xaoxuu/hexo-theme-stellar-docs/blob/main/"},"js":"/js/services/contributors.js"}}`));
+    for (let id of Object.keys(ctx.services)) {
+      const js = ctx.services[id].js;
+      if (id == 'siteinfo') {
+        ctx.cardlinks = document.querySelectorAll('a.link-card[cardlink]');
+        if (ctx.cardlinks?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            setCardLink(ctx.cardlinks);
+          });
+        }
+      } else if (id == 'voice') {
+        ctx.voiceAudios = document.querySelectorAll('.voice>audio');
+        if (ctx.voiceAudios?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            createVoiceDom(ctx.voiceAudios);
+          });
+        }
+      } else if (id == 'video') {
+        ctx.videos = document.querySelectorAll('.video>video');
+        if (ctx.videos?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            videoEvents(ctx.videos);
+          });
+        }
+      } else if (id == 'download-file') {
+        ctx.files = document.querySelectorAll('.file');
+        if (ctx.files?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            downloadFileEvent(ctx.files);
+          });
+        }
+      } else {
+        const els = document.getElementsByClassName(`ds-${id}`);
+        if (els?.length > 0) {
+          utils.jq(() => {
+            if (id == 'timeline' || 'memos' || 'marked') {
+              utils.js(deps.marked).then(function () {
+                utils.js(js, { defer: true });
+              });
+            } else {
+              utils.js(js, { defer: true });
+            }
+          });
+        }
+      }
+    }
+
+    // chat iphone time
+    let phoneTimes = document.querySelectorAll('.chat .status-bar .time');
+
+    if (phoneTimes.length > 0) {
+      NowTime();
+      var date = new Date();
+      var sec = date.getSeconds();
+      var firstAdjustInterval = setInterval(firstAdjustTime, 1000 * (60 - sec));
+    }
+
+    function firstAdjustTime() {
+      NowTime();
+      clearInterval(firstAdjustInterval);
+      setInterval(NowTime, 1000 * 60);
+    }
+
+    function NowTime() {
+      for (let i = 0; i < phoneTimes.length; ++i) {
+        var timeSpan = phoneTimes[i];
+        var date = new Date();
+        var hour = date.getHours();
+        var min = date.getMinutes();
+        timeSpan.innerHTML = check(hour) + ":" + check(min);
+      }
+    };
+
+    function check(val) {
+      if (val < 10) {
+        return ("0" + val);
+      }
+      return (val);
+    }
+
+    // chat quote
+    const chat_quote_obverser = new IntersectionObserver((entries, observer) => {
+      entries.filter((entry) => { return entry.isIntersecting }).sort((a, b) => a.intersectionRect.y !== b.intersectionRect.y ? a.intersectionRect.y - b.intersectionRect.y : a.intersectionRect.x - b.intersectionRect.x).forEach((entry, index) => {
+          observer.unobserve(entry.target);
+          setTimeout(() => {
+            entry.target.classList.add('quote-blink');
+            setTimeout(() => {
+              entry.target.classList.remove('quote-blink');
+            }, 1000);
+          }, Math.max(100, 16) * (index + 1));
+        });
+    });
+
+    var chatQuotes = document.querySelectorAll(".chat .talk .quote");
+    chatQuotes.forEach((quote) => {
+      quote.addEventListener('click', function () {
+        var chatCellDom = document.getElementById("quote-" + quote.getAttribute("quotedCellTag"));
+        if (chatCellDom) {
+          var chatDiv = chatCellDom.parentElement;
+          var mid = chatDiv.clientHeight / 2;
+          var offsetTop = chatCellDom.offsetTop;
+          if (offsetTop > mid - chatCellDom.clientHeight / 2) {
+            chatDiv.scrollTo({
+              top: chatCellDom.offsetTop - mid + chatCellDom.clientHeight / 2,
+              behavior: "smooth"
+            });
+          } else {
+            chatDiv.scrollTo({
+              top: 0,
+              behavior: "smooth"
+            });
+          }
+          chat_quote_obverser.observe(chatCellDom);
+        }
+      });
+    });
+  });
+</script>
+
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.search = {
+      path: `/search.json`,
+    }
+    utils.js('/js/search/local-search.js', { defer: true });
+  });
+</script><script>
+  window.FPConfig = {
+    delay: 0,
+    ignoreKeywords: [],
+    maxRPS: 5,
+    hoverDelay: 25
+  };
+</script>
+<script defer src="https://gcore.jsdelivr.net/npm/flying-pages@2/flying-pages.min.js"></script><script>
+  ctx.fancybox = {
+    selector: `.timenode p>img`,
+    css: `https://gcore.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css`,
+    js: `https://gcore.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js`
+  };
+  var selector = '[data-fancybox]:not(.error), .with-fancybox .atk-content img:not([atk-emoticon])';
+  if (ctx.fancybox.selector) {
+    selector += `, ${ctx.fancybox.selector}`
+  }
+  var needFancybox = document.querySelectorAll(selector).length !== 0;
+  if (!needFancybox) {
+    const memos = document.getElementsByClassName('ds-memos');
+    if (memos != undefined && memos.length > 0) {
+      needFancybox = true;
+    }
+    const fancybox = document.getElementsByClassName('with-fancybox');
+    if (fancybox != undefined && fancybox.length > 0) {
+      needFancybox = true;
+    }
+  }
+  if (needFancybox) {
+    utils.css(ctx.fancybox.css);
+    utils.js(ctx.fancybox.js, { defer: true }).then(function () {
+      Fancybox.bind(selector, {
+        hideScrollbar: false,
+        Thumbs: {
+          autoStart: false,
+        },
+        caption: (fancybox, slide) => {
+          return slide.triggerEl.alt || slide.triggerEl.dataset.caption || null
+        }
+      });
+    })
+  }
+</script>
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    const swiper_api = document.getElementById('swiper-api');
+    if (swiper_api != undefined) {
+      utils.css(`https://unpkg.com/swiper@10.3/swiper-bundle.min.css`);
+      utils.js(`https://unpkg.com/swiper@10.3/swiper-bundle.min.js`, { defer: true }).then(function () {
+        const effect = swiper_api.getAttribute('effect') || '';
+        var swiper = new Swiper('.swiper#swiper-api', {
+          slidesPerView: 'auto',
+          spaceBetween: 8,
+          centeredSlides: true,
+          effect: effect,
+          rewind: true,
+          pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+          },
+          navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+          },
+        });
+      })
+    }
+  });
+</script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    window.codeElements = document.querySelectorAll('.code');
+    if (window.codeElements.length > 0) {
+      ctx.copycode = {
+        default_text: `Copy`,
+        success_text: `Copied`,
+        toast: `复制成功`,
+      };
+      utils.js('/js/plugins/copycode.js');
+    }
+  });
+</script>
+
+
+<!-- inject -->
+<script defer src="/js/openai.js"></script>
+</div></body></html>

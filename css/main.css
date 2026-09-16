@@ -34,19 +34,19 @@
   --gap-max: calc(var(--gap-margin) + var(--gap-padding));
 }
 :root {
-  --hue: 0deg;
-  --sat: 90%;
-  --light: 58%;
+  --hue: 220deg;
+  --sat: 9%;
+  --light: 12%;
   --alpha: 1;
   --theme: hsla(var(--hue) var(--sat) var(--light) / 1);
   --theme-a10: hsla(var(--hue) var(--sat) var(--light) / 0.1);
   --theme-a20: hsla(var(--hue) var(--sat) var(--light) / 0.2);
   --theme-a30: hsla(var(--hue) var(--sat) var(--light) / 0.3);
-  --accent: #ff3d3d;
-  --link: hsla(0deg 90% 60% / 1);
-  --link-a20: hsla(0deg 90% 60% / 0.2);
+  --accent: #2a2d32;
+  --link: hsla(220deg 9% 12% / 1);
+  --link-a20: hsla(220deg 9% 12% / 0.2);
   --background: hsla(210deg 20% 98% / 1);
-  --card: rgba(255,255,255,0.5);
+  --card: #fff;
   --bg-a20: hsla(210deg 0% 100% / 0.2);
   --bg-a50: hsla(210deg 0% 100% / 0.5);
   --bg-a60: hsla(210deg 0% 100% / 0.6);
@@ -68,7 +68,7 @@
 @media (prefers-color-scheme: dark) {
   :root {
     --background: hsla(210deg 8% 12% / 1);
-    --card: rgba(255,255,255,0.25);
+    --card: hsla(210deg 10% 24% / 1);
     --bg-a20: hsla(210deg 0% 0% / 0.2);
     --bg-a50: hsla(210deg 0% 0% / 0.5);
     --bg-a60: hsla(210deg 0% 0% / 0.6);
@@ -96,7 +96,7 @@
 }
 :root[data-theme="light"] {
   --background: hsla(210deg 20% 98% / 1);
-  --card: rgba(255,255,255,0.5);
+  --card: #fff;
   --bg-a20: hsla(210deg 0% 100% / 0.2);
   --bg-a50: hsla(210deg 0% 100% / 0.5);
   --bg-a60: hsla(210deg 0% 100% / 0.6);
@@ -117,7 +117,7 @@
 }
 :root[data-theme="dark"] {
   --background: hsla(210deg 8% 12% / 1);
-  --card: rgba(255,255,255,0.25);
+  --card: hsla(210deg 10% 24% / 1);
   --bg-a20: hsla(210deg 0% 0% / 0.2);
   --bg-a50: hsla(210deg 0% 0% / 0.5);
   --bg-a60: hsla(210deg 0% 0% / 0.6);
@@ -333,50 +333,50 @@
   --link-a20: hsla(291.24087591240874deg 95% 32% / 0.2);
 }
 .colorful[color='theme'] {
-  --hue: 0deg;
-  --sat: 90%;
-  --light: 58%;
+  --hue: 220deg;
+  --sat: 9%;
+  --light: 12%;
   --alpha: 1;
   --theme: hsla(var(--hue) var(--sat) var(--light) / 1);
   --theme-a10: hsla(var(--hue) var(--sat) var(--light) / 0.1);
   --theme-a20: hsla(var(--hue) var(--sat) var(--light) / 0.2);
   --theme-a30: hsla(var(--hue) var(--sat) var(--light) / 0.3);
-  --link: hsla(0deg 90% 58% / 1);
-  --link-a20: hsla(0deg 90% 58% / 0.2);
-  --theme-border: hsla(0deg 50% 80% / var(--alpha));
-  --theme-block: hsla(0deg 90% 92% / var(--alpha));
-  --theme-mark: hsla(0deg 95% 80% / var(--alpha));
-  --theme-codeblock: hsla(0deg 50% 95% / var(--alpha));
-  --text: hsla(0deg 55% 16% / 1);
-  --text-p1: hsla(0deg 90% 20% / 1);
-  --text-p2: hsla(0deg 90% 20% / 0.8);
-  --text-p3: hsla(0deg 90% 20% / 0.6);
-  --text-p4: hsla(0deg 90% 20% / 0.4);
-  --link: hsla(0deg 95% 32% / 1);
-  --link-a20: hsla(0deg 95% 32% / 0.2);
+  --link: hsla(220deg 9% 12% / 1);
+  --link-a20: hsla(220deg 9% 12% / 0.2);
+  --theme-border: hsla(220deg 50% 80% / var(--alpha));
+  --theme-block: hsla(220deg 90% 92% / var(--alpha));
+  --theme-mark: hsla(220deg 95% 80% / var(--alpha));
+  --theme-codeblock: hsla(220deg 50% 95% / var(--alpha));
+  --text: hsla(220deg 55% 16% / 1);
+  --text-p1: hsla(220deg 90% 20% / 1);
+  --text-p2: hsla(220deg 90% 20% / 0.8);
+  --text-p3: hsla(220deg 90% 20% / 0.6);
+  --text-p4: hsla(220deg 90% 20% / 0.4);
+  --link: hsla(220deg 95% 32% / 1);
+  --link-a20: hsla(220deg 95% 32% / 0.2);
 }
 .colorful[color='accent'] {
-  --hue: 0deg;
-  --sat: 100%;
-  --light: 62%;
+  --hue: 220deg;
+  --sat: 9%;
+  --light: 18%;
   --alpha: 1;
   --theme: hsla(var(--hue) var(--sat) var(--light) / 1);
   --theme-a10: hsla(var(--hue) var(--sat) var(--light) / 0.1);
   --theme-a20: hsla(var(--hue) var(--sat) var(--light) / 0.2);
   --theme-a30: hsla(var(--hue) var(--sat) var(--light) / 0.3);
-  --link: hsla(0deg 100% 62% / 1);
-  --link-a20: hsla(0deg 100% 62% / 0.2);
-  --theme-border: hsla(0deg 50% 80% / var(--alpha));
-  --theme-block: hsla(0deg 90% 92% / var(--alpha));
-  --theme-mark: hsla(0deg 95% 80% / var(--alpha));
-  --theme-codeblock: hsla(0deg 50% 95% / var(--alpha));
-  --text: hsla(0deg 55% 16% / 1);
-  --text-p1: hsla(0deg 90% 20% / 1);
-  --text-p2: hsla(0deg 90% 20% / 0.8);
-  --text-p3: hsla(0deg 90% 20% / 0.6);
-  --text-p4: hsla(0deg 90% 20% / 0.4);
-  --link: hsla(0deg 95% 32% / 1);
-  --link-a20: hsla(0deg 95% 32% / 0.2);
+  --link: hsla(220deg 9% 18% / 1);
+  --link-a20: hsla(220deg 9% 18% / 0.2);
+  --theme-border: hsla(220deg 50% 80% / var(--alpha));
+  --theme-block: hsla(220deg 90% 92% / var(--alpha));
+  --theme-mark: hsla(220deg 95% 80% / var(--alpha));
+  --theme-codeblock: hsla(220deg 50% 95% / var(--alpha));
+  --text: hsla(220deg 55% 16% / 1);
+  --text-p1: hsla(220deg 90% 20% / 1);
+  --text-p2: hsla(220deg 90% 20% / 0.8);
+  --text-p3: hsla(220deg 90% 20% / 0.6);
+  --text-p4: hsla(220deg 90% 20% / 0.4);
+  --link: hsla(220deg 95% 32% / 1);
+  --link-a20: hsla(220deg 95% 32% / 0.2);
 }
 .colorful[color='light'] {
   --theme: #fff;
@@ -384,7 +384,7 @@
   --theme-mark: var(--theme);
   --theme-codeblock: var(--theme);
   --background: hsla(210deg 20% 98% / 1);
-  --card: rgba(255,255,255,0.5);
+  --card: #fff;
   --bg-a20: hsla(210deg 0% 100% / 0.2);
   --bg-a50: hsla(210deg 0% 100% / 0.5);
   --bg-a60: hsla(210deg 0% 100% / 0.6);
@@ -405,7 +405,7 @@
 }
 .colorful[color='dark'] {
   --background: hsla(210deg 8% 12% / 1);
-  --card: rgba(255,255,255,0.25);
+  --card: hsla(210deg 10% 24% / 1);
   --bg-a20: hsla(210deg 0% 0% / 0.2);
   --bg-a50: hsla(210deg 0% 0% / 0.5);
   --bg-a60: hsla(210deg 0% 0% / 0.6);
@@ -458,7 +458,7 @@
   --link: hsla(50.96385542168675deg 95% 32% / 1);
   --link-a20: hsla(50.96385542168675deg 95% 32% / 0.2);
   --background: hsla(210deg 20% 98% / 1);
-  --card: rgba(255,255,255,0.5);
+  --card: #fff;
   --bg-a20: hsla(210deg 0% 100% / 0.2);
   --bg-a50: hsla(210deg 0% 100% / 0.5);
   --bg-a60: hsla(210deg 0% 100% / 0.6);
@@ -505,7 +505,7 @@
   --link: hsla(4.105263157894738deg 80% 60% / 1);
   --link-a20: hsla(4.105263157894738deg 80% 60% / 0.2);
   --background: hsla(210deg 8% 12% / 1);
-  --card: rgba(255,255,255,0.25);
+  --card: hsla(210deg 10% 24% / 1);
   --bg-a20: hsla(210deg 0% 0% / 0.2);
   --bg-a50: hsla(210deg 0% 0% / 0.5);
   --bg-a60: hsla(210deg 0% 0% / 0.6);
@@ -536,27 +536,27 @@
   }
 }
 :root[data-theme="dark"] .tag-plugin.tag {
-  --hue: 0deg;
-  --sat: 90%;
-  --light: 58%;
+  --hue: 220deg;
+  --sat: 9%;
+  --light: 12%;
   --alpha: 1;
   --theme: hsla(var(--hue) var(--sat) var(--light) / 1);
   --theme-a10: hsla(var(--hue) var(--sat) var(--light) / 0.1);
   --theme-a20: hsla(var(--hue) var(--sat) var(--light) / 0.2);
   --theme-a30: hsla(var(--hue) var(--sat) var(--light) / 0.3);
-  --link: hsla(0deg 90% 58% / 1);
-  --link-a20: hsla(0deg 90% 58% / 0.2);
-  --theme-border: hsla(0deg 40% 24% / var(--alpha));
-  --theme-block: hsla(0deg 24% 24% / var(--alpha));
-  --theme-mark: hsla(0deg 24% 24% / var(--alpha));
-  --theme-codeblock: hsla(0deg 12% 24% / var(--alpha));
-  --text: hsla(0deg 50% 75% / 1);
-  --text-p1: hsla(0deg 80% 80% / 1);
-  --text-p2: hsla(0deg 80% 80% / 0.8);
-  --text-p3: hsla(0deg 80% 80% / 0.6);
-  --text-p4: hsla(0deg 80% 80% / 0.4);
-  --link: hsla(0deg 80% 60% / 1);
-  --link-a20: hsla(0deg 80% 60% / 0.2);
+  --link: hsla(220deg 9% 12% / 1);
+  --link-a20: hsla(220deg 9% 12% / 0.2);
+  --theme-border: hsla(220deg 40% 24% / var(--alpha));
+  --theme-block: hsla(220deg 24% 24% / var(--alpha));
+  --theme-mark: hsla(220deg 24% 24% / var(--alpha));
+  --theme-codeblock: hsla(220deg 12% 24% / var(--alpha));
+  --text: hsla(220deg 50% 75% / 1);
+  --text-p1: hsla(220deg 80% 80% / 1);
+  --text-p2: hsla(220deg 80% 80% / 0.8);
+  --text-p3: hsla(220deg 80% 80% / 0.6);
+  --text-p4: hsla(220deg 80% 80% / 0.4);
+  --link: hsla(220deg 80% 60% / 1);
+  --link-a20: hsla(220deg 80% 60% / 0.2);
 }
 :root[data-theme="dark"] .colorful[color='red'] {
   --hue: 4.105263157894738deg;
@@ -744,27 +744,27 @@
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme]) .tag-plugin.tag {
-    --hue: 0deg;
-    --sat: 90%;
-    --light: 58%;
+    --hue: 220deg;
+    --sat: 9%;
+    --light: 12%;
     --alpha: 1;
     --theme: hsla(var(--hue) var(--sat) var(--light) / 1);
     --theme-a10: hsla(var(--hue) var(--sat) var(--light) / 0.1);
     --theme-a20: hsla(var(--hue) var(--sat) var(--light) / 0.2);
     --theme-a30: hsla(var(--hue) var(--sat) var(--light) / 0.3);
-    --link: hsla(0deg 90% 58% / 1);
-    --link-a20: hsla(0deg 90% 58% / 0.2);
-    --theme-border: hsla(0deg 40% 24% / var(--alpha));
-    --theme-block: hsla(0deg 24% 24% / var(--alpha));
-    --theme-mark: hsla(0deg 24% 24% / var(--alpha));
-    --theme-codeblock: hsla(0deg 12% 24% / var(--alpha));
-    --text: hsla(0deg 50% 75% / 1);
-    --text-p1: hsla(0deg 80% 80% / 1);
-    --text-p2: hsla(0deg 80% 80% / 0.8);
-    --text-p3: hsla(0deg 80% 80% / 0.6);
-    --text-p4: hsla(0deg 80% 80% / 0.4);
-    --link: hsla(0deg 80% 60% / 1);
-    --link-a20: hsla(0deg 80% 60% / 0.2);
+    --link: hsla(220deg 9% 12% / 1);
+    --link-a20: hsla(220deg 9% 12% / 0.2);
+    --theme-border: hsla(220deg 40% 24% / var(--alpha));
+    --theme-block: hsla(220deg 24% 24% / var(--alpha));
+    --theme-mark: hsla(220deg 24% 24% / var(--alpha));
+    --theme-codeblock: hsla(220deg 12% 24% / var(--alpha));
+    --text: hsla(220deg 50% 75% / 1);
+    --text-p1: hsla(220deg 80% 80% / 1);
+    --text-p2: hsla(220deg 80% 80% / 0.8);
+    --text-p3: hsla(220deg 80% 80% / 0.6);
+    --text-p4: hsla(220deg 80% 80% / 0.4);
+    --link: hsla(220deg 80% 60% / 1);
+    --link-a20: hsla(220deg 80% 60% / 0.2);
   }
   :root:not([data-theme]) .colorful[color='red'] {
     --hue: 4.105263157894738deg;
@@ -1874,7 +1874,7 @@ table:not([class]) {
   outline: none;
 }
 html {
-  font-family: system-ui, "Microsoft Yahei", "Segoe UI", Arial, sans-serif;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
   font-size: 16px;
   -webkit-text-size-adjust: 100%;
   -ms-text-size-adjust: 100%;
@@ -7073,7 +7073,7 @@ details.toc[open] >div.body section .header+.doc_tree {
 .search-wrapper .search-input {
   width: 100%;
   box-sizing: border-box;
-  font-family: system-ui, "Microsoft Yahei", "Segoe UI", Arial, sans-serif;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
   font-size: 0.875rem;
   padding: 12px 0;
   color: var(--text);
@@ -7224,17 +7224,6 @@ details.toc[open] >div.body section .header+.doc_tree {
   --saturate: 400%;
   --blur-px: 0px;
   --background-opacity: 1;
-  background-position: center;
-  background-size: cover;
-  --inset: 32px;
-  --background-opacity: 1;
-  background-image: url("/images/bg/space.jpg");
-  filter: saturate(var(--saturate)) blur(var(--blur-px)) opacity(var(--background-opacity));
-}
-@media screen and (prefers-color-scheme: dark) {
-  .l_left .sidebg {
-    --background-opacity: 0.75;
-  }
 }
 .l_left .leftbar-container {
   height: calc(100vh - var(--gap-margin) * 2 - 96px);
@@ -7263,22 +7252,6 @@ details.toc[open] >div.body section .header+.doc_tree {
   left: 0;
   right: 0;
   border-radius: 24px;
-}
-@media screen and (min-width: 667px) {
-  .l_left .leftbar-container:before {
-    background: rgba(255,255,255,0.5);
-    box-shadow: inset 0 0 32px 1px rgba(255,255,255,0.5);
-    backdrop-filter: saturate(300%);
-    -webkit-backdrop-filter: saturate(300%);
-    mask: linear-gradient(#000, rgba(0,0,0,0.5), 70%, transparent, 90%, transparent);
-    -webkit-mask: linear-gradient(#000, rgba(0,0,0,0.5), 70%, transparent, 90%, transparent);
-  }
-}
-@media screen and (prefers-color-scheme: dark) {
-  .l_left .leftbar-container:before {
-    background: rgba(255,255,255,0.05);
-    box-shadow: inset 0 0 32px 1px rgba(255,255,255,0.1);
-  }
 }
 @media screen and (max-width: 667px) {
   .l_left {
@@ -7720,6 +7693,11 @@ details.toc[open] >div.body section .header+.doc_tree {
   width: 4px;
   background: var(--block);
   border-radius: 4px;
+}
+@media screen and (min-width: 1180px) {
+  .widget-wrapper.toc {
+    background: var(--background);
+  }
 }
 .widget-wrapper.toc .toc {
   --fsp: calc(17px - 2px);
@@ -8256,7 +8234,7 @@ details.toc[open] >div.body section .header+.doc_tree {
   display: inline-block;
   width: 12px;
   height: 1.2em;
-  background: #ff3d3d;
+  background: #2a2d32;
   transform: skewX(-20deg);
   margin: 0 0.5em;
   vertical-align: top;
@@ -9077,7 +9055,6 @@ body>.sitebg {
   right: 0;
   bottom: 0;
   background-size: cover;
-  background-image: url("/images/bg/space.jpg");
 }
 body>.sitebg .siteblur {
   width: 100%;
@@ -9085,9 +9062,7 @@ body>.sitebg .siteblur {
   --blur-px: 0;
   --blur-sat: 200%;
   background-color: var(--blur-bg);
-  --blur-sat: 120%;
-  --blur-px: 80px;
-  --blur-bg: rgba(0,0,0,0.55);
+  --blur-px: 0px;
 }
 @supports ((-webkit-backdrop-filter: blur(var(--blur-px))) or (backdrop-filter: blur(var(--blur-px)))) {
   body>.sitebg .siteblur {
@@ -9822,7 +9797,7 @@ a[data-fancybox] {
   --at-color-sub: var(--text-p3);
   --at-color-grey: var(--text-p4);
   --at-color-meta: var(--text-p4);
-  --at-color-border: transparent;
+  --at-color-border: var(--block-border);
   --at-color-light: var(--link);
   --at-color-bg: var(--card);
   --at-color-bg-transl: var(--card);
