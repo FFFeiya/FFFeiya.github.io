@@ -1,0 +1,954 @@
+
+<!DOCTYPE html><html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="hexo-theme" content="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.33.1" theme-name="Stellar" theme-version="1.33.1">
+  
+  
+  <meta name="generator" content="Hexo 7.3.0">
+  <meta http-equiv='x-dns-prefetch-control' content='on' />
+  
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000">
+  <meta name="theme-color" content="#f9fafb">
+  <title>Sokoban Studio：我把一个推箱子笔试做成了关卡生产工具链 - FFFeiya</title>
+
+  
+    <meta name="description" content="关键词：Unity 2022.3.62f3、Sokoban、Level Editor、Level Validator、Level Analyzer、Solution Preview、Playtest、Editor Tooling   这是一次技术策划方向的笔试项目：题目要求做一个完整的推箱子（Sokoban）加上一个关卡编辑器。我没有停在「能摆格子」，而是继续追问了一个更实际的问题——设计师做完">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Sokoban Studio：我把一个推箱子笔试做成了关卡生产工具链">
+<meta property="og:url" content="http://example.com/2026/09/21/sokoban-studio/">
+<meta property="og:site_name" content="FFFeiya">
+<meta property="og:description" content="关键词：Unity 2022.3.62f3、Sokoban、Level Editor、Level Validator、Level Analyzer、Solution Preview、Playtest、Editor Tooling   这是一次技术策划方向的笔试项目：题目要求做一个完整的推箱子（Sokoban）加上一个关卡编辑器。我没有停在「能摆格子」，而是继续追问了一个更实际的问题——设计师做完">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://fffeiya.github.io/images/sokoban-studio/runtime-gameplay.png">
+<meta property="og:image" content="https://fffeiya.github.io/images/sokoban-studio/editor-dashboard.png">
+<meta property="og:image" content="https://fffeiya.github.io/images/sokoban-studio/editor-level-editor.png">
+<meta property="og:image" content="https://fffeiya.github.io/images/sokoban-studio/editor-validation.png">
+<meta property="og:image" content="https://fffeiya.github.io/images/sokoban-studio/editor-analyzer.png">
+<meta property="og:image" content="https://fffeiya.github.io/images/sokoban-studio/editor-solution-preview.png">
+<meta property="og:image" content="https://fffeiya.github.io/images/sokoban-studio/runtime-multigroup.png">
+<meta property="og:image" content="https://fffeiya.github.io/images/sokoban-studio/runtime-complete.png">
+<meta property="article:published_time" content="2026-09-21T06:00:00.000Z">
+<meta property="article:modified_time" content="2026-09-21T21:07:03.689Z">
+<meta property="article:author" content="FFFeiya">
+<meta property="article:tag" content="Unity">
+<meta property="article:tag" content="Sokoban">
+<meta property="article:tag" content="Level Design">
+<meta property="article:tag" content="Editor Tool">
+<meta property="article:tag" content="Technical Design">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://fffeiya.github.io/images/sokoban-studio/runtime-gameplay.png">
+  
+  
+  
+  <meta name="keywords" content="Unity,Sokoban,Level Design,Editor Tool,Technical Design">
+
+  <!-- feed -->
+  
+
+  <link rel="stylesheet" href="/css/main.css?v=1.33.1">
+
+
+  
+    <link rel="shortcut icon" href="/brand/favicon.png">
+  
+
+  
+    
+<link rel="stylesheet" href="https://gcore.jsdelivr.net/gh/highlightjs/cdn-release@11.9/build/styles/atom-one-dark.min.css">
+
+  
+
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"FFFeiya","sameAs":[]},"dateCreated":"2026-09-21T00:00:00-06:00","dateModified":"2026-09-21T15:07:03-06:00","datePublished":"2026-09-21T00:00:00-06:00","description":"","headline":"Sokoban Studio：我把一个推箱子笔试做成了关卡生产工具链","mainEntityOfPage":{"@type":"WebPage","@id":"http://example.com/2026/09/21/sokoban-studio/"},"publisher":{"@type":"Organization","name":"FFFeiya","sameAs":[]},"url":"http://example.com/2026/09/21/sokoban-studio/","keywords":"Unity, Sokoban, Level Design, Editor Tool, Technical Design","image":[]}</script>
+  <link rel="stylesheet" href="/css/custom.css">
+</head>
+<body>
+
+<div class="l_body content" id="start" layout="post" type="tech" ><aside class="l_left"><div class="sidebg"></div><div class="leftbar-container">
+
+
+<header class="header"><div class="logo-wrap"><a class="avatar" href="/"><div class="bg" style="opacity:0;background-image:url(https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/rainbow64@3x.webp);"></div><img no-lazy class="avatar" src="/brand/fffeiya-mark.png" onerror="javascript:this.classList.add('error');this.src='https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/image/2659360.svg';"></a><a class="title" href="/"><div class="main">FFFeiya</div><div class="sub cap">游戏开发 · 作品集</div></a></div></header>
+
+<div class="nav-area">
+
+<nav class="menu dis-select"><a class="nav-item" title="作品" href="/projects/">作品</a><a class="nav-item" title="技术" href="/blog/">技术</a><a class="nav-item" title="游戏" href="/p5game/">游戏</a><a class="nav-item" title="工具" href="/tools/">工具</a><a class="nav-item" title="关于" href="/about/">关于</a></nav>
+</div>
+<div class="widgets">
+<div class="search-wrapper" id="search-wrapper"><form class="search-form"><a class="search-button" onclick="document.getElementById(&quot;search-input&quot;).focus();"><svg t="1705074644177" viewBox="0 0 1025 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1560" width="200" height="200"><path d="M1008.839137 935.96571L792.364903 719.491476a56.783488 56.783488 0 0 0-80.152866 0 358.53545 358.53545 0 1 1 100.857314-335.166073 362.840335 362.840335 0 0 1-3.689902 170.145468 51.248635 51.248635 0 1 0 99.217358 26.444296 462.057693 462.057693 0 1 0-158.255785 242.303546l185.930047 185.725053a51.248635 51.248635 0 0 0 72.568068 0 51.248635 51.248635 0 0 0 0-72.978056z" p-id="1561"></path><path d="M616.479587 615.969233a50.428657 50.428657 0 0 0-61.498362-5.534852 174.655348 174.655348 0 0 1-177.525271 3.484907 49.403684 49.403684 0 0 0-58.833433 6.76482l-3.074918 2.869923a49.403684 49.403684 0 0 0 8.609771 78.10292 277.767601 277.767601 0 0 0 286.992355-5.739847 49.403684 49.403684 0 0 0 8.404776-76.667958z" p-id="1562"></path></svg></a><input type="text" class="search-input" id="search-input" placeholder="站内搜索"></form><div id="search-result"></div><div class="search-no-result">没有找到内容！</div></div>
+
+
+
+<widget class="widget-wrapper recent post-list"><div class="widget-header dis-select"><span class="name">最近更新</span></div><div class="widget-body fs14"><a class="item title" href="/2026/09/21/sokoban-studio/"><span class="title">Sokoban Studio：我把一个推箱子笔试做成了关卡生产工具链</span></a><a class="item title" href="/2026/09/15/game-engineering-ii-assignment-03/"><span class="title">Game Engineering II - Assignment 03</span></a><a class="item title" href="/2026/09/08/game-engineering-ii-assignment-02/"><span class="title">Game Engineering II - Assignment 02</span></a><a class="item title" href="/2026/09/01/game-engineering-ii-assignment-01/"><span class="title">Game Engineering II - Assignment 01</span></a><a class="item title" href="/2026/01/24/UE5.6_GAS_Enemy_AI_Stage_Summary%20-%20%E5%89%AF%E6%9C%AC/"><span class="title">Unreal 5 源码阅读笔记，大纲</span></a><a class="item title" href="/2026/01/02/UE5.6_GAS_Enemy_AI_Stage_Summary/"><span class="title">用 UE5.6 + GAS 搭一个可迭代的敌人近战 AI：从状态机图到可调试行为树</span></a><a class="item title" href="/2026/02/24/tech_blog_hexo_stellar_portfolio_safe/"><span class="title">用 Hexo + Stellar 搭一个作品展柜：卡片入口、主题配色与 CSS 覆盖</span></a><a class="item title" href="/2025/01/08/NXA_Pipeline_FTP_Tech_Blog/"><span class="title">NXA Studios 实习：用 Python 把 FTP 资产交付流程“工程化”</span></a><a class="item title" href="/2025/01/08/Building%20Real-Time%20NPC%20Dialogue%20in%20Unity%20with%20Large%20Language%20Models.zh-CN/"><span class="title">在 Unity 中用大语言模型构建实时 NPC 对话</span></a><a class="item title" href="/2024/12/08/Bridging%20Unity%20with%20Python%20and%20ChatGPT.zh-CN/"><span class="title">Unity 对接 Python 与 ChatGPT：综合指南</span></a></div></widget>
+</div>
+
+</div></aside><div class="l_main" id="main">
+
+
+
+
+
+<div class="article banner top">
+  <div class="content">
+    <div class="top bread-nav footnote"><div class="left"><div class="flex-row" id="breadcrumb"><a class="cap breadcrumb" href="/">主页</a>
+<span class="sep"></span><a class="cap breadcrumb" href="/blog/">文章</a><span class="sep"></span><a class="cap breadcrumb-link" href="/categories/Tech-Blog/">Tech Blog</a></div>
+<div class="flex-row" id="post-meta"><span class="text created">发布于：<time datetime="2026-09-21T06:00:00.000Z">2026.09.21</time></span><span class="sep updated"></span><span class="text updated">更新于：<time datetime="2026-09-21T21:07:03.689Z">2026.09.21</time></span></div></div></div>
+    
+    <div class="bottom only-title">
+      
+      <div class="text-area">
+        <h1 class="text title"><span>Sokoban Studio：我把一个推箱子笔试做成了关卡生产工具链</span></h1>
+        
+      </div>
+    </div>
+    
+  </div>
+  </div><article class="md-text content"><blockquote>
+<p>关键词：Unity 2022.3.62f3、Sokoban、Level Editor、Level Validator、Level Analyzer、Solution Preview、Playtest、Editor Tooling</p>
+</blockquote>
+<hr>
+<p>这是一次技术策划方向的笔试项目：题目要求做一个完整的推箱子（Sokoban）加上一个关卡编辑器。我没有停在「能摆格子」，而是继续追问了一个更实际的问题——<strong>设计师做完一个关卡之后，怎么知道它有没有问题、可不可解、最短解是什么、能不能直接试玩？</strong></p>
+<p>于是最后真正交出去的，不是「一个推箱子 + 一个画格子的窗口」，而是一条关卡内容生产链：</p>
+<blockquote>
+<p>制作 → 校验 → 分析 → 解法预览 → 一键试玩 → 迭代</p>
+</blockquote>
+<p><img src="https://fffeiya.github.io/images/sokoban-studio/runtime-gameplay.png" alt="游戏实机"></p>
+<p>下面按这条链来讲，重点放在「为什么这么做」而不是「我做了哪些功能」。</p>
+<hr>
+<h2 id="1-为什么不只做一个「能摆格子的编辑器」"><a href="#1-为什么不只做一个「能摆格子的编辑器」" class="headerlink" title="1. 为什么不只做一个「能摆格子的编辑器」"></a>1. 为什么不只做一个「能摆格子的编辑器」</h2><p>推箱子本身的规则几十行就能写完：玩家移动、推箱子、箱子到目标点、胜利判定。真正值得花力气的地方不在玩法，而在于<strong>数据改动之后的反馈速度</strong>。</p>
+<p>一个关卡设计师的工作是反复改数据：加一堵墙、换一个箱子位置、改一下目标点。如果每次改完都要「打包 → 进游戏 → 手工走到终点」才能知道结果，这个循环慢得没法用。所以工具链的价值不在「能画格子」，而在<strong>每一个改动之后，能不能立刻得到可靠的反馈</strong>：有没有错、能不能解、怎么解、能不能直接试玩。</p>
+<p><img src="https://fffeiya.github.io/images/sokoban-studio/editor-dashboard.png" alt="内容总览"></p>
+<p>内容总览会对整个正式关卡目录执行校验与分析，并直接进入编辑、解法预览或试玩。</p>
+<hr>
+<h2 id="2-确定性的-Board"><a href="#2-确定性的-Board" class="headerlink" title="2. 确定性的 Board"></a>2. 确定性的 Board</h2><p>为了让「编辑器里的判断」和「游戏里的行为」完全一致，我把规则系统收敛到了一个确定性的整数网格 <code>Board</code> 上：</p>
+<ul>
+<li>格子用整数坐标索引，<code>TryMove</code> 决定每一次移动与推箱是否合法；</li>
+<li><strong>物理从不决定推箱的合法性</strong>——动画只是视图层的缓动，棋盘状态永远是即时权威；</li>
+<li>Undo &#x2F; Restart &#x2F; 步数与推箱计数，都直接建立在 <code>Board</code> 快照之上。</li>
+</ul>
+<p>这样做有一个直接的好处：<strong>同一套规则可以被测试、被分析器、被解法预览反复复用</strong>，而不用担心「编辑器里跑的是简化版，游戏里跑的是物理版」这种两边对不上的问题。运行时代码也从不依赖 <code>UnityEditor</code> 或 <code>AssetDatabase</code>，关卡通过显式序列化的 <code>LevelCatalog</code> 加载，而不是资源发现。</p>
+<hr>
+<h2 id="3-关卡编辑器不是画格子工具"><a href="#3-关卡编辑器不是画格子工具" class="headerlink" title="3. 关卡编辑器不是画格子工具"></a>3. 关卡编辑器不是画格子工具</h2><p>编辑器真正的对象是「工作副本」（Working Copy），而不是资源本身：</p>
+<p><img src="https://fffeiya.github.io/images/sokoban-studio/editor-level-editor.png" alt="关卡编辑器"></p>
+<ul>
+<li><strong>New &#x2F; Load</strong> 得到一份可编辑的工作副本，资源本身不会被静默修改；</li>
+<li><strong>画 &#x2F; 擦 &#x2F; 改尺寸</strong>：调色板提供墙、地板、目标、玩家、箱子、擦除，以及压力板&#x2F;门 A·B 两组；</li>
+<li><strong>Undo &#x2F; Redo</strong> 作用在编辑历史上，而不是直接改资源；</li>
+<li><strong>校验问题可点击导航</strong>：点某条警告会直接跳到出问题的那个格子；</li>
+<li><strong>Save &#x2F; Save As</strong> 才把工作副本写回 <code>.asset</code>；</li>
+<li><strong>Analyze &#x2F; Preview &#x2F; Playtest</strong> 就在编辑器旁边，改完立刻能验证。</li>
+</ul>
+<p>一句话：这里的设计目标是<strong>设计师的工作流</strong>，而不是「一个能涂格子的画板」。当存在阻断性错误时，Playtest 按钮会直接禁用——工具替设计师挡住了「保存一个肯定跑不起来的关卡」。</p>
+<hr>
+<h2 id="4-提前发现错误：Error-与-Warning-的边界"><a href="#4-提前发现错误：Error-与-Warning-的边界" class="headerlink" title="4. 提前发现错误：Error 与 Warning 的边界"></a>4. 提前发现错误：Error 与 Warning 的边界</h2><p>校验器把问题按严重程度分成两类：</p>
+<ul>
+<li><strong>阻断性错误（Error）</strong>：箱子和目标点数量不一致、占据者落在墙上或门上、网格格式不对……这些会拦截保存和试玩。</li>
+<li><strong>建议性警告（Warning）</strong>：比如一个箱子停在非目标格、且两个正交方向都是墙&#x2F;边界——这是「静态死角死锁」，只提示、绝不拦截。</li>
+</ul>
+<p><img src="https://fffeiya.github.io/images/sokoban-studio/editor-validation.png" alt="校验与死锁警告"></p>
+<p>为什么把死角死锁做成警告而不是错误？因为<strong>有些死锁是设计师故意要的</strong>——它可能是一个「陷阱」式的谜题的一部分。工具越严格不一定越好，真正重要的是让「规则」和「设计判断」之间的边界清楚：硬性不变量由 Error 守，可争论的问题留给设计师自己决定。这是一个技术策划需要想清楚的判断，而不是「校验规则越多越好」。</p>
+<hr>
+<h2 id="5-让工具承认「我不知道」"><a href="#5-让工具承认「我不知道」" class="headerlink" title="5. 让工具承认「我不知道」"></a>5. 让工具承认「我不知道」</h2><p>分析器是一个有预算上限的广度优先搜索，它遍历的是真实的 <code>Board</code> 状态，并给出三种判定：</p>
+<table>
+<thead>
+<tr>
+<th>判定</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>可解</strong></td>
+<td>在预算内找到了解，并报告最短移动解和步数&#x2F;推箱数</td>
+</tr>
+<tr>
+<td><strong>无解</strong></td>
+<td>在预算内穷尽了可达状态空间，且不存在目标状态</td>
+</tr>
+<tr>
+<td><strong>未确定</strong></td>
+<td>还没得出结论就触发了预算（状态数或时间）</td>
+</tr>
+</tbody></table>
+<p><img src="https://fffeiya.github.io/images/sokoban-studio/editor-analyzer.png" alt="分析器"></p>
+<p>最值得强调的一点是：<strong>预算耗尽绝不等于无解</strong>。对一个足够大的关卡，分析器会如实说「我不知道」，而不是把「我算不动了」包装成「这关无解」。这个「未确定」状态是我认为整个工具链里最有价值的一个设计——它让工具从不说谎。</p>
+<p>找到解之后，解法预览会在一张<strong>独立的预览棋盘</strong>上回放最短解：</p>
+<p><img src="https://fffeiya.github.io/images/sokoban-studio/editor-solution-preview.png" alt="解法预览"></p>
+<p>预览棋盘独立于 <code>LevelDefinition</code> 和工作副本，回放的过程绝不会污染任何已保存的资源。</p>
+<hr>
+<h2 id="6-用-Multi-group-Door-验证整条链能不能扩展"><a href="#6-用-Multi-group-Door-验证整条链能不能扩展" class="headerlink" title="6. 用 Multi-group Door 验证整条链能不能扩展"></a>6. 用 Multi-group Door 验证整条链能不能扩展</h2><p>为了证明这条流水线能承载「新规则」而不只是「新瓦片」，我把压力板 + 门端到端地加了进来：A 压力板控制 A 门，B 压力板控制 B 门，两组互不影响。</p>
+<p><img src="https://fffeiya.github.io/images/sokoban-studio/runtime-multigroup.png" alt="多组压力板与门"></p>
+<p>重点不是「多加了一种玩法」，而是这个机制<strong>同时要求数据、棋盘、撤销、校验器、分析器、解法预览、编辑器、内容总览、运行时、测试一起跟着扩展</strong>。如果链条里任何一环是写死只为「箱子 + 目标」服务的，这个机制就加不进来。</p>
+<p>其中有一个关键的设计决策：门的状态是<strong>派生</strong>的，从不存储——每次移动&#x2F;撤销&#x2F;重新开始后，它都是玩家与箱子格子的纯函数。正因为如此，撤销、重新开始、以及分析器的已访问状态集都自动保持正确，不需要为门单独维护状态。</p>
+<hr>
+<h2 id="7-最终关卡生产流程"><a href="#7-最终关卡生产流程" class="headerlink" title="7. 最终关卡生产流程"></a>7. 最终关卡生产流程</h2><p>把这些工具串起来，一个关卡的完整生命周期是：</p>
+<figure class="highlight"><table><tr><td class="code"><pre><code class="hljs">内容总览 → 找到关卡 → 编辑 → 校验 → 分析 → 看最短解 → 保存 → 一键试玩 → 再迭代<br></code></pre></td></tr></table></figure>
+
+<p>一键试玩会把工作关卡直接送进 Play Mode，用和正式游戏完全相同的运行时加载器跑起来——不是「编辑器里有个模拟器」，而是「你玩到的就是将来玩家玩到的规则」。</p>
+<p><img src="https://fffeiya.github.io/images/sokoban-studio/runtime-complete.png" alt="关卡完成"></p>
+<hr>
+<h2 id="8-验证与自动化"><a href="#8-验证与自动化" class="headerlink" title="8. 验证与自动化"></a>8. 验证与自动化</h2><p>最终状态是用测试钉住的，而不是靠「我试了一下能跑」：</p>
+<ul>
+<li><strong>EditMode 190&#x2F;190、PlayMode 4&#x2F;4</strong> 全部通过；</li>
+<li>Windows x64 Release 构建通过；</li>
+<li>目录审计：8 个已发行关卡（从入门推箱到压力板&#x2F;门综合），0 错误、0 不可解。</li>
+</ul>
+<p>顺手做的一件工程小事是自动截图：一条 PowerShell 命令会启动 Unity、自动准备 Runtime 和 Editor 的十个场景状态、截图、做 PNG 质检（黑图&#x2F;空图&#x2F;重复检测）、再把结果写进 README。它保证了文章里这些截图是<strong>可重复生成</strong>的，而不是某一次手工截下来之后再也复现不了。</p>
+<hr>
+<h2 id="9-如果重新做，我会改什么"><a href="#9-如果重新做，我会改什么" class="headerlink" title="9. 如果重新做，我会改什么"></a>9. 如果重新做，我会改什么</h2><ul>
+<li><strong>运行时美术仍然是轻量程序化表现</strong>——用 OnGUI 而不是 UIElements，够用但不精致；如果继续做，优先换掉它。</li>
+<li><strong>分析器有预算上限</strong>，大关卡会落到「未确定」；这是刻意的取舍，但意味着它不是一个完整的求解器。</li>
+<li><strong>内容规模有限</strong>：8 个关卡覆盖了从基础到压力板&#x2F;门的弧线，但谈不上「内容丰富」。</li>
+<li>如果继续投入，我会优先<strong>打磨关卡质量</strong>，而不是继续往上堆系统。</li>
+</ul>
+<p>这些取舍写出来，比「项目很完美」更接近真实。</p>
+<hr>
+<h2 id="结尾"><a href="#结尾" class="headerlink" title="结尾"></a>结尾</h2><p>对我来说，这个项目真正有意思的部分，不是把 Sokoban 做出来，而是把一个玩法继续往前推了一步：<strong>如果今天坐在工具前的是关卡设计师，他能不能更快、更放心地做内容？</strong></p>
+<ul>
+<li>代码仓库：<a target="_blank" rel="noopener" href="https://github.com/FFFeiya/Sokoban-Studio">https://github.com/FFFeiya/Sokoban-Studio</a></li>
+</ul>
+<p>开发过程中，我把自动化验证、独立审查和可重复截图也纳入了工作流——但这些只是保证迭代质量的手段，项目本身的重点仍然是玩法、数据与设计工具之间的关系。</p>
+</article>
+<div class="article-footer">
+    <section id="license">
+      <div class="header"><span>许可协议</span></div>
+      <div class="body"><p>本文采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">署名-非商业性使用-相同方式共享 4.0 国际</a> 许可协议，转载请注明出处。</p>
+</div>
+    </section>
+    
+
+</div>
+
+<div class="related-wrap" id="read-next"><section class="body"><div class="item" id="prev"></div><div class="item" id="next"><div class="note">较早文章</div><a href="/2026/09/15/game-engineering-ii-assignment-03/">Game Engineering II - Assignment 03</a></div></section></div>
+
+
+
+
+
+
+<footer class="page-footer footnote"><hr><div class="text"><p>本站由 <a href="/">FFFeiya</a> 使用 <a target="_blank" rel="noopener" href="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.33.1">Stellar 1.33.1</a> 主题创建。<br>本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处。</p>
+</div></footer>
+<div class="main-mask" onclick="sidebar.dismiss()"></div></div><aside class="l_right">
+<div class="widgets">
+
+
+
+<widget class="widget-wrapper toc" id="data-toc" collapse="false"><div class="widget-header dis-select"><span class="name">本文目录</span><a class="cap-action" onclick="sidebar.toggleTOC()" ><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg></a></div><div class="widget-body"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E4%B8%BA%E4%BB%80%E4%B9%88%E4%B8%8D%E5%8F%AA%E5%81%9A%E4%B8%80%E4%B8%AA%E3%80%8C%E8%83%BD%E6%91%86%E6%A0%BC%E5%AD%90%E7%9A%84%E7%BC%96%E8%BE%91%E5%99%A8%E3%80%8D"><span class="toc-text">1. 为什么不只做一个「能摆格子的编辑器」</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E7%A1%AE%E5%AE%9A%E6%80%A7%E7%9A%84-Board"><span class="toc-text">2. 确定性的 Board</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E5%85%B3%E5%8D%A1%E7%BC%96%E8%BE%91%E5%99%A8%E4%B8%8D%E6%98%AF%E7%94%BB%E6%A0%BC%E5%AD%90%E5%B7%A5%E5%85%B7"><span class="toc-text">3. 关卡编辑器不是画格子工具</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E6%8F%90%E5%89%8D%E5%8F%91%E7%8E%B0%E9%94%99%E8%AF%AF%EF%BC%9AError-%E4%B8%8E-Warning-%E7%9A%84%E8%BE%B9%E7%95%8C"><span class="toc-text">4. 提前发现错误：Error 与 Warning 的边界</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E8%AE%A9%E5%B7%A5%E5%85%B7%E6%89%BF%E8%AE%A4%E3%80%8C%E6%88%91%E4%B8%8D%E7%9F%A5%E9%81%93%E3%80%8D"><span class="toc-text">5. 让工具承认「我不知道」</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-%E7%94%A8-Multi-group-Door-%E9%AA%8C%E8%AF%81%E6%95%B4%E6%9D%A1%E9%93%BE%E8%83%BD%E4%B8%8D%E8%83%BD%E6%89%A9%E5%B1%95"><span class="toc-text">6. 用 Multi-group Door 验证整条链能不能扩展</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-%E6%9C%80%E7%BB%88%E5%85%B3%E5%8D%A1%E7%94%9F%E4%BA%A7%E6%B5%81%E7%A8%8B"><span class="toc-text">7. 最终关卡生产流程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-%E9%AA%8C%E8%AF%81%E4%B8%8E%E8%87%AA%E5%8A%A8%E5%8C%96"><span class="toc-text">8. 验证与自动化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-%E5%A6%82%E6%9E%9C%E9%87%8D%E6%96%B0%E5%81%9A%EF%BC%8C%E6%88%91%E4%BC%9A%E6%94%B9%E4%BB%80%E4%B9%88"><span class="toc-text">9. 如果重新做，我会改什么</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%93%E5%B0%BE"><span class="toc-text">结尾</span></a></li></ol></div><div class="widget-footer"><a class="top" onclick="util.scrollTop()"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path stroke-linejoin="round" d="m9 15.5l3-3l3 3m-6-4l3-3l3 3"/><path d="M7 3.338A9.95 9.95 0 0 1 12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12c0-1.821.487-3.53 1.338-5"/></g></svg><span>回到顶部</span></a></div></widget>
+</div></aside><div class='float-panel'>
+  <button type='button' style='display:none' class='laptop-only rightbar-toggle mobile' onclick='sidebar.rightbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg>
+  </button>
+  <button type='button' style='display:none' class='mobile-only leftbar-toggle mobile' onclick='sidebar.leftbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 11c0-3.771 0-5.657 1.172-6.828C4.343 3 6.229 3 10 3h4c3.771 0 5.657 0 6.828 1.172C22 5.343 22 7.229 22 11v2c0 3.771 0 5.657-1.172 6.828C19.657 21 17.771 21 14 21h-4c-3.771 0-5.657 0-6.828-1.172C2 18.657 2 16.771 2 13z"/><path id="sep" stroke-linecap="round" d="M5.5 10h6m-5 4h4m4.5 7V3"/></g></svg>
+  </button>
+</div>
+</div><div class="scripts">
+
+
+<script type="text/javascript">
+  window.canonical = {"originalHost":null,"officialHosts":["localhost"],"encoded":""};
+  const ctx = {
+    date_suffix: {
+      just: `刚刚`,
+      min: `分钟前`,
+      hour: `小时前`,
+      day: `天前`,
+    },
+    root : `/`,
+    tag_plugins: {
+      chat: Object.assign({"api":"https://siteinfo.listentothewind.cn/api/v1"}),
+    }
+  };
+
+  // required plugins (only load if needs)
+  if (`local_search`) {
+    ctx.search = {};
+    ctx.search.service = `local_search`;
+    if (ctx.search.service == 'local_search') {
+      let service_obj = Object.assign({}, `{"field":"all","path":"/search.json","content":true,"skip_search":null,"sort":"-date"}`);
+      ctx.search[ctx.search.service] = service_obj;
+    }
+  }
+  const def = {
+    avatar: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/3442075.svg`,
+    cover: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/cover/76b86c0226ffd.svg`,
+    loading: `https://api.iconify.design/eos-icons:three-dots-loading.svg?color=%231cd0fd`,
+  };
+  const deps = {
+    jquery: `https://gcore.jsdelivr.net/npm/jquery@3.7/dist/jquery.min.js`,
+    marked: `https://gcore.jsdelivr.net/npm/marked@13.0/lib/marked.umd.min.js`,
+    lazyload: `/%5Bobject%20Object%5D`
+  }
+  
+
+</script>
+
+<script type="text/javascript">
+  
+  function RunItem() {
+    this.list = []; // 存放回调函数
+    this.start = () => {
+      for (var i = 0; i < this.list.length; i++) {
+        this.list[i].run();
+      }
+    };
+    this.push = (fn, name, setRequestAnimationFrame = true) => {
+      let myfn = fn
+      if (setRequestAnimationFrame) {
+        myfn = () => {
+          utils.requestAnimationFrame(fn)
+        }
+      }
+      var f = new Item(myfn, name);
+      this.list.push(f);
+    };
+    this.remove = (name) => {
+      for (let index = 0; index < this.list.length; index++) {
+        const e = this.list[index];
+        if (e.name == name) {
+          this.list.splice(index, 1);
+        }
+      }
+    }
+    // 构造一个可以run的对象
+    function Item(fn, name) {
+      // 函数名称
+      this.name = name || fn.name;
+      // run方法
+      this.run = () => {
+        try {
+          fn()
+        } catch (error) {
+          console.log(error);
+        }
+      };
+    }
+  }
+
+  const utils = {
+    // 懒加载 css https://github.com/filamentgroup/loadCSS
+    css: (href, before, media, attributes) => {
+      var doc = window.document;
+      var ss = doc.createElement("link");
+      var ref;
+      if (before) {
+        ref = before;
+      } else {
+        var refs = (doc.body || doc.getElementsByTagName("head")[0]).childNodes;
+        ref = refs[refs.length - 1];
+      }
+      var sheets = doc.styleSheets;
+      if (attributes) {
+        for (var attributeName in attributes) {
+          if (attributes.hasOwnProperty(attributeName)) {
+            ss.setAttribute(attributeName, attributes[attributeName]);
+          }
+        }
+      }
+      ss.rel = "stylesheet";
+      ss.href = href;
+      ss.media = "only x";
+      function ready(cb) {
+        if (doc.body) {
+          return cb();
+        }
+        setTimeout(function () {
+          ready(cb);
+        });
+      }
+      ready(function () {
+        ref.parentNode.insertBefore(ss, before ? ref : ref.nextSibling);
+      });
+      var onloadcssdefined = function (cb) {
+        var resolvedHref = ss.href;
+        var i = sheets.length;
+        while (i--) {
+          if (sheets[i].href === resolvedHref) {
+            return cb();
+          }
+        }
+        setTimeout(function () {
+          onloadcssdefined(cb);
+        });
+      };
+      function loadCB() {
+        if (ss.addEventListener) {
+          ss.removeEventListener("load", loadCB);
+        }
+        ss.media = media || "all";
+      }
+      if (ss.addEventListener) {
+        ss.addEventListener("load", loadCB);
+      }
+      ss.onloadcssdefined = onloadcssdefined;
+      onloadcssdefined(loadCB);
+      return ss;
+    },
+
+    js: (src, opt) => new Promise((resolve, reject) => {
+      var script = document.createElement('script');
+      if (src.startsWith('/')) {
+        src = ctx.root + src.substring(1);
+      }
+      script.src = src;
+      if (opt) {
+        for (let key of Object.keys(opt)) {
+          script[key] = opt[key]
+        }
+      } else {
+        // 默认异步，如果需要同步，第二个参数传入 {} 即可
+        script.async = true
+      }
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function () {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    }),
+
+    jq: (fn) => {
+      if (typeof jQuery === 'undefined') {
+        utils.js(deps.jquery).then(fn)
+      } else {
+        fn()
+      }
+    },
+
+    onLoading: (el) => {
+      if (el) {
+        $(el).append('<div class="loading-wrap"><svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" stroke-opacity=".3" d="M12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="1.3s" values="60;0"/></path><path stroke-dasharray="15" stroke-dashoffset="15" d="M12 3C16.9706 3 21 7.02944 21 12"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="15;0"/><animateTransform attributeName="transform" dur="1.5s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"/></path></g></svg></div>');
+      }
+    },
+    onLoadSuccess: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap').remove();
+      }
+    },
+    onLoadFailure: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap svg').remove();
+        $(el).find('.loading-wrap').append('<svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" d="M12 3L21 20H3L12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.5s" values="60;0"/></path><path stroke-dasharray="6" stroke-dashoffset="6" d="M12 10V14"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.6s" dur="0.2s" values="6;0"/></path></g><circle cx="12" cy="17" r="1" fill="currentColor" fill-opacity="0"><animate fill="freeze" attributeName="fill-opacity" begin="0.8s" dur="0.4s" values="0;1"/></circle></svg>');
+        $(el).find('.loading-wrap').addClass('error');
+      }
+    },
+    request: (el, url, callback, onFailure) => {
+      const maxRetry = 3;
+      let retryCount = 0;
+
+      return new Promise((resolve, reject) => {
+        const load = () => {
+          utils.onLoading?.(el);
+
+          let timedOut = false;
+          const timeout = setTimeout(() => {
+            timedOut = true;
+            console.warn('[request] 超时:', url);
+
+            if (++retryCount >= maxRetry) {
+              utils.onLoadFailure?.(el);
+              onFailure?.();
+              reject('请求超时');
+            } else {
+              setTimeout(load, 1000);
+            }
+          }, 5000);
+
+          fetch(url).then(resp => {
+            if (timedOut) return;
+            clearTimeout(timeout);
+
+            if (!resp.ok) throw new Error('响应失败');
+            return resp;
+          }).then(data => {
+            if (timedOut) return;
+            utils.onLoadSuccess?.(el);
+            callback(data);
+            resolve(data);
+          }).catch(err => {
+            clearTimeout(timeout);
+            console.warn('[request] 错误:', err);
+
+            if (++retryCount >= maxRetry) {
+              utils.onLoadFailure?.(el);
+              onFailure?.();
+              reject(err);
+            } else {
+              setTimeout(load, 1000);
+            }
+          });
+        };
+
+        load();
+      });
+    },
+    requestWithoutLoading: (url, options = {}, maxRetry = 2, timeout = 5000) => {
+      return new Promise((resolve, reject) => {
+        let retryCount = 0;
+
+        const tryRequest = () => {
+          let timedOut = false;
+          const timer = setTimeout(() => {
+            timedOut = true;
+            if (++retryCount > maxRetry) reject('timeout');
+            else tryRequest();
+          }, timeout);
+
+          fetch(url, options)
+            .then(resp => {
+              clearTimeout(timer);
+              if (!resp.ok) throw new Error('bad response');
+              resolve(resp);
+            })
+            .catch(err => {
+              clearTimeout(timer);
+              if (++retryCount > maxRetry) reject(err);
+              else setTimeout(tryRequest, 500);
+            });
+        };
+
+        tryRequest();
+      });
+    },
+    /********************** requestAnimationFrame ********************************/
+    // 1、requestAnimationFrame 会把每一帧中的所有 DOM 操作集中起来，在一次重绘或回流中就完成，并且重绘或回流的时间间隔紧紧跟随浏览器的刷新频率，一般来说，这个频率为每秒60帧。
+    // 2、在隐藏或不可见的元素中，requestAnimationFrame 将不会进行重绘或回流，这当然就意味着更少的的 cpu，gpu 和内存使用量。
+    requestAnimationFrame: (fn) => {
+      if (!window.requestAnimationFrame) {
+        window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame;
+      }
+      window.requestAnimationFrame(fn)
+    },
+    dark: {},
+  };
+
+  // utils.dark.mode 当前模式 dark or light
+  // utils.dark.toggle() 暗黑模式触发器
+  // utils.dark.push(callBack[,"callBackName"]) 传入触发器回调函数
+  utils.dark.method = {
+    toggle: new RunItem(),
+  };
+  utils.dark = Object.assign(utils.dark, {
+    push: utils.dark.method.toggle.push,
+  });
+</script>
+<script>
+  const sidebar = {
+    leftbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    rightbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('rightbar');
+        l_body.removeAttribute('leftbar');
+      }
+    },
+    dismiss: () => {
+      if (l_body) {
+        l_body.removeAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    toggleTOC: () => {
+      document.querySelector('#data-toc').classList.toggle('collapse');
+    }
+  }
+</script>
+<script type="text/javascript">
+  (() => {
+    const tagSwitchers = document.querySelectorAll('.tag-subtree.parent-tag > a > .tag-switcher-wrapper')
+    for (const tagSwitcher of tagSwitchers) {
+      tagSwitcher.addEventListener('click', (e) => {
+        const parent = e.target.closest('.tag-subtree.parent-tag')
+        parent.classList.toggle('expanded')
+        e.preventDefault()
+      })
+    }
+
+    // Get active tag from query string, then activate it.
+    const urlParams = new URLSearchParams(window.location.search)
+    const activeTag = urlParams.get('tag')
+    if (activeTag) {
+      let tag = document.querySelector(`.tag-subtree[data-tag="${activeTag}"]`)
+      if (tag) {
+        tag.querySelector('a').classList.add('active')
+        
+        while (tag) {
+          tag.classList.add('expanded')
+          tag = tag.parentElement.closest('.tag-subtree.parent-tag')
+        }
+      }
+    }
+  })()
+</script>
+
+<script async src="https://gcore.jsdelivr.net/npm/vanilla-lazyload@19.1/dist/lazyload.min.js"></script>
+<script>
+  // https://www.npmjs.com/package/vanilla-lazyload
+  // Set the options globally
+  // to make LazyLoad self-initialize
+  window.lazyLoadOptions = {
+    elements_selector: ".lazy",
+    callback_loaded: (el) => {
+      el.classList.add('loaded');
+      const wrapper = el.closest('.lazy-box');
+      const icon = wrapper?.querySelector('.lazy-icon');
+      if (icon) icon.remove();
+    }
+  };
+  // Listen to the initialization event
+  // and get the instance of LazyLoad
+  window.addEventListener(
+    "LazyLoad::Initialized",
+    function (event) {
+      window.lazyLoadInstance = event.detail.instance;
+    },
+    false
+  );
+  document.addEventListener('DOMContentLoaded', function () {
+    window.lazyLoadInstance?.update();
+  });
+
+  window.wrapLazyloadImages = (container) => {
+    if (typeof container === 'string') {
+      container = document.querySelector(container);
+    }
+    if (!container) return;
+    
+    const images = container.querySelectorAll('img');
+    images.forEach((img) => {
+      if (img.classList.contains('lazy')) return;
+
+      const src = img.getAttribute('src');
+      if (!src) return;
+
+      const wrapper = document.createElement('div');
+      wrapper.className = 'lazy-box';
+
+      const newImg = img.cloneNode();
+      newImg.removeAttribute('src');
+      newImg.setAttribute('data-src', src);
+      newImg.classList.add('lazy');
+
+      const icon = document.createElement('div');
+      icon.className = 'lazy-icon';
+      if (def.loading) {
+        icon.style.backgroundImage = `url("${def.loading}")`;
+      }
+
+      wrapper.appendChild(newImg);
+      wrapper.appendChild(icon);
+
+      img.replaceWith(wrapper);
+    });
+
+    // 通知 LazyLoad 更新
+    if (window.lazyLoadInstance?.update) {
+      window.lazyLoadInstance.update();
+    }
+  }
+  
+</script>
+
+<!-- required -->
+<script src="/js/main.js?v=1.33.1" defer></script>
+
+<script type="text/javascript">
+  const applyTheme = (theme) => {
+    if (theme === 'auto') {
+      document.documentElement.removeAttribute('data-theme')
+    } else {
+      document.documentElement.setAttribute('data-theme', theme)
+    }
+
+    // applyThemeToGiscus(theme)
+  }
+
+  // FIXME: 这会导致无法使用 preferred_color_scheme 以外的主题
+  const applyThemeToGiscus = (theme) => {
+    // theme = theme === 'auto' ? 'preferred_color_scheme' : theme
+    const cmt = document.getElementById('giscus')
+    if (cmt) {
+      // This works before giscus load.
+      cmt.setAttribute('data-theme', theme)
+    }
+
+    const iframe = document.querySelector('#comments > section.giscus > iframe')
+    if (iframe) {
+      // This works after giscus loaded.
+      const src = iframe.src
+      const newSrc = src.replace(/theme=[\w]+/, `theme=${theme}`)
+      iframe.src = newSrc
+    }
+  }
+
+  const switchTheme = () => {
+    // light -> dark -> auto -> light -> ...
+    const currentTheme = document.documentElement.getAttribute('data-theme')
+    let newTheme;
+    switch (currentTheme) {
+      case 'light':
+        newTheme = 'dark'
+        break
+      case 'dark':
+        newTheme = 'auto'
+        break
+      default:
+        newTheme = 'light'
+    }
+    applyTheme(newTheme)
+    window.localStorage.setItem('Stellar.theme', newTheme)
+    utils.dark.mode = newTheme === 'auto' ? (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light") : newTheme;
+    utils.dark.method.toggle.start();
+
+    const messages = {
+      light: `切换到浅色模式`,
+      dark: `切换到深色模式`,
+      auto: `切换到跟随系统配色`,
+    }
+    hud?.toast?.(messages[newTheme])
+  }
+
+  (() => {
+    // Apply user's preferred theme, if any.
+    const theme = window.localStorage.getItem('Stellar.theme')
+    if (theme !== null) {
+      applyTheme(theme)
+    } else {
+      utils.dark.mode = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    }
+    utils.dark.method.toggle.start();
+  })()
+</script>
+
+
+<!-- optional -->
+
+
+
+<script defer>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.services = Object.assign({}, JSON.parse(`{"mdrender":{"js":"/js/services/mdrender.js"},"siteinfo":{"js":"/js/services/siteinfo.js","api":null},"ghinfo":{"js":"/js/services/ghinfo.js"},"rating":{"js":"/js/services/rating.js","api":"https://star-vote.xaox.cc/api/rating"},"vote":{"js":"/js/services/vote.js","api":"https://star-vote.xaox.cc/api/vote"},"sites":{"js":"/js/services/sites.js"},"friends":{"js":"/js/services/friends.js"},"friends_and_posts":{"js":"/js/services/friends_and_posts.js"},"timeline":{"js":"/js/services/timeline.js"},"fcircle":{"js":"/js/services/fcircle.js"},"weibo":{"js":"/js/services/weibo.js"},"memos":{"js":"/js/services/memos.js"},"voice":{"js":"/js/plugins/voice.js"},"video":{"js":"/js/plugins/video.js"},"download-file":{"js":"/js/plugins/download-file.js"},"twikoo":{"js":"/js/services/twikoo_latest_comment.js"},"waline":{"js":"/js/services/waline_latest_comment.js"},"artalk":{"js":"/js/services/artalk_latest_comment.js"},"giscus":{"js":"/js/services/giscus_latest_comment.js"},"contributors":{"edit_this_page":{"_posts/":null,"wiki/stellar/":"https://github.com/xaoxuu/hexo-theme-stellar-docs/blob/main/"},"js":"/js/services/contributors.js"}}`));
+    for (let id of Object.keys(ctx.services)) {
+      const js = ctx.services[id].js;
+      if (id == 'siteinfo') {
+        ctx.cardlinks = document.querySelectorAll('a.link-card[cardlink]');
+        if (ctx.cardlinks?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            setCardLink(ctx.cardlinks);
+          });
+        }
+      } else if (id == 'voice') {
+        ctx.voiceAudios = document.querySelectorAll('.voice>audio');
+        if (ctx.voiceAudios?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            createVoiceDom(ctx.voiceAudios);
+          });
+        }
+      } else if (id == 'video') {
+        ctx.videos = document.querySelectorAll('.video>video');
+        if (ctx.videos?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            videoEvents(ctx.videos);
+          });
+        }
+      } else if (id == 'download-file') {
+        ctx.files = document.querySelectorAll('.file');
+        if (ctx.files?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            downloadFileEvent(ctx.files);
+          });
+        }
+      } else {
+        const els = document.getElementsByClassName(`ds-${id}`);
+        if (els?.length > 0) {
+          utils.jq(() => {
+            if (id == 'timeline' || 'memos' || 'marked') {
+              utils.js(deps.marked).then(function () {
+                utils.js(js, { defer: true });
+              });
+            } else {
+              utils.js(js, { defer: true });
+            }
+          });
+        }
+      }
+    }
+
+    // chat iphone time
+    let phoneTimes = document.querySelectorAll('.chat .status-bar .time');
+
+    if (phoneTimes.length > 0) {
+      NowTime();
+      var date = new Date();
+      var sec = date.getSeconds();
+      var firstAdjustInterval = setInterval(firstAdjustTime, 1000 * (60 - sec));
+    }
+
+    function firstAdjustTime() {
+      NowTime();
+      clearInterval(firstAdjustInterval);
+      setInterval(NowTime, 1000 * 60);
+    }
+
+    function NowTime() {
+      for (let i = 0; i < phoneTimes.length; ++i) {
+        var timeSpan = phoneTimes[i];
+        var date = new Date();
+        var hour = date.getHours();
+        var min = date.getMinutes();
+        timeSpan.innerHTML = check(hour) + ":" + check(min);
+      }
+    };
+
+    function check(val) {
+      if (val < 10) {
+        return ("0" + val);
+      }
+      return (val);
+    }
+
+    // chat quote
+    const chat_quote_obverser = new IntersectionObserver((entries, observer) => {
+      entries.filter((entry) => { return entry.isIntersecting }).sort((a, b) => a.intersectionRect.y !== b.intersectionRect.y ? a.intersectionRect.y - b.intersectionRect.y : a.intersectionRect.x - b.intersectionRect.x).forEach((entry, index) => {
+          observer.unobserve(entry.target);
+          setTimeout(() => {
+            entry.target.classList.add('quote-blink');
+            setTimeout(() => {
+              entry.target.classList.remove('quote-blink');
+            }, 1000);
+          }, Math.max(100, 16) * (index + 1));
+        });
+    });
+
+    var chatQuotes = document.querySelectorAll(".chat .talk .quote");
+    chatQuotes.forEach((quote) => {
+      quote.addEventListener('click', function () {
+        var chatCellDom = document.getElementById("quote-" + quote.getAttribute("quotedCellTag"));
+        if (chatCellDom) {
+          var chatDiv = chatCellDom.parentElement;
+          var mid = chatDiv.clientHeight / 2;
+          var offsetTop = chatCellDom.offsetTop;
+          if (offsetTop > mid - chatCellDom.clientHeight / 2) {
+            chatDiv.scrollTo({
+              top: chatCellDom.offsetTop - mid + chatCellDom.clientHeight / 2,
+              behavior: "smooth"
+            });
+          } else {
+            chatDiv.scrollTo({
+              top: 0,
+              behavior: "smooth"
+            });
+          }
+          chat_quote_obverser.observe(chatCellDom);
+        }
+      });
+    });
+  });
+</script>
+
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.search = {
+      path: `/search.json`,
+    }
+    utils.js('/js/search/local-search.js', { defer: true });
+  });
+</script><script>
+  window.FPConfig = {
+    delay: 0,
+    ignoreKeywords: [],
+    maxRPS: 5,
+    hoverDelay: 25
+  };
+</script>
+<script defer src="https://gcore.jsdelivr.net/npm/flying-pages@2/flying-pages.min.js"></script><script>
+  ctx.fancybox = {
+    selector: `.timenode p>img`,
+    css: `https://gcore.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css`,
+    js: `https://gcore.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js`
+  };
+  var selector = '[data-fancybox]:not(.error), .with-fancybox .atk-content img:not([atk-emoticon])';
+  if (ctx.fancybox.selector) {
+    selector += `, ${ctx.fancybox.selector}`
+  }
+  var needFancybox = document.querySelectorAll(selector).length !== 0;
+  if (!needFancybox) {
+    const memos = document.getElementsByClassName('ds-memos');
+    if (memos != undefined && memos.length > 0) {
+      needFancybox = true;
+    }
+    const fancybox = document.getElementsByClassName('with-fancybox');
+    if (fancybox != undefined && fancybox.length > 0) {
+      needFancybox = true;
+    }
+  }
+  if (needFancybox) {
+    utils.css(ctx.fancybox.css);
+    utils.js(ctx.fancybox.js, { defer: true }).then(function () {
+      Fancybox.bind(selector, {
+        hideScrollbar: false,
+        Thumbs: {
+          autoStart: false,
+        },
+        caption: (fancybox, slide) => {
+          return slide.triggerEl.alt || slide.triggerEl.dataset.caption || null
+        }
+      });
+    })
+  }
+</script>
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    const swiper_api = document.getElementById('swiper-api');
+    if (swiper_api != undefined) {
+      utils.css(`https://unpkg.com/swiper@10.3/swiper-bundle.min.css`);
+      utils.js(`https://unpkg.com/swiper@10.3/swiper-bundle.min.js`, { defer: true }).then(function () {
+        const effect = swiper_api.getAttribute('effect') || '';
+        var swiper = new Swiper('.swiper#swiper-api', {
+          slidesPerView: 'auto',
+          spaceBetween: 8,
+          centeredSlides: true,
+          effect: effect,
+          rewind: true,
+          pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+          },
+          navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+          },
+        });
+      })
+    }
+  });
+</script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    window.codeElements = document.querySelectorAll('.code');
+    if (window.codeElements.length > 0) {
+      ctx.copycode = {
+        default_text: `Copy`,
+        success_text: `Copied`,
+        toast: `复制成功`,
+      };
+      utils.js('/js/plugins/copycode.js');
+    }
+  });
+</script>
+
+
+<!-- inject -->
+<script defer src="/js/openai.js"></script>
+</div></body></html>
