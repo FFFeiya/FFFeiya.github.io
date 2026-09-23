@@ -1,0 +1,1299 @@
+
+<!DOCTYPE html><html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="hexo-theme" content="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.33.1" theme-name="Stellar" theme-version="1.33.1">
+  
+  
+  <meta name="generator" content="Hexo 7.3.0">
+  <meta http-equiv='x-dns-prefetch-control' content='on' />
+  
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000">
+  <meta name="theme-color" content="#f9fafb">
+  <title>Game Engineering II - Assignment 04 - FFFeiya</title>
+
+  
+    <meta name="description" content="This is the write-up for Assignment 04 of GAMES 6320 (Game Engineering II). Assignment 03 introduced cMesh&#x2F;cEffect abstractions and a platform-independent Graphics.cpp. Assignment 04 turns cMesh">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Game Engineering II - Assignment 04">
+<meta property="og:url" content="http://example.com/2026/09/23/game-engineering-ii-assignment-04/">
+<meta property="og:site_name" content="FFFeiya">
+<meta property="og:description" content="This is the write-up for Assignment 04 of GAMES 6320 (Game Engineering II). Assignment 03 introduced cMesh&#x2F;cEffect abstractions and a platform-independent Graphics.cpp. Assignment 04 turns cMesh">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://fffeiya.github.io/images/assignment04/screenshot_1_default.png">
+<meta property="og:image" content="https://fffeiya.github.io/images/assignment04/screenshot_2_hide_mesh.png">
+<meta property="og:image" content="https://fffeiya.github.io/images/assignment04/screenshot_3_different_effect.png">
+<meta property="article:published_time" content="2026-09-23T06:00:00.000Z">
+<meta property="article:modified_time" content="2026-09-23T20:44:25.685Z">
+<meta property="article:author" content="FFFeiya">
+<meta property="article:tag" content="C++">
+<meta property="article:tag" content="Game Engineering">
+<meta property="article:tag" content="Graphics">
+<meta property="article:tag" content="Direct3D">
+<meta property="article:tag" content="OpenGL">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://fffeiya.github.io/images/assignment04/screenshot_1_default.png">
+  
+  
+  
+  <meta name="keywords" content="C++,Game Engineering,Graphics,Direct3D,OpenGL">
+
+  <!-- feed -->
+  
+
+  <link rel="stylesheet" href="/css/main.css?v=1.33.1">
+
+
+  
+    <link rel="shortcut icon" href="/brand/favicon.png">
+  
+
+  
+    
+<link rel="stylesheet" href="https://gcore.jsdelivr.net/gh/highlightjs/cdn-release@11.9/build/styles/atom-one-dark.min.css">
+
+  
+
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"FFFeiya","sameAs":[]},"dateCreated":"2026-09-23T00:00:00-06:00","dateModified":"2026-09-23T14:44:25-06:00","datePublished":"2026-09-23T00:00:00-06:00","description":"","headline":"Game Engineering II - Assignment 04","mainEntityOfPage":{"@type":"WebPage","@id":"http://example.com/2026/09/23/game-engineering-ii-assignment-04/"},"publisher":{"@type":"Organization","name":"FFFeiya","sameAs":[]},"url":"http://example.com/2026/09/23/game-engineering-ii-assignment-04/","keywords":"C++, Game Engineering, Graphics, Direct3D, OpenGL","image":[]}</script>
+  <link rel="stylesheet" href="/css/custom.css">
+</head>
+<body>
+
+<div class="l_body content" id="start" layout="post" type="tech" ><aside class="l_left"><div class="sidebg"></div><div class="leftbar-container">
+
+
+<header class="header"><div class="logo-wrap"><a class="avatar" href="/"><div class="bg" style="opacity:0;background-image:url(https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/rainbow64@3x.webp);"></div><img no-lazy class="avatar" src="/brand/fffeiya-mark.png" onerror="javascript:this.classList.add('error');this.src='https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/image/2659360.svg';"></a><a class="title" href="/"><div class="main">FFFeiya</div><div class="sub cap">游戏开发 · 作品集</div></a></div></header>
+
+<div class="nav-area">
+
+<nav class="menu dis-select"><a class="nav-item" title="作品" href="/projects/">作品</a><a class="nav-item" title="技术" href="/blog/">技术</a><a class="nav-item" title="游戏" href="/p5game/">游戏</a><a class="nav-item" title="工具" href="/tools/">工具</a><a class="nav-item" title="关于" href="/about/">关于</a></nav>
+</div>
+<div class="widgets">
+<div class="search-wrapper" id="search-wrapper"><form class="search-form"><a class="search-button" onclick="document.getElementById(&quot;search-input&quot;).focus();"><svg t="1705074644177" viewBox="0 0 1025 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1560" width="200" height="200"><path d="M1008.839137 935.96571L792.364903 719.491476a56.783488 56.783488 0 0 0-80.152866 0 358.53545 358.53545 0 1 1 100.857314-335.166073 362.840335 362.840335 0 0 1-3.689902 170.145468 51.248635 51.248635 0 1 0 99.217358 26.444296 462.057693 462.057693 0 1 0-158.255785 242.303546l185.930047 185.725053a51.248635 51.248635 0 0 0 72.568068 0 51.248635 51.248635 0 0 0 0-72.978056z" p-id="1561"></path><path d="M616.479587 615.969233a50.428657 50.428657 0 0 0-61.498362-5.534852 174.655348 174.655348 0 0 1-177.525271 3.484907 49.403684 49.403684 0 0 0-58.833433 6.76482l-3.074918 2.869923a49.403684 49.403684 0 0 0 8.609771 78.10292 277.767601 277.767601 0 0 0 286.992355-5.739847 49.403684 49.403684 0 0 0 8.404776-76.667958z" p-id="1562"></path></svg></a><input type="text" class="search-input" id="search-input" placeholder="站内搜索"></form><div id="search-result"></div><div class="search-no-result">没有找到内容！</div></div>
+
+
+
+<widget class="widget-wrapper recent post-list"><div class="widget-header dis-select"><span class="name">最近更新</span></div><div class="widget-body fs14"><a class="item title" href="/2026/09/23/game-engineering-ii-assignment-04/"><span class="title">Game Engineering II - Assignment 04</span></a><a class="item title" href="/2026/09/21/sokoban-studio/"><span class="title">Sokoban Studio：我把一个推箱子笔试做成了关卡生产工具链</span></a><a class="item title" href="/2026/09/15/game-engineering-ii-assignment-03/"><span class="title">Game Engineering II - Assignment 03</span></a><a class="item title" href="/2026/09/08/game-engineering-ii-assignment-02/"><span class="title">Game Engineering II - Assignment 02</span></a><a class="item title" href="/2026/09/01/game-engineering-ii-assignment-01/"><span class="title">Game Engineering II - Assignment 01</span></a><a class="item title" href="/2026/01/24/UE5.6_GAS_Enemy_AI_Stage_Summary%20-%20%E5%89%AF%E6%9C%AC/"><span class="title">Unreal 5 源码阅读笔记，大纲</span></a><a class="item title" href="/2026/01/02/UE5.6_GAS_Enemy_AI_Stage_Summary/"><span class="title">用 UE5.6 + GAS 搭一个可迭代的敌人近战 AI：从状态机图到可调试行为树</span></a><a class="item title" href="/2026/02/24/tech_blog_hexo_stellar_portfolio_safe/"><span class="title">用 Hexo + Stellar 搭一个作品展柜：卡片入口、主题配色与 CSS 覆盖</span></a><a class="item title" href="/2025/01/08/NXA_Pipeline_FTP_Tech_Blog/"><span class="title">NXA Studios 实习：用 Python 把 FTP 资产交付流程“工程化”</span></a><a class="item title" href="/2025/01/08/Building%20Real-Time%20NPC%20Dialogue%20in%20Unity%20with%20Large%20Language%20Models.zh-CN/"><span class="title">在 Unity 中用大语言模型构建实时 NPC 对话</span></a></div></widget>
+</div>
+
+</div></aside><div class="l_main" id="main">
+
+
+
+
+
+<div class="article banner top">
+  <div class="content">
+    <div class="top bread-nav footnote"><div class="left"><div class="flex-row" id="breadcrumb"><a class="cap breadcrumb" href="/">主页</a>
+<span class="sep"></span><a class="cap breadcrumb" href="/blog/">文章</a><span class="sep"></span><a class="cap breadcrumb-link" href="/categories/Programming/">Programming</a></div>
+<div class="flex-row" id="post-meta"><span class="text created">发布于：<time datetime="2026-09-23T06:00:00.000Z">2026.09.23</time></span><span class="sep updated"></span><span class="text updated">更新于：<time datetime="2026-09-23T20:44:25.685Z">2026.09.23</time></span></div></div></div>
+    
+    <div class="bottom only-title">
+      
+      <div class="text-area">
+        <h1 class="text title"><span>Game Engineering II - Assignment 04</span></h1>
+        
+      </div>
+    </div>
+    
+  </div>
+  </div><article class="md-text content"><p>This is the write-up for Assignment 04 of GAMES 6320 (Game Engineering II). Assignment 03 introduced <code>cMesh</code>&#x2F;<code>cEffect</code> abstractions and a platform-independent <code>Graphics.cpp</code>. Assignment 04 turns <code>cMesh</code> and <code>cEffect</code> into reference-counted assets, adds <code>SubmitMeshWithEffect</code> &#x2F; <code>SubmitClearColor</code> submission interfaces, and moves mesh&#x2F;effect ownership from the Graphics project to the MyGame project.</p>
+<hr>
+<h2 id="Download"><a href="#Download" class="headerlink" title="Download"></a>Download</h2><blockquote>
+<p><strong>Release build (Direct3D x64):</strong> <a target="_blank" rel="noopener" href="https://fffeiya.github.io/files/MyGame_Assignment04_Release_x64.zip">MyGame_Assignment04_Release_x64.zip</a></p>
+<p>The ZIP contains a <strong>Direct3D Release</strong> build (<code>x64</code>). Unzip it and run <code>MyGame.exe</code>.<br><strong>Controls:</strong> hold <code>H</code> to hide the rectangle; hold <code>A</code> to switch the triangle to the animated effect; press <code>Esc</code> to close the window.</p>
+</blockquote>
+<hr>
+<h2 id="1-Overview"><a href="#1-Overview" class="headerlink" title="1. Overview"></a>1. Overview</h2><p>On top of Assignment 03, this assignment completes the following core work:</p>
+<ol>
+<li><strong>Reference-counted resources</strong>: <code>cMesh</code> and <code>cEffect</code> become reference-counted objects using the macros in <code>ReferenceCountedAssets.h</code>, and provide static <code>Load()</code> factory functions.</li>
+<li><strong>Submission interfaces</strong>: the Graphics project gains two interfaces — <code>SubmitMeshWithEffect(cMesh&amp;, cEffect&amp;)</code> and <code>SubmitClearColor(sColor)</code> — for the application to call on the submit thread.</li>
+<li><strong>Frame data caching</strong>: submitted mesh&#x2F;effect pairs are cached in a <strong>fixed-size array</strong> with <strong>zero runtime dynamic allocation</strong>.</li>
+<li><strong>Ownership migration</strong>: the two meshes (rectangle, triangle) and two effects (standard, animated) are created, submitted, and cleaned up by MyGame; the Graphics project no longer owns any mesh&#x2F;effect.</li>
+<li><strong>Keyboard interaction</strong>: hold <code>H</code> to hide the rectangle; hold <code>A</code> to make the triangle use the animated effect.</li>
+<li><strong>ExampleGame</strong>: still runs, but shows solid black with no triangles (the default clear color is black, and it submits nothing).</li>
+</ol>
+<p>The project is a standalone copy of Assignment 03 (the original Assignment 03 is preserved for rollback and was not modified further). Build configurations:</p>
+<table>
+<thead>
+<tr>
+<th>Platform (sln)</th>
+<th>Project level</th>
+<th>Graphics API</th>
+<th>Pointer size</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>x64</td>
+<td>x64</td>
+<td>Direct3D</td>
+<td>8 bytes</td>
+</tr>
+<tr>
+<td>x86</td>
+<td>Win32</td>
+<td>OpenGL</td>
+<td>4 bytes</td>
+</tr>
+</tbody></table>
+<h2 id="2-Modified-Files"><a href="#2-Modified-Files" class="headerlink" title="2. Modified Files"></a>2. Modified Files</h2><table>
+<thead>
+<tr>
+<th>File</th>
+<th>Change</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>Engine/Graphics/cMesh.h</code> &#x2F; <code>cMesh.cpp</code></td>
+<td>Turned into a reference-counted resource; added a static <code>Load()</code> factory</td>
+</tr>
+<tr>
+<td><code>Engine/Graphics/cEffect.h</code> &#x2F; <code>cEffect.cpp</code></td>
+<td>Turned into a reference-counted resource; added a static <code>Load()</code> factory</td>
+</tr>
+<tr>
+<td><code>Engine/Graphics/Graphics.h</code></td>
+<td>Forward-declared <code>cMesh</code>&#x2F;<code>cEffect</code>; declared <code>SubmitMeshWithEffect</code></td>
+</tr>
+<tr>
+<td><code>Engine/Graphics/Graphics.cpp</code></td>
+<td>Default clear color changed to black; frame data struct gained <code>clearColor</code> + a mesh&#x2F;effect pair array; implemented <code>SubmitMeshWithEffect</code>, cleanup, and rendering</td>
+</tr>
+<tr>
+<td><code>MyGame_/MyGame/cMyGame.h</code></td>
+<td>Added 4 resource pointers + 2 boolean flags; declared the relevant overrides</td>
+</tr>
+<tr>
+<td><code>MyGame_/MyGame/cMyGame.cpp</code></td>
+<td>Creates &#x2F; submits &#x2F; cleans up the two meshes and two effects; handles keys</td>
+</tr>
+<tr>
+<td><code>ExampleGame_/ExampleGame/</code></td>
+<td><strong>No changes needed</strong> (only handles ESC to exit; shows solid black)</td>
+</tr>
+</tbody></table>
+<h2 id="3-Reference-Counted-Resources-cMesh-cEffect"><a href="#3-Reference-Counted-Resources-cMesh-cEffect" class="headerlink" title="3. Reference-Counted Resources (cMesh &#x2F; cEffect)"></a>3. Reference-Counted Resources (cMesh &#x2F; cEffect)</h2><p>Both classes become reference-counted resources via the macros in <code>ReferenceCountedAssets.h</code>:</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">cMesh</span><br>&#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">Draw</span><span class="hljs-params">()</span></span>;<br>    <span class="hljs-function"><span class="hljs-type">static</span> cResult <span class="hljs-title">Load</span><span class="hljs-params">( <span class="hljs-type">const</span> sMeshData&amp; i_meshData, cMesh*&amp; o_mesh )</span></span>;<br><br>    <span class="hljs-built_in">EAE6320_ASSETS_DECLAREDELETEDREFERENCECOUNTEDFUNCTIONS</span>( cMesh );  <span class="hljs-comment">// no copy/move</span><br>    <span class="hljs-built_in">EAE6320_ASSETS_DECLAREREFERENCECOUNTINGFUNCTIONS</span>();               <span class="hljs-comment">// Increment / Decrement</span><br><br><span class="hljs-keyword">private</span>:<br>    <span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> m_vertexCount = <span class="hljs-number">0</span>;<br>    <span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> m_indexCount = <span class="hljs-number">0</span>;<br>    <span class="hljs-built_in">EAE6320_ASSETS_DECLAREREFERENCECOUNT</span>();   <span class="hljs-comment">// uint16_t m_referenceCount = 1;</span><br>    <span class="hljs-comment">// ... platform-specific resources (D3D pointers / GL ids) ...</span><br>    <span class="hljs-built_in">cMesh</span>() = <span class="hljs-keyword">default</span>;<br>    ~<span class="hljs-built_in">cMesh</span>();                                  <span class="hljs-comment">// asserts the count is zero on destruction</span><br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<p>Key macro behavior (<code>ReferenceCountedAssets.h</code>):</p>
+<ul>
+<li><code>IncrementReferenceCount()</code> &#x2F; <code>DecrementReferenceCount()</code> use <code>InterlockedIncrement16</code> &#x2F; <code>InterlockedDecrement16</code> (<strong>thread-safe atomic operations</strong>); when the count reaches <code>0</code>, <code>delete this</code> is executed — i.e. <strong>the last referencer is responsible for freeing</strong>.</li>
+<li>The reference count <code>m_referenceCount</code> is a <code>uint16_t</code>, deliberately placed after the other small integers &#x2F; between the shader pointers and the render state (whether it actually fits into padding depends on the platform; see §7.3 for the measured analysis).</li>
+</ul>
+<p><code>Load()</code> uses the factory pattern: on success it returns a <code>cResult</code> and hands back a fresh object with reference count <code>1</code> through the output parameter <code>o_mesh</code>&#x2F;<code>o_effect</code>; on failure it cleans up the partially-built object with a <code>cScopeGuard</code>.</p>
+<h2 id="4-Frame-Data-Caching-and-Submit-Interfaces-Graphics-cpp"><a href="#4-Frame-Data-Caching-and-Submit-Interfaces-Graphics-cpp" class="headerlink" title="4. Frame Data Caching and Submit Interfaces (Graphics.cpp)"></a>4. Frame Data Caching and Submit Interfaces (Graphics.cpp)</h2><h3 id="4-1-Frame-data-structure"><a href="#4-1-Frame-data-structure" class="headerlink" title="4.1 Frame data structure"></a>4.1 Frame data structure</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">constexpr</span> <span class="hljs-type">uint16_t</span> s_maxMeshEffectPairCount = <span class="hljs-number">100</span>;<br><br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">sDataRequiredToRenderAFrame</span><br>&#123;<br>    ConstantBufferFormats::sFrame constantData_frame;<br>    sColor clearColor = s_defaultClearColor;          <span class="hljs-comment">// black by default</span><br><br>    <span class="hljs-keyword">struct</span> <span class="hljs-title class_">sMeshEffectPair</span><br>    &#123;<br>        cMesh* mesh = <span class="hljs-literal">nullptr</span>;<br>        cEffect* effect = <span class="hljs-literal">nullptr</span>;<br>    &#125;;<br>    <span class="hljs-type">uint16_t</span> meshEffectPairCount = <span class="hljs-number">0</span>;<br>    sMeshEffectPair meshEffectPairs[s_maxMeshEffectPairCount];   <span class="hljs-comment">// fixed size, zero allocation</span><br>&#125;;<br>sDataRequiredToRenderAFrame s_dataRequiredToRenderAFrame[<span class="hljs-number">2</span>];    <span class="hljs-comment">// double buffered</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="4-2-Submit-interfaces"><a href="#4-2-Submit-interfaces" class="headerlink" title="4.2 Submit interfaces"></a>4.2 Submit interfaces</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><code class="hljs cpp"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">Graphics::SubmitClearColor</span><span class="hljs-params">( <span class="hljs-type">const</span> sColor&amp; i_clearColor )</span></span><br><span class="hljs-function"></span>&#123;<br>    s_dataBeingSubmittedByApplicationThread-&gt;clearColor = i_clearColor;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">Graphics::SubmitMeshWithEffect</span><span class="hljs-params">( cMesh&amp; i_mesh, cEffect&amp; i_effect )</span></span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-keyword">auto</span>&amp; frameData = *s_dataBeingSubmittedByApplicationThread;<br>    <span class="hljs-keyword">if</span> ( frameData.meshEffectPairCount &gt;= s_maxMeshEffectPairCount )  <span class="hljs-comment">// over budget</span><br>    &#123;<br>        <span class="hljs-built_in">EAE6320_ASSERTF</span>( <span class="hljs-literal">false</span>, <span class="hljs-string">&quot;Too many mesh/effect pairs (max %u)&quot;</span>, ... );<br>        Logging::<span class="hljs-built_in">OutputError</span>( <span class="hljs-string">&quot;Too many mesh/effect pairs; the extra pair was ignored&quot;</span> );<br>        <span class="hljs-keyword">return</span>;<br>    &#125;<br>    <span class="hljs-keyword">auto</span>&amp; pair = frameData.meshEffectPairs[frameData.meshEffectPairCount++];<br>    pair.mesh = &amp;i_mesh;<br>    pair.effect = &amp;i_effect;<br>    pair.mesh-&gt;<span class="hljs-built_in">IncrementReferenceCount</span>();    <span class="hljs-comment">// hold a temporary reference on submission</span><br>    pair.effect-&gt;<span class="hljs-built_in">IncrementReferenceCount</span>();<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="4-3-Rendering-and-cleanup"><a href="#4-3-Rendering-and-cleanup" class="headerlink" title="4.3 Rendering and cleanup"></a>4.3 Rendering and cleanup</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><code class="hljs cpp"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">Graphics::RenderFrame</span><span class="hljs-params">()</span></span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-comment">// 1. Wait for the application thread to finish, then swap the double-buffer pointers</span><br>    std::<span class="hljs-built_in">swap</span>( s_dataBeingSubmittedByApplicationThread, s_dataBeingRenderedByRenderThread );<br><br>    <span class="hljs-comment">// 2. Clear the back buffer with the submitted clear color</span><br>    sContext::g_context.<span class="hljs-built_in">ClearBackBuffer</span>( dataRequiredToRenderFrame-&gt;clearColor );<br><br>    <span class="hljs-comment">// 3. Update the frame constant buffer</span><br>    s_constantBuffer_frame.<span class="hljs-built_in">Update</span>( &amp;dataRequiredToRenderFrame-&gt;constantData_frame );<br><br>    <span class="hljs-comment">// 4. Bind each effect and draw its mesh in turn</span><br>    <span class="hljs-keyword">for</span> ( <span class="hljs-type">uint16_t</span> i = <span class="hljs-number">0</span>; i &lt; dataRequiredToRenderFrame-&gt;meshEffectPairCount; ++i )<br>    &#123;<br>        meshEffectPair.effect-&gt;<span class="hljs-built_in">Bind</span>();<br>        meshEffectPair.mesh-&gt;<span class="hljs-built_in">Draw</span>();<br>    &#125;<br><br>    <span class="hljs-comment">// 5. Present</span><br>    sContext::g_context.<span class="hljs-built_in">Present</span>();<br><br>    <span class="hljs-comment">// 6. Release this frame&#x27;s temporary references on the meshes/effects</span><br>    <span class="hljs-built_in">CleanUpSubmittedMeshEffectPairs</span>( *dataRequiredToRenderFrame );<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><code>CleanUp()</code> clears <strong>both</strong> <code>s_dataRequiredToRenderAFrame[0]</code> <strong>and</strong> <code>[1]</code>, to cover the copy that the application thread submitted but that was never rendered.</p>
+<h2 id="5-MyGame-Create-Submit-Clean-Up"><a href="#5-MyGame-Create-Submit-Clean-Up" class="headerlink" title="5. MyGame: Create, Submit, Clean Up"></a>5. MyGame: Create, Submit, Clean Up</h2><h3 id="5-1-Initialize-create-two-effects-two-meshes"><a href="#5-1-Initialize-create-two-effects-two-meshes" class="headerlink" title="5.1 Initialize (create two effects + two meshes)"></a>5.1 Initialize (create two effects + two meshes)</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><code class="hljs cpp"><span class="hljs-function">cResult <span class="hljs-title">cMyGame::Initialize</span><span class="hljs-params">()</span></span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-type">uint8_t</span> renderStateBits = <span class="hljs-number">0</span>;<br>    RenderStates::<span class="hljs-built_in">EnableDepthTesting</span>( renderStateBits );<br>    RenderStates::<span class="hljs-built_in">EnableDepthWriting</span>( renderStateBits );<br>    RenderStates::<span class="hljs-built_in">EnableDrawingBothTriangleSides</span>( renderStateBits );<br><br>    <span class="hljs-comment">// Two effects: standard (solid white) + animated (changes color over time)</span><br>    Graphics::cEffect::<span class="hljs-built_in">Load</span>( &#123; s_path_vertexShader, s_path_fragmentShader_standard, renderStateBits &#125;, m_effect_standard );<br>    Graphics::cEffect::<span class="hljs-built_in">Load</span>( &#123; s_path_vertexShader, s_path_fragmentShader_animated, renderStateBits &#125;, m_effect_animated );<br><br>    <span class="hljs-comment">// Two meshes: rectangle (left) + triangle (right)</span><br>    Graphics::cMesh::<span class="hljs-built_in">Load</span>( rectangleData, m_mesh_rectangle );<br>    Graphics::cMesh::<span class="hljs-built_in">Load</span>( triangleData, m_mesh_triangle );<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="5-2-Key-handling"><a href="#5-2-Key-handling" class="headerlink" title="5.2 Key handling"></a>5.2 Key handling</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><code class="hljs cpp"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">cMyGame::UpdateSimulationBasedOnInput</span><span class="hljs-params">()</span></span><br><span class="hljs-function"></span>&#123;<br>    m_shouldRectangleBeDrawn          = !UserInput::<span class="hljs-built_in">IsKeyPressed</span>( <span class="hljs-string">&#x27;H&#x27;</span> );   <span class="hljs-comment">// hold H to hide the rectangle</span><br>    m_shouldTriangleUseAnimatedEffect = UserInput::<span class="hljs-built_in">IsKeyPressed</span>( <span class="hljs-string">&#x27;A&#x27;</span> );    <span class="hljs-comment">// hold A for the animated effect</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="5-3-Submit-every-frame"><a href="#5-3-Submit-every-frame" class="headerlink" title="5.3 Submit (every frame)"></a>5.3 Submit (every frame)</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><code class="hljs cpp"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">cMyGame::SubmitDataToBeRendered</span><span class="hljs-params">( <span class="hljs-type">float</span>, <span class="hljs-type">float</span> )</span></span><br><span class="hljs-function"></span>&#123;<br>    Graphics::<span class="hljs-built_in">SubmitClearColor</span>( s_backgroundColor );   <span class="hljs-comment">// non-black blue background (0, 0, 0.25)</span><br><br>    <span class="hljs-keyword">if</span> ( m_shouldRectangleBeDrawn )<br>        Graphics::<span class="hljs-built_in">SubmitMeshWithEffect</span>( *m_mesh_rectangle, *m_effect_standard );<br><br>    <span class="hljs-keyword">auto</span>* <span class="hljs-type">const</span> effect = m_shouldTriangleUseAnimatedEffect ? m_effect_animated : m_effect_standard;<br>    Graphics::<span class="hljs-built_in">SubmitMeshWithEffect</span>( *m_mesh_triangle, *effect );<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="5-4-Clean-up"><a href="#5-4-Clean-up" class="headerlink" title="5.4 Clean up"></a>5.4 Clean up</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><code class="hljs cpp"><span class="hljs-function">cResult <span class="hljs-title">cMyGame::CleanUp</span><span class="hljs-params">()</span></span><br><span class="hljs-function"></span>&#123;<br>    m_mesh_rectangle-&gt;<span class="hljs-built_in">DecrementReferenceCount</span>();   <span class="hljs-comment">// release the game&#x27;s references</span><br>    m_mesh_triangle-&gt;<span class="hljs-built_in">DecrementReferenceCount</span>();<br>    m_effect_standard-&gt;<span class="hljs-built_in">DecrementReferenceCount</span>();<br>    m_effect_animated-&gt;<span class="hljs-built_in">DecrementReferenceCount</span>();<br>    <span class="hljs-comment">// null them out ...</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h2 id="6-Screenshots-and-Verification"><a href="#6-Screenshots-and-Verification" class="headerlink" title="6. Screenshots and Verification"></a>6. Screenshots and Verification</h2><p>Three 512×512 client-area screenshots were captured with a system tool (<code>PrintWindow</code>, which reads the game window’s own rendered contents directly, so occlusion by other windows doesn’t affect them):</p>
+<table>
+<thead>
+<tr>
+<th>Screenshot</th>
+<th>State</th>
+<th>Background</th>
+<th>Rectangle (left)</th>
+<th>Triangle (right)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>screenshot_1_default.png</code></td>
+<td>default</td>
+<td>blue (0,0,64)</td>
+<td>white (255,255,255)</td>
+<td>white (255,255,255)</td>
+</tr>
+<tr>
+<td><code>screenshot_2_hide_mesh.png</code></td>
+<td>holding H</td>
+<td>blue (0,0,64)</td>
+<td><strong>blue (hidden)</strong></td>
+<td>white (255,255,255)</td>
+</tr>
+<tr>
+<td><code>screenshot_3_different_effect.png</code></td>
+<td>holding A</td>
+<td>blue (0,0,64)</td>
+<td>white (255,255,255)</td>
+<td><strong>dark green (animated)</strong> (0,67,21)</td>
+</tr>
+</tbody></table>
+<p><img src="https://fffeiya.github.io/images/assignment04/screenshot_1_default.png" alt="Default"></p>
+<p><img src="https://fffeiya.github.io/images/assignment04/screenshot_2_hide_mesh.png" alt="Holding H hides the rectangle"></p>
+<p><img src="https://fffeiya.github.io/images/assignment04/screenshot_3_different_effect.png" alt="Holding A switches the triangle effect"></p>
+<p>All three states were verified pixel-by-pixel to match expectations:</p>
+<ol>
+<li><strong>Default</strong>: both meshes are drawn with the standard (white) effect on a <strong>non-black blue</strong> background — proving <code>SubmitClearColor</code> and <code>SubmitMeshWithEffect</code> work.</li>
+<li><strong>Holding H</strong>: the rectangle area becomes the blue background — proving the rectangle is no longer submitted.</li>
+<li><strong>Holding A</strong>: the triangle changes from white to dark green (the animated effect changes color over time) — proving the same mesh uses a different effect.</li>
+</ol>
+<h2 id="7-sizeof-cMesh-sizeof-cEffect-and-Memory-Budget"><a href="#7-sizeof-cMesh-sizeof-cEffect-and-Memory-Budget" class="headerlink" title="7. sizeof(cMesh) &#x2F; sizeof(cEffect) and Memory Budget"></a>7. sizeof(cMesh) &#x2F; sizeof(cEffect) and Memory Budget</h2><p>The numbers below were <strong>measured with the compiler</strong>: a small block of code writing <code>sizeof(...)</code> to a file was temporarily added to <code>Graphics::Initialize()</code>, built and run on both platforms, and the results were read back (the temporary code was removed afterwards):</p>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th align="right">x64 &#x2F; Direct3D</th>
+<th align="right">x86 &#x2F; OpenGL</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>sizeof(cMesh)</code></td>
+<td align="right"><strong>40 bytes</strong></td>
+<td align="right"><strong>24 bytes</strong></td>
+</tr>
+<tr>
+<td><code>sizeof(cEffect)</code></td>
+<td align="right"><strong>56 bytes</strong></td>
+<td align="right"><strong>16 bytes</strong></td>
+</tr>
+<tr>
+<td><code>sizeof(sDataRequiredToRenderAFrame)</code></td>
+<td align="right"><strong>1768 bytes</strong></td>
+<td align="right"><strong>964 bytes</strong></td>
+</tr>
+</tbody></table>
+<h3 id="7-1-cMesh-members-and-layout"><a href="#7-1-cMesh-members-and-layout" class="headerlink" title="7.1 cMesh members and layout"></a>7.1 cMesh members and layout</h3><p>Data members (in declaration order): <code>unsigned int m_vertexCount</code>, <code>unsigned int m_indexCount</code>, <code>uint16_t m_referenceCount</code> (reference count), and three platform handles (D3D: 3 pointers &#x2F; GL: 3 <code>GLuint</code>s).</p>
+<p><strong>x64 &#x2F; D3D (8-byte pointers, 8-byte alignment):</strong></p>
+<table>
+<thead>
+<tr>
+<th>Offset</th>
+<th>Member</th>
+<th>Size</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0</td>
+<td><code>m_vertexCount</code></td>
+<td>4</td>
+</tr>
+<tr>
+<td>4</td>
+<td><code>m_indexCount</code></td>
+<td>4</td>
+</tr>
+<tr>
+<td>8</td>
+<td><code>m_referenceCount</code></td>
+<td>2</td>
+</tr>
+<tr>
+<td>10–15</td>
+<td>padding (align to 8)</td>
+<td>6</td>
+</tr>
+<tr>
+<td>16</td>
+<td><code>m_vertexFormat*</code></td>
+<td>8</td>
+</tr>
+<tr>
+<td>24</td>
+<td><code>m_vertexBuffer*</code></td>
+<td>8</td>
+</tr>
+<tr>
+<td>32</td>
+<td><code>m_indexBuffer*</code></td>
+<td>8</td>
+</tr>
+<tr>
+<td>—</td>
+<td><strong>Total</strong></td>
+<td><strong>40</strong></td>
+</tr>
+</tbody></table>
+<p><strong>x86 &#x2F; GL (4-byte <code>GLuint</code>, 4-byte alignment):</strong></p>
+<table>
+<thead>
+<tr>
+<th>Offset</th>
+<th>Member</th>
+<th>Size</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0</td>
+<td><code>m_vertexCount</code></td>
+<td>4</td>
+</tr>
+<tr>
+<td>4</td>
+<td><code>m_indexCount</code></td>
+<td>4</td>
+</tr>
+<tr>
+<td>8</td>
+<td><code>m_referenceCount</code></td>
+<td>2</td>
+</tr>
+<tr>
+<td>10–11</td>
+<td>padding (align to 4)</td>
+<td>2</td>
+</tr>
+<tr>
+<td>12</td>
+<td><code>m_vertexBufferId</code></td>
+<td>4</td>
+</tr>
+<tr>
+<td>16</td>
+<td><code>m_indexBufferId</code></td>
+<td>4</td>
+</tr>
+<tr>
+<td>20</td>
+<td><code>m_vertexArrayId</code></td>
+<td>4</td>
+</tr>
+<tr>
+<td>—</td>
+<td><strong>Total</strong></td>
+<td><strong>24</strong></td>
+</tr>
+</tbody></table>
+<h3 id="7-2-cEffect-members-and-layout"><a href="#7-2-cEffect-members-and-layout" class="headerlink" title="7.2 cEffect members and layout"></a>7.2 cEffect members and layout</h3><p>Data members: <code>cShader* m_vertexShader</code>, <code>cShader* m_fragmentShader</code>, <code>uint16_t m_referenceCount</code>, <code>cRenderState m_renderState</code>, plus <code>GLuint m_programId</code> on GL. <code>cRenderState</code> holds 3 state pointers + a 1-byte <code>uint8_t m_bits</code> on D3D (32 bytes total), but only a 1-byte <code>m_bits</code> on GL.</p>
+<p><strong>x64 &#x2F; D3D (8-byte alignment):</strong></p>
+<table>
+<thead>
+<tr>
+<th>Offset</th>
+<th>Member</th>
+<th>Size</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0</td>
+<td><code>m_vertexShader*</code></td>
+<td>8</td>
+</tr>
+<tr>
+<td>8</td>
+<td><code>m_fragmentShader*</code></td>
+<td>8</td>
+</tr>
+<tr>
+<td>16</td>
+<td><code>m_referenceCount</code></td>
+<td>2</td>
+</tr>
+<tr>
+<td>18–23</td>
+<td>padding (align to 8)</td>
+<td>6</td>
+</tr>
+<tr>
+<td>24–55</td>
+<td><code>m_renderState</code> (3 pointers + 1 byte)</td>
+<td>32</td>
+</tr>
+<tr>
+<td>—</td>
+<td><strong>Total</strong></td>
+<td><strong>56</strong></td>
+</tr>
+</tbody></table>
+<p><strong>x86 &#x2F; GL (4-byte alignment):</strong></p>
+<table>
+<thead>
+<tr>
+<th>Offset</th>
+<th>Member</th>
+<th>Size</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0</td>
+<td><code>m_vertexShader*</code></td>
+<td>4</td>
+</tr>
+<tr>
+<td>4</td>
+<td><code>m_fragmentShader*</code></td>
+<td>4</td>
+</tr>
+<tr>
+<td>8</td>
+<td><code>m_referenceCount</code></td>
+<td>2</td>
+</tr>
+<tr>
+<td>10</td>
+<td><code>m_renderState.m_bits</code></td>
+<td>1</td>
+</tr>
+<tr>
+<td>11</td>
+<td>padding (align to 4)</td>
+<td>1</td>
+</tr>
+<tr>
+<td>12</td>
+<td><code>m_programId</code></td>
+<td>4</td>
+</tr>
+<tr>
+<td>—</td>
+<td><strong>Total</strong></td>
+<td><strong>16</strong></td>
+</tr>
+</tbody></table>
+<h3 id="7-3-Does-the-reference-count-“fill-padding”"><a href="#7-3-Does-the-reference-count-“fill-padding”" class="headerlink" title="7.3 Does the reference count “fill padding”?"></a>7.3 Does the reference count “fill padding”?</h3><p>The comment in <code>ReferenceCountedAssets.h</code> claims the reference count can be placed anywhere in the class to “fill padding that would otherwise be wasted”. Measurement shows this is only true in some cases:</p>
+<table>
+<thead>
+<tr>
+<th>Class &#x2F; platform</th>
+<th align="right">Without refcount</th>
+<th align="right">With refcount</th>
+<th>Net refcount cost</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>cMesh</code> x64</td>
+<td align="right">32</td>
+<td align="right">40</td>
+<td><strong>+8</strong> (2-byte count + 6 new padding bytes)</td>
+</tr>
+<tr>
+<td><code>cMesh</code> x86</td>
+<td align="right">20</td>
+<td align="right">24</td>
+<td><strong>+4</strong> (2-byte count + 2 new padding bytes)</td>
+</tr>
+<tr>
+<td><code>cEffect</code> x64</td>
+<td align="right">48</td>
+<td align="right">56</td>
+<td><strong>+8</strong> (2-byte count + 6 new padding bytes)</td>
+</tr>
+<tr>
+<td><code>cEffect</code> x86</td>
+<td align="right">16</td>
+<td align="right">16</td>
+<td><strong>0 (completely free)</strong></td>
+</tr>
+</tbody></table>
+<p>Conclusion: only <code>cEffect</code> on x86&#x2F;GL has its 2-byte reference count fit exactly into the 3-byte gap after <code>m_bits</code> (1 byte) and before the 4-byte alignment of <code>m_programId</code> — a true “zero cost”. In the other three cases, the two <code>unsigned int</code>s (or two shader pointers) are already individually aligned and the following pointer had no padding to begin with, so inserting the reference count pushes the pointer back and <strong>newly creates</strong> 6 (or 2) bytes of padding.</p>
+<h3 id="7-4-Can-it-be-smaller-larger"><a href="#7-4-Can-it-be-smaller-larger" class="headerlink" title="7.4 Can it be smaller &#x2F; larger?"></a>7.4 Can it be smaller &#x2F; larger?</h3><p><strong><code>cMesh</code></strong></p>
+<ul>
+<li>Smaller: the size is determined by “two <code>unsigned int</code> counts + three platform handles”, not by the reference count. Making <code>m_vertexCount</code>&#x2F;<code>m_indexCount</code> <code>uint16_t</code> would shrink x64 to 32 bytes and x86 to 20 bytes — but that caps each mesh at 65535 vertices&#x2F;indices, which doesn’t hold for general geometry, so keeping <code>unsigned int</code> is the right trade-off. Keeping the two <code>unsigned int</code>s, the 2-byte reference count costs 40 bytes on x64 (8+2&#x3D;10 must round to 16 to align the 8-byte pointers) and 24 bytes on x86 no matter where it’s placed.</li>
+<li>Larger: always possible (make the count <code>uint64_t</code>, cache the raw <code>sMeshData</code>, add a debug name, etc.), but unnecessary.</li>
+</ul>
+<p><strong><code>cEffect</code></strong></p>
+<ul>
+<li>Smaller: of x64’s 56 bytes, <code>cRenderState</code> (32 bytes &#x3D; 3 D3D state pointers) is the bulk, and those 3 pointers are required by the render-state object and can’t be removed. The reference count’s 6 padding bytes can’t be eliminated by reordering members (there are no other small fields to merge with), so 56 bytes is nearly minimal. x86’s 16 bytes is already the optimal “reference count completely free” result.</li>
+<li>Larger: equally possible, just add fields.</li>
+</ul>
+<h3 id="7-5-Frame-render-data-memory-budget-and-whether-pointer-targets-count"><a href="#7-5-Frame-render-data-memory-budget-and-whether-pointer-targets-count" class="headerlink" title="7.5 Frame-render data memory budget (and whether pointer targets count)"></a>7.5 Frame-render data memory budget (and whether pointer targets count)</h3><p><code>Graphics.cpp</code> caches one frame’s data in <code>sDataRequiredToRenderAFrame</code> and <strong>double buffers</strong> two copies (<code>s_dataRequiredToRenderAFrame[2]</code>):</p>
+<table>
+<thead>
+<tr>
+<th>Member</th>
+<th align="right">x64</th>
+<th align="right">x86</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>constantData_frame</code> (<code>sFrame</code>: two 4×4 matrices + 4 floats)</td>
+<td align="right">144</td>
+<td align="right">144</td>
+</tr>
+<tr>
+<td><code>clearColor</code> (4 floats)</td>
+<td align="right">16</td>
+<td align="right">16</td>
+</tr>
+<tr>
+<td><code>meshEffectPairCount</code> (<code>uint16_t</code> + padding)</td>
+<td align="right">8</td>
+<td align="right">4</td>
+</tr>
+<tr>
+<td><code>meshEffectPairs[100]</code> (each pair &#x3D; mesh pointer + effect pointer)</td>
+<td align="right">100×16 &#x3D; 1600</td>
+<td align="right">100×8 &#x3D; 800</td>
+</tr>
+<tr>
+<td><strong>Single copy (compiler-measured)</strong></td>
+<td align="right"><strong>1768</strong></td>
+<td align="right"><strong>964</strong></td>
+</tr>
+<tr>
+<td><strong>Double-buffered total (×2)</strong></td>
+<td align="right"><strong>3536 bytes</strong></td>
+<td align="right"><strong>1928 bytes</strong></td>
+</tr>
+</tbody></table>
+<p><strong>“Should the memory the pointers point to be counted in this budget?” — Conclusion: no.</strong> This budget measures the data Graphics caches to render one frame — i.e. the <code>sDataRequiredToRenderAFrame</code> struct itself (×2). The <code>cMesh*</code> &#x2F; <code>cEffect*</code> in the array are just <strong>pointers</strong>; the vertex&#x2F;index buffers, shaders, and render-state objects they point to are assets MyGame creates at initialization and holds long-term, so they aren’t part of the “frame cache”. The frame cache only records “which (mesh, effect) pair to draw this frame” and does not copy those assets. The frame-render memory budget is therefore reported as <strong>3536 (x64) &#x2F; 1928 (x86) bytes</strong>, not counting the pointer targets. The mesh&#x2F;effect pair array is by far the bulk (1600 &#x2F; 800 bytes), and the limit <code>s_maxMeshEffectPairCount = 100</code> is fixed at compile time, with <strong>zero runtime dynamic allocation</strong>.</p>
+<h2 id="8-Why-Frame-Data-Must-Be-Cached"><a href="#8-Why-Frame-Data-Must-Be-Cached" class="headerlink" title="8. Why Frame Data Must Be Cached"></a>8. Why Frame Data Must Be Cached</h2><p>Submission (<code>SubmitMeshWithEffect</code>) happens on the <strong>application loop thread</strong>, while the actual drawing (<code>RenderFrame</code>) happens on the <strong>main&#x2F;render thread</strong> — the two run <strong>concurrently</strong>. Therefore:</p>
+<ol>
+<li><strong>Decoupled timing</strong>: the application thread fills in what to draw this frame, and the render thread consumes it later. The data must live in a stable location between the two operations; you can’t count on drawing happening the moment <code>Submit*</code> is called.</li>
+<li><strong>Double buffering avoids races</strong>: if one thread writes while the other reads the same data, you get a data race. So two copies of frame data ping-pong (<code>s_dataBeingSubmittedByApplicationThread</code> ↔ <code>s_dataBeingRenderedByRenderThread</code>) with two <code>cEvent</code>s for synchronization: the application thread signals <code>s_whenAllDataHasBeenSubmittedFromApplicationThread</code> after filling; the render thread waits for that signal, swaps the two pointers, then signals <code>s_whenDataForANewFrameCanBeSubmittedFromApplicationThread</code> so the application thread can fill the next frame.</li>
+<li><strong>Lifetime safety</strong>: meshes&#x2F;effects belong to MyGame; Graphics only uses them temporarily. On submission, <code>IncrementReferenceCount()</code> gives Graphics a temporary reference so the object can’t be freed before rendering finishes; after rendering (or <code>CleanUp</code>), <code>DecrementReferenceCount()</code> returns it.</li>
+<li><strong>Fixed budget, zero dynamic allocation</strong>: the cache uses fixed-size arrays, the memory ceiling is fixed at compile time, and there are no <code>new</code>&#x2F;<code>delete</code> calls during gameplay — avoiding fragmentation and nondeterministic latency.</li>
+</ol>
+<h2 id="9-Build-Verification"><a href="#9-Build-Verification" class="headerlink" title="9. Build Verification"></a>9. Build Verification</h2><ul>
+<li><code>MSBuild YangFeiyang.sln /p:Configuration=Debug|Release /p:Platform=x64</code> (Direct3D) and <code>/p:Platform=x86</code> (OpenGL) both compile cleanly (the sln-level platform name is <code>x86</code>, mapping to project-level <code>Win32</code>);</li>
+<li><code>MyGame</code> and <code>ExampleGame</code> both ran successfully in x64 Release and x86 Release;</li>
+<li>x64 Release <code>MyGame</code> ran successfully and produced&#x2F;verified the three screenshots above;</li>
+<li><code>ExampleGame</code> is left unchanged: it runs and shows solid black with no triangles;</li>
+<li>the <code>sizeof</code> values are <strong>compiler-measured</strong> (see §7; the temporary probe code was removed after measuring).</li>
+</ul>
+</article>
+<div class="article-footer">
+    <section id="license">
+      <div class="header"><span>许可协议</span></div>
+      <div class="body"><p>本文采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">署名-非商业性使用-相同方式共享 4.0 国际</a> 许可协议，转载请注明出处。</p>
+</div>
+    </section>
+    
+
+</div>
+
+<div class="related-wrap" id="read-next"><section class="body"><div class="item" id="prev"></div><div class="item" id="next"><div class="note">较早文章</div><a href="/2026/09/21/sokoban-studio/">Sokoban Studio：我把一个推箱子笔试做成了关卡生产工具链</a></div></section></div>
+
+
+
+
+
+
+<footer class="page-footer footnote"><hr><div class="text"><p>本站由 <a href="/">FFFeiya</a> 使用 <a target="_blank" rel="noopener" href="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.33.1">Stellar 1.33.1</a> 主题创建。<br>本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处。</p>
+</div></footer>
+<div class="main-mask" onclick="sidebar.dismiss()"></div></div><aside class="l_right">
+<div class="widgets">
+
+
+
+<widget class="widget-wrapper toc" id="data-toc" collapse="false"><div class="widget-header dis-select"><span class="name">本文目录</span><a class="cap-action" onclick="sidebar.toggleTOC()" ><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg></a></div><div class="widget-body"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Download"><span class="toc-text">Download</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-Overview"><span class="toc-text">1. Overview</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-Modified-Files"><span class="toc-text">2. Modified Files</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-Reference-Counted-Resources-cMesh-cEffect"><span class="toc-text">3. Reference-Counted Resources (cMesh &#x2F; cEffect)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-Frame-Data-Caching-and-Submit-Interfaces-Graphics-cpp"><span class="toc-text">4. Frame Data Caching and Submit Interfaces (Graphics.cpp)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-Frame-data-structure"><span class="toc-text">4.1 Frame data structure</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-Submit-interfaces"><span class="toc-text">4.2 Submit interfaces</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-3-Rendering-and-cleanup"><span class="toc-text">4.3 Rendering and cleanup</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-MyGame-Create-Submit-Clean-Up"><span class="toc-text">5. MyGame: Create, Submit, Clean Up</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#5-1-Initialize-create-two-effects-two-meshes"><span class="toc-text">5.1 Initialize (create two effects + two meshes)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-2-Key-handling"><span class="toc-text">5.2 Key handling</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-3-Submit-every-frame"><span class="toc-text">5.3 Submit (every frame)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-4-Clean-up"><span class="toc-text">5.4 Clean up</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-Screenshots-and-Verification"><span class="toc-text">6. Screenshots and Verification</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-sizeof-cMesh-sizeof-cEffect-and-Memory-Budget"><span class="toc-text">7. sizeof(cMesh) &#x2F; sizeof(cEffect) and Memory Budget</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#7-1-cMesh-members-and-layout"><span class="toc-text">7.1 cMesh members and layout</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-2-cEffect-members-and-layout"><span class="toc-text">7.2 cEffect members and layout</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-3-Does-the-reference-count-%E2%80%9Cfill-padding%E2%80%9D"><span class="toc-text">7.3 Does the reference count “fill padding”?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-4-Can-it-be-smaller-larger"><span class="toc-text">7.4 Can it be smaller &#x2F; larger?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-5-Frame-render-data-memory-budget-and-whether-pointer-targets-count"><span class="toc-text">7.5 Frame-render data memory budget (and whether pointer targets count)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-Why-Frame-Data-Must-Be-Cached"><span class="toc-text">8. Why Frame Data Must Be Cached</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-Build-Verification"><span class="toc-text">9. Build Verification</span></a></li></ol></div><div class="widget-footer"><a class="top" onclick="util.scrollTop()"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path stroke-linejoin="round" d="m9 15.5l3-3l3 3m-6-4l3-3l3 3"/><path d="M7 3.338A9.95 9.95 0 0 1 12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12c0-1.821.487-3.53 1.338-5"/></g></svg><span>回到顶部</span></a></div></widget>
+</div></aside><div class='float-panel'>
+  <button type='button' style='display:none' class='laptop-only rightbar-toggle mobile' onclick='sidebar.rightbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg>
+  </button>
+  <button type='button' style='display:none' class='mobile-only leftbar-toggle mobile' onclick='sidebar.leftbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 11c0-3.771 0-5.657 1.172-6.828C4.343 3 6.229 3 10 3h4c3.771 0 5.657 0 6.828 1.172C22 5.343 22 7.229 22 11v2c0 3.771 0 5.657-1.172 6.828C19.657 21 17.771 21 14 21h-4c-3.771 0-5.657 0-6.828-1.172C2 18.657 2 16.771 2 13z"/><path id="sep" stroke-linecap="round" d="M5.5 10h6m-5 4h4m4.5 7V3"/></g></svg>
+  </button>
+</div>
+</div><div class="scripts">
+
+
+<script type="text/javascript">
+  window.canonical = {"originalHost":null,"officialHosts":["localhost"],"encoded":""};
+  const ctx = {
+    date_suffix: {
+      just: `刚刚`,
+      min: `分钟前`,
+      hour: `小时前`,
+      day: `天前`,
+    },
+    root : `/`,
+    tag_plugins: {
+      chat: Object.assign({"api":"https://siteinfo.listentothewind.cn/api/v1"}),
+    }
+  };
+
+  // required plugins (only load if needs)
+  if (`local_search`) {
+    ctx.search = {};
+    ctx.search.service = `local_search`;
+    if (ctx.search.service == 'local_search') {
+      let service_obj = Object.assign({}, `{"field":"all","path":"/search.json","content":true,"skip_search":null,"sort":"-date"}`);
+      ctx.search[ctx.search.service] = service_obj;
+    }
+  }
+  const def = {
+    avatar: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/3442075.svg`,
+    cover: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/cover/76b86c0226ffd.svg`,
+    loading: `https://api.iconify.design/eos-icons:three-dots-loading.svg?color=%231cd0fd`,
+  };
+  const deps = {
+    jquery: `https://gcore.jsdelivr.net/npm/jquery@3.7/dist/jquery.min.js`,
+    marked: `https://gcore.jsdelivr.net/npm/marked@13.0/lib/marked.umd.min.js`,
+    lazyload: `/%5Bobject%20Object%5D`
+  }
+  
+
+</script>
+
+<script type="text/javascript">
+  
+  function RunItem() {
+    this.list = []; // 存放回调函数
+    this.start = () => {
+      for (var i = 0; i < this.list.length; i++) {
+        this.list[i].run();
+      }
+    };
+    this.push = (fn, name, setRequestAnimationFrame = true) => {
+      let myfn = fn
+      if (setRequestAnimationFrame) {
+        myfn = () => {
+          utils.requestAnimationFrame(fn)
+        }
+      }
+      var f = new Item(myfn, name);
+      this.list.push(f);
+    };
+    this.remove = (name) => {
+      for (let index = 0; index < this.list.length; index++) {
+        const e = this.list[index];
+        if (e.name == name) {
+          this.list.splice(index, 1);
+        }
+      }
+    }
+    // 构造一个可以run的对象
+    function Item(fn, name) {
+      // 函数名称
+      this.name = name || fn.name;
+      // run方法
+      this.run = () => {
+        try {
+          fn()
+        } catch (error) {
+          console.log(error);
+        }
+      };
+    }
+  }
+
+  const utils = {
+    // 懒加载 css https://github.com/filamentgroup/loadCSS
+    css: (href, before, media, attributes) => {
+      var doc = window.document;
+      var ss = doc.createElement("link");
+      var ref;
+      if (before) {
+        ref = before;
+      } else {
+        var refs = (doc.body || doc.getElementsByTagName("head")[0]).childNodes;
+        ref = refs[refs.length - 1];
+      }
+      var sheets = doc.styleSheets;
+      if (attributes) {
+        for (var attributeName in attributes) {
+          if (attributes.hasOwnProperty(attributeName)) {
+            ss.setAttribute(attributeName, attributes[attributeName]);
+          }
+        }
+      }
+      ss.rel = "stylesheet";
+      ss.href = href;
+      ss.media = "only x";
+      function ready(cb) {
+        if (doc.body) {
+          return cb();
+        }
+        setTimeout(function () {
+          ready(cb);
+        });
+      }
+      ready(function () {
+        ref.parentNode.insertBefore(ss, before ? ref : ref.nextSibling);
+      });
+      var onloadcssdefined = function (cb) {
+        var resolvedHref = ss.href;
+        var i = sheets.length;
+        while (i--) {
+          if (sheets[i].href === resolvedHref) {
+            return cb();
+          }
+        }
+        setTimeout(function () {
+          onloadcssdefined(cb);
+        });
+      };
+      function loadCB() {
+        if (ss.addEventListener) {
+          ss.removeEventListener("load", loadCB);
+        }
+        ss.media = media || "all";
+      }
+      if (ss.addEventListener) {
+        ss.addEventListener("load", loadCB);
+      }
+      ss.onloadcssdefined = onloadcssdefined;
+      onloadcssdefined(loadCB);
+      return ss;
+    },
+
+    js: (src, opt) => new Promise((resolve, reject) => {
+      var script = document.createElement('script');
+      if (src.startsWith('/')) {
+        src = ctx.root + src.substring(1);
+      }
+      script.src = src;
+      if (opt) {
+        for (let key of Object.keys(opt)) {
+          script[key] = opt[key]
+        }
+      } else {
+        // 默认异步，如果需要同步，第二个参数传入 {} 即可
+        script.async = true
+      }
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function () {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    }),
+
+    jq: (fn) => {
+      if (typeof jQuery === 'undefined') {
+        utils.js(deps.jquery).then(fn)
+      } else {
+        fn()
+      }
+    },
+
+    onLoading: (el) => {
+      if (el) {
+        $(el).append('<div class="loading-wrap"><svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" stroke-opacity=".3" d="M12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="1.3s" values="60;0"/></path><path stroke-dasharray="15" stroke-dashoffset="15" d="M12 3C16.9706 3 21 7.02944 21 12"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="15;0"/><animateTransform attributeName="transform" dur="1.5s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"/></path></g></svg></div>');
+      }
+    },
+    onLoadSuccess: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap').remove();
+      }
+    },
+    onLoadFailure: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap svg').remove();
+        $(el).find('.loading-wrap').append('<svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" d="M12 3L21 20H3L12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.5s" values="60;0"/></path><path stroke-dasharray="6" stroke-dashoffset="6" d="M12 10V14"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.6s" dur="0.2s" values="6;0"/></path></g><circle cx="12" cy="17" r="1" fill="currentColor" fill-opacity="0"><animate fill="freeze" attributeName="fill-opacity" begin="0.8s" dur="0.4s" values="0;1"/></circle></svg>');
+        $(el).find('.loading-wrap').addClass('error');
+      }
+    },
+    request: (el, url, callback, onFailure) => {
+      const maxRetry = 3;
+      let retryCount = 0;
+
+      return new Promise((resolve, reject) => {
+        const load = () => {
+          utils.onLoading?.(el);
+
+          let timedOut = false;
+          const timeout = setTimeout(() => {
+            timedOut = true;
+            console.warn('[request] 超时:', url);
+
+            if (++retryCount >= maxRetry) {
+              utils.onLoadFailure?.(el);
+              onFailure?.();
+              reject('请求超时');
+            } else {
+              setTimeout(load, 1000);
+            }
+          }, 5000);
+
+          fetch(url).then(resp => {
+            if (timedOut) return;
+            clearTimeout(timeout);
+
+            if (!resp.ok) throw new Error('响应失败');
+            return resp;
+          }).then(data => {
+            if (timedOut) return;
+            utils.onLoadSuccess?.(el);
+            callback(data);
+            resolve(data);
+          }).catch(err => {
+            clearTimeout(timeout);
+            console.warn('[request] 错误:', err);
+
+            if (++retryCount >= maxRetry) {
+              utils.onLoadFailure?.(el);
+              onFailure?.();
+              reject(err);
+            } else {
+              setTimeout(load, 1000);
+            }
+          });
+        };
+
+        load();
+      });
+    },
+    requestWithoutLoading: (url, options = {}, maxRetry = 2, timeout = 5000) => {
+      return new Promise((resolve, reject) => {
+        let retryCount = 0;
+
+        const tryRequest = () => {
+          let timedOut = false;
+          const timer = setTimeout(() => {
+            timedOut = true;
+            if (++retryCount > maxRetry) reject('timeout');
+            else tryRequest();
+          }, timeout);
+
+          fetch(url, options)
+            .then(resp => {
+              clearTimeout(timer);
+              if (!resp.ok) throw new Error('bad response');
+              resolve(resp);
+            })
+            .catch(err => {
+              clearTimeout(timer);
+              if (++retryCount > maxRetry) reject(err);
+              else setTimeout(tryRequest, 500);
+            });
+        };
+
+        tryRequest();
+      });
+    },
+    /********************** requestAnimationFrame ********************************/
+    // 1、requestAnimationFrame 会把每一帧中的所有 DOM 操作集中起来，在一次重绘或回流中就完成，并且重绘或回流的时间间隔紧紧跟随浏览器的刷新频率，一般来说，这个频率为每秒60帧。
+    // 2、在隐藏或不可见的元素中，requestAnimationFrame 将不会进行重绘或回流，这当然就意味着更少的的 cpu，gpu 和内存使用量。
+    requestAnimationFrame: (fn) => {
+      if (!window.requestAnimationFrame) {
+        window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame;
+      }
+      window.requestAnimationFrame(fn)
+    },
+    dark: {},
+  };
+
+  // utils.dark.mode 当前模式 dark or light
+  // utils.dark.toggle() 暗黑模式触发器
+  // utils.dark.push(callBack[,"callBackName"]) 传入触发器回调函数
+  utils.dark.method = {
+    toggle: new RunItem(),
+  };
+  utils.dark = Object.assign(utils.dark, {
+    push: utils.dark.method.toggle.push,
+  });
+</script>
+<script>
+  const sidebar = {
+    leftbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    rightbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('rightbar');
+        l_body.removeAttribute('leftbar');
+      }
+    },
+    dismiss: () => {
+      if (l_body) {
+        l_body.removeAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    toggleTOC: () => {
+      document.querySelector('#data-toc').classList.toggle('collapse');
+    }
+  }
+</script>
+<script type="text/javascript">
+  (() => {
+    const tagSwitchers = document.querySelectorAll('.tag-subtree.parent-tag > a > .tag-switcher-wrapper')
+    for (const tagSwitcher of tagSwitchers) {
+      tagSwitcher.addEventListener('click', (e) => {
+        const parent = e.target.closest('.tag-subtree.parent-tag')
+        parent.classList.toggle('expanded')
+        e.preventDefault()
+      })
+    }
+
+    // Get active tag from query string, then activate it.
+    const urlParams = new URLSearchParams(window.location.search)
+    const activeTag = urlParams.get('tag')
+    if (activeTag) {
+      let tag = document.querySelector(`.tag-subtree[data-tag="${activeTag}"]`)
+      if (tag) {
+        tag.querySelector('a').classList.add('active')
+        
+        while (tag) {
+          tag.classList.add('expanded')
+          tag = tag.parentElement.closest('.tag-subtree.parent-tag')
+        }
+      }
+    }
+  })()
+</script>
+
+<script async src="https://gcore.jsdelivr.net/npm/vanilla-lazyload@19.1/dist/lazyload.min.js"></script>
+<script>
+  // https://www.npmjs.com/package/vanilla-lazyload
+  // Set the options globally
+  // to make LazyLoad self-initialize
+  window.lazyLoadOptions = {
+    elements_selector: ".lazy",
+    callback_loaded: (el) => {
+      el.classList.add('loaded');
+      const wrapper = el.closest('.lazy-box');
+      const icon = wrapper?.querySelector('.lazy-icon');
+      if (icon) icon.remove();
+    }
+  };
+  // Listen to the initialization event
+  // and get the instance of LazyLoad
+  window.addEventListener(
+    "LazyLoad::Initialized",
+    function (event) {
+      window.lazyLoadInstance = event.detail.instance;
+    },
+    false
+  );
+  document.addEventListener('DOMContentLoaded', function () {
+    window.lazyLoadInstance?.update();
+  });
+
+  window.wrapLazyloadImages = (container) => {
+    if (typeof container === 'string') {
+      container = document.querySelector(container);
+    }
+    if (!container) return;
+    
+    const images = container.querySelectorAll('img');
+    images.forEach((img) => {
+      if (img.classList.contains('lazy')) return;
+
+      const src = img.getAttribute('src');
+      if (!src) return;
+
+      const wrapper = document.createElement('div');
+      wrapper.className = 'lazy-box';
+
+      const newImg = img.cloneNode();
+      newImg.removeAttribute('src');
+      newImg.setAttribute('data-src', src);
+      newImg.classList.add('lazy');
+
+      const icon = document.createElement('div');
+      icon.className = 'lazy-icon';
+      if (def.loading) {
+        icon.style.backgroundImage = `url("${def.loading}")`;
+      }
+
+      wrapper.appendChild(newImg);
+      wrapper.appendChild(icon);
+
+      img.replaceWith(wrapper);
+    });
+
+    // 通知 LazyLoad 更新
+    if (window.lazyLoadInstance?.update) {
+      window.lazyLoadInstance.update();
+    }
+  }
+  
+</script>
+
+<!-- required -->
+<script src="/js/main.js?v=1.33.1" defer></script>
+
+<script type="text/javascript">
+  const applyTheme = (theme) => {
+    if (theme === 'auto') {
+      document.documentElement.removeAttribute('data-theme')
+    } else {
+      document.documentElement.setAttribute('data-theme', theme)
+    }
+
+    // applyThemeToGiscus(theme)
+  }
+
+  // FIXME: 这会导致无法使用 preferred_color_scheme 以外的主题
+  const applyThemeToGiscus = (theme) => {
+    // theme = theme === 'auto' ? 'preferred_color_scheme' : theme
+    const cmt = document.getElementById('giscus')
+    if (cmt) {
+      // This works before giscus load.
+      cmt.setAttribute('data-theme', theme)
+    }
+
+    const iframe = document.querySelector('#comments > section.giscus > iframe')
+    if (iframe) {
+      // This works after giscus loaded.
+      const src = iframe.src
+      const newSrc = src.replace(/theme=[\w]+/, `theme=${theme}`)
+      iframe.src = newSrc
+    }
+  }
+
+  const switchTheme = () => {
+    // light -> dark -> auto -> light -> ...
+    const currentTheme = document.documentElement.getAttribute('data-theme')
+    let newTheme;
+    switch (currentTheme) {
+      case 'light':
+        newTheme = 'dark'
+        break
+      case 'dark':
+        newTheme = 'auto'
+        break
+      default:
+        newTheme = 'light'
+    }
+    applyTheme(newTheme)
+    window.localStorage.setItem('Stellar.theme', newTheme)
+    utils.dark.mode = newTheme === 'auto' ? (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light") : newTheme;
+    utils.dark.method.toggle.start();
+
+    const messages = {
+      light: `切换到浅色模式`,
+      dark: `切换到深色模式`,
+      auto: `切换到跟随系统配色`,
+    }
+    hud?.toast?.(messages[newTheme])
+  }
+
+  (() => {
+    // Apply user's preferred theme, if any.
+    const theme = window.localStorage.getItem('Stellar.theme')
+    if (theme !== null) {
+      applyTheme(theme)
+    } else {
+      utils.dark.mode = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    }
+    utils.dark.method.toggle.start();
+  })()
+</script>
+
+
+<!-- optional -->
+
+
+
+<script defer>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.services = Object.assign({}, JSON.parse(`{"mdrender":{"js":"/js/services/mdrender.js"},"siteinfo":{"js":"/js/services/siteinfo.js","api":null},"ghinfo":{"js":"/js/services/ghinfo.js"},"rating":{"js":"/js/services/rating.js","api":"https://star-vote.xaox.cc/api/rating"},"vote":{"js":"/js/services/vote.js","api":"https://star-vote.xaox.cc/api/vote"},"sites":{"js":"/js/services/sites.js"},"friends":{"js":"/js/services/friends.js"},"friends_and_posts":{"js":"/js/services/friends_and_posts.js"},"timeline":{"js":"/js/services/timeline.js"},"fcircle":{"js":"/js/services/fcircle.js"},"weibo":{"js":"/js/services/weibo.js"},"memos":{"js":"/js/services/memos.js"},"voice":{"js":"/js/plugins/voice.js"},"video":{"js":"/js/plugins/video.js"},"download-file":{"js":"/js/plugins/download-file.js"},"twikoo":{"js":"/js/services/twikoo_latest_comment.js"},"waline":{"js":"/js/services/waline_latest_comment.js"},"artalk":{"js":"/js/services/artalk_latest_comment.js"},"giscus":{"js":"/js/services/giscus_latest_comment.js"},"contributors":{"edit_this_page":{"_posts/":null,"wiki/stellar/":"https://github.com/xaoxuu/hexo-theme-stellar-docs/blob/main/"},"js":"/js/services/contributors.js"}}`));
+    for (let id of Object.keys(ctx.services)) {
+      const js = ctx.services[id].js;
+      if (id == 'siteinfo') {
+        ctx.cardlinks = document.querySelectorAll('a.link-card[cardlink]');
+        if (ctx.cardlinks?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            setCardLink(ctx.cardlinks);
+          });
+        }
+      } else if (id == 'voice') {
+        ctx.voiceAudios = document.querySelectorAll('.voice>audio');
+        if (ctx.voiceAudios?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            createVoiceDom(ctx.voiceAudios);
+          });
+        }
+      } else if (id == 'video') {
+        ctx.videos = document.querySelectorAll('.video>video');
+        if (ctx.videos?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            videoEvents(ctx.videos);
+          });
+        }
+      } else if (id == 'download-file') {
+        ctx.files = document.querySelectorAll('.file');
+        if (ctx.files?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            downloadFileEvent(ctx.files);
+          });
+        }
+      } else {
+        const els = document.getElementsByClassName(`ds-${id}`);
+        if (els?.length > 0) {
+          utils.jq(() => {
+            if (id == 'timeline' || 'memos' || 'marked') {
+              utils.js(deps.marked).then(function () {
+                utils.js(js, { defer: true });
+              });
+            } else {
+              utils.js(js, { defer: true });
+            }
+          });
+        }
+      }
+    }
+
+    // chat iphone time
+    let phoneTimes = document.querySelectorAll('.chat .status-bar .time');
+
+    if (phoneTimes.length > 0) {
+      NowTime();
+      var date = new Date();
+      var sec = date.getSeconds();
+      var firstAdjustInterval = setInterval(firstAdjustTime, 1000 * (60 - sec));
+    }
+
+    function firstAdjustTime() {
+      NowTime();
+      clearInterval(firstAdjustInterval);
+      setInterval(NowTime, 1000 * 60);
+    }
+
+    function NowTime() {
+      for (let i = 0; i < phoneTimes.length; ++i) {
+        var timeSpan = phoneTimes[i];
+        var date = new Date();
+        var hour = date.getHours();
+        var min = date.getMinutes();
+        timeSpan.innerHTML = check(hour) + ":" + check(min);
+      }
+    };
+
+    function check(val) {
+      if (val < 10) {
+        return ("0" + val);
+      }
+      return (val);
+    }
+
+    // chat quote
+    const chat_quote_obverser = new IntersectionObserver((entries, observer) => {
+      entries.filter((entry) => { return entry.isIntersecting }).sort((a, b) => a.intersectionRect.y !== b.intersectionRect.y ? a.intersectionRect.y - b.intersectionRect.y : a.intersectionRect.x - b.intersectionRect.x).forEach((entry, index) => {
+          observer.unobserve(entry.target);
+          setTimeout(() => {
+            entry.target.classList.add('quote-blink');
+            setTimeout(() => {
+              entry.target.classList.remove('quote-blink');
+            }, 1000);
+          }, Math.max(100, 16) * (index + 1));
+        });
+    });
+
+    var chatQuotes = document.querySelectorAll(".chat .talk .quote");
+    chatQuotes.forEach((quote) => {
+      quote.addEventListener('click', function () {
+        var chatCellDom = document.getElementById("quote-" + quote.getAttribute("quotedCellTag"));
+        if (chatCellDom) {
+          var chatDiv = chatCellDom.parentElement;
+          var mid = chatDiv.clientHeight / 2;
+          var offsetTop = chatCellDom.offsetTop;
+          if (offsetTop > mid - chatCellDom.clientHeight / 2) {
+            chatDiv.scrollTo({
+              top: chatCellDom.offsetTop - mid + chatCellDom.clientHeight / 2,
+              behavior: "smooth"
+            });
+          } else {
+            chatDiv.scrollTo({
+              top: 0,
+              behavior: "smooth"
+            });
+          }
+          chat_quote_obverser.observe(chatCellDom);
+        }
+      });
+    });
+  });
+</script>
+
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.search = {
+      path: `/search.json`,
+    }
+    utils.js('/js/search/local-search.js', { defer: true });
+  });
+</script><script>
+  window.FPConfig = {
+    delay: 0,
+    ignoreKeywords: [],
+    maxRPS: 5,
+    hoverDelay: 25
+  };
+</script>
+<script defer src="https://gcore.jsdelivr.net/npm/flying-pages@2/flying-pages.min.js"></script><script>
+  ctx.fancybox = {
+    selector: `.timenode p>img`,
+    css: `https://gcore.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css`,
+    js: `https://gcore.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js`
+  };
+  var selector = '[data-fancybox]:not(.error), .with-fancybox .atk-content img:not([atk-emoticon])';
+  if (ctx.fancybox.selector) {
+    selector += `, ${ctx.fancybox.selector}`
+  }
+  var needFancybox = document.querySelectorAll(selector).length !== 0;
+  if (!needFancybox) {
+    const memos = document.getElementsByClassName('ds-memos');
+    if (memos != undefined && memos.length > 0) {
+      needFancybox = true;
+    }
+    const fancybox = document.getElementsByClassName('with-fancybox');
+    if (fancybox != undefined && fancybox.length > 0) {
+      needFancybox = true;
+    }
+  }
+  if (needFancybox) {
+    utils.css(ctx.fancybox.css);
+    utils.js(ctx.fancybox.js, { defer: true }).then(function () {
+      Fancybox.bind(selector, {
+        hideScrollbar: false,
+        Thumbs: {
+          autoStart: false,
+        },
+        caption: (fancybox, slide) => {
+          return slide.triggerEl.alt || slide.triggerEl.dataset.caption || null
+        }
+      });
+    })
+  }
+</script>
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    const swiper_api = document.getElementById('swiper-api');
+    if (swiper_api != undefined) {
+      utils.css(`https://unpkg.com/swiper@10.3/swiper-bundle.min.css`);
+      utils.js(`https://unpkg.com/swiper@10.3/swiper-bundle.min.js`, { defer: true }).then(function () {
+        const effect = swiper_api.getAttribute('effect') || '';
+        var swiper = new Swiper('.swiper#swiper-api', {
+          slidesPerView: 'auto',
+          spaceBetween: 8,
+          centeredSlides: true,
+          effect: effect,
+          rewind: true,
+          pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+          },
+          navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+          },
+        });
+      })
+    }
+  });
+</script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    window.codeElements = document.querySelectorAll('.code');
+    if (window.codeElements.length > 0) {
+      ctx.copycode = {
+        default_text: `Copy`,
+        success_text: `Copied`,
+        toast: `复制成功`,
+      };
+      utils.js('/js/plugins/copycode.js');
+    }
+  });
+</script>
+
+
+<!-- inject -->
+<script defer src="/js/openai.js"></script>
+</div></body></html>
