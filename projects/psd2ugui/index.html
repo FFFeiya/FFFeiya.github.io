@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Psd2UGUI — 把 PSD 设计稿转成 Unity UGUI 界面的工具 — 杨飞洋 Feiya Yang</title>
+<meta name="description" content="按规范画的 PSD 一条命令转成 Prefab、控件、九宫格和绑定类，并用像素对比验收；乱稿先由模型整理，程序执行并把关。">
+<meta name="author" content="杨飞洋 Feiya Yang">
+<link rel="canonical" href="https://fffeiya.github.io/projects/psd2ugui/">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="杨飞洋 Feiya Yang">
+<meta property="og:title" content="Psd2UGUI — 把 PSD 设计稿转成 Unity UGUI 界面的工具">
+<meta property="og:description" content="按规范画的 PSD 一条命令转成 Prefab、控件、九宫格和绑定类，并用像素对比验收；乱稿先由模型整理，程序执行并把关。">
+<meta property="og:url" content="https://fffeiya.github.io/projects/psd2ugui/">
+<meta property="og:image" content="https://fffeiya.github.io/images/work/psd2ugui/page-edit.webp">
+<meta property="og:locale" content="zh_CN">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#fbfbf9" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0e0e0d" media="(prefers-color-scheme: dark)">
+<link rel="icon" type="image/png" href="/brand/favicon.png">
+<link rel="preload" href="/fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<script>
+(function () {
+  try {
+    var t = localStorage.getItem('theme');
+    if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+  } catch (e) {}
+})();
+</script>
+<link rel="stylesheet" href="/css/site.css">
+</head>
+
+<body class="layout-project">
+<a class="skip-link" href="#main">跳到正文</a>
+<header class="site-header" data-header>
+  <div class="wrap site-header__inner">
+    <a class="brand" href="/" aria-label="杨飞洋 Feiya Yang 首页">
+      <img class="brand__mark brand__mark--light" src="/brand/fffeiya-mark.png" alt="" width="28" height="24">
+      <img class="brand__mark brand__mark--dark" src="/brand/fffeiya-mark-dark.png" alt="" width="28" height="24">
+      <span class="brand__name">Feiya Yang</span>
+    </a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" data-nav-toggle>
+      <span class="nav-toggle__label">菜单</span>
+      <span class="nav-toggle__icon" aria-hidden="true"></span>
+    </button>
+    <nav class="site-nav" id="site-nav" aria-label="主导航" data-nav>
+      <ul class="site-nav__list">
+        
+        <li><a class="site-nav__link is-active" href="/projects/" aria-current="page">作品<span class="site-nav__en">Work</span></a></li>
+        
+        <li><a class="site-nav__link" href="/#focus">方向<span class="site-nav__en">Focus</span></a></li>
+        
+        <li><a class="site-nav__link" href="/blog/">文章<span class="site-nav__en">Writing</span></a></li>
+        
+        <li><a class="site-nav__link" href="/about/">关于<span class="site-nav__en">About</span></a></li>
+        
+        <li><a class="site-nav__link" href="/resume/">简历<span class="site-nav__en">Resume</span></a></li>
+        
+      </ul>
+      <button class="theme-toggle" type="button" data-theme-toggle aria-label="切换深色 / 浅色模式">
+        <span class="theme-toggle__dot" aria-hidden="true"></span>
+        <span class="theme-toggle__text" data-theme-label>Dark</span>
+      </button>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+<article class="project">
+  <header class="project-head">
+    <div class="wrap">
+      <p class="label"><a href="/projects/">Work</a> / UI Tooling</p>
+      <h1 class="project-head__title">Psd2UGUI <span class="project-head__zh">PSD → Unity UGUI 界面转换工具</span></h1>
+      <p class="project-head__summary">按规范画的 PSD 一条命令转成 Prefab、控件、九宫格和绑定类，并用像素对比验收；乱稿先由模型整理，程序执行并把关。</p>
+      <dl class="facts">
+        <div><dt>Role</dt><dd>个人项目（AI 辅助开发，制作方式见页内说明）</dd></div>
+        <div><dt>Year</dt><dd>2026</dd></div>
+        <div><dt>Team</dt><dd>个人项目</dd></div>
+        <div><dt>Tech</dt><dd>Python · Unity 2022.3 · UGUI / TextMeshPro · Claude Code skill</dd></div>
+        <div><dt>Status</dt><dd><span class="work-card__status" data-status="开发中">开发中</span></dd></div>
+      </dl>
+      
+      <p class="project-head__links">
+        <a class="btn" href="/files/psd2ugui.pdf">介绍 PDF <span aria-hidden="true">→</span></a>
+      </p>
+      
+    </div>
+    
+  </header>
+
+  <div class="wrap article-grid article-grid--single">
+    <div class="prose prose--numbered"><video class="bleed" controls muted playsinline preload="none" poster="/images/work/psd2ugui/page-edit.webp">
+<source src="/files/psd2ugui.mp4" type="video/mp4">
+</video>
+<p class="caption">全流程实录，约 3 分半，无声。不是录屏：页面操作由脚本在无界面浏览器里完成，模型的部分按工具记下的会话记录回放，Unity 画面是 Play 模式下逐帧录的。这里是压缩到 720p 的版本。</p>
+
+<h2 id="概览"><a href="#概览" class="headerlink" title="概览"></a>概览</h2><p class="lede">给一张按规范画的 PSD，一条命令得到 Unity 原生 UGUI 的界面资源：Prefab、控件、九宫格切图、给程序用的绑定类，外加一份设计稿与引擎截图的像素对比报告。可以在浏览器里预览和修改，修改直接写回 PSD；不按规范画的稿子，先由模型整理成标准稿。</p>
+
+<p><strong>乱稿 →（模型判断，程序执行）→ 标准 PSD → 检查器 → 切图、界面描述、绑定类 → Unity 生成 Prefab → 离屏截图 → 与设计稿对比 → 报告</strong></p>
+<p>Unity 全程 <code>-batchmode</code>，不开任何窗口。只用 Unity 原生 UGUI 和 TextMeshPro。</p>
+<div class="stats">
+<div><b>≤ 0.023%</b><span>四张示例稿的非文字区域差异（合格线 1%）</span></div>
+<div><b>33</b><span>条规范检查规则，21 条错误、12 条警告</span></div>
+<div><b>517</b><span>个图层的 Bag 稿：4 个按钮、5 个页签、60 个列表条目</span></div>
+<div><b>3 轮</b><span>盲测：全新的子代理整理四张乱稿</span></div>
+</div>
+
+<div class="notice"><strong>制作方式与状态。</strong>个人项目，AI 辅助开发（Claude Code），仍在开发中：图集还没做。暂未开源。数字都来自工具写出的测量文件；它只在四张脚本生成的示例稿和由它们打乱出来的四张乱稿上跑通过，没有在设计师手画的稿子上测过。完整说明见 <a href="/files/psd2ugui.pdf">介绍 PDF</a>（15 页）。</div>
+
+<h2 id="AI-只在一个地方"><a href="#AI-只在一个地方" class="headerlink" title="AI 只在一个地方"></a>AI 只在一个地方</h2><p>这个工具最重要的设计决定是<strong>把模型关在一个很小的范围里</strong>。</p>
+<p>转换器是确定性的程序，里面没有 AI：语义全部来自图层名里的标记。模型只做一件事——判断乱稿里每个图层是什么，写成一份带理由的决定清单。改 PSD、核对结果都由程序做。</p>
+<p>这样分工之后，转换的结果可以复现、可以测量；模型出错的地方被限制在“命名和分组”上，而且每一条都看得见。</p>
+<h2 id="输入：图层名就是全部输入"><a href="#输入：图层名就是全部输入" class="headerlink" title="输入：图层名就是全部输入"></a>输入：图层名就是全部输入</h2><p>规范只管命名和分组，不要求设计师换工具。</p>
+<table>
+<thead>
+<tr>
+<th>写法</th>
+<th>结果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>名字@btn</code></td>
+<td><code>Button</code>。组内同名、状态不同的图层（<code>底:normal</code> <code>底:pressed</code> <code>底:disabled</code>）合并成一个 <code>Image</code>，其余状态成为 Sprite Swap 的图</td>
+</tr>
+<tr>
+<td><code>名字@tabs</code> &#x2F; <code>@toggle</code></td>
+<td><code>ToggleGroup</code> + <code>Toggle</code>，<code>:on</code> &#x2F; <code>:off</code> 图层随状态切换</td>
+</tr>
+<tr>
+<td><code>名字@list</code> &#x2F; <code>@grid</code></td>
+<td>子组是条目：结构相同、等间距。方向、列数、间距从稿子量出；第一个条目存成 Prefab，其余都是它的实例</td>
+</tr>
+<tr>
+<td><code>图层@9s</code> &#x2F; <code>@9s=左,上,右,下</code> &#x2F; <code>@raw</code></td>
+<td>九宫格：按容差找边距 &#x2F; 指定边距 &#x2F; 不切</td>
+</tr>
+<tr>
+<td><code>名字@fx</code></td>
+<td>投影、发光、选中框：不计入节点矩形</td>
+</tr>
+<tr>
+<td><code>名字@anchor=横-纵</code></td>
+<td>指定锚点；不写时按节点在父节点里的位置自动推断</td>
+</tr>
+<tr>
+<td><code>名字#id</code></td>
+<td>给程序用的 id，成为绑定类的强类型字段</td>
+</tr>
+</tbody></table>
+<p>文字是活文字：<code>TextMeshProUGUI</code>，字体、字号、颜色、字距、行距取自 PSD。</p>
+<h2 id="输出与还原度"><a href="#输出与还原度" class="headerlink" title="输出与还原度"></a>输出与还原度</h2><p>参照图是 PSD 内嵌的合成图，也就是 Photoshop 自己的渲染；引擎图是 Unity 按设计分辨率离屏渲染。任一通道差大于 16&#x2F;255 记为差异像素。</p>
+<div class="gallery gallery--3">
+<figure><img src="/images/work/psd2ugui/quest-design.webp" alt="Quest 设计稿" loading="lazy"><figcaption>设计稿（Photoshop 渲染）</figcaption></figure>
+<figure><img src="/images/work/psd2ugui/quest-engine.webp" alt="Quest 在 Unity 中的渲染" loading="lazy"><figcaption>转出的 Prefab（Unity 离屏渲染）</figcaption></figure>
+<figure><img src="/images/work/psd2ugui/quest-heat.webp" alt="Quest 差异热力图" loading="lazy"><figcaption>差异热力图：集中在文字笔画边缘</figcaption></figure>
+</div>
+
+<table>
+<thead>
+<tr>
+<th>稿子</th>
+<th>图层</th>
+<th>切图（去重前 → 后）</th>
+<th>按钮 &#x2F; 页签 &#x2F; 列表</th>
+<th>非文字区域差异</th>
+<th>整图差异</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>ConfirmPopup</td>
+<td>21</td>
+<td>12 → 12</td>
+<td>3 &#x2F; 0 &#x2F; 0</td>
+<td>0.000%</td>
+<td>0.203%</td>
+</tr>
+<tr>
+<td>Lobby</td>
+<td>76</td>
+<td>39 → 31</td>
+<td>3 &#x2F; 0 &#x2F; 1</td>
+<td>0.000%</td>
+<td>0.516%</td>
+</tr>
+<tr>
+<td>Bag</td>
+<td>517</td>
+<td>340 → 109</td>
+<td>4 &#x2F; 5 &#x2F; 1</td>
+<td>0.023%</td>
+<td>0.659%</td>
+</tr>
+<tr>
+<td>Quest（模拟手绘质感）</td>
+<td>94</td>
+<td>52 → 43</td>
+<td>6 &#x2F; 3 &#x2F; 1</td>
+<td>0.000%</td>
+<td>0.344%</td>
+</tr>
+</tbody></table>
+<p>合格线是非文字区域 ≤ 1%、整图 ≤ 5%。文字区域内的差异来自两个渲染器的抗锯齿不同，不设合格线；点文字的位置偏差在 0.6 px 以内。Bag 稿从读 PSD 到 Unity 截图完成约 10 秒。</p>
+<p>除了 Prefab 和切图，每个界面还会生成一个绑定类，带 <code>#id</code> 的对象都是强类型字段：</p>
+<figure class="highlight csharp"><table><tr><td class="code"><pre><code class="hljs csharp"><span class="hljs-keyword">var</span> view = <span class="hljs-keyword">new</span> BagView(Instantiate(prefab));<br>view.Use.onClick.AddListener(OnUse);<br>view.Title.text = <span class="hljs-string">&quot;背包&quot;</span>;<br></code></pre></td></tr></table></figure>
+
+<p><img src="/images/work/psd2ugui/bag-engine.webp" alt="Bag.psd 转出的 Prefab：517 个图层，Unity 离屏渲染"></p>
+<h2 id="规范检查器"><a href="#规范检查器" class="headerlink" title="规范检查器"></a>规范检查器</h2><p>“标准稿”的定义就是检查器零错误。错误分两类：转出来的画面会和设计稿不一样的（图层样式、混合模式、调整图层、剪贴蒙版……），和写下的标记无法兑现的（未知标记、互相冲突、id 重复……）。有错误时转换不会启动。</p>
+<p>每条发现都指到具体图层，预览页里点一条就选中那个图层，名字上的问题可以直接在页面里改。</p>
+<p><img src="/images/work/psd2ugui/page-lint.webp" alt="检查器在一张故意做坏的稿子上：右侧是发现列表，左侧图层列表里有问题的行带下划线"></p>
+<p>为什么需要它：把这张坏稿强行转换，再逐图层和 Photoshop 的画面比，6 个画面类违规里 5 个明显不同（差异像素 20% – 41%）——但<strong>整张图的判定仍然是“合格”</strong>，因为违规图层面积小，摊到整图上过不了 1% 的线。只看整图数字拦不住这些问题。</p>
+<figure class="bleed"><img src="/images/work/psd2ugui/lint-forced.webp" alt="坏稿强行转换后的逐图层对比" loading="lazy"><figcaption>上：Photoshop 的画面。中：强行转换后的 Unity 画面。下：差异。</figcaption></figure>
+
+<h2 id="在浏览器里预览和修改"><a href="#在浏览器里预览和修改" class="headerlink" title="在浏览器里预览和修改"></a>在浏览器里预览和修改</h2><p>一个只监听本机的小服务加一个页面。页面按图层拼出画面，标出转换器识别到的控件；点选图层后可以改名字、id、控件类型、状态、九宫格、锚点和位置。</p>
+<ul>
+<li><strong>保存就是写回 PSD</strong>，没有旁路文件；写入前先校验，不合法的拒绝</li>
+<li><strong>每次写入前自动备份</strong>，页面上可以按备份恢复</li>
+<li><strong>不覆盖别人的修改</strong>：文件在页面读取之后被别的程序改过，写入会被拒绝并重新读取</li>
+<li><strong>“生成到 Unity”</strong>触发完整转换，是否合格、数字和三张对比图直接显示在页面里</li>
+</ul>
+<p><img src="/images/work/psd2ugui/page-edit.webp" alt="预览页：左边是图层树和标记，中间是按图层拼出的画面，右边是选中图层的属性"></p>
+<div class="gallery">
+<figure><img src="/images/work/psd2ugui/wide-before.webp" alt="修改锚点之前的 21:9 画面" loading="lazy"><figcaption>21:9 下，修改前：底部面板不跟着变宽</figcaption></figure>
+<figure><img src="/images/work/psd2ugui/wide-after.webp" alt="修改锚点之后的 21:9 画面" loading="lazy"><figcaption>在页面里把锚点改成横向拉伸并写回后：面板跟着变宽，九宫格让圆角不变</figcaption></figure>
+</div>
+
+<p>直接改 PSD 是有风险的，所以这件事先单独验证过：改名、移动、归组之后，Photoshop 打开无报错，文字仍是文字图层、智能对象仍是智能对象，重新渲染的画面与预期相差不到 0.1% 的像素。对照实验里，移动时如果不同步文字变换和蒙版矩形，Photoshop 重新渲染后文字会跳回原位 42 px——这个检查抓得到问题。</p>
+<h2 id="乱稿规范化：模型判断，程序执行"><a href="#乱稿规范化：模型判断，程序执行" class="headerlink" title="乱稿规范化：模型判断，程序执行"></a>乱稿规范化：模型判断，程序执行</h2><p>不按规范画的稿子画面是对的，只是程序读不出含义：默认图层名、没有标记、控件没成组。</p>
+<ul>
+<li><strong>模型做判断</strong>：这一层是什么（按钮的底、按下态、发光、列表条目……）。它不直接改 PSD，只写一份决定清单：改名、归组、解散组、移动，每条带一句理由。拿不准的列为“待确认”</li>
+<li><strong>程序执行并把关</strong>：只改名和调整分组，不动像素。会让重叠图层上下颠倒、或改变显隐和不透明度的操作一律拒绝。写完再读回来，逐图层比像素和文字数据，逐像素比合成画面</li>
+<li><strong>像素层面的问题不处理</strong>：图层样式、混合模式只报告，留给 Photoshop</li>
+</ul>
+<figure class="bleed"><img src="/images/work/psd2ugui/pdf-normalize.webp" alt="介绍 PDF 第 13 页：模型看到的图、写下的决定与理由" loading="lazy"><figcaption>介绍 PDF 第 13 页：模型看到的图层视图、它写下的决定和给出的理由</figcaption></figure>
+
+<h3 id="怎么测的：盲测"><a href="#怎么测的：盲测" class="headerlink" title="怎么测的：盲测"></a>怎么测的：盲测</h3><p>乱稿是从标准稿打乱出来的，答案是已知的。所以判断交给<strong>全新的子代理</strong>：每张稿子一个，只拿到 skill 说明和乱稿，被禁止读标准稿、测试和报告。交回的决定清单由程序重新执行，再和标准稿逐个控件按矩形比对。</p>
+<table>
+<thead>
+<tr>
+<th>命中 &#x2F; 有偏差 &#x2F; 漏判 &#x2F; 误判</th>
+<th>标准稿里有</th>
+<th>第一轮</th>
+<th>第二轮</th>
+<th>第三轮</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>按钮</td>
+<td>16</td>
+<td>12 &#x2F; 4 &#x2F; 0 &#x2F; 5</td>
+<td>15 &#x2F; 1 &#x2F; 0 &#x2F; 5</td>
+<td>15 &#x2F; 1 &#x2F; 0 &#x2F; 5</td>
+</tr>
+<tr>
+<td>页签</td>
+<td>8</td>
+<td>8 &#x2F; 0 &#x2F; 0 &#x2F; 0</td>
+<td>8 &#x2F; 0 &#x2F; 0 &#x2F; 0</td>
+<td>8 &#x2F; 0 &#x2F; 0 &#x2F; 0</td>
+</tr>
+<tr>
+<td>列表</td>
+<td>3</td>
+<td>3 &#x2F; 0 &#x2F; 0 &#x2F; 0</td>
+<td>3 &#x2F; 0 &#x2F; 0 &#x2F; 0</td>
+<td>3 &#x2F; 0 &#x2F; 0 &#x2F; 0</td>
+</tr>
+<tr>
+<td><code>@fx</code> 图层</td>
+<td>133</td>
+<td>133 &#x2F; 0 &#x2F; 0 &#x2F; 1</td>
+<td>133 &#x2F; 0 &#x2F; 0 &#x2F; 1</td>
+<td>133 &#x2F; 0 &#x2F; 0 &#x2F; 1</td>
+</tr>
+<tr>
+<td><code>@9s</code> 图层</td>
+<td>18</td>
+<td>6 &#x2F; 0 &#x2F; 12 &#x2F; 8</td>
+<td>18 &#x2F; 0 &#x2F; 0 &#x2F; 15</td>
+<td>18 &#x2F; 0 &#x2F; 0 &#x2F; 15</td>
+</tr>
+</tbody></table>
+<p>规范化之后四张稿子都能转换，非文字区域差异最大 0.85%（来自故意留下的一个图层样式和一个滤色混合），Play 模式检查 7 &#x2F; 7 通过。模型整理一张稿子用时 39 – 125 秒。</p>
+<p>误判的 5 个按钮是导航列表的五个条目——模型把条目本身也标成了按钮，这是读法不同而不是错。多标的 <code>@9s</code> 是进度条和条目底板，对画面没有影响。</p>
+<p><strong>这个测试的边界</strong></p>
+<ul>
+<li>第一轮之后改了工具的看图方式和 skill；其中“只有一张非灰色的隐藏底图时判为按下态”这一条是看过答案之后加的，第二轮在这一条上不算盲测</li>
+<li>三轮用的是同四张稿子</li>
+<li>乱稿是从标准稿打乱出来的：像素干净，一个图层一个用途。真实的乱稿会更糟</li>
+<li>三轮里程序没有拒绝过任何操作，所以“拒绝后改用别的归组方式”这条路在盲测里没有走到</li>
+</ul>
+<h2 id="还验证了什么"><a href="#还验证了什么" class="headerlink" title="还验证了什么"></a>还验证了什么</h2><ul>
+<li><strong>Play 模式检查</strong>：Unity 以 batchmode 进入 Play 模式，一个虚拟指针通过标准输入模块和射线检测去点按钮、切页签、拖列表。四张稿子全部通过</li>
+<li><strong>预览服务</strong>：34 项接口检查全部通过；另有一段 16 步的页面脚本会话，每步核对 PSD。最后恢复最早的备份，文件与原稿逐字节相同</li>
+<li><strong>九宫格</strong>：切完按原尺寸拼回，与原图比较，四张稿子最大通道误差不超过 2 &#x2F; 255</li>
+</ul>
+<h2 id="已知限制"><a href="#已知限制" class="headerlink" title="已知限制"></a>已知限制</h2><ul>
+<li><strong>没有图集</strong>，也还没有进度条、滑条、输入框</li>
+<li><strong>示例稿不是人画的</strong>：由 HTML 渲染再经 Photoshop 脚本生成，图层结构比真实设计稿规整</li>
+<li><strong>还原度的合格线拦不住小面积的错误</strong>，见上面的坏稿实验</li>
+<li><strong>段落文字换行可能不同</strong>：一行放不下时 Photoshop 会挤压标点排进一行，TextMeshPro 会换行</li>
+<li><strong>文字只支持单一样式、横排、无旋转</strong>；描边和投影没有还原</li>
+<li><strong>锚点推断是启发式的</strong>，Bag 稿有三处靠手动指定</li>
+<li><strong>带渐变或颗粒的图不裁小</strong>；带颗粒的中段拉伸后会成横纹</li>
+<li><strong>操作都由脚本完成</strong>：Unity 里是虚拟指针，页面是无界面浏览器，没有真人点过，也没有真机</li>
+<li>只在一台机器上跑过：Unity 2022.3.62f3，Photoshop 2021，Chrome</li>
+</ul>
+<p>示例稿里有三张取材自我另一个作品 <a href="/projects/ui-showcase/">Driftglass UI Showcase</a> 的界面：那边是把界面在引擎里搭出来，这边是让同样的界面从 PSD 自动生成。</p>
+</div>
+    
+  </div>
+
+  
+  <section class="section section--tight" aria-labelledby="rel-title">
+    <div class="wrap">
+      <header class="section__head">
+        <p class="label">Read by Focus</p>
+        <h2 class="section__title" id="rel-title">这个项目和哪些方向相关</h2>
+      </header>
+      <div class="rel-grid">
+        
+        <a class="rel" href="/focus/tools/">
+          <span class="rel__no">03</span>
+          <span class="rel__title">Tools &amp; Pipeline · 客户端工具 / 编辑器</span>
+          <span class="rel__why">一条有检查、有验收、有回退的 UI 内容管线，模型只在其中一步里做判断。</span>
+        </a>
+        
+        <a class="rel" href="/focus/technical-ui/">
+          <span class="rel__no">04</span>
+          <span class="rel__title">Technical UI · UI 蓝图 / 界面工程</span>
+          <span class="rel__why">把“设计稿进引擎”这一步做成工具：规范、检查、转换、验收连成一条线，AI 只负责整理乱稿。</span>
+        </a>
+        
+      </div>
+    </div>
+  </section>
+  
+
+  <nav class="wrap pager" aria-label="其他项目">
+    
+    <a class="pager__all" href="/projects/">← 全部作品</a>
+    <a class="pager__next" href="/projects/tencent-production/"><span class="label">Next</span>Production Engineering →</a>
+  </nav>
+</article>
+
+</main>
+<footer class="site-footer">
+  <div class="wrap site-footer__inner">
+    <div class="site-footer__lead">
+      <p class="label">Contact</p>
+      <a class="site-footer__mail" href="mailto:fffeiya@foxmail.com">fffeiya@foxmail.com</a>
+    </div>
+    <ul class="site-footer__links">
+      <li><a target="_blank" href="https://github.com/FFFeiya" rel="noopener noopener">GitHub</a></li>
+      <li><a href="/resume/">简历</a></li>
+      <li><a href="/projects/">全部作品</a></li>
+      <li><a href="/blog/">文章</a></li>
+    </ul>
+    <p class="site-footer__meta">© 2026 杨飞洋 Feiya Yang · 文章采用 <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener noopener">CC BY-NC-SA 4.0</a></p>
+  </div>
+</footer>
+
+<script src="/js/site.js" defer></script>
+</body>
+</html>

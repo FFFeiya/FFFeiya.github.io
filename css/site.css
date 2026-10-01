@@ -794,6 +794,7 @@ button {
 }
 
 .work-card__status[data-status="重构中"]::before,
+.work-card__status[data-status="开发中"]::before,
 .work-card__status[data-status="原型"]::before {
   background: #d99a1c;
 }
