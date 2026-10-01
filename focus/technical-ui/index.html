@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Technical UI 界面工程 — 杨飞洋 Feiya Yang</title>
+<meta name="description" content="UI 蓝图 / Technical UI 方向：UGUI、自适应、多语言、UI 性能与设计稿还原。">
+<meta name="author" content="杨飞洋 Feiya Yang">
+<link rel="canonical" href="https://fffeiya.github.io/focus/technical-ui/">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="杨飞洋 Feiya Yang">
+<meta property="og:title" content="Technical UI 界面工程">
+<meta property="og:description" content="UI 蓝图 / Technical UI 方向：UGUI、自适应、多语言、UI 性能与设计稿还原。">
+<meta property="og:url" content="https://fffeiya.github.io/focus/technical-ui/">
+<meta property="og:image" content="https://fffeiya.github.io/images/work/ui-showcase/lobby_16x9_zh.webp">
+<meta property="og:locale" content="zh_CN">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#fbfbf9" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0e0e0d" media="(prefers-color-scheme: dark)">
+<link rel="icon" type="image/png" href="/brand/favicon.png">
+<link rel="preload" href="/fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<script>
+(function () {
+  try {
+    var t = localStorage.getItem('theme');
+    if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+  } catch (e) {}
+})();
+</script>
+<link rel="stylesheet" href="/css/site.css">
+</head>
+
+<body class="layout-focus">
+<a class="skip-link" href="#main">跳到正文</a>
+<header class="site-header" data-header>
+  <div class="wrap site-header__inner">
+    <a class="brand" href="/" aria-label="杨飞洋 Feiya Yang 首页">
+      <img class="brand__mark brand__mark--light" src="/brand/fffeiya-mark.png" alt="" width="28" height="24">
+      <img class="brand__mark brand__mark--dark" src="/brand/fffeiya-mark-dark.png" alt="" width="28" height="24">
+      <span class="brand__name">Feiya Yang</span>
+    </a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" data-nav-toggle>
+      <span class="nav-toggle__label">菜单</span>
+      <span class="nav-toggle__icon" aria-hidden="true"></span>
+    </button>
+    <nav class="site-nav" id="site-nav" aria-label="主导航" data-nav>
+      <ul class="site-nav__list">
+        
+        <li><a class="site-nav__link" href="/projects/">作品<span class="site-nav__en">Work</span></a></li>
+        
+        <li><a class="site-nav__link is-active" href="/#focus" aria-current="page">方向<span class="site-nav__en">Focus</span></a></li>
+        
+        <li><a class="site-nav__link" href="/blog/">文章<span class="site-nav__en">Writing</span></a></li>
+        
+        <li><a class="site-nav__link" href="/about/">关于<span class="site-nav__en">About</span></a></li>
+        
+        <li><a class="site-nav__link" href="/resume/">简历<span class="site-nav__en">Resume</span></a></li>
+        
+      </ul>
+      <button class="theme-toggle" type="button" data-theme-toggle aria-label="切换深色 / 浅色模式">
+        <span class="theme-toggle__dot" aria-hidden="true"></span>
+        <span class="theme-toggle__text" data-theme-label>Dark</span>
+      </button>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+<section class="page-head page-head--focus">
+  <div class="wrap">
+    <p class="label"><a href="/#focus">Focus</a> / 04</p>
+    <h1 class="page-head__title">Technical UI <span class="page-head__zh">UI 蓝图 / 界面工程</span></h1>
+    <p class="page-head__lead">把设计稿在引擎里搭成程序可以直接用的界面资源，并对适配、多语言、性能和还原度负责。</p>
+    <ul class="keyline" aria-label="这个方向会关注的能力">
+      <li>UGUI / TextMeshPro</li><li>Prefab 与控件化</li><li>自适应与安全区</li><li>多语言</li><li>UI 性能</li><li>图集与资源规范</li><li>设计稿还原</li><li>UI 工具</li>
+    </ul>
+  </div>
+</section>
+
+<section class="section section--tight" aria-labelledby="evidence-title">
+  <div class="wrap">
+    <header class="section__head">
+      <p class="label">Evidence</p>
+      <h2 class="section__title" id="evidence-title">先看这些</h2>
+      <p class="section__note">每一条只说明它为什么与这个方向相关，完整内容在项目页。</p>
+    </header>
+    <div class="evidence">
+      
+      <article class="evidence__item">
+        <a class="evidence__media" href="/projects/ui-showcase/" tabindex="-1" aria-hidden="true">
+          <img src="/images/work/ui-showcase/lobby_16x9_zh.webp" alt="" loading="lazy" decoding="async">
+        </a>
+        <div class="evidence__body">
+          <p class="work-card__meta"><span class="work-card__index">01</span><span>Technical UI</span><span class="work-card__status" data-status="已完成">已完成</span></p>
+          <h3 class="evidence__title"><a href="/projects/ui-showcase/">Driftglass UI Showcase <span class="work-card__zh">Unity UGUI 界面搭建作品</span></a></h3>
+          <p class="evidence__why">为这个方向专门做的作品：一套原创界面，每一项要求都有画面和实测数字。</p>
+          <ul class="evidence__points">
+            <li>一份 Prefab 适配 16:9 / 21:9 / 4:3 / 竖屏与刘海安全区</li><li>中 / 英 / 日 / 德实时切换，每个文本节点声明溢出策略</li><li>20 个基础控件 + 10 个 Prefab Variant，界面全部由控件拼成</li><li>10000 条数据的循环列表：窗口模式下 10.4 FPS → 60 FPS（实测）</li><li>设计稿与引擎画面逐像素对比，差异像素 6.78%</li>
+          </ul>
+          <p class="evidence__foot"><span class="evidence__tech">Unity 2022.3 LTS · UGUI · TextMeshPro · ShaderLab</span><a class="link-arrow" href="/projects/ui-showcase/">打开项目页 →</a></p>
+        </div>
+      </article>
+      
+      <article class="evidence__item">
+        <a class="evidence__media evidence__media--text" href="/projects/tencent-production/" tabindex="-1" aria-hidden="true">
+          <pre class="work-card__diagram">Excel  ⇄  Blueprint  ⇄  Unity Runtime
+PSD  →  Merge Plan  →  Prefab
+GM · Trace · Perf</pre>
+        </a>
+        <div class="evidence__body">
+          <p class="work-card__meta"><span class="work-card__index">02</span><span>Production Case</span><span class="work-card__status" data-status="实习项目">实习项目</span></p>
+          <h3 class="evidence__title"><a href="/projects/tencent-production/">Production Engineering <span class="work-card__zh">腾讯 IEG《虚环》客户端实习</span></a></h3>
+          <p class="evidence__why">在商业项目里做 UI 的生产侧：从 PSD 到 Prefab，再到应用层落地。</p>
+          <ul class="evidence__points">
+            <li>Button 事件自动绑定、Slot 预制体化、多实例差异保留的状态绑定</li><li>PSD→Unity 自动化与图层合并计划</li><li>HUD 视觉还原调研，沉淀还原规则与检查脚本</li>
+          </ul>
+          <p class="evidence__foot"><span class="evidence__tech">Unity · C# · Electron / React / TypeScript · Python</span><a class="link-arrow" href="/projects/tencent-production/">打开项目页 →</a></p>
+        </div>
+      </article>
+      
+      <article class="evidence__item">
+        <a class="evidence__media" href="/projects/farmix/" tabindex="-1" aria-hidden="true">
+          <img src="/images/work/farmix/gameplay.webp" alt="" loading="lazy" decoding="async">
+        </a>
+        <div class="evidence__body">
+          <p class="work-card__meta"><span class="work-card__index">03</span><span>Gameplay</span><span class="work-card__status" data-status="已完成">已完成</span></p>
+          <h3 class="evidence__title"><a href="/projects/farmix/">Farmix <span class="work-card__zh">Qix-like 领地占领游戏</span></a></h3>
+          <p class="evidence__why">一个完整游戏流的 UGUI / TMP 实现。</p>
+          <ul class="evidence__points">
+            <li>主菜单、HUD、结算弹窗与首关提示</li><li>移动端分辨率与输入适配</li>
+          </ul>
+          <p class="evidence__foot"><span class="evidence__tech">Unity 6 · C# · Android</span><a class="link-arrow" href="/projects/farmix/">打开项目页 →</a></p>
+        </div>
+      </article>
+      
+    </div>
+  </div>
+</section>
+
+
+
+
+
+<section class="section section--last" aria-labelledby="other-title">
+  <div class="wrap">
+    <header class="section__head">
+      <p class="label">Other Focus</p>
+      <h2 class="section__title" id="other-title">换一个方向看</h2>
+    </header>
+    <ul class="chip-nav chip-nav--lg">
+      
+      <li><a href="/focus/technical-design/"><span>01</span>Technical Design · 技术策划</a></li>
+      
+      <li><a href="/focus/client/"><span>02</span>Client Engineering · 客户端开发</a></li>
+      
+      <li><a href="/focus/tools/"><span>03</span>Tools &amp; Pipeline · 客户端工具 / 编辑器</a></li>
+      
+    </ul>
+  </div>
+</section>
+
+</main>
+<footer class="site-footer">
+  <div class="wrap site-footer__inner">
+    <div class="site-footer__lead">
+      <p class="label">Contact</p>
+      <a class="site-footer__mail" href="mailto:fffeiya@foxmail.com">fffeiya@foxmail.com</a>
+    </div>
+    <ul class="site-footer__links">
+      <li><a target="_blank" href="https://github.com/FFFeiya" rel="noopener noopener">GitHub</a></li>
+      <li><a href="/resume/">简历</a></li>
+      <li><a href="/projects/">全部作品</a></li>
+      <li><a href="/blog/">文章</a></li>
+    </ul>
+    <p class="site-footer__meta">© 2026 杨飞洋 Feiya Yang · 文章采用 <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener noopener">CC BY-NC-SA 4.0</a></p>
+  </div>
+</footer>
+
+<script src="/js/site.js" defer></script>
+</body>
+</html>

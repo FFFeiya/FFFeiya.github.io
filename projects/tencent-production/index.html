@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Production Engineering — 腾讯 IEG《虚环》客户端实习 — 杨飞洋 Feiya Yang</title>
+<meta name="description" content="在商业项目里做运行时功能、配置编辑器与内容管线：Excel↔可视化蓝图、PSD→Unity、GM 与排查工具。">
+<meta name="author" content="杨飞洋 Feiya Yang">
+<link rel="canonical" href="https://fffeiya.github.io/projects/tencent-production/">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="杨飞洋 Feiya Yang">
+<meta property="og:title" content="Production Engineering — 腾讯 IEG《虚环》客户端实习">
+<meta property="og:description" content="在商业项目里做运行时功能、配置编辑器与内容管线：Excel↔可视化蓝图、PSD→Unity、GM 与排查工具。">
+<meta property="og:url" content="https://fffeiya.github.io/projects/tencent-production/">
+<meta property="og:image" content="https://fffeiya.github.io/images/work/ui-showcase/lobby_16x9_zh.webp">
+<meta property="og:locale" content="zh_CN">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#fbfbf9" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0e0e0d" media="(prefers-color-scheme: dark)">
+<link rel="icon" type="image/png" href="/brand/favicon.png">
+<link rel="preload" href="/fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<script>
+(function () {
+  try {
+    var t = localStorage.getItem('theme');
+    if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+  } catch (e) {}
+})();
+</script>
+<link rel="stylesheet" href="/css/site.css">
+</head>
+
+<body class="layout-project">
+<a class="skip-link" href="#main">跳到正文</a>
+<header class="site-header" data-header>
+  <div class="wrap site-header__inner">
+    <a class="brand" href="/" aria-label="杨飞洋 Feiya Yang 首页">
+      <img class="brand__mark brand__mark--light" src="/brand/fffeiya-mark.png" alt="" width="28" height="24">
+      <img class="brand__mark brand__mark--dark" src="/brand/fffeiya-mark-dark.png" alt="" width="28" height="24">
+      <span class="brand__name">Feiya Yang</span>
+    </a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" data-nav-toggle>
+      <span class="nav-toggle__label">菜单</span>
+      <span class="nav-toggle__icon" aria-hidden="true"></span>
+    </button>
+    <nav class="site-nav" id="site-nav" aria-label="主导航" data-nav>
+      <ul class="site-nav__list">
+        
+        <li><a class="site-nav__link is-active" href="/projects/" aria-current="page">作品<span class="site-nav__en">Work</span></a></li>
+        
+        <li><a class="site-nav__link" href="/#focus">方向<span class="site-nav__en">Focus</span></a></li>
+        
+        <li><a class="site-nav__link" href="/blog/">文章<span class="site-nav__en">Writing</span></a></li>
+        
+        <li><a class="site-nav__link" href="/about/">关于<span class="site-nav__en">About</span></a></li>
+        
+        <li><a class="site-nav__link" href="/resume/">简历<span class="site-nav__en">Resume</span></a></li>
+        
+      </ul>
+      <button class="theme-toggle" type="button" data-theme-toggle aria-label="切换深色 / 浅色模式">
+        <span class="theme-toggle__dot" aria-hidden="true"></span>
+        <span class="theme-toggle__text" data-theme-label>Dark</span>
+      </button>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+<article class="project">
+  <header class="project-head">
+    <div class="wrap">
+      <p class="label"><a href="/projects/">Work</a> / Production Case</p>
+      <h1 class="project-head__title">Production Engineering <span class="project-head__zh">腾讯 IEG《虚环》客户端实习</span></h1>
+      <p class="project-head__summary">在商业项目里做运行时功能、配置编辑器与内容管线：Excel↔可视化蓝图、PSD→Unity、GM 与排查工具。</p>
+      <dl class="facts">
+        <div><dt>Role</dt><dd>游戏客户端开发实习生</dd></div>
+        <div><dt>Year</dt><dd>2026</dd></div>
+        <div><dt>Team</dt><dd>腾讯 IEG 内容生态部 ·《虚环》项目组</dd></div>
+        <div><dt>Tech</dt><dd>Unity · C# · Electron / React / TypeScript · Python</dd></div>
+        <div><dt>Status</dt><dd><span class="work-card__status" data-status="实习项目">实习项目</span></dd></div>
+      </dl>
+      
+    </div>
+    
+  </header>
+
+  <div class="wrap article-grid">
+    <div class="prose prose--numbered"><div class="notice"><strong>关于这一页。</strong>这是一段商业项目里的实习经历，所以这里不出现内部截图、代码和业务数据，只讲我面对的问题、做法和边界。细节可以在面试中展开。</div>
+
+<h2 id="概览"><a href="#概览" class="headerlink" title="概览"></a>概览</h2><p class="lede">2026 年 5 月到 8 月，我在腾讯 IEG 内容生态部《虚环》项目组做游戏客户端开发实习生，项目使用 Unity。工作落在三层：项目主干上的运行时功能与调试工具、给策划用的配置编辑器、给 UI 生产用的自动化管线。</p>
+
+<div class="stats">
+<div><b>20+</b><span>项 Unity 主干上的功能任务</span></div>
+<div><b>5</b><span>类节点，覆盖 Excel↔蓝图双向编辑</span></div>
+<div><b>6</b><span>类处理动作的图层合并计划</span></div>
+</div>
+
+<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>内容型项目的瓶颈往往不在“功能做不出来”，而在<strong>内容生产和验证的成本</strong>：</p>
+<ul>
+<li>策划的配置分布在多级 Excel 里，有跨表逻辑和蓝图引用，改一处要在几张表之间来回核对</li>
+<li>运行时出了问题，复现需要构造特定的日程、角色状态或比赛结果，手工走一遍很慢</li>
+<li>UI 从 PSD 到 Prefab 的还原是重复劳动，隐含的图层处理规则只存在于人的经验里</li>
+</ul>
+<h2 id="我的角色"><a href="#我的角色" class="headerlink" title="我的角色"></a>我的角色</h2><p>实习生，但承担的是独立的功能任务。需要说清楚的边界：</p>
+<ul>
+<li><strong>独立负责</strong>：主干上的 GM、Cutscene、UI 应用层、剧情相关的 20 余项功能；Excel↔可视化蓝图的双向编辑专项；养成配置的节点化；UI 内容生产管线</li>
+<li><strong>共同建设</strong>：编辑器的蓝图体系——我负责近期的扩展与视图集成，不是从零独立完成</li>
+<li><strong>参与接入</strong>：配置在运行时的执行由一套统一执行器负责，我做的是渲染侧适配、runtime bridge 和预览入口，不是它的整体架构</li>
+<li><strong>不属于我</strong>：配置编辑器的内核</li>
+</ul>
+<h2 id="约束"><a href="#约束" class="headerlink" title="约束"></a>约束</h2><ul>
+<li>不能破坏既有的 Excel 数据链路：原表仍然是其他流程的输入，未知列必须原样保留</li>
+<li>多表、多行聚合、跨蓝图引用，导入必须能诊断出缺列与别名</li>
+<li>生成式步骤（AI 处理 PSD 图层）的结果不稳定，需要可审查、可回退</li>
+<li>实习周期有限，产出要小粒度、可审查</li>
+</ul>
+<h2 id="做法"><a href="#做法" class="headerlink" title="做法"></a>做法</h2><h3 id="Unity-主干：运行时功能与排查工具"><a href="#Unity-主干：运行时功能与排查工具" class="headerlink" title="Unity 主干：运行时功能与排查工具"></a>Unity 主干：运行时功能与排查工具</h3><ul>
+<li><strong>GM 调试面板</strong>：把日程跳转、角色状态、比赛结果等高频调试场景做成面板与批处理（录制、列表、编辑）</li>
+<li><strong>Cutscene 演出</strong>：过场编辑器的轨道能力扩展，包括场景脚本关键帧、灯光轨道对 layer 与材质参数的控制</li>
+<li><strong>排查与性能</strong>：语音配置的链路追踪工具、剧情性能跑测工具、对象池审计</li>
+</ul>
+<h3 id="配置编辑器：Excel-↔-可视化蓝图"><a href="#配置编辑器：Excel-↔-可视化蓝图" class="headerlink" title="配置编辑器：Excel ↔ 可视化蓝图"></a>配置编辑器：Excel ↔ 可视化蓝图</h3><p>把日程、逻辑列表、条件判断、剧情引用、对话气泡抽象为 5 类节点，打通：</p>
+<p><strong>扫描与诊断 → 分组导入 → 可视化编辑 → 反向抽取 → 写回原表 + 备份</strong></p>
+<p>另一条线是把训练、直播、角色状态等养成配置节点化，沉淀可复用的节点库，并接入 Unity 侧的只读同步和运行时验证。编辑器基于 Electron &#x2F; React &#x2F; TypeScript。</p>
+<h3 id="UI-生产管线：PSD-→-Unity"><a href="#UI-生产管线：PSD-→-Unity" class="headerlink" title="UI 生产管线：PSD → Unity"></a>UI 生产管线：PSD → Unity</h3><ul>
+<li>应用层：Button 事件自动绑定、Slot 预制体化、多实例差异保留的状态绑定</li>
+<li>管线：把原本隐含在处理链里的图层合并规则，迁移成“AI 生成计划 → 人工可审查 → 执行器回放”的显式计划数据，支持 6 类处理动作</li>
+<li>质量：图层树摘要、回归样例、Smoke Test，保留旧链路作为回退</li>
+</ul>
+<h3 id="Agent-Skill"><a href="#Agent-Skill" class="headerlink" title="Agent Skill"></a>Agent Skill</h3><p>把剧情结构化生成、PSD 批处理、UI 批注精修这些重复的研发任务封装成 Skill，用 Schema、稳定 ID 和阶段验收约束模型输出；在组内做过 AI 提效与 Skill 开发的分享。</p>
+<h2 id="工程决策"><a href="#工程决策" class="headerlink" title="工程决策"></a>工程决策</h2><ul>
+<li><strong>先冻结数据边界再写代码。</strong> 双向编辑专项经历过一次返工：逻辑子图最初是独立文件，后来改为内联，并系统清理了旧文件、导航和校验。教训是单一事实源、文件颗粒度、跨蓝图引用和保存原子性，要在大批量实现之前定下来。</li>
+<li><strong>把隐式规则变成可审查的数据。</strong> 图层合并从启发式代码改成计划文件之后，出错时能看到“计划是什么”，而不只是“结果不对”。</li>
+<li><strong>给生成式步骤留人工控制点。</strong> 计划可保存、可回放，执行有回退，验收分阶段。</li>
+<li><strong>区分“代码完成”和“验收完成”。</strong> 我在文档里固定使用已实现、已测试、观察期、待联调这样的状态词，避免把提交等同于交付。</li>
+</ul>
+<h2 id="结果与状态"><a href="#结果与状态" class="headerlink" title="结果与状态"></a>结果与状态</h2><ul>
+<li>Excel↔蓝图的导入、内联编辑、反向抽取、写回与备份已实现；完整的异常数据往返与 Unity 对齐验收，到 2026 年 8 月初我整理记录时还没有全部完成</li>
+<li>养成配置节点化的主批次已实现；统一执行器在真实场景下的完整端到端验收当时也未完成</li>
+<li>图层合并计划的核心实现完成，进入真实 PSD 样本的观察期，旧链路仍作为回退保留</li>
+<li>主干上的功能任务均有实现日志、修改报告或测试记录</li>
+</ul>
+<h2 id="我学到的"><a href="#我学到的" class="headerlink" title="我学到的"></a>我学到的</h2><ul>
+<li>工具的用户是具体的人：策划、音频、美术和客户端各有不同的“改完之后怎么确认”</li>
+<li>边界意识和实现能力同样重要：说清楚哪部分是自己的、哪部分是共建、哪部分只是接入</li>
+<li>状态要诚实。“代码写完了”不等于“可以放心用了”</li>
+</ul>
+</div>
+    
+    <aside class="article-aside">
+      
+      <nav class="toc" aria-label="本页目录">
+        <p class="label">On this page</p>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A6%82%E8%A7%88"><span class="toc-text">概览</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%97%AE%E9%A2%98"><span class="toc-text">问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%88%91%E7%9A%84%E8%A7%92%E8%89%B2"><span class="toc-text">我的角色</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BA%A6%E6%9D%9F"><span class="toc-text">约束</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%81%9A%E6%B3%95"><span class="toc-text">做法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B7%A5%E7%A8%8B%E5%86%B3%E7%AD%96"><span class="toc-text">工程决策</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%93%E6%9E%9C%E4%B8%8E%E7%8A%B6%E6%80%81"><span class="toc-text">结果与状态</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%88%91%E5%AD%A6%E5%88%B0%E7%9A%84"><span class="toc-text">我学到的</span></a></li></ol>
+      </nav>
+      
+    </aside>
+    
+  </div>
+
+  
+  <section class="section section--tight" aria-labelledby="rel-title">
+    <div class="wrap">
+      <header class="section__head">
+        <p class="label">Read by Focus</p>
+        <h2 class="section__title" id="rel-title">这个项目和哪些方向相关</h2>
+      </header>
+      <div class="rel-grid">
+        
+        <a class="rel" href="/focus/technical-design/">
+          <span class="rel__no">01</span>
+          <span class="rel__title">Technical Design · 技术策划</span>
+          <span class="rel__why">策划每天面对的是多级 Excel、跨表逻辑和蓝图引用。我做的是把这些配置变成能看见、能编辑、能写回原表的可视化流程。</span>
+        </a>
+        
+        <a class="rel" href="/focus/client/">
+          <span class="rel__no">02</span>
+          <span class="rel__title">Client Engineering · 客户端开发</span>
+          <span class="rel__why">在 Unity 项目主干上承担 20 余项功能任务，代码最终落在正式工作副本里。</span>
+        </a>
+        
+        <a class="rel" href="/focus/tools/">
+          <span class="rel__no">03</span>
+          <span class="rel__title">Tools &amp; Pipeline · 客户端工具 / 编辑器</span>
+          <span class="rel__why">面向策划与美术的生产工具：配置编辑器、PSD→Unity 管线、调试与验证工具。</span>
+        </a>
+        
+        <a class="rel" href="/focus/technical-ui/">
+          <span class="rel__no">04</span>
+          <span class="rel__title">Technical UI · UI 蓝图 / 界面工程</span>
+          <span class="rel__why">在商业项目里做 UI 的生产侧：从 PSD 到 Prefab，再到应用层落地。</span>
+        </a>
+        
+      </div>
+    </div>
+  </section>
+  
+
+  <nav class="wrap pager" aria-label="其他项目">
+    
+    <a class="pager__all" href="/projects/">← 全部作品</a>
+    <a class="pager__next" href="/projects/the-circle/"><span class="label">Next</span>THE Circle →</a>
+  </nav>
+</article>
+
+</main>
+<footer class="site-footer">
+  <div class="wrap site-footer__inner">
+    <div class="site-footer__lead">
+      <p class="label">Contact</p>
+      <a class="site-footer__mail" href="mailto:fffeiya@foxmail.com">fffeiya@foxmail.com</a>
+    </div>
+    <ul class="site-footer__links">
+      <li><a target="_blank" href="https://github.com/FFFeiya" rel="noopener noopener">GitHub</a></li>
+      <li><a href="/resume/">简历</a></li>
+      <li><a href="/projects/">全部作品</a></li>
+      <li><a href="/blog/">文章</a></li>
+    </ul>
+    <p class="site-footer__meta">© 2026 杨飞洋 Feiya Yang · 文章采用 <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener noopener">CC BY-NC-SA 4.0</a></p>
+  </div>
+</footer>
+
+<script src="/js/site.js" defer></script>
+</body>
+</html>

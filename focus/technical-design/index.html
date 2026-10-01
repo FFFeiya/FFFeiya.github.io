@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Technical Design 技术策划 — 杨飞洋 Feiya Yang</title>
+<meta name="description" content="技术策划方向：玩法原型、系统抽象、数据驱动与面向设计者的工具。">
+<meta name="author" content="杨飞洋 Feiya Yang">
+<link rel="canonical" href="https://fffeiya.github.io/focus/technical-design/">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="杨飞洋 Feiya Yang">
+<meta property="og:title" content="Technical Design 技术策划">
+<meta property="og:description" content="技术策划方向：玩法原型、系统抽象、数据驱动与面向设计者的工具。">
+<meta property="og:url" content="https://fffeiya.github.io/focus/technical-design/">
+<meta property="og:image" content="https://fffeiya.github.io/images/work/ui-showcase/lobby_16x9_zh.webp">
+<meta property="og:locale" content="zh_CN">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#fbfbf9" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0e0e0d" media="(prefers-color-scheme: dark)">
+<link rel="icon" type="image/png" href="/brand/favicon.png">
+<link rel="preload" href="/fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<script>
+(function () {
+  try {
+    var t = localStorage.getItem('theme');
+    if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+  } catch (e) {}
+})();
+</script>
+<link rel="stylesheet" href="/css/site.css">
+</head>
+
+<body class="layout-focus">
+<a class="skip-link" href="#main">跳到正文</a>
+<header class="site-header" data-header>
+  <div class="wrap site-header__inner">
+    <a class="brand" href="/" aria-label="杨飞洋 Feiya Yang 首页">
+      <img class="brand__mark brand__mark--light" src="/brand/fffeiya-mark.png" alt="" width="28" height="24">
+      <img class="brand__mark brand__mark--dark" src="/brand/fffeiya-mark-dark.png" alt="" width="28" height="24">
+      <span class="brand__name">Feiya Yang</span>
+    </a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" data-nav-toggle>
+      <span class="nav-toggle__label">菜单</span>
+      <span class="nav-toggle__icon" aria-hidden="true"></span>
+    </button>
+    <nav class="site-nav" id="site-nav" aria-label="主导航" data-nav>
+      <ul class="site-nav__list">
+        
+        <li><a class="site-nav__link" href="/projects/">作品<span class="site-nav__en">Work</span></a></li>
+        
+        <li><a class="site-nav__link is-active" href="/#focus" aria-current="page">方向<span class="site-nav__en">Focus</span></a></li>
+        
+        <li><a class="site-nav__link" href="/blog/">文章<span class="site-nav__en">Writing</span></a></li>
+        
+        <li><a class="site-nav__link" href="/about/">关于<span class="site-nav__en">About</span></a></li>
+        
+        <li><a class="site-nav__link" href="/resume/">简历<span class="site-nav__en">Resume</span></a></li>
+        
+      </ul>
+      <button class="theme-toggle" type="button" data-theme-toggle aria-label="切换深色 / 浅色模式">
+        <span class="theme-toggle__dot" aria-hidden="true"></span>
+        <span class="theme-toggle__text" data-theme-label>Dark</span>
+      </button>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+<section class="page-head page-head--focus">
+  <div class="wrap">
+    <p class="label"><a href="/#focus">Focus</a> / 01</p>
+    <h1 class="page-head__title">Technical Design <span class="page-head__zh">技术策划</span></h1>
+    <p class="page-head__lead">从玩法和使用者出发定义问题，再用原型、数据模型和工具把它验证出来。</p>
+    <ul class="keyline" aria-label="这个方向会关注的能力">
+      <li>玩法原型与快速验证</li><li>系统与规则抽象</li><li>数据驱动</li><li>设计者 / 开发者双视角</li><li>AI 辅助内容生产</li>
+    </ul>
+  </div>
+</section>
+
+<section class="section section--tight" aria-labelledby="evidence-title">
+  <div class="wrap">
+    <header class="section__head">
+      <p class="label">Evidence</p>
+      <h2 class="section__title" id="evidence-title">先看这些</h2>
+      <p class="section__note">每一条只说明它为什么与这个方向相关，完整内容在项目页。</p>
+    </header>
+    <div class="evidence">
+      
+      <article class="evidence__item">
+        <a class="evidence__media" href="/projects/sokoban-studio/" tabindex="-1" aria-hidden="true">
+          <img src="/images/work/sokoban-studio/cover.webp" alt="" loading="lazy" decoding="async">
+        </a>
+        <div class="evidence__body">
+          <p class="work-card__meta"><span class="work-card__index">01</span><span>Editor Tooling</span><span class="work-card__status" data-status="已完成">已完成</span></p>
+          <h3 class="evidence__title"><a href="/projects/sokoban-studio/">Sokoban Studio <span class="work-card__zh">推箱子关卡生产工具链</span></a></h3>
+          <p class="evidence__why">关卡设计师改完一格数据后，多久能知道“有没有错、能不能解、怎么解”——这个项目回答的是工作流问题，而不是功能清单。</p>
+          <ul class="evidence__points">
+            <li>制作 → 校验 → 分析 → 最短解预览 → 一键试玩 的完整闭环</li><li>Error 与 Warning 的边界：静态死角死锁只提示不拦截，因为它可能是设计意图</li><li>分析器有“未确定”状态：搜索预算耗尽不等于无解</li><li>八个关卡各教一件事；测试验证门与 A / B 分组在关卡里是必要的，不是装饰</li>
+          </ul>
+          <p class="evidence__foot"><span class="evidence__tech">Unity 2022.3 · C# · Editor Tooling</span><a class="link-arrow" href="/projects/sokoban-studio/">打开项目页 →</a></p>
+        </div>
+      </article>
+      
+      <article class="evidence__item">
+        <a class="evidence__media evidence__media--text" href="/projects/tencent-production/" tabindex="-1" aria-hidden="true">
+          <pre class="work-card__diagram">Excel  ⇄  Blueprint  ⇄  Unity Runtime
+PSD  →  Merge Plan  →  Prefab
+GM · Trace · Perf</pre>
+        </a>
+        <div class="evidence__body">
+          <p class="work-card__meta"><span class="work-card__index">02</span><span>Production Case</span><span class="work-card__status" data-status="实习项目">实习项目</span></p>
+          <h3 class="evidence__title"><a href="/projects/tencent-production/">Production Engineering <span class="work-card__zh">腾讯 IEG《虚环》客户端实习</span></a></h3>
+          <p class="evidence__why">策划每天面对的是多级 Excel、跨表逻辑和蓝图引用。我做的是把这些配置变成能看见、能编辑、能写回原表的可视化流程。</p>
+          <ul class="evidence__points">
+            <li>将日程、逻辑、条件、剧情引用、对话气泡抽象为 5 类节点</li><li>Excel 导入 → 可视化编辑 → 反向抽取 → 原表写回，保留备份与异常诊断</li><li>训练 / 直播 / 角色状态等养成配置的节点化与可复用节点库</li>
+          </ul>
+          <p class="evidence__foot"><span class="evidence__tech">Unity · C# · Electron / React / TypeScript · Python</span><a class="link-arrow" href="/projects/tencent-production/">打开项目页 →</a></p>
+        </div>
+      </article>
+      
+      <article class="evidence__item">
+        <a class="evidence__media" href="/projects/StarKiller/" tabindex="-1" aria-hidden="true">
+          <img src="/images/work/starkiller/battle-dv.webp" alt="" loading="lazy" decoding="async">
+        </a>
+        <div class="evidence__body">
+          <p class="work-card__meta"><span class="work-card__index">03</span><span>Strategy Prototype</span><span class="work-card__status" data-status="原型">原型</span></p>
+          <h3 class="evidence__title"><a href="/projects/StarKiller/">StarKiller <span class="work-card__zh">《歼星者》反塔防轨道棋</span></a></h3>
+          <p class="evidence__why">独立设计的回合制策略：把轨道力学压成一个每回合的 Δv 预算问题，规则、数值和反馈都是自己定的，可以直接在线玩。</p>
+          <ul class="evidence__points">
+            <li>三个轨道根数 + 火箭方程给出的预算，质量与机动性是真实的取舍</li><li>机动前预览新轨道、落点威胁和可攻击目标，让后果可以被预判</li><li>用模拟脚本跑两千局检验数值，并如实记录“当前关卡太宽松”</li><li>舰船、装备、关卡、抽卡池全部由配置表驱动</li>
+          </ul>
+          <p class="evidence__foot"><span class="evidence__tech">JavaScript · p5.js · Node 测试</span><a class="link-arrow" href="/projects/StarKiller/">打开项目页 →</a></p>
+        </div>
+      </article>
+      
+      <article class="evidence__item">
+        <a class="evidence__media" href="/projects/the-circle/" tabindex="-1" aria-hidden="true">
+          <img src="/images/work/the-circle/scene.webp" alt="" loading="lazy" decoding="async">
+        </a>
+        <div class="evidence__body">
+          <p class="work-card__meta"><span class="work-card__index">04</span><span>Interactive Narrative</span><span class="work-card__status" data-status="已完成">已完成</span></p>
+          <h3 class="evidence__title"><a href="/projects/the-circle/">THE Circle <span class="work-card__zh">实时语音交互叙事 / 展陈原型</span></a></h3>
+          <p class="evidence__why">把大模型放进叙事里，同时保留设计者对剧情结构的控制。</p>
+          <ul class="evidence__points">
+            <li>节点 / 分支 / 自动跳转的对话系统</li><li>用标签组织线索与事件，可检索、可触发</li><li>语音对话闭环驱动灯光、视频与材质反馈</li>
+          </ul>
+          <p class="evidence__foot"><span class="evidence__tech">Unity · C# · LLM · TTS · Shader Graph</span><a class="link-arrow" href="/projects/the-circle/">打开项目页 →</a></p>
+        </div>
+      </article>
+      
+      <article class="evidence__item">
+        <a class="evidence__media" href="/projects/the-perfect-crime/" tabindex="-1" aria-hidden="true">
+          <img src="/images/work/the-perfect-crime/team.webp" alt="" loading="lazy" decoding="async">
+        </a>
+        <div class="evidence__body">
+          <p class="work-card__meta"><span class="work-card__index">05</span><span>Rapid Prototype</span><span class="work-card__status" data-status="原型">原型</span></p>
+          <h3 class="evidence__title"><a href="/projects/the-perfect-crime/">The Perfect Crime <span class="work-card__zh">潜行 + 物理解谜关卡原型</span></a></h3>
+          <p class="evidence__why">团队原型里负责三套谜题机制，并按试玩反馈迭代手感。</p>
+          <ul class="evidence__points">
+            <li>视野锥角度 / 距离 / 扫描速度可调，带可视化调参辅助</li><li>镜子旋转从“狂点”改为“按住”，并收窄旋转范围降低挫败</li>
+          </ul>
+          <p class="evidence__foot"><span class="evidence__tech">Unreal Engine · C++ / Blueprint · UMG</span><a class="link-arrow" href="/projects/the-perfect-crime/">打开项目页 →</a></p>
+        </div>
+      </article>
+      
+      <article class="evidence__item">
+        <a class="evidence__media" href="/projects/farmix/" tabindex="-1" aria-hidden="true">
+          <img src="/images/work/farmix/gameplay.webp" alt="" loading="lazy" decoding="async">
+        </a>
+        <div class="evidence__body">
+          <p class="work-card__meta"><span class="work-card__index">06</span><span>Gameplay</span><span class="work-card__status" data-status="已完成">已完成</span></p>
+          <h3 class="evidence__title"><a href="/projects/farmix/">Farmix <span class="work-card__zh">Qix-like 领地占领游戏</span></a></h3>
+          <p class="evidence__why">规则多、状态多、参数多的玩法，难度全部通过关卡配置调。</p>
+          <ul class="evidence__points">
+            <li>LevelConfig 暴露数量、速度、计时、胜利阈值等参数</li><li>四类敌人共享规则层，各自有不同的行为层</li>
+          </ul>
+          <p class="evidence__foot"><span class="evidence__tech">Unity 6 · C# · Android</span><a class="link-arrow" href="/projects/farmix/">打开项目页 →</a></p>
+        </div>
+      </article>
+      
+    </div>
+  </div>
+</section>
+
+
+
+
+
+<section class="section section--last" aria-labelledby="other-title">
+  <div class="wrap">
+    <header class="section__head">
+      <p class="label">Other Focus</p>
+      <h2 class="section__title" id="other-title">换一个方向看</h2>
+    </header>
+    <ul class="chip-nav chip-nav--lg">
+      
+      <li><a href="/focus/client/"><span>02</span>Client Engineering · 客户端开发</a></li>
+      
+      <li><a href="/focus/tools/"><span>03</span>Tools &amp; Pipeline · 客户端工具 / 编辑器</a></li>
+      
+      <li><a href="/focus/technical-ui/"><span>04</span>Technical UI · UI 蓝图 / 界面工程</a></li>
+      
+    </ul>
+  </div>
+</section>
+
+</main>
+<footer class="site-footer">
+  <div class="wrap site-footer__inner">
+    <div class="site-footer__lead">
+      <p class="label">Contact</p>
+      <a class="site-footer__mail" href="mailto:fffeiya@foxmail.com">fffeiya@foxmail.com</a>
+    </div>
+    <ul class="site-footer__links">
+      <li><a target="_blank" href="https://github.com/FFFeiya" rel="noopener noopener">GitHub</a></li>
+      <li><a href="/resume/">简历</a></li>
+      <li><a href="/projects/">全部作品</a></li>
+      <li><a href="/blog/">文章</a></li>
+    </ul>
+    <p class="site-footer__meta">© 2026 杨飞洋 Feiya Yang · 文章采用 <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener noopener">CC BY-NC-SA 4.0</a></p>
+  </div>
+</footer>
+
+<script src="/js/site.js" defer></script>
+</body>
+</html>

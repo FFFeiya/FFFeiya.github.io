@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sokoban Studio — 推箱子关卡生产工具链 — 杨飞洋 Feiya Yang</title>
+<meta name="description" content="把一道推箱子笔试题做成关卡生产链：制作、校验、可解性分析、最短解预览、一键试玩。">
+<meta name="author" content="杨飞洋 Feiya Yang">
+<link rel="canonical" href="https://fffeiya.github.io/projects/sokoban-studio/">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="杨飞洋 Feiya Yang">
+<meta property="og:title" content="Sokoban Studio — 推箱子关卡生产工具链">
+<meta property="og:description" content="把一道推箱子笔试题做成关卡生产链：制作、校验、可解性分析、最短解预览、一键试玩。">
+<meta property="og:url" content="https://fffeiya.github.io/projects/sokoban-studio/">
+<meta property="og:image" content="https://fffeiya.github.io/images/work/sokoban-studio/cover.webp">
+<meta property="og:locale" content="zh_CN">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#fbfbf9" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0e0e0d" media="(prefers-color-scheme: dark)">
+<link rel="icon" type="image/png" href="/brand/favicon.png">
+<link rel="preload" href="/fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<script>
+(function () {
+  try {
+    var t = localStorage.getItem('theme');
+    if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+  } catch (e) {}
+})();
+</script>
+<link rel="stylesheet" href="/css/site.css">
+</head>
+
+<body class="layout-project">
+<a class="skip-link" href="#main">跳到正文</a>
+<header class="site-header" data-header>
+  <div class="wrap site-header__inner">
+    <a class="brand" href="/" aria-label="杨飞洋 Feiya Yang 首页">
+      <img class="brand__mark brand__mark--light" src="/brand/fffeiya-mark.png" alt="" width="28" height="24">
+      <img class="brand__mark brand__mark--dark" src="/brand/fffeiya-mark-dark.png" alt="" width="28" height="24">
+      <span class="brand__name">Feiya Yang</span>
+    </a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" data-nav-toggle>
+      <span class="nav-toggle__label">菜单</span>
+      <span class="nav-toggle__icon" aria-hidden="true"></span>
+    </button>
+    <nav class="site-nav" id="site-nav" aria-label="主导航" data-nav>
+      <ul class="site-nav__list">
+        
+        <li><a class="site-nav__link is-active" href="/projects/" aria-current="page">作品<span class="site-nav__en">Work</span></a></li>
+        
+        <li><a class="site-nav__link" href="/#focus">方向<span class="site-nav__en">Focus</span></a></li>
+        
+        <li><a class="site-nav__link" href="/blog/">文章<span class="site-nav__en">Writing</span></a></li>
+        
+        <li><a class="site-nav__link" href="/about/">关于<span class="site-nav__en">About</span></a></li>
+        
+        <li><a class="site-nav__link" href="/resume/">简历<span class="site-nav__en">Resume</span></a></li>
+        
+      </ul>
+      <button class="theme-toggle" type="button" data-theme-toggle aria-label="切换深色 / 浅色模式">
+        <span class="theme-toggle__dot" aria-hidden="true"></span>
+        <span class="theme-toggle__text" data-theme-label>Dark</span>
+      </button>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+<article class="project">
+  <header class="project-head">
+    <div class="wrap">
+      <p class="label"><a href="/projects/">Work</a> / Editor Tooling</p>
+      <h1 class="project-head__title">Sokoban Studio <span class="project-head__zh">推箱子关卡生产工具链</span></h1>
+      <p class="project-head__summary">把一道推箱子笔试题做成关卡生产链：制作、校验、可解性分析、最短解预览、一键试玩。</p>
+      <dl class="facts">
+        <div><dt>Role</dt><dd>独立开发</dd></div>
+        <div><dt>Year</dt><dd>2026</dd></div>
+        <div><dt>Team</dt><dd>个人项目</dd></div>
+        <div><dt>Tech</dt><dd>Unity 2022.3 · C# · Editor Tooling</dd></div>
+        <div><dt>Status</dt><dd><span class="work-card__status" data-status="已完成">已完成</span></dd></div>
+      </dl>
+      
+      <p class="project-head__links">
+        <a class="btn" target="_blank" href="https://github.com/FFFeiya/Sokoban-Studio" rel="noopener noopener">GitHub <span aria-hidden="true">↗</span></a><a class="btn" href="/2026/09/21/sokoban-studio/">开发复盘 <span aria-hidden="true">→</span></a>
+      </p>
+      
+    </div>
+    
+  </header>
+
+  <div class="wrap article-grid">
+    <div class="prose prose--numbered"><video controls muted playsinline preload="none" poster="/images/work/sokoban-studio/runtime-gameplay-l08.webp">
+<source src="/files/sokoban-studio-replay.mp4" type="video/mp4">
+</video>
+<p class="caption">运行时回放：第 1、7、8 关，走的是测试里锁定的最短解（11 / 38 / 56 步）。1080p，32 秒，无声。</p>
+
+<h2 id="概览"><a href="#概览" class="headerlink" title="概览"></a>概览</h2><p class="lede">这是一道技术策划方向的笔试题：做一个完整的推箱子，加一个关卡编辑器。我多问了一个问题——设计师做完一个关卡之后，怎么知道它有没有问题、可不可解、最短解是什么、能不能直接试玩？</p>
+
+<p>最后交出去的不是“一个推箱子 + 一个画格子的窗口”，而是一条关卡内容生产链：</p>
+<p><strong>制作 → 校验 → 分析 → 解法预览 → 一键试玩 → 迭代</strong></p>
+<div class="stats">
+<div><b>197 / 197</b><span>EditMode 测试通过</span></div>
+<div><b>4 / 4</b><span>PlayMode 测试通过</span></div>
+<div><b>8</b><span>个关卡，0 错误、0 不可解</span></div>
+<div><b>11 – 56</b><span>步的最短解，每一关都被测试锁定</span></div>
+</div>
+
+<h2 id="设计目标"><a href="#设计目标" class="headerlink" title="设计目标"></a>设计目标</h2><p>推箱子的规则几十行就能写完。真正值得花力气的是<strong>数据改动之后的反馈速度</strong>。</p>
+<p>关卡设计师的工作是反复改数据：加一堵墙、换一个箱子位置、改一个目标点。如果每次改完都要“打包 → 进游戏 → 手工走到终点”才知道结果，这个循环慢得没法用。所以工具的价值不在“能画格子”，而在每一次改动之后，能不能立刻得到可靠的反馈。</p>
+<h2 id="包含什么"><a href="#包含什么" class="headerlink" title="包含什么"></a>包含什么</h2><ul>
+<li><strong>确定性的 <code>Board</code></strong>：整数网格上的规则核心，移动、推箱、Undo、Restart 都建立在棋盘快照上</li>
+<li><strong>关卡编辑器</strong>：工作副本、调色板、Undo &#x2F; Redo、可点击定位的校验问题</li>
+<li><strong>校验器</strong>：阻断性错误与建议性警告两级</li>
+<li><strong>分析器</strong>：有预算上限的广度优先搜索，给出最短解与步数 &#x2F; 推箱数</li>
+<li><strong>解法预览与一键试玩</strong>：在独立棋盘上回放最短解；用正式运行时加载器直接进 Play Mode</li>
+<li><strong>内容总览</strong>：对整个关卡目录批量校验与分析</li>
+<li><strong>多组压力板 &#x2F; 门</strong>：一个贯穿全链路的新机制</li>
+<li><strong>分层的验证门禁</strong>：编译 → EditMode &#x2F; PlayMode 测试 → 构建</li>
+</ul>
+<p><img src="/images/sokoban-studio/editor-dashboard.png" alt="内容总览：对整个关卡目录批量校验与分析，列出每关的最短步数、最少推箱与搜索状态数"></p>
+<h2 id="关键决策"><a href="#关键决策" class="headerlink" title="关键决策"></a>关键决策</h2><h3 id="物理不参与规则"><a href="#物理不参与规则" class="headerlink" title="物理不参与规则"></a>物理不参与规则</h3><p>规则收敛到一个确定性的整数网格上，动画只是视图层的缓动，棋盘状态永远是即时权威。这样同一套规则可以被测试、分析器、解法预览反复复用，不会出现“编辑器里跑的是简化版，游戏里跑的是物理版”的对不上。运行时代码不依赖 <code>UnityEditor</code> 或 <code>AssetDatabase</code>，关卡通过显式序列化的 <code>LevelCatalog</code> 加载。</p>
+<h3 id="编辑的是工作副本，不是资源"><a href="#编辑的是工作副本，不是资源" class="headerlink" title="编辑的是工作副本，不是资源"></a>编辑的是工作副本，不是资源</h3><p>New &#x2F; Load 得到一份可编辑的工作副本，Save 之前资源不会被修改；Undo &#x2F; Redo 作用在编辑历史上。存在阻断性错误时，试玩按钮直接禁用。</p>
+<p><img src="/images/sokoban-studio/editor-level-editor.png" alt="关卡编辑器：调色板、校验状态与分析入口在同一个窗口里"></p>
+<h3 id="Error-和-Warning-的边界"><a href="#Error-和-Warning-的边界" class="headerlink" title="Error 和 Warning 的边界"></a>Error 和 Warning 的边界</h3><ul>
+<li><strong>Error</strong>：箱子与目标数量不一致、占据者落在墙或门上、网格格式不对——拦截保存和试玩</li>
+<li><strong>Warning</strong>：箱子停在非目标格且两个正交方向都是墙（静态死角死锁）——只提示，不拦截</li>
+</ul>
+<p>死角死锁做成警告，是因为有些死锁是设计师故意要的。硬性不变量由 Error 守，可争论的问题留给设计师。</p>
+<p><img src="/images/sokoban-studio/editor-validation.png" alt="校验器：墙角的箱子被标成警告，点击这条提示会把网格定位到对应的格子"></p>
+<h3 id="让工具承认“我不知道”"><a href="#让工具承认“我不知道”" class="headerlink" title="让工具承认“我不知道”"></a>让工具承认“我不知道”</h3><p>分析器遍历真实的 <code>Board</code> 状态，给出三种结论：可解、无解、未确定。<strong>预算耗尽不等于无解</strong>——对足够大的关卡，它会如实说“我不知道”，而不是把“算不动了”包装成“这关无解”。</p>
+<div class="gallery">
+<figure><img src="/images/sokoban-studio/editor-analyzer.png" alt="分析器结果" loading="lazy"><figcaption>分析器：结论、最短步数与搜索状态数</figcaption></figure>
+<figure><img src="/images/sokoban-studio/editor-solution-preview.png" alt="解法预览窗口" loading="lazy"><figcaption>解法预览：在独立棋盘上逐步回放最短解，不触碰资源</figcaption></figure>
+</div>
+
+<h3 id="门的状态是派生的，从不存储"><a href="#门的状态是派生的，从不存储" class="headerlink" title="门的状态是派生的，从不存储"></a>门的状态是派生的，从不存储</h3><p>压力板 + 门是为了验证这条链能不能承载新规则：它要求数据、棋盘、撤销、校验器、分析器、解法预览、编辑器、内容总览、运行时和测试一起扩展。门的开闭是玩家与箱子位置的纯函数，所以撤销、重开和分析器的已访问状态集都自动保持正确。</p>
+<div class="gallery">
+<figure><img src="/images/work/sokoban-studio/runtime-gameplay-l07.webp" alt="第 7 关运行时画面" loading="lazy"><figcaption>第 7 关「分组换门」：同一个箱子先压 A 板开左门，再转压 B 板开右门</figcaption></figure>
+<figure><img src="/images/work/sokoban-studio/runtime-complete-l08.webp" alt="第 8 关完成界面" loading="lazy"><figcaption>第 8 关「层层开门」：56 步、21 次推箱</figcaption></figure>
+</div>
+
+<h2 id="关卡"><a href="#关卡" class="headerlink" title="关卡"></a>关卡</h2><p>八个关卡分两组，前四关是基础，后四关引入压力板与门。</p>
+<table>
+<thead>
+<tr>
+<th>关卡</th>
+<th>箱子</th>
+<th>最短解</th>
+<th>在教什么</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>01 推箱入位</td>
+<td>2</td>
+<td>11 步 &#x2F; 5 推</td>
+<td>箱子只能推不能拉</td>
+</tr>
+<tr>
+<td>02 绕路借道</td>
+<td>2</td>
+<td>28 步 &#x2F; 7 推</td>
+<td>站在箱子错误的一侧时要绕到另一端</td>
+</tr>
+<tr>
+<td>03 墙角陷阱</td>
+<td>3</td>
+<td>23 步 &#x2F; 7 推</td>
+<td>推到外墙就再也推不回来</td>
+</tr>
+<tr>
+<td>04 先后有序</td>
+<td>3</td>
+<td>39 步 &#x2F; 17 推</td>
+<td>必须先填最深的目标</td>
+</tr>
+<tr>
+<td>05 以箱压板</td>
+<td>3</td>
+<td>46 步 &#x2F; 16 推</td>
+<td>一个箱子压板撑门，送其他箱子过门</td>
+</tr>
+<tr>
+<td>06 双板同压</td>
+<td>3</td>
+<td>40 步 &#x2F; 14 推</td>
+<td>同组两块压板要同时压住</td>
+</tr>
+<tr>
+<td>07 分组换门</td>
+<td>3</td>
+<td>38 步 &#x2F; 16 推</td>
+<td>A &#x2F; B 两组门各自独立</td>
+</tr>
+<tr>
+<td>08 层层开门</td>
+<td>4</td>
+<td>56 步 &#x2F; 21 推</td>
+<td>顺序、撑门时机与空间规划的综合</td>
+</tr>
+</tbody></table>
+<p>关卡不是摆出来就算数的：测试会回放每一关的最短解，要求分析器得到同样的最优值；还会把第 5 – 8 关的门拿掉、把第 7 – 8 关的 A &#x2F; B 分组合并，验证拿掉之后关卡会变得不成立——也就是说这些机制在关卡里是<strong>必要的</strong>，不是装饰。</p>
+<h2 id="验证"><a href="#验证" class="headerlink" title="验证"></a>验证</h2><ul>
+<li>三层门禁：<code>Fast</code> 只编译，<code>Gate</code> 加上 EditMode 与 PlayMode 测试，<code>Release</code> 再构建 Windows x64</li>
+<li>当前结果：EditMode 197 &#x2F; 197、PlayMode 4 &#x2F; 4，构建通过</li>
+<li>目录审计：8 个关卡全部有效，0 错误、0 警告、0 不可解、0 未确定</li>
+<li>PlayMode 测试确实接进了门禁：放进一个故意失败的测试，门禁变红；拿掉之后恢复。两次运行的输出都留了证据</li>
+</ul>
+<h2 id="如果重新做"><a href="#如果重新做" class="headerlink" title="如果重新做"></a>如果重新做</h2><ul>
+<li>运行时表现仍是轻量的程序化绘制（OnGUI），够用但不精致，会优先换掉</li>
+<li>分析器有预算上限，大关卡会落到“未确定”——这是刻意的取舍，但它不是完整的求解器</li>
+<li>内容规模有限，8 个关卡覆盖了从基础到压力板 &#x2F; 门的弧线，谈不上丰富；继续投入的话我会先打磨关卡质量，而不是继续堆系统</li>
+</ul>
+<p>完整的开发复盘见文章：<a href="/2026/09/21/sokoban-studio/">Sokoban Studio：我把一个推箱子笔试做成了关卡生产工具链</a>。</p>
+</div>
+    
+    <aside class="article-aside">
+      
+      <nav class="toc" aria-label="本页目录">
+        <p class="label">On this page</p>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A6%82%E8%A7%88"><span class="toc-text">概览</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%BE%E8%AE%A1%E7%9B%AE%E6%A0%87"><span class="toc-text">设计目标</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8C%85%E5%90%AB%E4%BB%80%E4%B9%88"><span class="toc-text">包含什么</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E9%94%AE%E5%86%B3%E7%AD%96"><span class="toc-text">关键决策</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E5%8D%A1"><span class="toc-text">关卡</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%AA%8C%E8%AF%81"><span class="toc-text">验证</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A6%82%E6%9E%9C%E9%87%8D%E6%96%B0%E5%81%9A"><span class="toc-text">如果重新做</span></a></li></ol>
+      </nav>
+      
+    </aside>
+    
+  </div>
+
+  
+  <section class="section section--tight" aria-labelledby="rel-title">
+    <div class="wrap">
+      <header class="section__head">
+        <p class="label">Read by Focus</p>
+        <h2 class="section__title" id="rel-title">这个项目和哪些方向相关</h2>
+      </header>
+      <div class="rel-grid">
+        
+        <a class="rel" href="/focus/technical-design/">
+          <span class="rel__no">01</span>
+          <span class="rel__title">Technical Design · 技术策划</span>
+          <span class="rel__why">关卡设计师改完一格数据后，多久能知道“有没有错、能不能解、怎么解”——这个项目回答的是工作流问题，而不是功能清单。</span>
+        </a>
+        
+        <a class="rel" href="/focus/tools/">
+          <span class="rel__no">03</span>
+          <span class="rel__title">Tools &amp; Pipeline · 客户端工具 / 编辑器</span>
+          <span class="rel__why">一条完整的小型内容管线，编辑器、规则、分析器和运行时共用同一套确定性棋盘。</span>
+        </a>
+        
+      </div>
+    </div>
+  </section>
+  
+
+  <nav class="wrap pager" aria-label="其他项目">
+    
+    <a class="pager__all" href="/projects/">← 全部作品</a>
+    <a class="pager__next" href="/projects/ui-showcase/"><span class="label">Next</span>Driftglass UI Showcase →</a>
+  </nav>
+</article>
+
+</main>
+<footer class="site-footer">
+  <div class="wrap site-footer__inner">
+    <div class="site-footer__lead">
+      <p class="label">Contact</p>
+      <a class="site-footer__mail" href="mailto:fffeiya@foxmail.com">fffeiya@foxmail.com</a>
+    </div>
+    <ul class="site-footer__links">
+      <li><a target="_blank" href="https://github.com/FFFeiya" rel="noopener noopener">GitHub</a></li>
+      <li><a href="/resume/">简历</a></li>
+      <li><a href="/projects/">全部作品</a></li>
+      <li><a href="/blog/">文章</a></li>
+    </ul>
+    <p class="site-footer__meta">© 2026 杨飞洋 Feiya Yang · 文章采用 <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener noopener">CC BY-NC-SA 4.0</a></p>
+  </div>
+</footer>
+
+<script src="/js/site.js" defer></script>
+</body>
+</html>

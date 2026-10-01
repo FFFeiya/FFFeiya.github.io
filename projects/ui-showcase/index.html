@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Driftglass UI Showcase — Unity UGUI 界面搭建作品 — 杨飞洋 Feiya Yang</title>
+<meta name="description" content="一套原创游戏界面：JSON 描述生成 Prefab，四种宽高比与四种语言下实时重排，性能与还原度都有实测数字。">
+<meta name="author" content="杨飞洋 Feiya Yang">
+<link rel="canonical" href="https://fffeiya.github.io/projects/ui-showcase/">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="杨飞洋 Feiya Yang">
+<meta property="og:title" content="Driftglass UI Showcase — Unity UGUI 界面搭建作品">
+<meta property="og:description" content="一套原创游戏界面：JSON 描述生成 Prefab，四种宽高比与四种语言下实时重排，性能与还原度都有实测数字。">
+<meta property="og:url" content="https://fffeiya.github.io/projects/ui-showcase/">
+<meta property="og:image" content="https://fffeiya.github.io/images/work/ui-showcase/lobby_16x9_zh.webp">
+<meta property="og:locale" content="zh_CN">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#fbfbf9" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0e0e0d" media="(prefers-color-scheme: dark)">
+<link rel="icon" type="image/png" href="/brand/favicon.png">
+<link rel="preload" href="/fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<script>
+(function () {
+  try {
+    var t = localStorage.getItem('theme');
+    if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+  } catch (e) {}
+})();
+</script>
+<link rel="stylesheet" href="/css/site.css">
+</head>
+
+<body class="layout-project">
+<a class="skip-link" href="#main">跳到正文</a>
+<header class="site-header" data-header>
+  <div class="wrap site-header__inner">
+    <a class="brand" href="/" aria-label="杨飞洋 Feiya Yang 首页">
+      <img class="brand__mark brand__mark--light" src="/brand/fffeiya-mark.png" alt="" width="28" height="24">
+      <img class="brand__mark brand__mark--dark" src="/brand/fffeiya-mark-dark.png" alt="" width="28" height="24">
+      <span class="brand__name">Feiya Yang</span>
+    </a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" data-nav-toggle>
+      <span class="nav-toggle__label">菜单</span>
+      <span class="nav-toggle__icon" aria-hidden="true"></span>
+    </button>
+    <nav class="site-nav" id="site-nav" aria-label="主导航" data-nav>
+      <ul class="site-nav__list">
+        
+        <li><a class="site-nav__link is-active" href="/projects/" aria-current="page">作品<span class="site-nav__en">Work</span></a></li>
+        
+        <li><a class="site-nav__link" href="/#focus">方向<span class="site-nav__en">Focus</span></a></li>
+        
+        <li><a class="site-nav__link" href="/blog/">文章<span class="site-nav__en">Writing</span></a></li>
+        
+        <li><a class="site-nav__link" href="/about/">关于<span class="site-nav__en">About</span></a></li>
+        
+        <li><a class="site-nav__link" href="/resume/">简历<span class="site-nav__en">Resume</span></a></li>
+        
+      </ul>
+      <button class="theme-toggle" type="button" data-theme-toggle aria-label="切换深色 / 浅色模式">
+        <span class="theme-toggle__dot" aria-hidden="true"></span>
+        <span class="theme-toggle__text" data-theme-label>Dark</span>
+      </button>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+<article class="project">
+  <header class="project-head">
+    <div class="wrap">
+      <p class="label"><a href="/projects/">Work</a> / Technical UI</p>
+      <h1 class="project-head__title">Driftglass UI Showcase <span class="project-head__zh">Unity UGUI 界面搭建作品</span></h1>
+      <p class="project-head__summary">一套原创游戏界面：JSON 描述生成 Prefab，四种宽高比与四种语言下实时重排，性能与还原度都有实测数字。</p>
+      <dl class="facts">
+        <div><dt>Role</dt><dd>个人作品（AI 编程工具辅助，制作方式见页内说明）</dd></div>
+        <div><dt>Year</dt><dd>2026</dd></div>
+        <div><dt>Team</dt><dd>个人项目</dd></div>
+        <div><dt>Tech</dt><dd>Unity 2022.3 LTS · UGUI · TextMeshPro · ShaderLab</dd></div>
+        <div><dt>Status</dt><dd><span class="work-card__status" data-status="已完成">已完成</span></dd></div>
+      </dl>
+      
+      <p class="project-head__links">
+        <a class="btn" href="/files/driftglass-ui-showcase.pdf">作品说明 PDF <span aria-hidden="true">→</span></a>
+      </p>
+      
+    </div>
+    
+  </header>
+
+  <div class="wrap article-grid article-grid--single">
+    <div class="prose prose--numbered"><video class="bleed" controls muted playsinline preload="none" poster="/images/work/ui-showcase/lobby_16x9_zh.webp">
+<source src="/files/driftglass-ui-showcase.mp4" type="video/mp4">
+</video>
+<p class="caption">展示片，87 秒，无声。由导演脚本驱动虚拟指针与按键、离屏逐帧渲染；这里是压缩到 720p 的版本。</p>
+
+<h2 id="概览"><a href="#概览" class="headerlink" title="概览"></a>概览</h2><p class="lede">一套原创的小型游戏界面，用来展示“把界面设计稿在引擎里搭成程序可以直接使用的界面资源”这件事：自适应、多语言、控件化、资源规范、性能、交互手感、UI Shader、设计稿还原，以及配套的生成与检查工具。</p>
+
+<p>界面包括大厅、背包（10000 条数据的循环列表）、角色详情、设置、控件陈列室、设计稿对比和三种弹窗。Unity 2022.3 LTS，内置渲染管线，UGUI + TextMeshPro，没有第三方插件。</p>
+<div class="stats">
+<div><b>10.4 → 60</b><span>FPS，10000 条数据的背包列表，窗口模式垂直同步</span></div>
+<div><b>6.78%</b><span>设计稿对比的差异像素（通道差 &gt; 16/255）</span></div>
+<div><b>96</b><span>张截图矩阵：6 界面 × 4 分辨率 × 4 语言</span></div>
+<div><b>20 + 10</b><span>基础控件 + Prefab Variant</span></div>
+</div>
+
+<div class="notice"><strong>制作方式。</strong>个人作品，使用 AI 编程工具（Claude Code）完成：我给出需求、验收标准和功能的取舍优先级；视觉方向与技术方案由 AI 工具在这些约束内提出，代码、界面的 JSON 描述、图标的 SVG 源和文档由 AI 工具编写，界面 Prefab 由 JSON 描述经 Editor 脚本生成。所有数字来自程序写出的实测文件。完整说明见 <a href="/files/driftglass-ui-showcase.pdf">作品说明 PDF</a> 最后一页。</div>
+
+<h2 id="自适应：一份-Prefab，四种宽高比"><a href="#自适应：一份-Prefab，四种宽高比" class="headerlink" title="自适应：一份 Prefab，四种宽高比"></a>自适应：一份 Prefab，四种宽高比</h2><p>界面不读屏幕尺寸，只读“设备”渲染目标，所以同一个包可以在运行时切换比例，布局实时重排。4:3 到 21:9 之间没有断点，只靠锚点、Layout Group、Content Size Fitter 和 Aspect Ratio Fitter；列表列数由宽度算出。竖屏是同一个 Prefab：差异写在 JSON 的 <code>portrait</code> 块里，没有第二份层级。</p>
+<figure class="bleed"><img src="/images/work/ui-showcase/bag_21x9_de.webp" alt="背包界面，21:9，德语" loading="lazy"><figcaption>21:9 · 2560×1080 · 德语：15 列，长文本按钮缩字号或撑开</figcaption></figure>
+
+<div class="gallery gallery--3">
+<figure><img src="/images/work/ui-showcase/bag_4x3_ja.webp" alt="背包界面，4:3，日语" loading="lazy"><figcaption>4:3 · 日语（JP 字形优先）</figcaption></figure>
+<figure class="tall"><img src="/images/work/ui-showcase/bag_9x19_5_zh_notch.webp" alt="背包界面，竖屏带刘海" loading="lazy"><figcaption>9:19.5 · 刘海 + Safe Area</figcaption></figure>
+<figure class="tall"><img src="/images/work/ui-showcase/lobby_9x19_5_zh.webp" alt="大厅界面，竖屏" loading="lazy"><figcaption>9:19.5 · 大厅</figcaption></figure>
+</div>
+
+<h2 id="多语言：溢出是设计出来的"><a href="#多语言：溢出是设计出来的" class="headerlink" title="多语言：溢出是设计出来的"></a>多语言：溢出是设计出来的</h2><p>中 &#x2F; 英 &#x2F; 日 &#x2F; 德实时切换，四种语言共 197 条文案，键由脚本校验对齐。德语专门用来压测长文本。每个文本节点在 JSON 里都必须声明溢出策略：</p>
+<ul>
+<li><strong>缩字号有下限</strong>：标题、物品名、定宽按钮先缩到约 70%，再不够才省略</li>
+<li><strong>省略号</strong>：下拉当前项、定高的描述</li>
+<li><strong>随文本撑开</strong>：自由宽度的按钮由文字决定宽度</li>
+<li><strong>换行</strong>：说明文字自动换行，德语复合词内置软连字符</li>
+</ul>
+<p>字体回退链是 Outfit → Noto Sans SC → Noto Sans JP，切到日语时后两者交换；静态 SDF 图集只烘焙语言表里出现的字符。</p>
+<p><img src="/images/work/ui-showcase/bag_16x9_en.webp" alt="背包界面，16:9，英语"></p>
+<h2 id="控件化与资源规范"><a href="#控件化与资源规范" class="headerlink" title="控件化与资源规范"></a>控件化与资源规范</h2><p>界面里没有一次性的散装节点：20 个基础控件加 10 个 Prefab Variant，6 个界面和 3 个弹窗全部由控件的嵌套实例拼成。每个界面根上有一份 <code>ViewRefs</code>，程序按 id 取用节点，不依赖层级路径。</p>
+<p>规范写成代码而不是文档：命名由检查工具校验，导入设置由 Postprocessor 强制，图集由脚本按文件夹生成（公共一个，每个界面一个）。面板、按钮底板、进度条、投影、发光都由 Shader 绘制，全工程的贴图只有图标和三个九宫格边框。</p>
+<p><img src="/images/work/ui-showcase/gallery_16x9_zh.webp" alt="控件陈列室：所有控件的所有状态排在一页上"></p>
+<h2 id="性能：优化前后都是实测值"><a href="#性能：优化前后都是实测值" class="headerlink" title="性能：优化前后都是实测值"></a>性能：优化前后都是实测值</h2><p>基准跑在打出来的 Windows 包里：同一批数据、同样的滚动距离，分别测对照组（全部实例化到 GridLayoutGroup + ScrollRect）和循环列表。</p>
+<table>
+<thead>
+<tr>
+<th>10000 条数据，滚动 300 帧</th>
+<th>全部实例化</th>
+<th>循环列表</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>每帧耗时（无窗口、不限帧）</td>
+<td>200.81 ms</td>
+<td>2.51 ms</td>
+</tr>
+<tr>
+<td>最差一帧</td>
+<td>243.32 ms</td>
+<td>4.20 ms</td>
+</tr>
+<tr>
+<td>格子 &#x2F; GameObject</td>
+<td>10,000 &#x2F; 60,000</td>
+<td>100 &#x2F; 600</td>
+</tr>
+<tr>
+<td>构建耗时</td>
+<td>1,696 ms</td>
+<td>0 ms</td>
+</tr>
+<tr>
+<td>窗口模式，垂直同步 60 Hz</td>
+<td>10.4 FPS</td>
+<td>60.0 FPS</td>
+</tr>
+</tbody></table>
+<p>测试机：Intel Core i9-9900K、NVIDIA GeForce RTX 2080 Ti，1920×1080，只在这一台机器上测过。</p>
+<p>也有测了之后决定不做的：给列表单独拆嵌套 Canvas。耗时差异在测量噪声内，Batch 反而从 37 变成 38——这个界面里列表本身就是绝大部分图元，没有可隔离的静态内容。对照数据留在基准里。</p>
+<p><img src="/images/work/ui-showcase/bag_16x9_zh.webp" alt="背包界面：节点 100 / 数据 10,000"></p>
+<h2 id="设计稿还原：先出稿，再搭建，最后量差异"><a href="#设计稿还原：先出稿，再搭建，最后量差异" class="headerlink" title="设计稿还原：先出稿，再搭建，最后量差异"></a>设计稿还原：先出稿，再搭建，最后量差异</h2><p>背包界面的设计稿先用 HTML &#x2F; CSS 写出来，浏览器渲染成 1920×1080 的 PNG，再在 Unity 里按稿搭建。两边只共用设计 token、文案、字体、图标和背景图；布局、文字渲染、模糊各自实现。</p>
+<p>对比工具做在游戏里：左右滑动、叠加、热力图三种视图，数字在运行时由两张图逐像素算出——差异像素 6.78%，平均误差 2.10%。差异集中在文字抗锯齿、1px 以内的图标边缘和面板投影的衰减曲线，布局位置没有成片的偏移。</p>
+<div class="gallery">
+<figure><img src="/images/work/ui-showcase/compare_16x9_zh.webp" alt="设计稿对比页" loading="lazy"><figcaption>对比页：左右滑动查看设计稿与引擎画面</figcaption></figure>
+<figure><img src="/images/work/ui-showcase/compare_heat.webp" alt="差异热力图" loading="lazy"><figcaption>差异热力图：青 → 黄 → 红</figcaption></figure>
+</div>
+
+<h2 id="工具：界面是数据，Prefab-是生成物"><a href="#工具：界面是数据，Prefab-是生成物" class="headerlink" title="工具：界面是数据，Prefab 是生成物"></a>工具：界面是数据，Prefab 是生成物</h2><ul>
+<li><strong>生成器</strong>：JSON 界面描述 → Editor 脚本生成 Prefab 与场景</li>
+<li><strong>Prefab 检查工具</strong>：多余的 Raycast Target、未进图集的 Sprite、命名不合规、缺失引用，带一键修复</li>
+<li><strong>流水线</strong>：Unity 以 <code>-batchmode</code> 运行，截图矩阵、基准、展示片和 PDF 可以用一条命令从源文件重建</li>
+</ul>
+<p>自写的部分还有 UI Shader（SDF 圆角矩形、描边、渐变、流光、毛玻璃、溶解、雷达图）和一个每帧零分配的 Tween 库。鼠标、触摸、手柄与键盘都能完整操作。</p>
+<p><img src="/images/work/ui-showcase/character_16x9_zh.webp" alt="角色详情：属性条、雷达图与徽记由 Shader 绘制"></p>
+<h2 id="已知局限"><a href="#已知局限" class="headerlink" title="已知局限"></a>已知局限</h2><ul>
+<li>没有真机测试：竖屏、刘海和安全区是在 Windows 包里模拟的，触摸与实体手柄没有在设备上验证过</li>
+<li>设计稿对比只做了背包界面一屏（16:9、中文）</li>
+<li>没有音效和音乐</li>
+<li>检查工具的 Editor 窗口没有截图：工程全程以无界面的 batchmode 制作，展示的是它导出的报告</li>
+</ul>
+</div>
+    
+  </div>
+
+  
+  <section class="section section--tight" aria-labelledby="rel-title">
+    <div class="wrap">
+      <header class="section__head">
+        <p class="label">Read by Focus</p>
+        <h2 class="section__title" id="rel-title">这个项目和哪些方向相关</h2>
+      </header>
+      <div class="rel-grid">
+        
+        <a class="rel" href="/focus/tools/">
+          <span class="rel__no">03</span>
+          <span class="rel__title">Tools &amp; Pipeline · 客户端工具 / 编辑器</span>
+          <span class="rel__why">界面是数据，Prefab 是生成物，规范由工具检查。</span>
+        </a>
+        
+        <a class="rel" href="/focus/technical-ui/">
+          <span class="rel__no">04</span>
+          <span class="rel__title">Technical UI · UI 蓝图 / 界面工程</span>
+          <span class="rel__why">为这个方向专门做的作品：一套原创界面，每一项要求都有画面和实测数字。</span>
+        </a>
+        
+      </div>
+    </div>
+  </section>
+  
+
+  <nav class="wrap pager" aria-label="其他项目">
+    
+    <a class="pager__all" href="/projects/">← 全部作品</a>
+    <a class="pager__next" href="/projects/tencent-production/"><span class="label">Next</span>Production Engineering →</a>
+  </nav>
+</article>
+
+</main>
+<footer class="site-footer">
+  <div class="wrap site-footer__inner">
+    <div class="site-footer__lead">
+      <p class="label">Contact</p>
+      <a class="site-footer__mail" href="mailto:fffeiya@foxmail.com">fffeiya@foxmail.com</a>
+    </div>
+    <ul class="site-footer__links">
+      <li><a target="_blank" href="https://github.com/FFFeiya" rel="noopener noopener">GitHub</a></li>
+      <li><a href="/resume/">简历</a></li>
+      <li><a href="/projects/">全部作品</a></li>
+      <li><a href="/blog/">文章</a></li>
+    </ul>
+    <p class="site-footer__meta">© 2026 杨飞洋 Feiya Yang · 文章采用 <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener noopener">CC BY-NC-SA 4.0</a></p>
+  </div>
+</footer>
+
+<script src="/js/site.js" defer></script>
+</body>
+</html>

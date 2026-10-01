@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tools &amp; Pipeline 客户端工具 / 编辑器 — 杨飞洋 Feiya Yang</title>
+<meta name="description" content="工具方向：Editor 工具、内容管线、校验与自动化。">
+<meta name="author" content="杨飞洋 Feiya Yang">
+<link rel="canonical" href="https://fffeiya.github.io/focus/tools/">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="杨飞洋 Feiya Yang">
+<meta property="og:title" content="Tools &amp; Pipeline 客户端工具 / 编辑器">
+<meta property="og:description" content="工具方向：Editor 工具、内容管线、校验与自动化。">
+<meta property="og:url" content="https://fffeiya.github.io/focus/tools/">
+<meta property="og:image" content="https://fffeiya.github.io/images/work/ui-showcase/lobby_16x9_zh.webp">
+<meta property="og:locale" content="zh_CN">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#fbfbf9" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0e0e0d" media="(prefers-color-scheme: dark)">
+<link rel="icon" type="image/png" href="/brand/favicon.png">
+<link rel="preload" href="/fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<script>
+(function () {
+  try {
+    var t = localStorage.getItem('theme');
+    if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+  } catch (e) {}
+})();
+</script>
+<link rel="stylesheet" href="/css/site.css">
+</head>
+
+<body class="layout-focus">
+<a class="skip-link" href="#main">跳到正文</a>
+<header class="site-header" data-header>
+  <div class="wrap site-header__inner">
+    <a class="brand" href="/" aria-label="杨飞洋 Feiya Yang 首页">
+      <img class="brand__mark brand__mark--light" src="/brand/fffeiya-mark.png" alt="" width="28" height="24">
+      <img class="brand__mark brand__mark--dark" src="/brand/fffeiya-mark-dark.png" alt="" width="28" height="24">
+      <span class="brand__name">Feiya Yang</span>
+    </a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" data-nav-toggle>
+      <span class="nav-toggle__label">菜单</span>
+      <span class="nav-toggle__icon" aria-hidden="true"></span>
+    </button>
+    <nav class="site-nav" id="site-nav" aria-label="主导航" data-nav>
+      <ul class="site-nav__list">
+        
+        <li><a class="site-nav__link" href="/projects/">作品<span class="site-nav__en">Work</span></a></li>
+        
+        <li><a class="site-nav__link is-active" href="/#focus" aria-current="page">方向<span class="site-nav__en">Focus</span></a></li>
+        
+        <li><a class="site-nav__link" href="/blog/">文章<span class="site-nav__en">Writing</span></a></li>
+        
+        <li><a class="site-nav__link" href="/about/">关于<span class="site-nav__en">About</span></a></li>
+        
+        <li><a class="site-nav__link" href="/resume/">简历<span class="site-nav__en">Resume</span></a></li>
+        
+      </ul>
+      <button class="theme-toggle" type="button" data-theme-toggle aria-label="切换深色 / 浅色模式">
+        <span class="theme-toggle__dot" aria-hidden="true"></span>
+        <span class="theme-toggle__text" data-theme-label>Dark</span>
+      </button>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+<section class="page-head page-head--focus">
+  <div class="wrap">
+    <p class="label"><a href="/#focus">Focus</a> / 03</p>
+    <h1 class="page-head__title">Tools &amp; Pipeline <span class="page-head__zh">客户端工具 / 编辑器</span></h1>
+    <p class="page-head__lead">我做工具的出发点是使用者的反馈回路：改完之后多久能知道对不对，错了能不能回退。</p>
+    <ul class="keyline" aria-label="这个方向会关注的能力">
+      <li>Editor 工具</li><li>内容管线</li><li>数据模型与校验</li><li>自动化</li><li>Electron / TypeScript / Python</li><li>Human-in-the-loop</li>
+    </ul>
+  </div>
+</section>
+
+<section class="section section--tight" aria-labelledby="evidence-title">
+  <div class="wrap">
+    <header class="section__head">
+      <p class="label">Evidence</p>
+      <h2 class="section__title" id="evidence-title">先看这些</h2>
+      <p class="section__note">每一条只说明它为什么与这个方向相关，完整内容在项目页。</p>
+    </header>
+    <div class="evidence">
+      
+      <article class="evidence__item">
+        <a class="evidence__media" href="/projects/sokoban-studio/" tabindex="-1" aria-hidden="true">
+          <img src="/images/work/sokoban-studio/cover.webp" alt="" loading="lazy" decoding="async">
+        </a>
+        <div class="evidence__body">
+          <p class="work-card__meta"><span class="work-card__index">01</span><span>Editor Tooling</span><span class="work-card__status" data-status="已完成">已完成</span></p>
+          <h3 class="evidence__title"><a href="/projects/sokoban-studio/">Sokoban Studio <span class="work-card__zh">推箱子关卡生产工具链</span></a></h3>
+          <p class="evidence__why">一条完整的小型内容管线，编辑器、规则、分析器和运行时共用同一套确定性棋盘。</p>
+          <ul class="evidence__points">
+            <li>编辑对象是工作副本，Save 之前不改资源；Undo / Redo 作用在编辑历史上</li><li>校验问题可点击定位到出错的格子；存在阻断性错误时禁用试玩</li><li>有预算上限的 BFS 分析器，解法在独立棋盘上回放，不污染资源</li><li>EditMode 197 / 197、PlayMode 4 / 4；测试回放并锁定每一关的最短解</li>
+          </ul>
+          <p class="evidence__foot"><span class="evidence__tech">Unity 2022.3 · C# · Editor Tooling</span><a class="link-arrow" href="/projects/sokoban-studio/">打开项目页 →</a></p>
+        </div>
+      </article>
+      
+      <article class="evidence__item">
+        <a class="evidence__media evidence__media--text" href="/projects/tencent-production/" tabindex="-1" aria-hidden="true">
+          <pre class="work-card__diagram">Excel  ⇄  Blueprint  ⇄  Unity Runtime
+PSD  →  Merge Plan  →  Prefab
+GM · Trace · Perf</pre>
+        </a>
+        <div class="evidence__body">
+          <p class="work-card__meta"><span class="work-card__index">02</span><span>Production Case</span><span class="work-card__status" data-status="实习项目">实习项目</span></p>
+          <h3 class="evidence__title"><a href="/projects/tencent-production/">Production Engineering <span class="work-card__zh">腾讯 IEG《虚环》客户端实习</span></a></h3>
+          <p class="evidence__why">面向策划与美术的生产工具：配置编辑器、PSD→Unity 管线、调试与验证工具。</p>
+          <ul class="evidence__points">
+            <li>Electron / React / TypeScript 编辑器里的 Excel↔可视化蓝图双向链路</li><li>PSD→Unity：把隐式的图层合并规则改成可保存、可审查、可回放的计划数据</li><li>Smoke Test、回归样例与旧链路回退，控制生成式步骤的不确定性</li><li>把重复的研发任务封装成带 Schema 与阶段验收的 Skill</li>
+          </ul>
+          <p class="evidence__foot"><span class="evidence__tech">Unity · C# · Electron / React / TypeScript · Python</span><a class="link-arrow" href="/projects/tencent-production/">打开项目页 →</a></p>
+        </div>
+      </article>
+      
+      <article class="evidence__item">
+        <a class="evidence__media" href="/projects/ui-showcase/" tabindex="-1" aria-hidden="true">
+          <img src="/images/work/ui-showcase/lobby_16x9_zh.webp" alt="" loading="lazy" decoding="async">
+        </a>
+        <div class="evidence__body">
+          <p class="work-card__meta"><span class="work-card__index">03</span><span>Technical UI</span><span class="work-card__status" data-status="已完成">已完成</span></p>
+          <h3 class="evidence__title"><a href="/projects/ui-showcase/">Driftglass UI Showcase <span class="work-card__zh">Unity UGUI 界面搭建作品</span></a></h3>
+          <p class="evidence__why">界面是数据，Prefab 是生成物，规范由工具检查。</p>
+          <ul class="evidence__points">
+            <li>JSON 界面描述 → Editor 脚本生成 Prefab 与场景</li><li>Prefab 检查工具：多余的 Raycast Target、未进图集的 Sprite、命名与缺失引用</li><li>全流程 batchmode：截图矩阵、性能基准、展示片与 PDF 一条命令重建</li>
+          </ul>
+          <p class="evidence__foot"><span class="evidence__tech">Unity 2022.3 LTS · UGUI · TextMeshPro · ShaderLab</span><a class="link-arrow" href="/projects/ui-showcase/">打开项目页 →</a></p>
+        </div>
+      </article>
+      
+      <article class="evidence__item">
+        <a class="evidence__media" href="/tools/p4-review-bot/" tabindex="-1" aria-hidden="true">
+          <img src="/images/P4ReviewBot/example.png" alt="" loading="lazy" decoding="async">
+        </a>
+        <div class="evidence__body">
+          <p class="work-card__meta"><span class="work-card__index">04</span><span>Pipeline Tool</span><span class="work-card__status" data-status="已完成">已完成</span></p>
+          <h3 class="evidence__title"><a href="/tools/p4-review-bot/">P4 Review Bot <span class="work-card__zh">Perforce 提交审查机器人</span></a></h3>
+          <p class="evidence__why">把“人肉检查 changelist”变成可复现的流水线。</p>
+          <ul class="evidence__points">
+            <li>规则写在 YAML 里，改规则不改脚本</li><li>结果落盘为 JSON，再按严重程度分级通知</li>
+          </ul>
+          <p class="evidence__foot"><span class="evidence__tech">PowerShell · Node.js · Perforce</span><a class="link-arrow" href="/tools/p4-review-bot/">打开项目页 →</a></p>
+        </div>
+      </article>
+      
+      <article class="evidence__item">
+        <a class="evidence__media evidence__media--text" href="/2025/01/08/NXA_Pipeline_FTP_Tech_Blog/" tabindex="-1" aria-hidden="true">
+          <span class="evidence__placeholder">Pipeline Tool</span>
+        </a>
+        <div class="evidence__body">
+          <p class="work-card__meta"><span class="work-card__index">05</span><span>Pipeline Tool</span><span class="work-card__status" data-status="实习项目">实习项目</span></p>
+          <h3 class="evidence__title"><a href="/2025/01/08/NXA_Pipeline_FTP_Tech_Blog/">FTP 资产交付 Pipeline <span class="work-card__zh">NXA Studios 实习</span></a></h3>
+          <p class="evidence__why">第一份工具向实习：交付前把返工前置。</p>
+          <ul class="evidence__points">
+            <li>命名、依赖、导出配置的自动校验与错误报告</li><li>manifest + hash，incoming → staging → release 的版本化发布与回滚</li>
+          </ul>
+          <p class="evidence__foot"><span class="evidence__tech">Python</span><a class="link-arrow" href="/2025/01/08/NXA_Pipeline_FTP_Tech_Blog/">打开项目页 →</a></p>
+        </div>
+      </article>
+      
+    </div>
+  </div>
+</section>
+
+
+
+
+
+<section class="section section--last" aria-labelledby="other-title">
+  <div class="wrap">
+    <header class="section__head">
+      <p class="label">Other Focus</p>
+      <h2 class="section__title" id="other-title">换一个方向看</h2>
+    </header>
+    <ul class="chip-nav chip-nav--lg">
+      
+      <li><a href="/focus/technical-design/"><span>01</span>Technical Design · 技术策划</a></li>
+      
+      <li><a href="/focus/client/"><span>02</span>Client Engineering · 客户端开发</a></li>
+      
+      <li><a href="/focus/technical-ui/"><span>04</span>Technical UI · UI 蓝图 / 界面工程</a></li>
+      
+    </ul>
+  </div>
+</section>
+
+</main>
+<footer class="site-footer">
+  <div class="wrap site-footer__inner">
+    <div class="site-footer__lead">
+      <p class="label">Contact</p>
+      <a class="site-footer__mail" href="mailto:fffeiya@foxmail.com">fffeiya@foxmail.com</a>
+    </div>
+    <ul class="site-footer__links">
+      <li><a target="_blank" href="https://github.com/FFFeiya" rel="noopener noopener">GitHub</a></li>
+      <li><a href="/resume/">简历</a></li>
+      <li><a href="/projects/">全部作品</a></li>
+      <li><a href="/blog/">文章</a></li>
+    </ul>
+    <p class="site-footer__meta">© 2026 杨飞洋 Feiya Yang · 文章采用 <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener noopener">CC BY-NC-SA 4.0</a></p>
+  </div>
+</footer>
+
+<script src="/js/site.js" defer></script>
+</body>
+</html>

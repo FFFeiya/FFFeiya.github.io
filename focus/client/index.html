@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Client Engineering 客户端开发 — 杨飞洋 Feiya Yang</title>
+<meta name="description" content="客户端开发方向：Unity / C#、UE5 / C++、Gameplay 系统、调试与性能。">
+<meta name="author" content="杨飞洋 Feiya Yang">
+<link rel="canonical" href="https://fffeiya.github.io/focus/client/">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="杨飞洋 Feiya Yang">
+<meta property="og:title" content="Client Engineering 客户端开发">
+<meta property="og:description" content="客户端开发方向：Unity / C#、UE5 / C++、Gameplay 系统、调试与性能。">
+<meta property="og:url" content="https://fffeiya.github.io/focus/client/">
+<meta property="og:image" content="https://fffeiya.github.io/images/work/ui-showcase/lobby_16x9_zh.webp">
+<meta property="og:locale" content="zh_CN">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#fbfbf9" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0e0e0d" media="(prefers-color-scheme: dark)">
+<link rel="icon" type="image/png" href="/brand/favicon.png">
+<link rel="preload" href="/fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<script>
+(function () {
+  try {
+    var t = localStorage.getItem('theme');
+    if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+  } catch (e) {}
+})();
+</script>
+<link rel="stylesheet" href="/css/site.css">
+</head>
+
+<body class="layout-focus">
+<a class="skip-link" href="#main">跳到正文</a>
+<header class="site-header" data-header>
+  <div class="wrap site-header__inner">
+    <a class="brand" href="/" aria-label="杨飞洋 Feiya Yang 首页">
+      <img class="brand__mark brand__mark--light" src="/brand/fffeiya-mark.png" alt="" width="28" height="24">
+      <img class="brand__mark brand__mark--dark" src="/brand/fffeiya-mark-dark.png" alt="" width="28" height="24">
+      <span class="brand__name">Feiya Yang</span>
+    </a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" data-nav-toggle>
+      <span class="nav-toggle__label">菜单</span>
+      <span class="nav-toggle__icon" aria-hidden="true"></span>
+    </button>
+    <nav class="site-nav" id="site-nav" aria-label="主导航" data-nav>
+      <ul class="site-nav__list">
+        
+        <li><a class="site-nav__link" href="/projects/">作品<span class="site-nav__en">Work</span></a></li>
+        
+        <li><a class="site-nav__link is-active" href="/#focus" aria-current="page">方向<span class="site-nav__en">Focus</span></a></li>
+        
+        <li><a class="site-nav__link" href="/blog/">文章<span class="site-nav__en">Writing</span></a></li>
+        
+        <li><a class="site-nav__link" href="/about/">关于<span class="site-nav__en">About</span></a></li>
+        
+        <li><a class="site-nav__link" href="/resume/">简历<span class="site-nav__en">Resume</span></a></li>
+        
+      </ul>
+      <button class="theme-toggle" type="button" data-theme-toggle aria-label="切换深色 / 浅色模式">
+        <span class="theme-toggle__dot" aria-hidden="true"></span>
+        <span class="theme-toggle__text" data-theme-label>Dark</span>
+      </button>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+<section class="page-head page-head--focus">
+  <div class="wrap">
+    <p class="label"><a href="/#focus">Focus</a> / 02</p>
+    <h1 class="page-head__title">Client Engineering <span class="page-head__zh">客户端开发</span></h1>
+    <p class="page-head__lead">Unity / C# 是主力，UE5 / C++ 有完整的 Gameplay 实践；在商业项目主干里交付过运行时功能和排查工具。</p>
+    <ul class="keyline" aria-label="这个方向会关注的能力">
+      <li>Unity / C#</li><li>UE5 / C++</li><li>Gameplay 系统与 GAS</li><li>AI / Behavior Tree</li><li>调试与性能</li><li>输入与网络</li>
+    </ul>
+  </div>
+</section>
+
+<section class="section section--tight" aria-labelledby="evidence-title">
+  <div class="wrap">
+    <header class="section__head">
+      <p class="label">Evidence</p>
+      <h2 class="section__title" id="evidence-title">先看这些</h2>
+      <p class="section__note">每一条只说明它为什么与这个方向相关，完整内容在项目页。</p>
+    </header>
+    <div class="evidence">
+      
+      <article class="evidence__item">
+        <a class="evidence__media evidence__media--text" href="/projects/tencent-production/" tabindex="-1" aria-hidden="true">
+          <pre class="work-card__diagram">Excel  ⇄  Blueprint  ⇄  Unity Runtime
+PSD  →  Merge Plan  →  Prefab
+GM · Trace · Perf</pre>
+        </a>
+        <div class="evidence__body">
+          <p class="work-card__meta"><span class="work-card__index">01</span><span>Production Case</span><span class="work-card__status" data-status="实习项目">实习项目</span></p>
+          <h3 class="evidence__title"><a href="/projects/tencent-production/">Production Engineering <span class="work-card__zh">腾讯 IEG《虚环》客户端实习</span></a></h3>
+          <p class="evidence__why">在 Unity 项目主干上承担 20 余项功能任务，代码最终落在正式工作副本里。</p>
+          <ul class="evidence__points">
+            <li>GM 调试面板、Cutscene 演出、UI 应用层与剧情运行相关功能</li><li>剧情性能跑测工具、对象池审计、语音配置链路追踪</li><li>配置节点的 runtime bridge、预览入口与渲染侧适配</li>
+          </ul>
+          <p class="evidence__foot"><span class="evidence__tech">Unity · C# · Electron / React / TypeScript · Python</span><a class="link-arrow" href="/projects/tencent-production/">打开项目页 →</a></p>
+        </div>
+      </article>
+      
+      <article class="evidence__item">
+        <a class="evidence__media" href="/projects/dragon-rider/" tabindex="-1" aria-hidden="true">
+          <img src="/images/work/dragon-rider/onesheet.webp" alt="" loading="lazy" decoding="async">
+        </a>
+        <div class="evidence__body">
+          <p class="work-card__meta"><span class="work-card__index">02</span><span>Gameplay Prototype</span><span class="work-card__status" data-status="原型">原型</span></p>
+          <h3 class="evidence__title"><a href="/projects/dragon-rider/">DragonRider <span class="work-card__zh">UE5 双人体感骑龙原型</span></a></h3>
+          <p class="evidence__why">14 人团队里的客户端工程师，负责 GAS 战斗框架、敌人与 Boss 的 AI，以及体感控制器的硬件调试。</p>
+          <ul class="evidence__points">
+            <li>玩家与敌人都挂载 AbilitySystemComponent，属性通过 RepNotify 复制</li><li>四个 Boss 技能走 GAS，数值与阶段切换放在 GameplayEffect 和 Tag 里</li><li>ESP32 控制器的数据包进到 Unreal 之后的解析、平滑与排查</li><li>36 份试玩问卷，整体评价全部为“好”或“很好”</li>
+          </ul>
+          <p class="evidence__foot"><span class="evidence__tech">Unreal Engine 5.6 · C++ / Blueprint · GAS · ESP32</span><a class="link-arrow" href="/projects/dragon-rider/">打开项目页 →</a></p>
+        </div>
+      </article>
+      
+      <article class="evidence__item">
+        <a class="evidence__media" href="/projects/the-perfect-crime/" tabindex="-1" aria-hidden="true">
+          <img src="/images/work/the-perfect-crime/team.webp" alt="" loading="lazy" decoding="async">
+        </a>
+        <div class="evidence__body">
+          <p class="work-card__meta"><span class="work-card__index">03</span><span>Rapid Prototype</span><span class="work-card__status" data-status="原型">原型</span></p>
+          <h3 class="evidence__title"><a href="/projects/the-perfect-crime/">The Perfect Crime <span class="work-card__zh">潜行 + 物理解谜关卡原型</span></a></h3>
+          <p class="evidence__why">UE 团队项目中的 Gameplay Engineer，从 C++ 原型一直跟到关卡集成和末期修复。</p>
+          <ul class="evidence__points">
+            <li>玩法逻辑在 Actor，表现与提示在 UMG Widget，接口对 Blueprint 友好</li><li>射线检测的镜面反射谜题与带状态的怀表谜题</li>
+          </ul>
+          <p class="evidence__foot"><span class="evidence__tech">Unreal Engine · C++ / Blueprint · UMG</span><a class="link-arrow" href="/projects/the-perfect-crime/">打开项目页 →</a></p>
+        </div>
+      </article>
+      
+      <article class="evidence__item">
+        <a class="evidence__media" href="/projects/farmix/" tabindex="-1" aria-hidden="true">
+          <img src="/images/work/farmix/gameplay.webp" alt="" loading="lazy" decoding="async">
+        </a>
+        <div class="evidence__body">
+          <p class="work-card__meta"><span class="work-card__index">04</span><span>Gameplay</span><span class="work-card__status" data-status="已完成">已完成</span></p>
+          <h3 class="evidence__title"><a href="/projects/farmix/">Farmix <span class="work-card__zh">Qix-like 领地占领游戏</span></a></h3>
+          <p class="evidence__why">规则型玩法的工程实现，重点是先定不变量、再让它可验证。</p>
+          <ul class="evidence__points">
+            <li>网格三态与 14 向边缘 mask，把规则与渲染解耦</li><li>闭合判定与 BFS / Flood Fill 填充</li><li>键盘与陀螺仪输入，Android 构建</li>
+          </ul>
+          <p class="evidence__foot"><span class="evidence__tech">Unity 6 · C# · Android</span><a class="link-arrow" href="/projects/farmix/">打开项目页 →</a></p>
+        </div>
+      </article>
+      
+      <article class="evidence__item">
+        <a class="evidence__media" href="/projects/the-circle/" tabindex="-1" aria-hidden="true">
+          <img src="/images/work/the-circle/scene.webp" alt="" loading="lazy" decoding="async">
+        </a>
+        <div class="evidence__body">
+          <p class="work-card__meta"><span class="work-card__index">05</span><span>Interactive Narrative</span><span class="work-card__status" data-status="已完成">已完成</span></p>
+          <h3 class="evidence__title"><a href="/projects/the-circle/">THE Circle <span class="work-card__zh">实时语音交互叙事 / 展陈原型</span></a></h3>
+          <p class="evidence__why">Unity 里一条跨服务的实时链路：语音识别、大模型、TTS 与串口外设。</p>
+          <ul class="evidence__points">
+            <li>把 UnityWebRequest 封装成 async / await</li><li>讯飞 TTS 的会话管理与音频播放</li><li>Fullscreen Shader Graph 做统一的视觉层</li>
+          </ul>
+          <p class="evidence__foot"><span class="evidence__tech">Unity · C# · LLM · TTS · Shader Graph</span><a class="link-arrow" href="/projects/the-circle/">打开项目页 →</a></p>
+        </div>
+      </article>
+      
+      <article class="evidence__item">
+        <a class="evidence__media" href="/projects/dragon-tail/" tabindex="-1" aria-hidden="true">
+          <img src="/images/work/dragon-tail/cover.webp" alt="" loading="lazy" decoding="async">
+        </a>
+        <div class="evidence__body">
+          <p class="work-card__meta"><span class="work-card__index">06</span><span>Alt-Control Prototype</span><span class="work-card__status" data-status="原型">原型</span></p>
+          <h3 class="evidence__title"><a href="/projects/dragon-tail/">Dragon Tail <span class="work-card__zh">双人 IMU 协作龙对战原型</span></a></h3>
+          <p class="evidence__why">硬件输入驱动玩法：后台线程读串口，主线程每帧只取最新一帧。</p>
+          <ul class="evidence__points">
+            <li>串口协议容错、滤波与 deadzone</li><li>运行时串口配置菜单，换机器不用重新打包</li>
+          </ul>
+          <p class="evidence__foot"><span class="evidence__tech">Unity 2023.1 · C# · ESP32 + MPU6050</span><a class="link-arrow" href="/projects/dragon-tail/">打开项目页 →</a></p>
+        </div>
+      </article>
+      
+    </div>
+  </div>
+</section>
+
+
+<section class="section section--tight" aria-labelledby="fw-title">
+  <div class="wrap">
+    <header class="section__head">
+      <p class="label">Writing</p>
+      <h2 class="section__title" id="fw-title">相关文章</h2>
+    </header>
+    <div class="rows">
+      
+      <a class="row" href="/2026/01/02/UE5.6_GAS_Enemy_AI_Stage_Summary/"><span class="row__main"><span class="row__title">用 UE5.6 + GAS 搭一个可迭代的敌人近战 AI</span></span><span class="row__go">阅读 →</span></a>
+      
+      <a class="row" href="/tags/Game-Engineering/"><span class="row__main"><span class="row__title">Game Engineering II：C++ 引擎课程作业（Direct3D / OpenGL）</span></span><span class="row__go">阅读 →</span></a>
+      
+    </div>
+  </div>
+</section>
+
+
+
+
+<section class="section section--last" aria-labelledby="other-title">
+  <div class="wrap">
+    <header class="section__head">
+      <p class="label">Other Focus</p>
+      <h2 class="section__title" id="other-title">换一个方向看</h2>
+    </header>
+    <ul class="chip-nav chip-nav--lg">
+      
+      <li><a href="/focus/technical-design/"><span>01</span>Technical Design · 技术策划</a></li>
+      
+      <li><a href="/focus/tools/"><span>03</span>Tools &amp; Pipeline · 客户端工具 / 编辑器</a></li>
+      
+      <li><a href="/focus/technical-ui/"><span>04</span>Technical UI · UI 蓝图 / 界面工程</a></li>
+      
+    </ul>
+  </div>
+</section>
+
+</main>
+<footer class="site-footer">
+  <div class="wrap site-footer__inner">
+    <div class="site-footer__lead">
+      <p class="label">Contact</p>
+      <a class="site-footer__mail" href="mailto:fffeiya@foxmail.com">fffeiya@foxmail.com</a>
+    </div>
+    <ul class="site-footer__links">
+      <li><a target="_blank" href="https://github.com/FFFeiya" rel="noopener noopener">GitHub</a></li>
+      <li><a href="/resume/">简历</a></li>
+      <li><a href="/projects/">全部作品</a></li>
+      <li><a href="/blog/">文章</a></li>
+    </ul>
+    <p class="site-footer__meta">© 2026 杨飞洋 Feiya Yang · 文章采用 <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener noopener">CC BY-NC-SA 4.0</a></p>
+  </div>
+</footer>
+
+<script src="/js/site.js" defer></script>
+</body>
+</html>
