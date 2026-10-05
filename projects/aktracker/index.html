@@ -5,14 +5,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>黑流树海记牌器 — 明日方舟集成战略的战斗情报悬浮窗 — 杨飞洋 Feiya Yang</title>
-<meta name="description" content="只读游戏画面的置顶悬浮窗：进关前给出这一关的出怪情报，战斗中倒计时下一波从哪个口来什么，战后记下漏怪。">
+<meta name="description" content="只读游戏画面的置顶悬浮窗：进关前给出出怪情报，战斗中在游戏画面上标出下一波的倒计时和技能总伤，战后记下漏怪。">
 <meta name="author" content="杨飞洋 Feiya Yang">
 <link rel="canonical" href="https://fffeiya.github.io/projects/aktracker/">
 
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="杨飞洋 Feiya Yang">
 <meta property="og:title" content="黑流树海记牌器 — 明日方舟集成战略的战斗情报悬浮窗">
-<meta property="og:description" content="只读游戏画面的置顶悬浮窗：进关前给出这一关的出怪情报，战斗中倒计时下一波从哪个口来什么，战后记下漏怪。">
+<meta property="og:description" content="只读游戏画面的置顶悬浮窗：进关前给出出怪情报，战斗中在游戏画面上标出下一波的倒计时和技能总伤，战后记下漏怪。">
 <meta property="og:url" content="https://fffeiya.github.io/projects/aktracker/">
 <meta property="og:image" content="https://fffeiya.github.io/images/work/aktracker/cover.webp">
 <meta property="og:locale" content="zh_CN">
@@ -74,7 +74,7 @@
     <div class="wrap">
       <p class="label"><a href="/projects/">Work</a> / Game Companion Tool</p>
       <h1 class="project-head__title">黑流树海记牌器 <span class="project-head__zh">明日方舟集成战略的战斗情报悬浮窗</span></h1>
-      <p class="project-head__summary">只读游戏画面的置顶悬浮窗：进关前给出这一关的出怪情报，战斗中倒计时下一波从哪个口来什么，战后记下漏怪。</p>
+      <p class="project-head__summary">只读游戏画面的置顶悬浮窗：进关前给出出怪情报，战斗中在游戏画面上标出下一波的倒计时和技能总伤，战后记下漏怪。</p>
       <dl class="facts">
         <div><dt>Role</dt><dd>个人项目</dd></div>
         <div><dt>Year</dt><dd>2026</dd></div>
@@ -91,38 +91,41 @@
     <div class="prose prose--numbered"><video class="bleed" controls muted playsinline preload="none" poster="/images/work/aktracker/cover.webp">
 <source src="/files/aktracker-demo.mp4" type="video/mp4">
 </video>
-<p class="caption">演示实录，约 3 分 20 秒，无声：右侧窄窗是记牌器，左侧是游戏窗口。这里是压缩到 720p 的版本。</p>
+<p class="caption">演示实录（第三版），约 4 分钟，无声：右侧窄窗是记牌器，左侧是游戏窗口，战斗中游戏画面上的标注来自记牌器的叠加层。这里是压缩到 720p 的版本。</p>
 
-<h2 id="概览"><a href="#概览" class="headerlink" title="概览"></a>概览</h2><p class="lede">明日方舟 PC 端集成战略「沉沦者的黑流树海」的置顶悬浮窗。它只看游戏画面，自动记下藏品、资源和走过的节点；更重要的是战斗情报——进关前告诉你这一关会来什么，战斗中告诉你下一波什么时候、从哪个口、来什么，打完记下漏了谁。</p>
+<h2 id="概览"><a href="#概览" class="headerlink" title="概览"></a>概览</h2><p class="lede">明日方舟 PC 端集成战略「沉沦者的黑流树海」的置顶悬浮窗。它只看游戏画面，自动记下藏品、资源和走过的节点；更重要的是战斗情报——进关前告诉你这一关会来什么，战斗中告诉你下一波什么时候、从哪个口、来什么，我方干员的技能能打多少，打完记下漏了谁。</p>
 
 <p>集成战略里一场战斗翻车，整局就白打了。社区已经有解决“地图怎么走”的工具，这个项目解决的是另一半：<strong>这一仗怎么不翻车</strong>。</p>
 <div class="stats">
 <div><b>68</b><span>个关卡的出怪时间轴，来自官方解包数据</span></div>
 <div><b>≤ 0.35 s</b><span>战斗时钟误差（5 fps 实时跟踪，含暂停与 2 倍速）</span></div>
 <div><b>11%</b><span>单核：战斗中读数的 CPU 占用（非战斗约 1%）</span></div>
-<div><b>60</b><span>个单元测试</span></div>
+<div><b>66</b><span>个单元测试</span></div>
 </div>
 
 <div class="notice"><strong>状态与声明。</strong>个人项目，仍在开发中，暂未公开发布。只在第 1 层、1918×1009 / 1920×1080 窗口下实机验证过。这是玩家自制的辅助工具，与游戏官方无关；游戏画面与数据的版权归原权利方所有。</div>
 
 <h2 id="设计原则：只给信息，不给打法"><a href="#设计原则：只给信息，不给打法" class="headerlink" title="设计原则：只给信息，不给打法"></a>设计原则：只给信息，不给打法</h2><p>这类工具最容易越界，所以先把边界定死：</p>
 <ul>
-<li><strong>只读画面</strong>：用 <code>PrintWindow</code> 截取游戏窗口。不读内存、不抓包、不注入，<strong>也不向游戏发送任何输入</strong></li>
+<li><strong>只读画面</strong>：用 <code>PrintWindow</code> 截取游戏窗口。不读内存、不抓包、不注入，<strong>也不向游戏发送任何输入</strong>。PC 端有反作弊，内存类工具有封号风险</li>
 <li><strong>只给信息，不给打法</strong>：不推荐部署位置，不代打。“哪里该放谁”仍然是玩家自己的判断</li>
 <li><strong>低占用</strong>：玩家开着它打游戏，它不能把游戏拖慢</li>
 </ul>
 <p>第三条决定了很多技术选择：非战斗时画面静止才做整图识别；进入战斗后只以 5 fps 读几个小区域；OCR 限 2 个线程并关掉忙等。</p>
-<h2 id="战前情报"><a href="#战前情报" class="headerlink" title="战前情报"></a>战前情报</h2><p>在地图上点开一个作战节点，记牌器识别出关卡名，自动切到“情报”页：</p>
-<ul>
-<li>敌人总数（有随机组时给出区间）、波次数</li>
-<li>地形缩略图：高台、地面、出怪口、保护点</li>
-<li>需要注意的敌人：精英、不可阻挡、飞行、隐匿等特性，首次出现的波次、时间和入口，数值按保密等级与藏品换算</li>
-<li>普通 &#x2F; 紧急作战的差异，以及条件出现的敌人</li>
-<li>打过的关卡还会显示我自己的记录：打过几次、输过几次、平均掉几点生命、通常漏在哪一波</li>
-</ul>
-<p><img src="/images/work/aktracker/intel.webp" alt="战前情报：点开「灌水贤者」节点后，右侧自动显示敌人区间、地形缩略图和需要注意的敌人"></p>
-<h2 id="战斗中：出怪条"><a href="#战斗中：出怪条" class="headerlink" title="战斗中：出怪条"></a>战斗中：出怪条</h2><p>进入战斗自动切换成一条出怪条：当前波次、击杀计数、下一批敌人的倒计时与入口；同一组敌人间隔出现时显示“每 N 秒 1 个”和剩余数量；宝物怪和精英会提前提示。</p>
-<p><img src="/images/work/aktracker/battle.webp" alt="战斗中：右侧出怪条显示「9 秒后 · 迷茫的修理小助手 ×2 · 左上」，以及清场后才会出现的宝物怪与概率"></p>
+<h2 id="战前情报与敌人资料卡"><a href="#战前情报与敌人资料卡" class="headerlink" title="战前情报与敌人资料卡"></a>战前情报与敌人资料卡</h2><p>在地图上点开一个作战节点，记牌器识别出关卡名，自动切到“情报”页：敌人总数（有随机组时给出区间）、波次、地形缩略图、需要注意的敌人（精英、不可阻挡、飞行、隐匿等特性，首次出现的波次、时间和入口）、普通 &#x2F; 紧急作战的差异、这一关我自己打过的记录。数值按保密等级、藏品和紧急作战的倍率换算。</p>
+<p>鼠标悬停任意一个敌人，弹出资料卡：上半部分仿游戏的任务简报，下半部分仿图鉴，列出等级、出现波次与入口、换算后的属性和能力。</p>
+<p><img src="/images/work/aktracker/enemy-card.webp" alt="敌人资料卡：悬停「屠夫」弹出，数值已按保密等级与藏品换算"></p>
+<h2 id="战斗中：出怪条与游戏画面叠加层"><a href="#战斗中：出怪条与游戏画面叠加层" class="headerlink" title="战斗中：出怪条与游戏画面叠加层"></a>战斗中：出怪条与游戏画面叠加层</h2><p>进入战斗，悬浮窗自动切换成出怪条：当前波次、击杀计数、下一批敌人的倒计时与入口；同一组敌人间隔出现时显示“每 N 秒 1 个”。</p>
+<p>同时，一个<strong>透明、鼠标穿透、不抢焦点</strong>的叠加层盖在游戏画面上：每个出怪口上方直接显示下一批敌人和倒计时，不用把视线移到窗外。</p>
+<p><img src="/images/work/aktracker/overlay-countdown.webp" alt="叠加层：左侧两个出怪口上方各显示下一批敌人与倒计时，右侧是出怪条"></p>
+<p>把标注画在出怪口上，需要知道地图格子在屏幕上的位置。这里移植了开源项目 Arknights-Tile-Pos（MIT）的相机模型；它没有黑流树海关卡的相机数据，所以从常见的几组相机位置里，按画面上出怪口红框和保护点蓝框的位置自动挑出对得上的那一组，并按关卡保存。</p>
+<h2 id="我方干员：技能-DPS-与总伤"><a href="#我方干员：技能-DPS-与总伤" class="headerlink" title="我方干员：技能 DPS 与总伤"></a>我方干员：技能 DPS 与总伤</h2><p>拿起干员卡或点击场上干员时，游戏左侧会出现干员面板。记牌器在这一刻读一次面板：攻击力、技能名和技能描述。把技能描述的模板代入每一级的数值，和面板上的数字比对，就能认出技能等级；再按本关敌人防御 &#x2F; 法抗的中位数，估算技能期间的 DPS 和总伤。聚焦视角下，估算值直接标在技能按钮旁边。</p>
+<div class="gallery">
+<figure><img src="/images/work/aktracker/operator-dps.webp" alt="出怪条下方的我方干员列表" loading="lazy"><figcaption>读到过面板的干员会出现在“我方干员”里</figcaption></figure>
+<figure><img src="/images/work/aktracker/skill-damage.webp" alt="技能按钮旁标出技能总伤与 DPS" loading="lazy"><figcaption>点击场上的玛恩纳：技能按钮旁标出 30 秒总伤与 DPS</figcaption></figure>
+</div>
+
+<p>实测发现面板攻击力<strong>已经包含</strong>藏品加成（玛恩纳的 530 正好是基础值 × 1.4），也包含随时间变化的天赋——不攻击时会从 583 涨到 1007，所以估算的是“读到那一刻”的值。这是通用公式的估算，不含天赋、模组特效和攻击动画，界面上也这样标明。</p>
 <h2 id="难点：从截图里读出游戏内时间"><a href="#难点：从截图里读出游戏内时间" class="headerlink" title="难点：从截图里读出游戏内时间"></a>难点：从截图里读出游戏内时间</h2><p>倒计时要准，前提是知道“游戏里现在是第几秒”。但游戏会暂停、会开 2 倍速、拿起干员卡时会进入慢动作，现实时间完全不可用。</p>
 <p>我找到的时钟是<strong>费用条</strong>：费用按游戏时间自然回复，费用条的进度随游戏时间连续增长。</p>
 <ul>
@@ -131,10 +134,10 @@
 <li>波次用击杀计数推进，同一读数连续两帧才采信；关卡用战前识别到的关卡名加战斗首帧的敌人总数相互核对</li>
 </ul>
 <p>实测：在 180 秒的脚本（1X、暂停、2X、费用封顶）里，5 fps 实时跟踪的时钟误差不超过 0.35 秒；按 2 秒间隔回放三段录像，误差在 ±2 秒内。</p>
-<h2 id="战后复盘与个人关卡档案"><a href="#战后复盘与个人关卡档案" class="headerlink" title="战后复盘与个人关卡档案"></a>战后复盘与个人关卡档案</h2><p>战斗结束后记下这一场：关卡、胜负、掉了几点生命、漏怪发生在第几波第几秒，以及推测漏的是谁。这些记录累积成个人关卡档案，下一次进同一关时出现在战前情报里，情报页还会列出“鬼图榜”。</p>
-<p><img src="/images/work/aktracker/review.webp" alt="赛后复盘：急不可耐 · 胜 · -1 生命，第 1 波 97 秒漏了 1 个；关卡档案随之更新"></p>
-<h2 id="记牌"><a href="#记牌" class="headerlink" title="记牌"></a>记牌</h2><p>非战斗时它也在记：目标生命、护盾、希望、源石锭、行动力自动读取；239 件藏品按图鉴分类显示已获得和未出现；三条结局线的条件进度；所有变化写进本局时间线，可以删除、<code>Ctrl+Z</code> 撤销。</p>
-<p><img src="/images/work/aktracker/map-timeline.webp" alt="地图上自动读取资源，右侧时间线逐条记录每次变化与识别置信度"></p>
+<h2 id="战后复盘与个人关卡档案"><a href="#战后复盘与个人关卡档案" class="headerlink" title="战后复盘与个人关卡档案"></a>战后复盘与个人关卡档案</h2><p>战斗结束后记下这一场：关卡、胜负、掉了几点生命、漏怪发生在第几波第几秒，以及推测漏的是谁；失败结算会回填这一仗的结果。这些记录累积成个人关卡档案：每关打过几次、输过几次、平均掉多少血、通常漏在哪一波，下次进同一关时出现在战前情报里。</p>
+<p><img src="/images/work/aktracker/stage-archive.webp" alt="个人关卡档案：三个关卡的场次、失败次数、漏怪最多的波次与平均掉血"></p>
+<h2 id="记牌"><a href="#记牌" class="headerlink" title="记牌"></a>记牌</h2><p>非战斗时它也在记：开局识别分队与招募；目标生命、护盾、希望、源石锭、行动力自动读取；239 件藏品按图鉴分类显示已获得和未出现，并汇总当前藏品对全体 &#x2F; 近战 &#x2F; 某职业的属性加成；三条结局线的条件进度。所有变化写进本局时间线，可以删除、<code>Ctrl+Z</code> 撤销。</p>
+<p><img src="/images/work/aktracker/auto-tracking.webp" alt="开局：识别招募与资源变化，逐条写入时间线"></p>
 <h2 id="怎么做的"><a href="#怎么做的" class="headerlink" title="怎么做的"></a>怎么做的</h2><table>
 <thead>
 <tr>
@@ -144,28 +147,40 @@
 </thead>
 <tbody><tr>
 <td>关卡数据</td>
-<td>解析官方解包的 68 个关卡文件：地形、路线、波次与片段，含随机方案、条件组、分支、紧急版替换与倍率；302 名敌人的分等级数值与特性；保密等级与藏品对敌人的修正（解析官方说明文字）</td>
+<td>解析官方解包的 68 个关卡文件：地形、路线、波次与片段，含随机方案、条件组、分支、紧急版替换与倍率；302 名敌人的分等级数值与特性；保密等级与藏品对敌人的修正</td>
 </tr>
 <tr>
 <td>画面识别</td>
 <td>PP-OCRv5（ONNX）+ 固定区域读数；整图 OCR 关键字判断界面类型</td>
 </tr>
 <tr>
+<td>叠加层</td>
+<td>移植 Arknights-Tile-Pos（MIT）的相机模型做格子 → 屏幕投影，按出怪口红框 &#x2F; 保护点蓝框自动校准</td>
+</tr>
+<tr>
 <td>应用</td>
-<td>C# &#x2F; .NET，WPF 悬浮窗，可单文件发布</td>
+<td>C# &#x2F; .NET，WPF 悬浮窗，界面参考游戏本体的图鉴与任务简报风格，可单文件发布</td>
 </tr>
 <tr>
 <td>验证</td>
-<td>每个阶段都写验收报告，首验不通过就返工再复验；实机端到端测试记录在仓库里</td>
+<td>每个阶段都写验收报告，首验不通过就返工再复验；实机端到端测试和开发日志都在仓库里</td>
 </tr>
 </tbody></table>
-<p>开发按阶段推进：数据管线 → 战斗时钟 → 战前情报 → 出怪条 → 复盘与档案 → 打磨发布。计划里还有一个“在战场上画出怪口箭头和路线”的叠加层，因为格子投影需要更多实机标定，这一轮跳过了。</p>
+<p>开发按阶段推进：数据管线 → 战斗时钟 → 战前情报 → 出怪条 → 复盘与档案 → 打磨发布 → 叠加层与干员估算。</p>
+<h2 id="踩过的坑"><a href="#踩过的坑" class="headerlink" title="踩过的坑"></a>踩过的坑</h2><ul>
+<li>光标停在倍速按钮上会让 1X 图标变宽，被误判成 2X → 要求同时识别到“2”字样</li>
+<li>拿起干员卡时费用面板上移，进度条读成 0 → 没有亮像素就当作“读不到”</li>
+<li>每波的击杀阈值没算随机组，会提前跳到下一波 → 与总数同口径，并用画面上的总数收紧</li>
+<li>出怪口红框是半透明的暗红，最初按亮色写阈值，一个像素都没匹配上，悄悄回退到了默认相机 → 按实测颜色重写</li>
+<li>录演示时，开局敌人正好压在出怪口红框上，相机选错，技能按钮的位置跟着算错 → 聚焦视角改为逐个候选相机检测技能按钮旁的技力图标，命中哪个用哪个</li>
+</ul>
 <h2 id="已知限制"><a href="#已知限制" class="headerlink" title="已知限制"></a>已知限制</h2><ul>
 <li>只在 1918×1009 &#x2F; 1920×1080 窗口验证过；其他分辨率按比例换算，未实测；不支持模拟器</li>
 <li>第 2 层以后的关卡、紧急作战、领袖战还没有实机验证</li>
 <li>漏怪来源只是<strong>推测</strong>：敌人受伤后退、被阻挡、技能位移都会改变抵达时间，离线无法精确预测</li>
+<li>干员 DPS 是通用公式估算：不含天赋、模组特效和攻击动画</li>
+<li>敌人血条跟随暂不可行：需要逐帧检测每个敌人，而游戏只画血条不显示数值，不读内存无法得到准确血量</li>
 <li>选人慢动作只在费用未封顶时能精确计时；封顶后按估计速率外推，界面会提示误差</li>
-<li>保密等级需要手动设置一次</li>
 </ul>
 </div>
     
