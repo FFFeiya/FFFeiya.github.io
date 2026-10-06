@@ -482,6 +482,24 @@
   list-style: decimal;
 }
 
+.nv-prose blockquote {
+  margin: 0 0 2.2em;
+  padding: 16px 20px;
+  border-radius: 14px;
+  background: var(--nv-bubble);
+  font-size: 14.5px;
+  line-height: 1.8;
+  color: var(--nv-ink-2);
+}
+
+.nv-prose blockquote p + p {
+  margin-top: 0.4em;
+}
+
+.nv-prose blockquote strong {
+  color: var(--nv-ink);
+}
+
 .nv-prose hr.scene-break {
   width: 64px;
   margin: 2.4em auto;
