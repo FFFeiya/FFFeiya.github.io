@@ -17,12 +17,77 @@
       // The label names the mode you switch to.
       if (label) label.textContent = currentTheme() === 'dark' ? 'Light' : 'Dark';
     }
-    button.addEventListener('click', function () {
+    // Easter egg (main site only): hold the toggle ~1.5 s -> "Late"; click -> "02:17",
+    // the page dims a little and a note links to /novel/. Ordinary clicks are unchanged.
+    var egg = document.body.classList.contains('novel-app') ? null : { state: 'off', timer: 0, swallow: false };
+
+    button.addEventListener('click', function (e) {
+      if (egg && egg.swallow) {
+        // the click that ends a long press must not toggle the theme
+        egg.swallow = false;
+        e.preventDefault();
+        return;
+      }
+      if (egg && egg.state === 'late') {
+        egg.state = 'night';
+        if (label) label.textContent = '02:17';
+        enterAfterHours();
+        return;
+      }
+      if (egg && egg.state === 'night') {
+        exitAfterHours();
+        return;
+      }
       var next = currentTheme() === 'dark' ? 'light' : 'dark';
       root.setAttribute('data-theme', next);
-      try { localStorage.setItem('theme', next); } catch (e) {}
+      try { localStorage.setItem('theme', next); } catch (err) {}
       sync();
     });
+
+    if (egg) {
+      var cancel = function () { clearTimeout(egg.timer); egg.timer = 0; };
+      button.addEventListener('pointerdown', function (e) {
+        if (e.button !== undefined && e.button !== 0) return;
+        if (egg.state !== 'off') return;
+        cancel();
+        egg.timer = setTimeout(function () {
+          egg.timer = 0;
+          egg.state = 'late';
+          egg.swallow = true;
+          button.classList.add('is-late');
+          if (label) label.textContent = 'Late';
+        }, 1500);
+      });
+      ['pointerup', 'pointerleave', 'pointercancel'].forEach(function (type) {
+        button.addEventListener(type, cancel);
+      });
+      button.addEventListener('contextmenu', function (e) { if (egg.state !== 'off' || egg.timer) e.preventDefault(); });
+      // a long press that ends outside the button produces no click; drop the flag shortly after release
+      button.addEventListener('pointerup', function () { setTimeout(function () { egg.swallow = false; }, 400); });
+      document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && egg.state !== 'off') exitAfterHours(); });
+    }
+
+    function enterAfterHours() {
+      root.classList.add('after-hours');
+      var note = document.createElement('a');
+      note.className = 'after-hours-note';
+      note.href = '/novel/';
+      note.textContent = '你还没睡？';
+      note.setAttribute('data-after-hours', '');
+      document.body.appendChild(note);
+      requestAnimationFrame(function () { note.classList.add('is-in'); });
+    }
+
+    function exitAfterHours() {
+      egg.state = 'off';
+      egg.swallow = false;
+      button.classList.remove('is-late');
+      root.classList.remove('after-hours');
+      var note = document.querySelector('[data-after-hours]');
+      if (note) note.remove();
+      sync();
+    }
+
     sync();
   }
 

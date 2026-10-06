@@ -2121,3 +2121,89 @@ button {
     display: none;
   }
 }
+
+/* ---------- Hidden ways into /novel/ ---------- */
+
+.site-footer__dot {
+  margin-left: 2px;
+  padding: 0 4px;
+  color: var(--ink-3);
+  text-decoration: none !important;
+  opacity: 0.55;
+  transition: opacity 400ms var(--ease), color 400ms var(--ease);
+}
+
+.site-footer__dot:hover,
+.site-footer__dot:focus-visible {
+  opacity: 1;
+  color: var(--accent);
+}
+
+.theme-toggle {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+  touch-action: manipulation;
+}
+
+.theme-toggle.is-late .theme-toggle__dot {
+  background: transparent;
+  box-shadow: inset -3px -1px 0 0 var(--ink);
+}
+
+.theme-toggle.is-late [data-theme-label] {
+  font-variant-numeric: tabular-nums;
+}
+
+/* after-hours: a faint late-night wash over the page; nothing moves */
+:root.after-hours::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  pointer-events: none;
+  background: radial-gradient(120% 90% at 100% 100%, rgba(255, 168, 92, 0.10), transparent 60%), rgba(18, 16, 40, 0.10);
+  animation: after-hours-in 1.6s var(--ease) both;
+}
+
+:root[data-theme="dark"].after-hours::after {
+  background: radial-gradient(120% 90% at 100% 100%, rgba(255, 168, 92, 0.08), transparent 60%), rgba(0, 0, 0, 0.22);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]).after-hours::after {
+    background: radial-gradient(120% 90% at 100% 100%, rgba(255, 168, 92, 0.08), transparent 60%), rgba(0, 0, 0, 0.22);
+  }
+}
+
+@keyframes after-hours-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.after-hours-note {
+  position: fixed;
+  right: clamp(16px, 3vw, 32px);
+  bottom: clamp(16px, 3vw, 32px);
+  z-index: 80;
+  padding: 10px 16px;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  background: var(--bg-raise);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.12);
+  font-size: 14px;
+  color: var(--ink-2);
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 900ms var(--ease) 500ms, transform 900ms var(--ease) 500ms, color 160ms var(--ease), border-color 160ms var(--ease);
+}
+
+.after-hours-note.is-in {
+  opacity: 1;
+  transform: none;
+}
+
+.after-hours-note:hover {
+  color: var(--ink);
+  border-color: var(--ink);
+}
