@@ -325,8 +325,8 @@
 .nv-read__cover::after {
   content: "";
   position: absolute;
-  inset: 45% 0 0;
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.38));
+  inset: 40% 0 0;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.55));
   pointer-events: none;
 }
 
@@ -338,7 +338,7 @@
   font-weight: 600;
   letter-spacing: 0.02em;
   color: rgba(255, 255, 255, 0.92);
-  text-shadow: 0 1px 24px rgba(0, 0, 0, 0.25);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.35), 0 1px 24px rgba(0, 0, 0, 0.3);
 }
 
 .nv-card__body {
@@ -438,7 +438,7 @@
   font-size: clamp(22px, 3vw, 34px);
   font-weight: 600;
   color: rgba(255, 255, 255, 0.92);
-  text-shadow: 0 1px 24px rgba(0, 0, 0, 0.25);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.35), 0 1px 24px rgba(0, 0, 0, 0.3);
 }
 
 .nv-read__head {
