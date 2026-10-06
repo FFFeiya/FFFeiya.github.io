@@ -45,21 +45,39 @@
     });
 
     if (egg) {
-      var cancel = function () { clearTimeout(egg.timer); egg.timer = 0; };
+      var HOLD_MS = 1500;
+      var start = null;
+      var cancel = function () {
+        clearTimeout(egg.timer);
+        egg.timer = 0;
+        start = null;
+        button.classList.remove('is-holding');
+      };
       button.addEventListener('pointerdown', function (e) {
         if (e.button !== undefined && e.button !== 0) return;
         if (egg.state !== 'off') return;
         cancel();
+        start = { x: e.clientX, y: e.clientY };
+        // keep receiving events even if the finger or cursor drifts off the small button
+        try { button.setPointerCapture(e.pointerId); } catch (err) {}
+        // the dot fills while held, so it is clear something is happening
+        button.classList.add('is-holding');
         egg.timer = setTimeout(function () {
           egg.timer = 0;
+          start = null;
+          button.classList.remove('is-holding');
           egg.state = 'late';
           egg.swallow = true;
           button.classList.add('is-late');
           if (label) label.textContent = 'Late';
-        }, 1500);
+        }, HOLD_MS);
       });
-      ['pointerup', 'pointerleave', 'pointercancel'].forEach(function (type) {
-        button.addEventListener(type, cancel);
+      button.addEventListener('pointermove', function (e) {
+        // only a real drag cancels the hold, not a trembling finger
+        if (start && Math.abs(e.clientX - start.x) + Math.abs(e.clientY - start.y) > 24) cancel();
+      });
+      ['pointerup', 'pointercancel', 'lostpointercapture'].forEach(function (type) {
+        button.addEventListener(type, function () { if (egg.timer) cancel(); });
       });
       button.addEventListener('contextmenu', function (e) { if (egg.state !== 'off' || egg.timer) e.preventDefault(); });
       // a long press that ends outside the button produces no click; drop the flag shortly after release

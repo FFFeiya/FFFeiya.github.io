@@ -2143,7 +2143,17 @@ button {
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   user-select: none;
-  touch-action: manipulation;
+  /* no browser gesture on this small button, so a long press is not cancelled by panning */
+  touch-action: none;
+}
+
+.theme-toggle.is-holding .theme-toggle__dot {
+  animation: theme-hold 1.5s linear forwards;
+}
+
+@keyframes theme-hold {
+  from { box-shadow: 0 0 0 0 var(--accent); }
+  to { box-shadow: 0 0 0 5px var(--accent); background: var(--accent); }
 }
 
 .theme-toggle.is-late .theme-toggle__dot {
