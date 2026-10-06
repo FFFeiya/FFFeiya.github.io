@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Game Engineering II - Assignment 03 — 杨飞洋 Feiya Yang</title>
+<meta name="description" content="Assignment 02 introduced cMesh and cEffect but still had platform-specific Graphics.d3d.cpp and Graphics.gl.cpp files. Assignment 03 removes those two files completely by moving the remaining platform-specific frame work behind a small sContext abstraction. It also adds uint16_t index buffers to cMesh, makes both cMesh and cEffect initialize from caller-provided data, and renders two objects with two effects.">
+<meta name="author" content="杨飞洋 Feiya Yang">
+<link rel="canonical" href="https://fffeiya.github.io/game-essay/assignment-03/">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="杨飞洋 Feiya Yang">
+<meta property="og:title" content="Game Engineering II - Assignment 03">
+<meta property="og:description" content="Assignment 02 introduced cMesh and cEffect but still had platform-specific Graphics.d3d.cpp and Graphics.gl.cpp files. Assignment 03 removes those two files completely by moving the remaining platform-specific frame work behind a small sContext abstraction. It also adds uint16_t index buffers to cMesh, makes both cMesh and cEffect initialize from caller-provided data, and renders two objects with two effects.">
+<meta property="og:url" content="https://fffeiya.github.io/game-essay/assignment-03/">
+<meta property="og:image" content="https://fffeiya.github.io/images/assignment03/d3d_game_running.png">
+<meta property="og:locale" content="zh_CN">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#fbfbf9" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0e0e0d" media="(prefers-color-scheme: dark)">
+<link rel="icon" type="image/png" href="/brand/favicon.png">
+<link rel="preload" href="/fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<script>
+(function () {
+  try {
+    var t = localStorage.getItem('theme');
+    if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+  } catch (e) {}
+})();
+</script>
+<link rel="stylesheet" href="/css/site.css?v=mux5y0wh">
+
+<link rel="stylesheet" href="/css/essay.css?v=mux5y0wh">
+</head>
+
+
+<body class="essay-app">
+
+<a class="skip-link" href="#es-main">Skip to content</a>
+<div class="es" data-nv>
+  <aside class="es-side" id="es-side" aria-label="Essays">
+    <div class="es-side__top">
+      <a class="es-brand" href="/game-essay/">
+        <img class="brand__mark brand__mark--light" src="/brand/fffeiya-mark.png" alt="" width="22" height="20">
+        <img class="brand__mark brand__mark--dark" src="/brand/fffeiya-mark-dark.png" alt="" width="22" height="20">
+        <span>Game Essays</span>
+      </a>
+      <button class="es-icon-btn es-close" type="button" data-nv-close aria-label="Close sidebar">
+        <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 5l10 10M15 5L5 15" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+
+    <nav class="es-nav" aria-label="Collection">
+      <a class="es-nav__item" href="/game-essay/">
+        <svg width="16" height="16" viewBox="0 0 20 20" aria-hidden="true"><rect x="3" y="3" width="6" height="6" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="11" y="3" width="6" height="6" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="3" y="11" width="6" height="6" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="11" y="11" width="6" height="6" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+        Overview
+      </a>
+
+      <p class="es-nav__label">GAMES 6320 · Game Engineering II</p>
+      <ol class="es-nav__list">
+        
+        <li><a href="/game-essay/assignment-01/index.html"><span class="es-nav__no">01</span><span class="es-nav__text">Graphics library, a second game project, the asset build</span></a></li>
+        
+        <li><a href="/game-essay/assignment-02/index.html"><span class="es-nav__no">02</span><span class="es-nav__text">Platform-independent mesh and effect interfaces</span></a></li>
+        
+        <li><a href="/game-essay/assignment-03/index.html" class="is-active" aria-current="page"><span class="es-nav__no">03</span><span class="es-nav__text">Removing per-platform Graphics files; index buffers</span></a></li>
+        
+        <li><a href="/game-essay/assignment-04/index.html"><span class="es-nav__no">04</span><span class="es-nav__text">Reference-counted assets and render submission</span></a></li>
+        
+        <li><a href="/game-essay/assignment-05/index.html"><span class="es-nav__no">05</span><span class="es-nav__text">Cameras, game objects, platform-independent shaders</span></a></li>
+        
+        <li><a href="/game-essay/assignment-06/index.html"><span class="es-nav__no">06</span><span class="es-nav__text">A human-readable mesh format and a MeshBuilder</span></a></li>
+        
+        <li><a href="/game-essay/assignment-07/index.html"><span class="es-nav__no">07</span><span class="es-nav__text">A Maya exporter, depth buffering, vertex colors</span></a></li>
+        
+      </ol>
+    </nav>
+
+    <div class="es-side__foot">
+      <button class="es-side__theme" type="button" data-theme-toggle aria-label="切换深色 / 浅色模式">
+        <span class="theme-toggle__dot" aria-hidden="true"></span><span data-theme-label>Dark</span>
+      </button>
+      <a class="es-side__home" href="/">杨飞洋 Feiya Yang ↗</a>
+    </div>
+  </aside>
+  <div class="es-scrim" data-nv-close></div>
+
+  <div class="es-main">
+    <header class="es-bar">
+      <button class="es-icon-btn es-open" type="button" data-nv-open aria-label="Open sidebar" aria-controls="es-side" aria-expanded="false">
+        <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M3.5 5.5h13M3.5 10h13M3.5 14.5h13" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+      </button>
+      <nav class="es-crumbs" aria-label="Breadcrumb">
+        <a href="/">Feiya Yang</a><span aria-hidden="true">/</span><a href="/game-essay/">Game Essays</a><span aria-hidden="true">/</span><span aria-current="page">Assignment 03</span>
+      </nav>
+    </header>
+    <main id="es-main" class="es-content">
+      
+<div class="es-doc">
+  <article class="es-article">
+    <header class="es-head">
+      <p class="es-eyebrow">GAMES 6320 · Assignment 03</p>
+      <h1 class="es-head__title">Removing per-platform Graphics files; index buffers</h1>
+      <p class="es-head__lead">Assignment 02 introduced cMesh and cEffect but still had platform-specific Graphics.d3d.cpp and Graphics.gl.cpp files. Assignment 03 removes those two files completely by moving the remaining platform-specific frame work behind a small sContext abstraction. It also adds uint16_t index buffers to cMesh, makes both cMesh and cEffect initialize from caller-provided data, and renders two objects with two effects.</p>
+      <p class="es-head__meta"><time datetime="2026-09-15T06:00:00.000Z">2026.09.15</time><span>4 min read</span><span>C++ · Direct3D · OpenGL</span></p>
+    </header>
+
+    <div class="prose es-prose"><p>This is the write-up for Assignment 03 of GAMES 6320 (Game Engineering II). Assignment 02 introduced <code>cMesh</code> and <code>cEffect</code> but still had platform-specific <code>Graphics.d3d.cpp</code> and <code>Graphics.gl.cpp</code> files. Assignment 03 removes those two files completely by moving the remaining platform-specific frame work behind a small <code>sContext</code> abstraction. It also adds <code>uint16_t</code> index buffers to <code>cMesh</code>, makes both <code>cMesh</code> and <code>cEffect</code> initialize from caller-provided data, and renders two objects with two effects.</p>
+<hr>
+<h2 id="Download"><a href="#Download" class="headerlink" title="Download"></a>Download</h2><blockquote>
+<p><strong>Release build (Direct3D x64):</strong> <a href="/files/MyGame_Assignment03_Release_x64.zip">MyGame_Assignment03_Release_x64.zip</a></p>
+<p>The ZIP contains a <strong>Direct3D Release</strong> build (<code>x64</code>). Unzip it and run <code>MyGame.exe</code>.<br><strong>Controls:</strong> none for this assignment (press <code>Esc</code> to close the window).</p>
+</blockquote>
+<hr>
+<h2 id="What-changed"><a href="#What-changed" class="headerlink" title="What changed"></a>What changed</h2><p>Assignment 03 removes the last two duplicated graphics frame files (<code>Graphics.d3d.cpp</code> and <code>Graphics.gl.cpp</code>) and replaces them with a single <code>Graphics.cpp</code> that contains <strong>no platform-specific macros or API calls</strong>.</p>
+<p>The project now has:</p>
+<ul>
+<li>one platform-independent <code>Graphics.cpp</code>;</li>
+<li>indexed meshes using <code>uint16_t</code> indices;</li>
+<li>effect initialization driven by caller-provided data;</li>
+<li>mesh initialization driven by caller-provided vertex&#x2F;index data;</li>
+<li>two meshes and two effects, drawn with two distinct colors;</li>
+<li>a configurable clear color instead of hard-coded black.</li>
+</ul>
+<h2 id="Platform-independent-Graphics-cpp"><a href="#Platform-independent-Graphics-cpp" class="headerlink" title="Platform-independent Graphics.cpp"></a>Platform-independent Graphics.cpp</h2><h3 id="New-interfaces"><a href="#New-interfaces" class="headerlink" title="New interfaces"></a>New interfaces</h3><p>I added the following platform-independent interfaces:</p>
+<table>
+<thead>
+<tr>
+<th>Interface</th>
+<th>Declared in</th>
+<th>Platform implementation</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>Graphics::sColor</code> and <code>Graphics::SubmitClearColor()</code></td>
+<td><code>Engine/Graphics/Graphics.h</code> &#x2F; <code>Graphics.cpp</code></td>
+<td>shared</td>
+</tr>
+<tr>
+<td><code>sContext::InitializeViews()</code></td>
+<td><code>Engine/Graphics/sContext.h</code></td>
+<td><code>Direct3D/sContext.d3d.cpp</code>, <code>OpenGL/sContext.gl.cpp</code></td>
+</tr>
+<tr>
+<td><code>sContext::ClearBackBuffer()</code></td>
+<td><code>Engine/Graphics/sContext.h</code></td>
+<td><code>Direct3D/sContext.d3d.cpp</code>, <code>OpenGL/sContext.gl.cpp</code></td>
+</tr>
+<tr>
+<td><code>sContext::Present()</code></td>
+<td><code>Engine/Graphics/sContext.h</code></td>
+<td><code>Direct3D/sContext.d3d.cpp</code>, <code>OpenGL/sContext.gl.cpp</code></td>
+</tr>
+<tr>
+<td><code>sContext::UsesLeftHandedWinding()</code></td>
+<td><code>Engine/Graphics/sContext.h</code></td>
+<td><code>Direct3D/sContext.d3d.cpp</code>, <code>OpenGL/sContext.gl.cpp</code></td>
+</tr>
+</tbody></table>
+<p>The Direct3D render-target&#x2F;depth views also moved out of <code>Graphics.d3d.cpp</code> and into <code>Direct3D/sContext.d3d.cpp</code>. OpenGL simply implements the same interface with <code>glClearColor()</code>, <code>glClear()</code>, and <code>SwapBuffers()</code>.</p>
+<h3 id="Clear-color"><a href="#Clear-color" class="headerlink" title="Clear color"></a>Clear color</h3><p><code>Graphics.cpp</code> specifies the background color and submits it through the new platform-independent interface:</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">constexpr</span> eae6320::Graphics::sColor s_clearColor = &#123; <span class="hljs-number">0.0f</span>, <span class="hljs-number">0.0f</span>, <span class="hljs-number">0.25f</span>, <span class="hljs-number">1.0f</span> &#125;;<br></code></pre></td></tr></table></figure>
+
+<p>At render time, the code in <code>Graphics.cpp</code> uses only the context interface:</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><code class="hljs cpp">sContext::g_context.<span class="hljs-built_in">ClearBackBuffer</span>( dataRequiredToRenderFrame-&gt;clearColor );<br></code></pre></td></tr></table></figure>
+
+<p>Changing <code>s_clearColor</code> to <code>&#123; 1, 0, 0, 1 &#125;</code>, <code>&#123; 0, 1, 0, 1 &#125;</code>, or <code>&#123; 0, 0, 1, 1 &#125;</code> changes the background to red, green, or blue respectively.</p>
+<h2 id="Effect-initialization-with-data"><a href="#Effect-initialization-with-data" class="headerlink" title="Effect initialization with data"></a>Effect initialization with data</h2><p>The effect interface no longer hard-codes shader paths:</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">struct</span> <span class="hljs-title class_">sEffectData</span><br>&#123;<br>    <span class="hljs-type">const</span> <span class="hljs-type">char</span>* vertexShaderPath = <span class="hljs-literal">nullptr</span>;<br>    <span class="hljs-type">const</span> <span class="hljs-type">char</span>* fragmentShaderPath = <span class="hljs-literal">nullptr</span>;<br>    <span class="hljs-type">uint8_t</span> renderStateBits = <span class="hljs-number">0</span>;<br>&#125;;<br><br><span class="hljs-function">cResult <span class="hljs-title">Initialize</span><span class="hljs-params">( <span class="hljs-type">const</span> sEffectData&amp; i_effectData )</span></span>;<br></code></pre></td></tr></table></figure>
+
+<p>The caller must provide:</p>
+<ul>
+<li>a path to a vertex shader;</li>
+<li>a path to a fragment shader;</li>
+<li>the render-state bits for this effect.</li>
+</ul>
+<p>These values are used only during initialization. <code>cEffect</code> stores the loaded shader objects and render-state object, not the paths or the raw input arrays.</p>
+<p>This is the relevant code in <code>Graphics.cpp</code>:</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><code class="hljs cpp"><span class="hljs-type">const</span> sEffectData effectData_animated =<br>&#123;<br>    s_vertexShaderPath,<br>    s_fragmentShaderPath_animated,<br>    s_renderStateBits,<br>&#125;;<br><span class="hljs-keyword">if</span> ( !( result = s_effect_animated.<span class="hljs-built_in">Initialize</span>( effectData_animated ) ) )<br>&#123;<br>    <span class="hljs-built_in">EAE6320_ASSERTF</span>( <span class="hljs-literal">false</span>, <span class="hljs-string">&quot;Can&#x27;t initialize Graphics without the animated shading data&quot;</span> );<br>    <span class="hljs-keyword">return</span> result;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="Effect-memory"><a href="#Effect-memory" class="headerlink" title="Effect memory"></a>Effect memory</h3><p>I measured these values with a small <code>sizeof()</code> program compiled against the same headers and platform macros.</p>
+<table>
+<thead>
+<tr>
+<th>Object</th>
+<th align="right">Direct3D x64</th>
+<th align="right">OpenGL x86</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>cEffect</code></td>
+<td align="right">48 bytes</td>
+<td align="right">16 bytes</td>
+</tr>
+<tr>
+<td><code>cRenderState</code></td>
+<td align="right">32 bytes</td>
+<td align="right">1 byte</td>
+</tr>
+</tbody></table>
+<p>On Direct3D, <code>cEffect</code> stores two shader pointers and a <code>cRenderState</code>. <code>cRenderState</code> stores three Direct3D state-object pointers plus one byte of render-state bits. On OpenGL, <code>cRenderState</code> needs only the one render-state byte; <code>cEffect</code> stores two shader pointers, that byte, and the OpenGL program ID.</p>
+<p>The values cannot easily be smaller because the active graphics API requires either COM state objects (Direct3D) or an OpenGL program ID and state bits. Shader paths are deliberately not stored after initialization.</p>
+<h2 id="Mesh-initialization-with-data-and-indexed-rendering"><a href="#Mesh-initialization-with-data-and-indexed-rendering" class="headerlink" title="Mesh initialization with data and indexed rendering"></a>Mesh initialization with data and indexed rendering</h2><p>The mesh interface now accepts vertex and index data:</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">struct</span> <span class="hljs-title class_">sMeshData</span><br>&#123;<br>    <span class="hljs-type">const</span> VertexFormats::sVertex_mesh* vertexData = <span class="hljs-literal">nullptr</span>;<br>    <span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> vertexCount = <span class="hljs-number">0</span>;<br>    <span class="hljs-type">const</span> <span class="hljs-type">uint16_t</span>* indexData = <span class="hljs-literal">nullptr</span>;<br>    <span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> indexCount = <span class="hljs-number">0</span>;<br>&#125;;<br><br><span class="hljs-function">cResult <span class="hljs-title">Initialize</span><span class="hljs-params">( <span class="hljs-type">const</span> sMeshData&amp; i_meshData )</span></span>;<br></code></pre></td></tr></table></figure>
+
+<p>The caller must provide:</p>
+<ul>
+<li>vertex data (<code>x</code>, <code>y</code>, <code>z</code>);</li>
+<li>the number of vertices;</li>
+<li><code>uint16_t</code> index data;</li>
+<li>the number of indices.</li>
+</ul>
+<p>The public mesh API uses <strong>right-handed winding order</strong>. <code>cMesh.cpp</code> asks the active platform whether it expects left-handed winding:</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">if</span> ( sContext::g_context.<span class="hljs-built_in">UsesLeftHandedWinding</span>() )<br>&#123;<br>    <span class="hljs-comment">// Direct3D expects left-handed winding, so reverse each triangle.</span><br>    std::<span class="hljs-built_in">swap</span>( triangle[<span class="hljs-number">1</span>], triangle[<span class="hljs-number">2</span>] );<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><code>Direct3D/sContext.d3d.cpp</code> returns <code>true</code>; <code>OpenGL/sContext.gl.cpp</code> returns <code>false</code>. Therefore the same vertex&#x2F;index data can be used regardless of platform.</p>
+<p>This is the relevant code in <code>Graphics.cpp</code>:</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><code class="hljs cpp"><span class="hljs-type">const</span> sMeshData rectangleData =<br>&#123;<br>    s_rectangleVertices,<br>    <span class="hljs-built_in">static_cast</span>&lt;<span class="hljs-type">unsigned</span> <span class="hljs-type">int</span>&gt;( <span class="hljs-built_in">sizeof</span>( s_rectangleVertices ) / <span class="hljs-built_in">sizeof</span>( s_rectangleVertices[<span class="hljs-number">0</span>] ) ),<br>    s_rectangleIndices,<br>    <span class="hljs-built_in">static_cast</span>&lt;<span class="hljs-type">unsigned</span> <span class="hljs-type">int</span>&gt;( <span class="hljs-built_in">sizeof</span>( s_rectangleIndices ) / <span class="hljs-built_in">sizeof</span>( s_rectangleIndices[<span class="hljs-number">0</span>] ) ),<br>&#125;;<br><span class="hljs-keyword">if</span> ( !( result = s_mesh_rectangle.<span class="hljs-built_in">Initialize</span>( rectangleData ) ) )<br>&#123;<br>    <span class="hljs-built_in">EAE6320_ASSERTF</span>( <span class="hljs-literal">false</span>, <span class="hljs-string">&quot;Can&#x27;t initialize Graphics without the rectangle geometry&quot;</span> );<br>    <span class="hljs-keyword">return</span> result;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="Mesh-memory"><a href="#Mesh-memory" class="headerlink" title="Mesh memory"></a>Mesh memory</h3><table>
+<thead>
+<tr>
+<th>Object</th>
+<th align="right">Direct3D x64</th>
+<th align="right">OpenGL x86</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>cMesh</code></td>
+<td align="right">32 bytes</td>
+<td align="right">20 bytes</td>
+</tr>
+</tbody></table>
+<p>On Direct3D, <code>cMesh</code> stores a vertex-format pointer, a vertex-buffer pointer, an index-buffer pointer, and two counts. On OpenGL, it stores a VAO ID, a VBO ID, an IBO ID, and two counts. The vertex&#x2F;index arrays themselves are copied into GPU buffers and are not stored on the CPU after initialization.</p>
+<h2 id="Two-objects-and-two-effects"><a href="#Two-objects-and-two-effects" class="headerlink" title="Two objects and two effects"></a>Two objects and two effects</h2><p><code>Graphics.cpp</code> creates:</p>
+<ul>
+<li>a <strong>rectangle</strong> using the animated-color fragment shader;</li>
+<li>a <strong>triangle</strong> using the standard white fragment shader.</li>
+</ul>
+<p>Per frame:</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><code class="hljs cpp">s_effect_animated.<span class="hljs-built_in">Bind</span>();<br>s_mesh_rectangle.<span class="hljs-built_in">Draw</span>();<br><br>s_effect_standard.<span class="hljs-built_in">Bind</span>();<br>s_mesh_triangle.<span class="hljs-built_in">Draw</span>();<br></code></pre></td></tr></table></figure>
+
+<p>The two objects occupy different areas of the screen, so both are clearly visible.</p>
+<h2 id="Screenshots"><a href="#Screenshots" class="headerlink" title="Screenshots"></a>Screenshots</h2><h3 id="Direct3D-Debug-x64"><a href="#Direct3D-Debug-x64" class="headerlink" title="Direct3D Debug (x64)"></a>Direct3D Debug (x64)</h3><p><img src="/images/assignment03/d3d_game_running.png" alt="Direct3D running game"></p>
+<h3 id="OpenGL-Debug-x86"><a href="#OpenGL-Debug-x86" class="headerlink" title="OpenGL Debug (x86)"></a>OpenGL Debug (x86)</h3><p><img src="/images/assignment03/gl_game_running.png" alt="OpenGL running game"></p>
+<p>Both screenshots show two distinct objects on a non-black blue background.</p>
+<h2 id="Build-test"><a href="#Build-test" class="headerlink" title="Build &#x2F; test"></a>Build &#x2F; test</h2><p>All four configurations were built cleanly with warnings treated as errors:</p>
+<ul>
+<li><code>Debug|x64</code> (Direct3D)</li>
+<li><code>Release|x64</code> (Direct3D)</li>
+<li><code>Debug|x86</code> (OpenGL)</li>
+<li><code>Release|x86</code> (OpenGL)</li>
+</ul>
+<p>The solution targets <code>PlatformToolset=v143</code>. The Visual Studio 2026 installation now has the v143 MSVC component (<code>Microsoft.VisualStudio.Component.VC.14.44.17.14.x86.x64</code>) installed, so the builds above were run <strong>without</strong> any command-line <code>PlatformToolset</code> override.</p>
+<p>The downloadable ZIP is the <strong>Direct3D Release</strong> build.</p>
+<h2 id="Reflection"><a href="#Reflection" class="headerlink" title="Reflection"></a>Reflection</h2><p>The important design choice was to stop treating the graphics context as raw API data and start treating it as an abstraction boundary. <code>Graphics.cpp</code> now sees only <code>InitializeViews()</code>, <code>ClearBackBuffer()</code>, <code>Present()</code>, and the winding-order query. That is enough to remove both platform-specific frame files completely.</p>
+<p>Moving winding-order conversion into <code>cMesh.cpp</code> keeps the public mesh interface simple. Callers provide indices once using one documented convention; the engine performs the tiny per-triangle swap only for the platform that needs it. This is intentionally simple and is exactly the kind of runtime conversion that can later move to the asset-build step.</p>
+</div>
+
+    <nav class="es-pager" aria-label="Other assignments">
+      <a class="es-pager__link" href="/game-essay/assignment-02/index.html"><span class="es-pager__dir">← Previous · 02</span><span class="es-pager__title">Platform-independent mesh and effect interfaces</span></a>
+      <a class="es-pager__link es-pager__link--next" href="/game-essay/assignment-04/index.html"><span class="es-pager__dir">Next · 04 →</span><span class="es-pager__title">Reference-counted assets and render submission</span></a>
+    </nav>
+  </article>
+
+  <aside class="es-aside">
+    
+    <nav class="toc es-toc" aria-label="On this page">
+      <p class="es-aside__label">On this page</p>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Download"><span class="toc-text">Download</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#What-changed"><span class="toc-text">What changed</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Platform-independent-Graphics-cpp"><span class="toc-text">Platform-independent Graphics.cpp</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Effect-initialization-with-data"><span class="toc-text">Effect initialization with data</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Mesh-initialization-with-data-and-indexed-rendering"><span class="toc-text">Mesh initialization with data and indexed rendering</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Two-objects-and-two-effects"><span class="toc-text">Two objects and two effects</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Screenshots"><span class="toc-text">Screenshots</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Build-test"><span class="toc-text">Build &#x2F; test</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Reflection"><span class="toc-text">Reflection</span></a></li></ol>
+    </nav>
+    
+  </aside>
+</div>
+
+    </main>
+  </div>
+</div>
+
+<script src="/js/site.js?v=mux5y0wh" defer></script>
+<script src="/js/novel.js?v=mux5y0wh" defer></script>
+</body>
+
+</html>

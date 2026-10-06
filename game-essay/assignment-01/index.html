@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Game Engineering II - Assignment 01 — 杨飞洋 Feiya Yang</title>
+<meta name="description" content="The assignment starts from a provided EAE6320-style engine and asks you to do a handful of things that sound small but expose a lot of how the engine is put together: introduce a new Graphics static library, split platform-specific rendering code correctly, create a second game project (MyGame) alongside the example game, hook up the asset build pipeline, and then make that game do something visible - an animated triangle - with a game-specific shader.">
+<meta name="author" content="杨飞洋 Feiya Yang">
+<link rel="canonical" href="https://fffeiya.github.io/game-essay/assignment-01/">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="杨飞洋 Feiya Yang">
+<meta property="og:title" content="Game Engineering II - Assignment 01">
+<meta property="og:description" content="The assignment starts from a provided EAE6320-style engine and asks you to do a handful of things that sound small but expose a lot of how the engine is put together: introduce a new Graphics static library, split platform-specific rendering code correctly, create a second game project (MyGame) alongside the example game, hook up the asset build pipeline, and then make that game do something visible - an animated triangle - with a game-specific shader.">
+<meta property="og:url" content="https://fffeiya.github.io/game-essay/assignment-01/">
+<meta property="og:image" content="https://fffeiya.github.io/images/assignment01/game-screenshot.png">
+<meta property="og:locale" content="zh_CN">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#fbfbf9" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0e0e0d" media="(prefers-color-scheme: dark)">
+<link rel="icon" type="image/png" href="/brand/favicon.png">
+<link rel="preload" href="/fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<script>
+(function () {
+  try {
+    var t = localStorage.getItem('theme');
+    if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+  } catch (e) {}
+})();
+</script>
+<link rel="stylesheet" href="/css/site.css?v=mux5y0wh">
+
+<link rel="stylesheet" href="/css/essay.css?v=mux5y0wh">
+</head>
+
+
+<body class="essay-app">
+
+<a class="skip-link" href="#es-main">Skip to content</a>
+<div class="es" data-nv>
+  <aside class="es-side" id="es-side" aria-label="Essays">
+    <div class="es-side__top">
+      <a class="es-brand" href="/game-essay/">
+        <img class="brand__mark brand__mark--light" src="/brand/fffeiya-mark.png" alt="" width="22" height="20">
+        <img class="brand__mark brand__mark--dark" src="/brand/fffeiya-mark-dark.png" alt="" width="22" height="20">
+        <span>Game Essays</span>
+      </a>
+      <button class="es-icon-btn es-close" type="button" data-nv-close aria-label="Close sidebar">
+        <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 5l10 10M15 5L5 15" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+
+    <nav class="es-nav" aria-label="Collection">
+      <a class="es-nav__item" href="/game-essay/">
+        <svg width="16" height="16" viewBox="0 0 20 20" aria-hidden="true"><rect x="3" y="3" width="6" height="6" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="11" y="3" width="6" height="6" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="3" y="11" width="6" height="6" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="11" y="11" width="6" height="6" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+        Overview
+      </a>
+
+      <p class="es-nav__label">GAMES 6320 · Game Engineering II</p>
+      <ol class="es-nav__list">
+        
+        <li><a href="/game-essay/assignment-01/index.html" class="is-active" aria-current="page"><span class="es-nav__no">01</span><span class="es-nav__text">Graphics library, a second game project, the asset build</span></a></li>
+        
+        <li><a href="/game-essay/assignment-02/index.html"><span class="es-nav__no">02</span><span class="es-nav__text">Platform-independent mesh and effect interfaces</span></a></li>
+        
+        <li><a href="/game-essay/assignment-03/index.html"><span class="es-nav__no">03</span><span class="es-nav__text">Removing per-platform Graphics files; index buffers</span></a></li>
+        
+        <li><a href="/game-essay/assignment-04/index.html"><span class="es-nav__no">04</span><span class="es-nav__text">Reference-counted assets and render submission</span></a></li>
+        
+        <li><a href="/game-essay/assignment-05/index.html"><span class="es-nav__no">05</span><span class="es-nav__text">Cameras, game objects, platform-independent shaders</span></a></li>
+        
+        <li><a href="/game-essay/assignment-06/index.html"><span class="es-nav__no">06</span><span class="es-nav__text">A human-readable mesh format and a MeshBuilder</span></a></li>
+        
+        <li><a href="/game-essay/assignment-07/index.html"><span class="es-nav__no">07</span><span class="es-nav__text">A Maya exporter, depth buffering, vertex colors</span></a></li>
+        
+      </ol>
+    </nav>
+
+    <div class="es-side__foot">
+      <button class="es-side__theme" type="button" data-theme-toggle aria-label="切换深色 / 浅色模式">
+        <span class="theme-toggle__dot" aria-hidden="true"></span><span data-theme-label>Dark</span>
+      </button>
+      <a class="es-side__home" href="/">杨飞洋 Feiya Yang ↗</a>
+    </div>
+  </aside>
+  <div class="es-scrim" data-nv-close></div>
+
+  <div class="es-main">
+    <header class="es-bar">
+      <button class="es-icon-btn es-open" type="button" data-nv-open aria-label="Open sidebar" aria-controls="es-side" aria-expanded="false">
+        <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M3.5 5.5h13M3.5 10h13M3.5 14.5h13" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+      </button>
+      <nav class="es-crumbs" aria-label="Breadcrumb">
+        <a href="/">Feiya Yang</a><span aria-hidden="true">/</span><a href="/game-essay/">Game Essays</a><span aria-hidden="true">/</span><span aria-current="page">Assignment 01</span>
+      </nav>
+    </header>
+    <main id="es-main" class="es-content">
+      
+<div class="es-doc">
+  <article class="es-article">
+    <header class="es-head">
+      <p class="es-eyebrow">GAMES 6320 · Assignment 01</p>
+      <h1 class="es-head__title">Graphics library, a second game project, the asset build</h1>
+      <p class="es-head__lead">The assignment starts from a provided EAE6320-style engine and asks you to do a handful of things that sound small but expose a lot of how the engine is put together: introduce a new Graphics static library, split platform-specific rendering code correctly, create a second game project (MyGame) alongside the example game, hook up the asset build pipeline, and then make that game do something visible - an animated triangle - with a game-specific shader.</p>
+      <p class="es-head__meta"><time datetime="2026-09-01T06:00:00.000Z">2026.09.01</time><span>8 min read</span><span>C++ · Direct3D · OpenGL</span></p>
+    </header>
+
+    <div class="prose es-prose"><p>This is the write-up for Assignment 01 of GAMES 6320 (Game Engineering II). The assignment starts from a provided EAE6320-style engine and asks you to do a handful of things that sound small but expose a lot of how the engine is put together: introduce a new <code>Graphics</code> static library, split platform-specific rendering code correctly, create a second game project (<code>MyGame</code>) alongside the example game, hook up the asset build pipeline, and then make that game do something visible - an animated triangle - with a game-specific shader.</p>
+<p>The point of the assignment is less “draw a triangle” and more “prove you understand how a multi-project, multi-platform engine is assembled and built.”</p>
+<hr>
+<h2 id="Download"><a href="#Download" class="headerlink" title="Download"></a>Download</h2><blockquote>
+<p><strong>Release build (Direct3D):</strong> <a href="/files/MyGame_Release_x64_Direct3D.zip">Download the Release Build</a></p>
+<p><strong>Release build (OpenGL):</strong> <a href="/files/MyGame_Release_Win32_OpenGL.zip">Download the Release Build (OpenGL)</a></p>
+</blockquote>
+<p><strong>Controls:</strong> No player input is required for this assignment (the only input handled by the starter code is ESC, which exits the application).</p>
+<hr>
+<h2 id="Result"><a href="#Result" class="headerlink" title="Result"></a>Result</h2><p>The finished <code>MyGame</code> renders a single triangle and animates its color over time, so instead of sitting at the default white it drifts through a range of colors as the simulation clock advances. The color is computed in a custom fragment shader and is identical on both rendering backends.</p>
+<p>The window title is also platform- and configuration-aware:</p>
+<ul>
+<li>OpenGL debug: <code>MyGame -- OpenGL -- Debug</code></li>
+<li>OpenGL release: <code>MyGame -- OpenGL</code></li>
+<li>Direct3D debug: <code>MyGame -- Direct3D -- Debug</code></li>
+<li>Direct3D release: <code>MyGame -- Direct3D</code></li>
+</ul>
+<p><img src="/images/assignment01/game-screenshot.png" alt="The MyGame window showing the animated triangle"></p>
+<p>The game also writes two lines to the generated log file (<code>eae6320.log</code>):</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><code class="hljs text">MyGame initialized successfully<br>MyGame cleaned up successfully<br></code></pre></td></tr></table></figure>
+
+<p><img src="/images/assignment01/log-screenshot.png" alt="The generated log file showing initialization and cleanup messages"></p>
+<hr>
+<h2 id="Graphics-Static-Library"><a href="#Graphics-Static-Library" class="headerlink" title="Graphics Static Library"></a>Graphics Static Library</h2><p>The first real piece of work is turning the graphics system into a proper static library named <code>Graphics</code>, living under <code>Engine/Graphics</code>. Before this, the solution shipped without a <code>Graphics</code> project at all - the graphics source files were provided separately - so the job was to drop them into the engine, create the project, and wire it into the rest of the solution.</p>
+<p>Why a static library instead of just compiling the graphics <code>.cpp</code> files into every game? Because the engine is organized as a set of small, focused static libraries (<code>Application</code>, <code>Logging</code>, <code>Platform</code>, <code>Concurrency</code>, <code>Math</code>, <code>Graphics</code>, and so on). Each library owns one concern, and the games link against the libraries they need. That keeps build times and dependency surfaces manageable and makes the boundaries between systems explicit.</p>
+<p>The interesting part is how the platform split works. <code>Graphics</code> has a shared interface (<code>Graphics.h</code>, <code>cShader.h</code>, <code>cRenderState.h</code>, …) and two platform-specific implementation folders:</p>
+<ul>
+<li><code>Direct3D/</code> - used by the x64 configurations</li>
+<li><code>OpenGL/</code> - used by the Win32 configurations</li>
+</ul>
+<p>The project file controls which folder gets compiled with <code>ExcludedFromBuild</code> conditions. The <code>Direct3D/*.d3d.cpp</code> files are excluded from the Win32 configurations, and the <code>OpenGL/*.gl.cpp</code> files are excluded from the x64 configurations. This means each configuration only ever compiles the code for the backend it actually uses. The platform macro comes from property sheets: <code>OpenGL.props</code> defines <code>EAE6320_PLATFORM_GL</code> and <code>Direct3D.props</code> defines <code>EAE6320_PLATFORM_D3D</code>, both along with <code>EAE6320_PLATFORM_WINDOWS</code>.</p>
+<p>That split matters beyond just “compile the right files.” It keeps Direct3D types out of OpenGL translation units and vice versa, and it makes the intended platform mapping explicit in one place.</p>
+<hr>
+<h2 id="Project-References"><a href="#Project-References" class="headerlink" title="Project References"></a>Project References</h2><p>Adding references correctly turned out to be the most instructive part of the assignment. The rule the assignment is teaching is:</p>
+<blockquote>
+<p>A project reference (a link dependency) is only needed when one project calls a <em>function</em> that is <em>defined in a .cpp file</em> of another project.</p>
+</blockquote>
+<p>Using a type, an enum, or a header-only declaration does <strong>not</strong> require a reference.</p>
+<h3 id="Who-needs-Graphics"><a href="#Who-needs-Graphics" class="headerlink" title="Who needs Graphics?"></a>Who needs <code>Graphics</code>?</h3><p>I searched the solution for <code>Graphics::</code> and looked at which usages are actual function calls into the <code>Graphics</code> library:</p>
+<ul>
+<li><code>Engine/Application</code> calls the real <code>Graphics</code> API - <code>Graphics::Initialize</code>, <code>Graphics::CleanUp</code>, <code>Graphics::RenderFrame</code>, <code>Graphics::SubmitElapsedTime</code>, and the frame submission functions. Those are defined in <code>Graphics.d3d.cpp</code> &#x2F; <code>Graphics.gl.cpp</code>, so <code>Application</code> is the project that needs a reference to <code>Graphics</code>.</li>
+</ul>
+<p>So <strong><code>Application</code> is the only project that needed a <code>Graphics</code> reference.</strong> <code>MyGame</code> and <code>ExampleGame</code> link against <code>Application</code>, and they get <code>Graphics</code> transitively.</p>
+<h3 id="Who-mentions-Graphics-but-does-not-need-a-reference"><a href="#Who-mentions-Graphics-but-does-not-need-a-reference" class="headerlink" title="Who mentions Graphics:: but does not need a reference?"></a>Who mentions <code>Graphics::</code> but does <em>not</em> need a reference?</h3><p><code>ShaderBuilder</code> is the clean example. Its source uses <code>Graphics::eShaderType</code> to decide which shader profile to compile. But <code>eShaderType</code> is just an <code>enum class</code> declared in a header. The <code>ShaderBuilder</code> never calls a function defined in a <code>Graphics</code> <code>.cpp</code> file, so it needs the <em>header</em> on its include path but no <em>link</em> dependency on <code>Graphics</code>.</p>
+<p>That distinction - namespace usage vs. linker dependency - is the thing I want to remember going forward.</p>
+<h3 id="Graphics‘s-own-references"><a href="#Graphics‘s-own-references" class="headerlink" title="Graphics‘s own references"></a><code>Graphics</code>‘s own references</h3><p><code>Graphics</code> itself links against <code>Asserts</code>, <code>Concurrency</code>, <code>Logging</code>, <code>Platform</code>, <code>UserOutput</code>, <code>Windows</code>, and <code>OpenGlExtensions</code>. Those are the projects whose compiled functions the graphics implementation actually calls.</p>
+<hr>
+<h2 id="Creating-MyGame"><a href="#Creating-MyGame" class="headerlink" title="Creating MyGame"></a>Creating MyGame</h2><p>Creating <code>MyGame</code> was mostly mechanical, but there is one subtlety that is easy to get wrong: you cannot just copy <code>ExampleGame</code> byte-for-byte.</p>
+<p>Visual Studio projects carry a <code>ProjectGuid</code>, and two projects in the same solution cannot share one. So the process is:</p>
+<ol>
+<li>Create a fresh <code>MyGame</code> project (which generates a new, unique GUID).</li>
+<li>Copy the example game’s source&#x2F;<code>.props</code> files in and rename them.</li>
+<li>Replace the generated GUID with the one from the new project.</li>
+<li>Rename the class from <code>cExampleGame</code> to <code>cMyGame</code> and update the include guards and <code>#include</code> directives.</li>
+</ol>
+<p>There is also a naming distinction the assignment is particular about:</p>
+<ul>
+<li>The <strong>disk folder</strong> is <code>MyGame_</code> (with a trailing underscore).</li>
+<li>The <strong>Solution Explorer filter</strong> and <strong>project</strong> are <code>MyGame</code> (no underscore).</li>
+</ul>
+<p>The <code>MyGame.props</code> file sits in <code>MyGame_/</code> but outside <code>MyGame_/MyGame/</code>, and it defines <code>GameName</code> as <code>MyGame_</code>, which drives the <code>$(GameInstallDir)</code> used to stage the finished game.</p>
+<p>The <code>BuildMyGameAssets</code> project is a separate, intentionally empty project whose whole job is to run the asset build step. It does not compile game code; it depends on the asset tools and invokes them on the game’s <code>AssetsToBuild.lua</code>. Keeping it separate is what lets the TA test “build the game only” and get a game with <em>no</em> assets, which is the correct behavior.</p>
+<hr>
+<h2 id="Asset-Pipeline"><a href="#Asset-Pipeline" class="headerlink" title="Asset Pipeline"></a>Asset Pipeline</h2><p>The asset pipeline is the part I had to trace most carefully. The flow is:</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><code class="hljs text">MyGame_/Content/AssetsToBuild.lua<br>        -&gt;  AssetBuildExe (runs the Lua build script)<br>        -&gt;  asset builders (e.g. ShaderBuilder)<br>        -&gt;  $(GameInstallDir)/data/...<br></code></pre></td></tr></table></figure>
+
+<p><code>AssetsToBuild.lua</code> lists <em>source</em> assets. For example, it lists <code>Shaders/Fragment/standard.shader</code> and my <code>Shaders/Fragment/animatedColor.shader</code>. The build system looks for each source file in the game’s content directory first, then in the engine’s content directory. The shader builder then preprocesses&#x2F;compiles the source into the <em>built</em> asset under <code>$(GameInstallDir)/data/shaders/...</code>.</p>
+<p>The distinction that matters is <strong>source asset vs. built asset</strong>. The game does not load from <code>Content/</code> at runtime. It loads from <code>data/</code> relative to the install directory. That is why deleting <code>temp/</code> and building only the game project produces an executable that cannot find its shaders - the game binary exists, but the built <code>data/</code> folder does not until <code>BuildMyGameAssets</code> runs.</p>
+<hr>
+<h2 id="Animated-Fragment-Shader"><a href="#Animated-Fragment-Shader" class="headerlink" title="Animated Fragment Shader"></a>Animated Fragment Shader</h2><p>For the visible result, I copied the engine’s <code>standard.shader</code> fragment shader to <code>MyGame_/Content/Shaders/Fragment/animatedColor.shader</code>, added it to <code>AssetsToBuild.lua</code>, and changed both <code>Graphics.d3d.cpp</code> and <code>Graphics.gl.cpp</code> to load it instead of <code>standard.shader</code>.</p>
+<p>The shader uses the frame constant buffer’s <code>g_elapsedSecondCount_simulationTime</code> to drive the color. The same math is written once for HLSL and once for GLSL:</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><code class="hljs text">r = 0.5 + 0.5 * sin( simulationTime )<br>g = 0.5 + 0.5 * sin( simulationTime * 1.7 + 2.0 )<br>b = 0.5 + 0.5 * cos( simulationTime * 0.8 )<br></code></pre></td></tr></table></figure>
+
+<p>Because <code>sin</code>&#x2F;<code>cos</code> stay in <code>[-1, 1]</code>, each channel stays in <code>[0, 1]</code>. Using different frequencies keeps the color drifting in a way that is clearly not white and clearly changing. Keeping the HLSL and GLSL formulas identical is what makes the two backends look the same.</p>
+<hr>
+<h2 id="Logging"><a href="#Logging" class="headerlink" title="Logging"></a>Logging</h2><p>The starter engine already has a <code>Logging</code> system, so I just used it rather than inventing anything new. <code>cMyGame::Initialize()</code> writes:</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><code class="hljs text">MyGame initialized successfully<br></code></pre></td></tr></table></figure>
+
+<p>and <code>cMyGame::CleanUp()</code> writes:</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><code class="hljs text">MyGame cleaned up successfully<br></code></pre></td></tr></table></figure>
+
+<p>Both end up in <code>eae6320.log</code> next to the executable. Lifecycle logging like this is useful after the fact: if something goes wrong, the log tells you how far initialization got before it failed, and whether cleanup ever ran.</p>
+<hr>
+<h2 id="Engine-Codebase-Thoughts"><a href="#Engine-Codebase-Thoughts" class="headerlink" title="Engine Codebase Thoughts"></a>Engine Codebase Thoughts</h2><p>A few things stood out from actually reading the engine while doing this:</p>
+<ul>
+<li><strong>Small static libraries with clear names.</strong> <code>Application</code>, <code>Graphics</code>, <code>Logging</code>, <code>Platform</code>, <code>Concurrency</code>, <code>UserOutput</code>, etc. This makes the dependency graph legible: you can usually tell who needs whom from the <code>ProjectReference</code> lists.</li>
+<li><strong>Property sheets do the platform configuration.</strong> Instead of repeating preprocessor definitions in every project, <code>OpenGL.props</code> and <code>Direct3D.props</code> set the platform macros, and projects import the right one per configuration.</li>
+<li><strong>Common code vs. platform code.</strong> <code>Graphics</code> keeps the interface shared and pushes backend-specific work into <code>.d3d.cpp</code> &#x2F; <code>.gl.cpp</code> files selected by configuration, which is a clean way to keep two renderers in one library.</li>
+<li><strong>The asset pipeline is genuinely a pipeline.</strong> Source content is authored, listed, built, and then installed to <code>data/</code>. The separation between source and built assets is easy to miss until a clean build fails to produce them.</li>
+</ul>
+<hr>
+<h2 id="Problems-Things-Learned"><a href="#Problems-Things-Learned" class="headerlink" title="Problems &#x2F; Things Learned"></a>Problems &#x2F; Things Learned</h2><p>The most useful realization was the namespace-vs-linker point described above: seeing <code>Graphics::</code> in a file does not mean that project links against <code>Graphics</code>. It depends on whether the symbol is an enum&#x2F;header declaration or a function defined in a <code>.cpp</code>.</p>
+<p>Clean builds exposed dependency order in a way incremental builds hide. A solution can pass on the second build but fail the first time if the asset project’s dependencies are not declared; testing from a deleted <code>temp/</code> folder is the only way to catch that.</p>
+<p>Configuring platform-specific <code>.cpp</code> files correctly (<code>ExcludedFromBuild</code>) was also something I had to check carefully - getting Direct3D into a Win32 build or OpenGL into an x64 build is exactly the kind of mistake that only shows up as a confusing compile error.</p>
+<p>Finally, keeping HLSL and GLSL behavior identical requires writing the same logic in two shader languages and remembering that both must produce colors in <code>[0, 1]</code>.</p>
+<p>Local note: on this machine, Release builds were intermittently blocked by Windows Smart App Control flagging freshly built unsigned binaries. This is a local OS-policy issue, not part of the assignment, and it is documented in the acceptance report.</p>
+<hr>
+<h2 id="Expectations-for-the-Class"><a href="#Expectations-for-the-Class" class="headerlink" title="Expectations for the Class"></a>Expectations for the Class</h2><p>From the first assignment I expect the rest of the course to keep building on this same foundation: more engine systems as static libraries, a real rendering pipeline that grows beyond one triangle, a proper asset pipeline, and an increasing focus on production-style engine organization and build discipline. I am most interested in graphics abstraction and asset&#x2F;tooling pipelines.</p>
+<p>Beyond that, I am really hoping the class gets into AI-agent and generative engineering topics. I want to learn how agentic tooling can fit into a real C++&#x2F;game-engine workflow: AI-assisted code generation, automated asset and build pipelines driven by language models, and using agents to take over the repetitive config&#x2F;refactor&#x2F;build work that this assignment required by hand. It would be great to figure out where those tools genuinely help a game engineer and where they still fall short.</p>
+</div>
+
+    <nav class="es-pager" aria-label="Other assignments">
+      <span></span>
+      <a class="es-pager__link es-pager__link--next" href="/game-essay/assignment-02/index.html"><span class="es-pager__dir">Next · 02 →</span><span class="es-pager__title">Platform-independent mesh and effect interfaces</span></a>
+    </nav>
+  </article>
+
+  <aside class="es-aside">
+    
+    <nav class="toc es-toc" aria-label="On this page">
+      <p class="es-aside__label">On this page</p>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Download"><span class="toc-text">Download</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Result"><span class="toc-text">Result</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Graphics-Static-Library"><span class="toc-text">Graphics Static Library</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Project-References"><span class="toc-text">Project References</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Creating-MyGame"><span class="toc-text">Creating MyGame</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Asset-Pipeline"><span class="toc-text">Asset Pipeline</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Animated-Fragment-Shader"><span class="toc-text">Animated Fragment Shader</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Logging"><span class="toc-text">Logging</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Engine-Codebase-Thoughts"><span class="toc-text">Engine Codebase Thoughts</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Problems-Things-Learned"><span class="toc-text">Problems &#x2F; Things Learned</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Expectations-for-the-Class"><span class="toc-text">Expectations for the Class</span></a></li></ol>
+    </nav>
+    
+  </aside>
+</div>
+
+    </main>
+  </div>
+</div>
+
+<script src="/js/site.js?v=mux5y0wh" defer></script>
+<script src="/js/novel.js?v=mux5y0wh" defer></script>
+</body>
+
+</html>

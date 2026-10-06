@@ -1001,6 +1001,14 @@ button {
   border-top: 1px solid var(--ink);
 }
 
+.label + .rows {
+  margin-top: 12px;
+}
+
+.rows--collection {
+  margin-bottom: clamp(36px, 5vw, 56px);
+}
+
 .row {
   display: grid;
   grid-template-columns: 148px minmax(0, 1fr) auto;

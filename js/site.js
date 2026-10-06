@@ -19,7 +19,7 @@
     }
     // Easter egg (main site only): hold the toggle ~1.5 s -> "Late"; click -> "02:17",
     // the page dims a little and a note links to /novel/. Ordinary clicks are unchanged.
-    var egg = document.body.classList.contains('novel-app') ? null : { state: 'off', timer: 0, swallow: false };
+    var egg = /novel-app|essay-app/.test(document.body.className) ? null : { state: 'off', timer: 0, swallow: false };
 
     button.addEventListener('click', function (e) {
       if (egg && egg.swallow) {

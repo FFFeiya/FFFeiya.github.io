@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Game Engineering II - Assignment 06 — 杨飞洋 Feiya Yang</title>
+<meta name="description" content="A human-readable mesh file format, a MeshBuilder tool, and loading meshes from disk.">
+<meta name="author" content="杨飞洋 Feiya Yang">
+<link rel="canonical" href="https://fffeiya.github.io/game-essay/assignment-06/">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="杨飞洋 Feiya Yang">
+<meta property="og:title" content="Game Engineering II - Assignment 06">
+<meta property="og:description" content="A human-readable mesh file format, a MeshBuilder tool, and loading meshes from disk.">
+<meta property="og:url" content="https://fffeiya.github.io/game-essay/assignment-06/">
+<meta property="og:image" content="https://fffeiya.github.io/images/assignment06/game.png">
+<meta property="og:locale" content="zh_CN">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#fbfbf9" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0e0e0d" media="(prefers-color-scheme: dark)">
+<link rel="icon" type="image/png" href="/brand/favicon.png">
+<link rel="preload" href="/fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<script>
+(function () {
+  try {
+    var t = localStorage.getItem('theme');
+    if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+  } catch (e) {}
+})();
+</script>
+<link rel="stylesheet" href="/css/site.css?v=mux5y0wh">
+
+<link rel="stylesheet" href="/css/essay.css?v=mux5y0wh">
+</head>
+
+
+<body class="essay-app">
+
+<a class="skip-link" href="#es-main">Skip to content</a>
+<div class="es" data-nv>
+  <aside class="es-side" id="es-side" aria-label="Essays">
+    <div class="es-side__top">
+      <a class="es-brand" href="/game-essay/">
+        <img class="brand__mark brand__mark--light" src="/brand/fffeiya-mark.png" alt="" width="22" height="20">
+        <img class="brand__mark brand__mark--dark" src="/brand/fffeiya-mark-dark.png" alt="" width="22" height="20">
+        <span>Game Essays</span>
+      </a>
+      <button class="es-icon-btn es-close" type="button" data-nv-close aria-label="Close sidebar">
+        <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 5l10 10M15 5L5 15" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+
+    <nav class="es-nav" aria-label="Collection">
+      <a class="es-nav__item" href="/game-essay/">
+        <svg width="16" height="16" viewBox="0 0 20 20" aria-hidden="true"><rect x="3" y="3" width="6" height="6" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="11" y="3" width="6" height="6" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="3" y="11" width="6" height="6" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="11" y="11" width="6" height="6" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+        Overview
+      </a>
+
+      <p class="es-nav__label">GAMES 6320 · Game Engineering II</p>
+      <ol class="es-nav__list">
+        
+        <li><a href="/game-essay/assignment-01/index.html"><span class="es-nav__no">01</span><span class="es-nav__text">Graphics library, a second game project, the asset build</span></a></li>
+        
+        <li><a href="/game-essay/assignment-02/index.html"><span class="es-nav__no">02</span><span class="es-nav__text">Platform-independent mesh and effect interfaces</span></a></li>
+        
+        <li><a href="/game-essay/assignment-03/index.html"><span class="es-nav__no">03</span><span class="es-nav__text">Removing per-platform Graphics files; index buffers</span></a></li>
+        
+        <li><a href="/game-essay/assignment-04/index.html"><span class="es-nav__no">04</span><span class="es-nav__text">Reference-counted assets and render submission</span></a></li>
+        
+        <li><a href="/game-essay/assignment-05/index.html"><span class="es-nav__no">05</span><span class="es-nav__text">Cameras, game objects, platform-independent shaders</span></a></li>
+        
+        <li><a href="/game-essay/assignment-06/index.html" class="is-active" aria-current="page"><span class="es-nav__no">06</span><span class="es-nav__text">A human-readable mesh format and a MeshBuilder</span></a></li>
+        
+        <li><a href="/game-essay/assignment-07/index.html"><span class="es-nav__no">07</span><span class="es-nav__text">A Maya exporter, depth buffering, vertex colors</span></a></li>
+        
+      </ol>
+    </nav>
+
+    <div class="es-side__foot">
+      <button class="es-side__theme" type="button" data-theme-toggle aria-label="切换深色 / 浅色模式">
+        <span class="theme-toggle__dot" aria-hidden="true"></span><span data-theme-label>Dark</span>
+      </button>
+      <a class="es-side__home" href="/">杨飞洋 Feiya Yang ↗</a>
+    </div>
+  </aside>
+  <div class="es-scrim" data-nv-close></div>
+
+  <div class="es-main">
+    <header class="es-bar">
+      <button class="es-icon-btn es-open" type="button" data-nv-open aria-label="Open sidebar" aria-controls="es-side" aria-expanded="false">
+        <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M3.5 5.5h13M3.5 10h13M3.5 14.5h13" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+      </button>
+      <nav class="es-crumbs" aria-label="Breadcrumb">
+        <a href="/">Feiya Yang</a><span aria-hidden="true">/</span><a href="/game-essay/">Game Essays</a><span aria-hidden="true">/</span><span aria-current="page">Assignment 06</span>
+      </nav>
+    </header>
+    <main id="es-main" class="es-content">
+      
+<div class="es-doc">
+  <article class="es-article">
+    <header class="es-head">
+      <p class="es-eyebrow">GAMES 6320 · Assignment 06</p>
+      <h1 class="es-head__title">A human-readable mesh format and a MeshBuilder</h1>
+      <p class="es-head__lead">A human-readable mesh file format, a MeshBuilder tool, and loading meshes from disk.</p>
+      <p class="es-head__meta"><time datetime="2026-10-06T17:30:00.000Z">2026.10.06</time><span>7 min read</span><span>C++ · Direct3D · OpenGL</span></p>
+    </header>
+
+    <div class="prose es-prose"><p><strong>Course:</strong> GAMES 6320-001 — Game Engineering II (Fall 2026)</p>
+<blockquote>
+<p><strong>Download (one click, ZIP):</strong> <a href="/files/MyGame_Assignment06_Release_x64.zip">MyGame_Assignment06_Release_x64.zip</a></p>
+<p>The ZIP contains a <strong>Direct3D Release</strong> build (<code>x64</code>). Unzip it and run <code>MyGame.exe</code>.</p>
+<p><strong>Controls:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Arrow keys</td>
+<td>Move the colored object left &#x2F; right &#x2F; up &#x2F; down</td>
+</tr>
+<tr>
+<td><code>Space</code> (hold)</td>
+<td>The colored object becomes a triangle instead of a square</td>
+</tr>
+<tr>
+<td><code>A</code> &#x2F; <code>D</code></td>
+<td>Move the camera left &#x2F; right</td>
+</tr>
+<tr>
+<td><code>W</code> &#x2F; <code>S</code></td>
+<td>Move the camera forward &#x2F; back</td>
+</tr>
+<tr>
+<td><code>Esc</code></td>
+<td>Exit</td>
+</tr>
+</tbody></table>
+</blockquote>
+<hr>
+<h2 id="1-What-the-assignment-was-about"><a href="#1-What-the-assignment-was-about" class="headerlink" title="1. What the assignment was about"></a>1. What the assignment was about</h2><p>Until last week every mesh in my game was an array of numbers typed into <code>cMyGame.cpp</code>.<br>Changing the shape of anything meant changing C++ code and recompiling the game. This<br>assignment moves geometry out of the code and into <strong>asset files</strong>:</p>
+<ul>
+<li>Every mesh is now a file in the game’s <code>Content/Meshes</code> folder, written in a format that I<br>designed.</li>
+<li>The asset build system has a new builder, <strong>MeshBuilder</strong>, that “builds” those files into the<br>game’s <code>data/</code> folder.</li>
+<li>The engine’s mesh factory function no longer takes vertex and index arrays; it takes the<br><strong>path of a mesh file</strong>, reads it, and creates the GPU buffers from what it read.</li>
+</ul>
+<p>The file format is Lua, which my engine already uses for its build scripts. A Lua file that<br><code>return</code>s a table is a very convenient data format: it has arrays, dictionaries, numbers,<br>strings and comments, and the engine already has a Lua library to read it.</p>
+<hr>
+<h2 id="2-Why-human-readable-asset-files"><a href="#2-Why-human-readable-asset-files" class="headerlink" title="2. Why human-readable asset files?"></a>2. Why human-readable asset files?</h2><ul>
+<li><strong>You can open them and see what is wrong.</strong> When something renders incorrectly the first<br>question is “is the data wrong or the code wrong?”. With a text file I can open the mesh and<br>read the positions and triangles directly, without writing a tool first.</li>
+<li><strong>Small changes don’t need a programmer or a recompile.</strong> Moving one vertex is editing one<br>number and rebuilding the assets. The game’s code doesn’t change at all.</li>
+<li><strong>They work with source control.</strong> A diff of a text file shows exactly which vertex changed.<br>A diff of a binary file only says “the file changed”.</li>
+<li><strong>The format can grow.</strong> Because data is labelled by name, a newer version of the format can<br>add things (vertex colors, normals) and old files keep working.</li>
+</ul>
+<p>The cost is that text is bigger and slower to parse than binary. That doesn’t matter for a<br><em>source</em> file, because the plan is to convert it into a compact binary file at build time.<br>The human-readable file is for people, and the built file will be for the game.</p>
+<hr>
+<h2 id="3-My-mesh-file-format"><a href="#3-My-mesh-file-format" class="headerlink" title="3. My mesh file format"></a>3. My mesh file format</h2><p>This is <code>house.mesh</code>, the white house in the screenshot:</p>
+<figure class="highlight lua"><table><tr><td class="code"><pre><code class="hljs lua"><span class="hljs-comment">--[[</span><br><span class="hljs-comment">	A simple house: a square body with a triangular roof,</span><br><span class="hljs-comment">	centered on its local origin</span><br><span class="hljs-comment">]]</span><br><br><span class="hljs-keyword">return</span><br>&#123;<br>	<span class="hljs-comment">-- Each vertex is a table of named values</span><br>	<span class="hljs-comment">-- (currently a vertex only has a position, but more data can be added by name)</span><br>	vertices =<br>	&#123;<br>		<span class="hljs-comment">-- Body</span><br>		<span class="hljs-comment">-- [0] bottom left</span><br>		&#123; position = &#123; x = <span class="hljs-number">-0.4</span>, y = <span class="hljs-number">-0.5</span>, z = <span class="hljs-number">0.0</span> &#125; &#125;,<br>		<span class="hljs-comment">-- [1] bottom right</span><br>		&#123; position = &#123; x = <span class="hljs-number">0.4</span>, y = <span class="hljs-number">-0.5</span>, z = <span class="hljs-number">0.0</span> &#125; &#125;,<br>		<span class="hljs-comment">-- [2] top right of the walls</span><br>		&#123; position = &#123; x = <span class="hljs-number">0.4</span>, y = <span class="hljs-number">0.1</span>, z = <span class="hljs-number">0.0</span> &#125; &#125;,<br>		<span class="hljs-comment">-- [3] top left of the walls</span><br>		&#123; position = &#123; x = <span class="hljs-number">-0.4</span>, y = <span class="hljs-number">0.1</span>, z = <span class="hljs-number">0.0</span> &#125; &#125;,<br><br>		<span class="hljs-comment">-- Roof</span><br>		<span class="hljs-comment">-- [4] left eave</span><br>		&#123; position = &#123; x = <span class="hljs-number">-0.55</span>, y = <span class="hljs-number">0.1</span>, z = <span class="hljs-number">0.0</span> &#125; &#125;,<br>		<span class="hljs-comment">-- [5] right eave</span><br>		&#123; position = &#123; x = <span class="hljs-number">0.55</span>, y = <span class="hljs-number">0.1</span>, z = <span class="hljs-number">0.0</span> &#125; &#125;,<br>		<span class="hljs-comment">-- [6] peak</span><br>		&#123; position = &#123; x = <span class="hljs-number">0.0</span>, y = <span class="hljs-number">0.5</span>, z = <span class="hljs-number">0.0</span> &#125; &#125;,<br>	&#125;,<br><br>	<span class="hljs-comment">-- Each triangle lists three vertices (by their index in the vertices table above, starting at 0)</span><br>	<span class="hljs-comment">-- in counter-clockwise order when looking at the front of the triangle</span><br>	triangles =<br>	&#123;<br>		<span class="hljs-comment">-- Body</span><br>		&#123; <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span> &#125;,<br>		&#123; <span class="hljs-number">0</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span> &#125;,<br>		<span class="hljs-comment">-- Roof</span><br>		&#123; <span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-number">6</span> &#125;,<br>	&#125;,<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="Why-it-looks-like-this"><a href="#Why-it-looks-like-this" class="headerlink" title="Why it looks like this"></a>Why it looks like this</h3><p>For every piece of data I asked the question from the lecture: <em>does the order matter?</em></p>
+<table>
+<thead>
+<tr>
+<th>Data</th>
+<th>Order matters?</th>
+<th>So it is a…</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>The top-level table (<code>vertices</code>, <code>triangles</code>)</td>
+<td>No</td>
+<td>dictionary</td>
+</tr>
+<tr>
+<td>The list of vertices</td>
+<td>Yes — triangles refer to vertices by their position in the list</td>
+<td>array</td>
+</tr>
+<tr>
+<td>One vertex</td>
+<td>No — a vertex is a bag of attributes</td>
+<td>dictionary (<code>position = …</code>)</td>
+</tr>
+<tr>
+<td>A position</td>
+<td>Not really (x, y, z)</td>
+<td>dictionary (<code>x =</code>, <code>y =</code>, <code>z =</code>)</td>
+</tr>
+<tr>
+<td>The list of triangles</td>
+<td>Arbitrary, but there must be <em>some</em> order</td>
+<td>array</td>
+</tr>
+<tr>
+<td>One triangle</td>
+<td><strong>Yes</strong> — the order of its three indices is the winding order</td>
+<td>array of 3</td>
+</tr>
+</tbody></table>
+<p>Some specific decisions:</p>
+<ul>
+<li><strong>A vertex is a dictionary, even though it only has one entry.</strong> I could have written a vertex<br>as just <code>&#123; -0.4, -0.5, 0.0 &#125;</code>. It is shorter, but it only works as long as a vertex is nothing<br>but a position. Next week vertices get a color; with my format that is a new named entry<br>(<code>color = &#123; … &#125;</code>) next to <code>position</code>, and files without a color can still be read.</li>
+<li><strong>x, y and z are named.</strong> The lecture said an array would also be fine here, because anyone who<br>knows a little graphics reads <code>&#123; -0.4, -0.5, 0.0 &#125;</code> as x, y, z. I chose names anyway because the<br>file is meant to be read by people who are <em>debugging</em>, and <code>y = 0.5</code> can’t be misread.</li>
+<li><strong>Indices are grouped into triangles.</strong> A flat list <code>0, 1, 2, 0, 2, 3, 4, 5, 6</code> is what the GPU<br>wants, but it hides where one triangle ends. Grouping by three makes every line one triangle,<br>and adding or removing a triangle is adding or removing one line.</li>
+<li><strong>Indices start at 0.</strong> Lua arrays start at 1, so I had to choose. I went with 0 because that is<br>what the engine and the GPU use, and the file states it explicitly in a comment. The loader<br>does the conversion.</li>
+<li><strong>No counts.</strong> There is no <code>vertexCount</code> or <code>triangleCount</code>: the loader counts the entries.<br>A count in the file would be redundant data that can be wrong, and then the file<br>contradicts itself.</li>
+<li><strong>Comments carry the helpful but optional information.</strong> The <code>-- [4] left eave</code> comments give<br>each vertex its index and a name. That is exactly the kind of information that helps a person<br>but that the format must not <em>require</em>. Lua comments are ignored by the machine, so a person<br>(or, later, an exporter) can add as many as they like.</li>
+<li><strong>The winding order is fixed and documented.</strong> Triangles are always counter-clockwise<br>(right-handed), and the engine reverses them for Direct3D when it loads the mesh. Callers never<br>have to think about which platform they are on.</li>
+</ul>
+<p>The extension is <code>.mesh</code>. The built file currently has the same name, because MeshBuilder<br>simply copies the file; when it starts writing a binary format the built file can get a<br>different extension without the game noticing anything besides a path change.</p>
+<hr>
+<h2 id="4-Building-and-loading-mesh-files"><a href="#4-Building-and-loading-mesh-files" class="headerlink" title="4. Building and loading mesh files"></a>4. Building and loading mesh files</h2><p><strong>MeshBuilder</strong> is a new console application in <code>Tools/</code>. Its <code>Build()</code> function copies the source<br>file to the target path using the engine’s platform-independent <code>Platform::CopyFile()</code>, overwrites<br>an existing target, updates the target’s file time so the build system knows that it is up to<br>date, and reports any failure with <code>OutputErrorMessageWithFileInfo()</code> so that it shows up in Visual<br>Studio’s Error List.</p>
+<p><code>AssetBuildFunctions.lua</code> registers the new asset type:</p>
+<figure class="highlight lua"><table><tr><td class="code"><pre><code class="hljs lua">NewAssetTypeInfo( <span class="hljs-string">&quot;meshes&quot;</span>,<br>	&#123;<br>		GetBuilderRelativePath = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span></span><br>			<span class="hljs-keyword">return</span> <span class="hljs-string">&quot;MeshBuilder.exe&quot;</span><br>		<span class="hljs-keyword">end</span>,<br>	&#125;<br>)<br></code></pre></td></tr></table></figure>
+
+<p>and the game lists its meshes in <code>AssetsToBuild.lua</code>:</p>
+<figure class="highlight lua"><table><tr><td class="code"><pre><code class="hljs lua">meshes =<br>&#123;<br>	<span class="hljs-string">&quot;Meshes/square.mesh&quot;</span>,<br>	<span class="hljs-string">&quot;Meshes/triangle.mesh&quot;</span>,<br>	<span class="hljs-string">&quot;Meshes/house.mesh&quot;</span>,<br>&#125;,<br></code></pre></td></tr></table></figure>
+
+<p><code>BuildMyGameAssets</code> runs <code>MeshBuilder.exe</code>, so I made it depend on the MeshBuilder project. (It is<br>not a <em>reference</em>: BuildMyGameAssets doesn’t link with MeshBuilder; it just needs the program to<br>exist before it can build.)</p>
+<p>The game now loads its meshes like this:</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">if</span> ( !( result = Graphics::cMesh::<span class="hljs-built_in">Load</span>( s_path_mesh_house, m_mesh_house ) ) )<br>&#123;<br>	<span class="hljs-built_in">EAE6320_ASSERTF</span>( <span class="hljs-literal">false</span>, <span class="hljs-string">&quot;Can&#x27;t initialize MyGame without the house mesh&quot;</span> );<br>	<span class="hljs-keyword">return</span> result;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>Inside <code>cMesh::Load()</code> I read the file with one small function per table level<br>(<code>LoadVertices()</code>, <code>LoadVertex()</code>, <code>LoadPosition()</code>, <code>LoadTriangles()</code>, <code>LoadTriangle()</code>). Each one<br>starts with a comment saying what is on top of the Lua stack, and each one pops exactly what it<br>pushed. That was the single most useful habit for this assignment: Lua stack bugs are invisible<br>in the debugger, so making every function responsible for one level kept the stack easy to<br>reason about.</p>
+<p>The loader is strict and specific about errors. A missing <code>position</code>, an index that refers to a<br>vertex that doesn’t exist, a triangle with two indices, or a file that doesn’t return a table<br>all produce a log message that names the file and the vertex or triangle, and the game then<br>exits with its normal error message instead of rendering garbage.</p>
+<hr>
+<h2 id="5-Screenshots"><a href="#5-Screenshots" class="headerlink" title="5. Screenshots"></a>5. Screenshots</h2><p>The game looks the same as last week on purpose, except that the white landmark is now a house<br>that comes from <code>house.mesh</code>:</p>
+<p><img src="/images/assignment06/game.png" alt="The game running"></p>
+<p>As a test I deleted the roof’s three indices <code>&#123; 4, 5, 6 &#125;</code> from <code>house.mesh</code>, rebuilt only the<br>assets, and ran the game without changing any code. The roof is gone:</p>
+<p><img src="/images/assignment06/no_roof.png" alt="The house without its roof"></p>
+<hr>
+<h2 id="6-Debugging-MeshBuilder"><a href="#6-Debugging-MeshBuilder" class="headerlink" title="6. Debugging MeshBuilder"></a>6. Debugging MeshBuilder</h2><p>To debug MeshBuilder I set it as the startup project and gave it the same command arguments that<br>the asset build passes to it (the source path of a mesh and its target path in the game’s <code>data</code><br>folder). Here it is stopped in <code>cMeshBuilder::Build()</code>, just before the copy, with the source and<br>target paths visible in the Autos window:</p>
+<p><img src="/images/assignment06/debug_meshbuilder.png" alt="Debugging MeshBuilder in Visual Studio"></p>
+<hr>
+<h2 id="7-Build-test"><a href="#7-Build-test" class="headerlink" title="7. Build &#x2F; test"></a>7. Build &#x2F; test</h2><p>All four configurations (<code>Debug|x64</code>, <code>Release|x64</code> for Direct3D and <code>Debug|x86</code>, <code>Release|x86</code> for<br>OpenGL) build from scratch without errors or warnings, and both platforms render the same scene.<br>Building only the game project and running it shows the “Initialization failed” message and exits;<br>after building only <code>BuildMyGameAssets</code> the game runs.</p>
+<hr>
+<h2 id="8-Reflection"><a href="#8-Reflection" class="headerlink" title="8. Reflection"></a>8. Reflection</h2><p>The design of the file format took longer than the code. My first version was very compact —<br>vertices as <code>&#123; x, y, z &#125;</code> arrays and one flat index list — and it was easy to <em>write</em> but hard to<br><em>check</em>: to find the roof I had to count indices in threes. Grouping indices into triangles and<br>naming everything made the file longer, but now I can read a triangle and see which vertices it<br>uses without counting anything.</p>
+<p>Thinking about next week while designing helped. Making each vertex a dictionary costs a few<br>characters per line today, but it means adding a vertex color will not break a single existing<br>mesh file.</p>
+<p>Strict validation in the loader paid off immediately: when I typed a wrong field name while<br>testing, the log said exactly which vertex in which file was wrong, instead of the mesh just not<br>showing up.</p>
+<p>What I would change in a real engine: parsing Lua at run time is the slowest possible way to load<br>geometry. The right place for all of this code is MeshBuilder, which should read the<br>human-readable file once at build time and write a binary file that the game can load with<br>almost no work — including doing the Direct3D winding-order swap there instead of every time the<br>game starts.</p>
+</div>
+
+    <nav class="es-pager" aria-label="Other assignments">
+      <a class="es-pager__link" href="/game-essay/assignment-05/index.html"><span class="es-pager__dir">← Previous · 05</span><span class="es-pager__title">Cameras, game objects, platform-independent shaders</span></a>
+      <a class="es-pager__link es-pager__link--next" href="/game-essay/assignment-07/index.html"><span class="es-pager__dir">Next · 07 →</span><span class="es-pager__title">A Maya exporter, depth buffering, vertex colors</span></a>
+    </nav>
+  </article>
+
+  <aside class="es-aside">
+    
+    <nav class="toc es-toc" aria-label="On this page">
+      <p class="es-aside__label">On this page</p>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-What-the-assignment-was-about"><span class="toc-text">1. What the assignment was about</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-Why-human-readable-asset-files"><span class="toc-text">2. Why human-readable asset files?</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-My-mesh-file-format"><span class="toc-text">3. My mesh file format</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-Building-and-loading-mesh-files"><span class="toc-text">4. Building and loading mesh files</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-Screenshots"><span class="toc-text">5. Screenshots</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-Debugging-MeshBuilder"><span class="toc-text">6. Debugging MeshBuilder</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-Build-test"><span class="toc-text">7. Build &#x2F; test</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-Reflection"><span class="toc-text">8. Reflection</span></a></li></ol>
+    </nav>
+    
+  </aside>
+</div>
+
+    </main>
+  </div>
+</div>
+
+<script src="/js/site.js?v=mux5y0wh" defer></script>
+<script src="/js/novel.js?v=mux5y0wh" defer></script>
+</body>
+
+</html>

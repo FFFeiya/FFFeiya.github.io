@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Game Engineering II - Assignment 07 — 杨飞洋 Feiya Yang</title>
+<meta name="description" content="A Maya mesh exporter plug-in, meshes made in Maya, depth buffering, and vertex colors.">
+<meta name="author" content="杨飞洋 Feiya Yang">
+<link rel="canonical" href="https://fffeiya.github.io/game-essay/assignment-07/">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="杨飞洋 Feiya Yang">
+<meta property="og:title" content="Game Engineering II - Assignment 07">
+<meta property="og:description" content="A Maya mesh exporter plug-in, meshes made in Maya, depth buffering, and vertex colors.">
+<meta property="og:url" content="https://fffeiya.github.io/game-essay/assignment-07/">
+<meta property="og:image" content="https://fffeiya.github.io/images/assignment07/game.png">
+<meta property="og:locale" content="zh_CN">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#fbfbf9" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0e0e0d" media="(prefers-color-scheme: dark)">
+<link rel="icon" type="image/png" href="/brand/favicon.png">
+<link rel="preload" href="/fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<script>
+(function () {
+  try {
+    var t = localStorage.getItem('theme');
+    if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+  } catch (e) {}
+})();
+</script>
+<link rel="stylesheet" href="/css/site.css?v=mux5y0wh">
+
+<link rel="stylesheet" href="/css/essay.css?v=mux5y0wh">
+</head>
+
+
+<body class="essay-app">
+
+<a class="skip-link" href="#es-main">Skip to content</a>
+<div class="es" data-nv>
+  <aside class="es-side" id="es-side" aria-label="Essays">
+    <div class="es-side__top">
+      <a class="es-brand" href="/game-essay/">
+        <img class="brand__mark brand__mark--light" src="/brand/fffeiya-mark.png" alt="" width="22" height="20">
+        <img class="brand__mark brand__mark--dark" src="/brand/fffeiya-mark-dark.png" alt="" width="22" height="20">
+        <span>Game Essays</span>
+      </a>
+      <button class="es-icon-btn es-close" type="button" data-nv-close aria-label="Close sidebar">
+        <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 5l10 10M15 5L5 15" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+
+    <nav class="es-nav" aria-label="Collection">
+      <a class="es-nav__item" href="/game-essay/">
+        <svg width="16" height="16" viewBox="0 0 20 20" aria-hidden="true"><rect x="3" y="3" width="6" height="6" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="11" y="3" width="6" height="6" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="3" y="11" width="6" height="6" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="11" y="11" width="6" height="6" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+        Overview
+      </a>
+
+      <p class="es-nav__label">GAMES 6320 · Game Engineering II</p>
+      <ol class="es-nav__list">
+        
+        <li><a href="/game-essay/assignment-01/index.html"><span class="es-nav__no">01</span><span class="es-nav__text">Graphics library, a second game project, the asset build</span></a></li>
+        
+        <li><a href="/game-essay/assignment-02/index.html"><span class="es-nav__no">02</span><span class="es-nav__text">Platform-independent mesh and effect interfaces</span></a></li>
+        
+        <li><a href="/game-essay/assignment-03/index.html"><span class="es-nav__no">03</span><span class="es-nav__text">Removing per-platform Graphics files; index buffers</span></a></li>
+        
+        <li><a href="/game-essay/assignment-04/index.html"><span class="es-nav__no">04</span><span class="es-nav__text">Reference-counted assets and render submission</span></a></li>
+        
+        <li><a href="/game-essay/assignment-05/index.html"><span class="es-nav__no">05</span><span class="es-nav__text">Cameras, game objects, platform-independent shaders</span></a></li>
+        
+        <li><a href="/game-essay/assignment-06/index.html"><span class="es-nav__no">06</span><span class="es-nav__text">A human-readable mesh format and a MeshBuilder</span></a></li>
+        
+        <li><a href="/game-essay/assignment-07/index.html" class="is-active" aria-current="page"><span class="es-nav__no">07</span><span class="es-nav__text">A Maya exporter, depth buffering, vertex colors</span></a></li>
+        
+      </ol>
+    </nav>
+
+    <div class="es-side__foot">
+      <button class="es-side__theme" type="button" data-theme-toggle aria-label="切换深色 / 浅色模式">
+        <span class="theme-toggle__dot" aria-hidden="true"></span><span data-theme-label>Dark</span>
+      </button>
+      <a class="es-side__home" href="/">杨飞洋 Feiya Yang ↗</a>
+    </div>
+  </aside>
+  <div class="es-scrim" data-nv-close></div>
+
+  <div class="es-main">
+    <header class="es-bar">
+      <button class="es-icon-btn es-open" type="button" data-nv-open aria-label="Open sidebar" aria-controls="es-side" aria-expanded="false">
+        <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M3.5 5.5h13M3.5 10h13M3.5 14.5h13" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+      </button>
+      <nav class="es-crumbs" aria-label="Breadcrumb">
+        <a href="/">Feiya Yang</a><span aria-hidden="true">/</span><a href="/game-essay/">Game Essays</a><span aria-hidden="true">/</span><span aria-current="page">Assignment 07</span>
+      </nav>
+    </header>
+    <main id="es-main" class="es-content">
+      
+<div class="es-doc">
+  <article class="es-article">
+    <header class="es-head">
+      <p class="es-eyebrow">GAMES 6320 · Assignment 07</p>
+      <h1 class="es-head__title">A Maya exporter, depth buffering, vertex colors</h1>
+      <p class="es-head__lead">A Maya mesh exporter plug-in, meshes made in Maya, depth buffering, and vertex colors.</p>
+      <p class="es-head__meta"><time datetime="2026-10-06T18:30:00.000Z">2026.10.06</time><span>8 min read</span><span>C++ · Direct3D · OpenGL</span></p>
+    </header>
+
+    <div class="prose es-prose"><p><strong>Course:</strong> GAMES 6320-001 — Game Engineering II (Fall 2026)</p>
+<blockquote>
+<p><strong>Download (one click, ZIP):</strong> <a href="/files/MyGame_Assignment07_Release_x64.zip">MyGame_Assignment07_Release_x64.zip</a></p>
+<p>The ZIP contains a <strong>Direct3D Release</strong> build (<code>x64</code>). Unzip it and run <code>MyGame.exe</code>.</p>
+<p><strong>Controls:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Arrow keys</td>
+<td>Move the sphere left &#x2F; right &#x2F; up &#x2F; down</td>
+</tr>
+<tr>
+<td><code>Space</code> (hold)</td>
+<td>The sphere becomes a cone</td>
+</tr>
+<tr>
+<td><code>A</code> &#x2F; <code>D</code></td>
+<td>Move the camera left &#x2F; right</td>
+</tr>
+<tr>
+<td><code>W</code> &#x2F; <code>S</code></td>
+<td>Move the camera forward &#x2F; back</td>
+</tr>
+<tr>
+<td><code>Esc</code></td>
+<td>Exit</td>
+</tr>
+</tbody></table>
+</blockquote>
+<hr>
+<h2 id="1-What-the-assignment-was-about"><a href="#1-What-the-assignment-was-about" class="headerlink" title="1. What the assignment was about"></a>1. What the assignment was about</h2><p>Last week I designed a human-readable mesh file format and typed a few meshes into it by hand.<br>That works for a square, but nobody is going to type the 1,488 vertices of a sphere. Real game<br>content is made in a modelling program, so this assignment connects my engine to one: I wrote a<br><strong>Maya plug-in</strong> that adds my format to Maya’s <em>Export</em> menu. An artist builds a model in Maya,<br>exports it, and the existing asset pipeline from Assignment 06 takes it from there.</p>
+<p>The scene now has three meshes made in Maya — a floor plane, a sphere and a torus — plus a cone<br>that the sphere turns into while <code>Space</code> is held. Because they are real 3D shapes, <strong>depth<br>buffering</strong> matters now: the effects enable depth testing and depth writing, so whatever is in<br>front is drawn in front no matter which object is drawn first.</p>
+<p>I also did the optional challenge and added <strong>vertex colors</strong>, because otherwise four white<br>shapes on a white floor would be hard to tell apart.</p>
+<hr>
+<h2 id="2-Screenshots"><a href="#2-Screenshots" class="headerlink" title="2. Screenshots"></a>2. Screenshots</h2><p>All four meshes come from Maya. The floor, the torus and the sphere:</p>
+<p><img src="/images/assignment07/game.png" alt="The floor, the sphere and the torus"></p>
+<p>Holding <code>Space</code> (and moving left) turns the sphere into the cone. The cone uses the animated<br>color effect, multiplied by its yellow-to-orange vertex colors:</p>
+<p><img src="/images/assignment07/game_cone.png" alt="The cone"></p>
+<p>The OpenGL build renders the same scene:</p>
+<p><img src="/images/assignment07/game_opengl.png" alt="The OpenGL build"></p>
+<hr>
+<h2 id="3-Setting-up-the-MayaMeshExporter-project"><a href="#3-Setting-up-the-MayaMeshExporter-project" class="headerlink" title="3. Setting up the MayaMeshExporter project"></a>3. Setting up the MayaMeshExporter project</h2><p>The project lives in <code>Tools/MayaMeshExporter</code>, both on disk and in the solution’s <code>Tools</code> folder.<br>It finds Maya through environment variables rather than hard-coded paths, so that it builds on<br>any machine where Maya is installed:</p>
+<ul>
+<li><code>MAYA_LOCATION</code> — where Maya is installed</li>
+<li><code>DEVKIT_LOCATION</code> — where the Maya SDK’s <code>include</code> and <code>lib</code> folders are</li>
+<li><code>MAYA_PLUG_IN_PATH</code> — where the built plug-in is copied so that Maya finds it</li>
+</ul>
+<p>The plug-in is built as <code>eae6320_OWNBY_YangFeiyang_mesh.mll</code> (and <code>..._DEBUG.mll</code>) so that it can’t<br>collide with another student’s plug-in in the same plug-in folder.</p>
+<p>Maya is a 64-bit program and can only load 64-bit plug-ins, so the project only has an <code>x64</code><br>platform, and the solution builds the <code>x64</code> plug-in for <strong>both</strong> solution platforms. Even when I<br>build the 32-bit OpenGL game, the plug-in that gets built is the one Maya can actually load.</p>
+<h3 id="What-references-did-I-have-to-add"><a href="#What-references-did-I-have-to-add" class="headerlink" title="What references did I have to add?"></a>What references did I have to add?</h3><p>None. The plug-in doesn’t link with any of my engine’s libraries: it only uses Maya’s libraries<br>(<code>Foundation.lib</code> and <code>OpenMaya.lib</code>, which <code>Windows/ExternalLibraries.win.h</code> links with<br><code>#pragma comment</code>) and the C++ standard library. The one engine file it includes,<br><code>Engine/Windows/Includes.h</code>, is a header that makes sure <code>windows.h</code> is included consistently,<br>and it has nothing to link against.</p>
+<p>That is also a nice property: the exporter is about the <em>source</em> format, and the source format<br>is plain text. The exporter doesn’t need to know anything about how the engine stores meshes.</p>
+<h3 id="What-depends-on-MayaMeshExporter"><a href="#What-depends-on-MayaMeshExporter" class="headerlink" title="What depends on MayaMeshExporter?"></a>What depends on MayaMeshExporter?</h3><p>Nothing. No project needs the plug-in in order to build: the game loads <code>.mesh</code> files, and<br><code>BuildMyGameAssets</code> builds <code>.mesh</code> files with MeshBuilder; neither cares how a <code>.mesh</code> file was<br>made. The plug-in is used by a person, inside Maya, <em>before</em> the build. Because it is part of the<br>solution it is still rebuilt (and copied to <code>MAYA_PLUG_IN_PATH</code>) whenever I build everything.</p>
+<hr>
+<h2 id="4-What-the-exporter-writes"><a href="#4-What-the-exporter-writes" class="headerlink" title="4. What the exporter writes"></a>4. What the exporter writes</h2><p>This is the beginning of <code>floor.mesh</code> as exported from Maya:</p>
+<figure class="highlight lua"><table><tr><td class="code"><pre><code class="hljs lua"><span class="hljs-comment">--[[</span><br><span class="hljs-comment">	Exported from Maya: 4 vertices, 2 triangles</span><br><span class="hljs-comment">]]</span><br><br><span class="hljs-keyword">return</span><br>&#123;<br>	<span class="hljs-comment">-- Each vertex is a table of named values</span><br>	<span class="hljs-comment">-- (only position and color are used by the engine at the moment;</span><br>	<span class="hljs-comment">-- the other values are exported so that they are available in the future without re-exporting)</span><br>	vertices =<br>	&#123;<br>		<span class="hljs-comment">-- [0]</span><br>		&#123;<br>			position = &#123; x = <span class="hljs-number">-4</span>, y = <span class="hljs-number">0</span>, z = <span class="hljs-number">4</span> &#125;,<br>			color = &#123; r = <span class="hljs-number">0.2</span>, g = <span class="hljs-number">0.45</span>, b = <span class="hljs-number">0.25</span>, a = <span class="hljs-number">1</span> &#125;,<br>			normal = &#123; x = <span class="hljs-number">0</span>, y = <span class="hljs-number">1</span>, z = <span class="hljs-number">0</span> &#125;,<br>			tangent = &#123; x = <span class="hljs-number">1</span>, y = <span class="hljs-number">-0</span>, z = <span class="hljs-number">0</span> &#125;,<br>			bitangent = &#123; x = <span class="hljs-number">0</span>, y = <span class="hljs-number">0</span>, z = <span class="hljs-number">-1</span> &#125;,<br>			texcoord = &#123; u = <span class="hljs-number">0</span>, v = <span class="hljs-number">0</span> &#125;,<br>		&#125;,<br>		<span class="hljs-comment">-- ...</span><br>	&#125;,<br><br>	<span class="hljs-comment">-- Each triangle lists three vertices (by their index in the vertices table above, starting at 0)</span><br>	<span class="hljs-comment">-- in counter-clockwise order when looking at the front of the triangle</span><br>	triangles =<br>	&#123;<br>		&#123; <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span> &#125;,<br>		&#123; <span class="hljs-number">2</span>, <span class="hljs-number">1</span>, <span class="hljs-number">3</span> &#125;,<br>	&#125;,<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>It is the same format that I designed last week, unchanged. Maya is right-handed, which is the<br>convention my format already uses, so the exporter writes positions and triangle indices exactly<br>as Maya provides them and the engine still does the one Direct3D conversion when it loads a mesh.</p>
+<p>The exporter also writes the comments that I said a tool should add: a summary at the top, and the<br>index of every vertex. They cost the machine nothing and save a person from counting.</p>
+<h3 id="Did-I-export-the-unused-data"><a href="#Did-I-export-the-unused-data" class="headerlink" title="Did I export the unused data?"></a>Did I export the unused data?</h3><p><strong>Yes.</strong> Normals, tangents, bitangents and texture coordinates are all in the file, even though the<br>engine currently only reads <code>position</code> and <code>color</code>.</p>
+<p>The reason is that the expensive part of getting this data is the export, not the file size. If I<br>leave something out and need it later (lighting needs normals, textures need texture<br>coordinates — both are very likely in a game engine class), every mesh has to be re-exported from<br>its Maya file, and that only works if the Maya file still exists. Writing everything now means the<br>source files already contain what a future version of the engine will need.</p>
+<p>It costs nothing at run time either: because every vertex is a dictionary, the loader looks up the<br>keys it understands and never visits the others, and once MeshBuilder writes a binary format the<br>unused values won’t even make it into the built file. The price is size: the sphere’s source file is<br>about half a megabyte, which is fine for a source asset.</p>
+<hr>
+<h2 id="5-Vertex-colors"><a href="#5-Vertex-colors" class="headerlink" title="5. Vertex colors"></a>5. Vertex colors</h2><p>Colors are an optional <code>color = &#123; r, g, b, a &#125;</code> entry in a vertex, with values from 0 to 1.</p>
+<ul>
+<li><strong>0 to 1 in the file, 0 to 255 in the engine.</strong> The file says what the color <em>is</em>; the engine<br>decides how to store it. Each channel is stored as a <code>uint8_t</code>, and the GPU reads <code>[0, 255]</code> as<br><code>[0, 1]</code> (<code>DXGI_FORMAT_R8G8B8A8_UNORM</code> in Direct3D, a normalized <code>GL_UNSIGNED_BYTE</code> attribute in<br>OpenGL). The conversion rounds to the nearest integer instead of truncating, so <code>0.5</code> becomes<br><code>128</code> and not <code>127</code>.</li>
+<li><strong>Alpha is optional</strong> and defaults to 1. Red, green and blue are required if a color is given.</li>
+<li><strong>A vertex without a color is white.</strong> This is the reason I made vertices dictionaries in<br>Assignment 06: none of last week’s hand-written mesh files had to change to keep working.</li>
+</ul>
+<p>The standard fragment shader now outputs the vertex color, and the animated shader multiplies its<br>animated color by the vertex color.</p>
+<hr>
+<h2 id="6-The-vertex-limit"><a href="#6-The-vertex-limit" class="headerlink" title="6. The vertex limit"></a>6. The vertex limit</h2><p>Indices are <code>uint16_t</code>s, which can hold 65,536 different values, so a mesh can have <strong>at most<br>65,536 vertices</strong> — any vertex beyond that couldn’t be referenced by an index. (The limit is on<br>vertices, not on triangles: a mesh can have as many triangles as it likes, as long as they share<br>those vertices.)</p>
+<p>To test it I exported a 300 × 300 sphere. Maya counts 89,702 vertices, but after the exporter<br>splits vertices that need different normals or texture coordinates there are 359,400. The exporter<br>warns about it in Maya:</p>
+<blockquote>
+<p>Warning: This mesh has 359400 vertices, but the engine can’t load meshes with more than 65536</p>
+</blockquote>
+<p>and the file is still written, because it is valid data that a future engine might load. When I<br>replaced the sphere’s built file with it, the game refused to load it instead of rendering garbage:<br>it writes the reason to the log,</p>
+<blockquote>
+<p>The mesh file data&#x2F;meshes&#x2F;sphere.mesh has 359400 vertices, but a mesh can’t have more than 65536</p>
+</blockquote>
+<p>shows the “Initialization failed” message, and exits. Without the check the indices would silently<br>wrap around past 65,535 and triangles would connect to the wrong vertices.</p>
+<hr>
+<h2 id="7-Debugging-the-plug-in"><a href="#7-Debugging-the-plug-in" class="headerlink" title="7. Debugging the plug-in"></a>7. Debugging the plug-in</h2><p>To debug the plug-in I started Maya, attached Visual Studio to <code>maya.exe</code>, and then loaded the debug<br>version of the plug-in from Maya. Loading a plug-in calls its <code>initializePlugin()</code>, so a breakpoint<br>there is hit as soon as Maya loads it:</p>
+<p><img src="/images/assignment07/debug_plugin.png" alt="Debugging the Maya plug-in"></p>
+<p>The Output window shows that Visual Studio loaded the symbols of<br><code>eae6320_OWNBY_YangFeiyang_mesh_DEBUG.mll</code>, and the Autos window shows the <code>MObject</code> that Maya passes in.</p>
+<p>Two things cost me time here:</p>
+<ul>
+<li><strong>Attach with the native debugger.</strong> Maya hosts Python, and when Visual Studio picks the debugger<br>automatically it can attach the <em>Python</em> debugger. Breakpoints in C++ then never turn red and are<br>never hit. Choosing <em>Native</em> code explicitly in the Attach to Process dialog fixed it.</li>
+<li><strong>Maya asks before it loads an untrusted plug-in.</strong> Newer versions of Maya show a security<br>warning for plug-ins outside trusted folders, and the load waits until you click <em>Allow</em>. While the<br>debugger is attached that looks exactly like “the breakpoint is never hit”, because Maya hasn’t<br>actually loaded the plug-in yet.</li>
+</ul>
+<hr>
+<h2 id="8-Build-test"><a href="#8-Build-test" class="headerlink" title="8. Build &#x2F; test"></a>8. Build &#x2F; test</h2><p>All four configurations build from scratch without errors or warnings, and both platforms render<br>the same scene. Building only the game project and running it shows the “Initialization failed”<br>message and exits; after building only <code>BuildMyGameAssets</code> the game runs.</p>
+<p>The Maya files the meshes came from are in <code>MyGame_/Content/Maya</code>, so any mesh can be edited and<br>exported again.</p>
+<hr>
+<h2 id="9-Reflection"><a href="#9-Reflection" class="headerlink" title="9. Reflection"></a>9. Reflection</h2><p>The best moment of this assignment was that nothing in the engine had to change to load the Maya<br>meshes. The format from last week took a sphere with 1,488 vertices exactly the way it took my<br>hand-typed square. Spending time on the format design paid off.</p>
+<p>Vertex colors were the same story: making every vertex a dictionary last week meant colors could<br>be added without touching a single existing file, and a file without colors still loads.</p>
+<p>The thing that surprised me was the vertex count. Maya reports far fewer vertices than the exporter<br>writes, because a vertex in the engine is a unique <em>combination</em> of position, normal, texture<br>coordinate and color, and a corner where faces meet with different normals becomes several<br>vertices. The 65,536 limit is reached much sooner than the vertex count in Maya suggests.</p>
+<p>What I would do next: move all of the Lua parsing into MeshBuilder and write a binary file, so the<br>game stops parsing half a megabyte of text for a sphere every time it starts. And with normals<br>already exported, simple lighting is the obvious next step.</p>
+</div>
+
+    <nav class="es-pager" aria-label="Other assignments">
+      <a class="es-pager__link" href="/game-essay/assignment-06/index.html"><span class="es-pager__dir">← Previous · 06</span><span class="es-pager__title">A human-readable mesh format and a MeshBuilder</span></a>
+      
+    </nav>
+  </article>
+
+  <aside class="es-aside">
+    
+    <nav class="toc es-toc" aria-label="On this page">
+      <p class="es-aside__label">On this page</p>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-What-the-assignment-was-about"><span class="toc-text">1. What the assignment was about</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-Screenshots"><span class="toc-text">2. Screenshots</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-Setting-up-the-MayaMeshExporter-project"><span class="toc-text">3. Setting up the MayaMeshExporter project</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-What-the-exporter-writes"><span class="toc-text">4. What the exporter writes</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-Vertex-colors"><span class="toc-text">5. Vertex colors</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-The-vertex-limit"><span class="toc-text">6. The vertex limit</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-Debugging-the-plug-in"><span class="toc-text">7. Debugging the plug-in</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-Build-test"><span class="toc-text">8. Build &#x2F; test</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-Reflection"><span class="toc-text">9. Reflection</span></a></li></ol>
+    </nav>
+    
+  </aside>
+</div>
+
+    </main>
+  </div>
+</div>
+
+<script src="/js/site.js?v=mux5y0wh" defer></script>
+<script src="/js/novel.js?v=mux5y0wh" defer></script>
+</body>
+
+</html>

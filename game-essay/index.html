@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Game Essays — Game Engineering II 课程作业合辑 — 杨飞洋 Feiya Yang</title>
+<meta name="description" content="Game Engineering II（GAMES 6320）课程作业合辑：C++ 引擎、Direct3D / OpenGL、资产管线与 Maya 导出插件，每篇附可运行的 Release 构建。">
+<meta name="author" content="杨飞洋 Feiya Yang">
+<link rel="canonical" href="https://fffeiya.github.io/game-essay/">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="杨飞洋 Feiya Yang">
+<meta property="og:title" content="Game Essays — Game Engineering II 课程作业合辑">
+<meta property="og:description" content="Game Engineering II（GAMES 6320）课程作业合辑：C++ 引擎、Direct3D / OpenGL、资产管线与 Maya 导出插件，每篇附可运行的 Release 构建。">
+<meta property="og:url" content="https://fffeiya.github.io/game-essay/">
+<meta property="og:image" content="https://fffeiya.github.io/images/work/ui-showcase/character_16x9_zh.webp">
+<meta property="og:locale" content="zh_CN">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#fbfbf9" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0e0e0d" media="(prefers-color-scheme: dark)">
+<link rel="icon" type="image/png" href="/brand/favicon.png">
+<link rel="preload" href="/fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<script>
+(function () {
+  try {
+    var t = localStorage.getItem('theme');
+    if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+  } catch (e) {}
+})();
+</script>
+<link rel="stylesheet" href="/css/site.css?v=mux5y0wh">
+
+<link rel="stylesheet" href="/css/essay.css?v=mux5y0wh">
+</head>
+
+
+<body class="essay-app">
+
+<a class="skip-link" href="#es-main">Skip to content</a>
+<div class="es" data-nv>
+  <aside class="es-side" id="es-side" aria-label="Essays">
+    <div class="es-side__top">
+      <a class="es-brand" href="/game-essay/">
+        <img class="brand__mark brand__mark--light" src="/brand/fffeiya-mark.png" alt="" width="22" height="20">
+        <img class="brand__mark brand__mark--dark" src="/brand/fffeiya-mark-dark.png" alt="" width="22" height="20">
+        <span>Game Essays</span>
+      </a>
+      <button class="es-icon-btn es-close" type="button" data-nv-close aria-label="Close sidebar">
+        <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 5l10 10M15 5L5 15" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+
+    <nav class="es-nav" aria-label="Collection">
+      <a class="es-nav__item is-active" href="/game-essay/" aria-current="page">
+        <svg width="16" height="16" viewBox="0 0 20 20" aria-hidden="true"><rect x="3" y="3" width="6" height="6" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="11" y="3" width="6" height="6" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="3" y="11" width="6" height="6" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="11" y="11" width="6" height="6" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+        Overview
+      </a>
+
+      <p class="es-nav__label">GAMES 6320 · Game Engineering II</p>
+      <ol class="es-nav__list">
+        
+        <li><a href="/game-essay/assignment-01/index.html"><span class="es-nav__no">01</span><span class="es-nav__text">Graphics library, a second game project, the asset build</span></a></li>
+        
+        <li><a href="/game-essay/assignment-02/index.html"><span class="es-nav__no">02</span><span class="es-nav__text">Platform-independent mesh and effect interfaces</span></a></li>
+        
+        <li><a href="/game-essay/assignment-03/index.html"><span class="es-nav__no">03</span><span class="es-nav__text">Removing per-platform Graphics files; index buffers</span></a></li>
+        
+        <li><a href="/game-essay/assignment-04/index.html"><span class="es-nav__no">04</span><span class="es-nav__text">Reference-counted assets and render submission</span></a></li>
+        
+        <li><a href="/game-essay/assignment-05/index.html"><span class="es-nav__no">05</span><span class="es-nav__text">Cameras, game objects, platform-independent shaders</span></a></li>
+        
+        <li><a href="/game-essay/assignment-06/index.html"><span class="es-nav__no">06</span><span class="es-nav__text">A human-readable mesh format and a MeshBuilder</span></a></li>
+        
+        <li><a href="/game-essay/assignment-07/index.html"><span class="es-nav__no">07</span><span class="es-nav__text">A Maya exporter, depth buffering, vertex colors</span></a></li>
+        
+      </ol>
+    </nav>
+
+    <div class="es-side__foot">
+      <button class="es-side__theme" type="button" data-theme-toggle aria-label="切换深色 / 浅色模式">
+        <span class="theme-toggle__dot" aria-hidden="true"></span><span data-theme-label>Dark</span>
+      </button>
+      <a class="es-side__home" href="/">杨飞洋 Feiya Yang ↗</a>
+    </div>
+  </aside>
+  <div class="es-scrim" data-nv-close></div>
+
+  <div class="es-main">
+    <header class="es-bar">
+      <button class="es-icon-btn es-open" type="button" data-nv-open aria-label="Open sidebar" aria-controls="es-side" aria-expanded="false">
+        <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M3.5 5.5h13M3.5 10h13M3.5 14.5h13" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+      </button>
+      <nav class="es-crumbs" aria-label="Breadcrumb">
+        <a href="/">Feiya Yang</a><span aria-hidden="true">/</span><a href="/game-essay/">Game Essays</a>
+      </nav>
+    </header>
+    <main id="es-main" class="es-content">
+      
+<section class="es-index">
+  <header class="es-hero">
+    <p class="es-eyebrow">GAMES 6320 · Course write-ups</p>
+    <h1 class="es-hero__title">Game Engineering II</h1>
+    <p class="es-hero__lead">C++ 引擎课程的每周作业记录。从一个 Direct3D / OpenGL 双平台的教学引擎出发，把硬编码的三角形一步步变成由资产管线构建、从 Maya 导出、经相机渲染的场景。每篇都附可下载的 Release 构建。</p>
+    <dl class="es-facts">
+      <div><dt>Course</dt><dd>GAMES 6320 · Game Engineering II</dd></div><div><dt>Term</dt><dd>Fall 2026 · University of Utah EAE</dd></div><div><dt>Stack</dt><dd>C++ · Direct3D · OpenGL · HLSL / GLSL · Lua · Maya</dd></div>
+      <div><dt>Essays</dt><dd>7 published · latest 2026.10.06</dd></div>
+    </dl>
+  </header>
+
+  
+  <a class="es-latest" href="/game-essay/assignment-07/index.html">
+    <span class="es-latest__media"><img src="/images/assignment07/game.png" alt="" decoding="async"></span>
+    <span class="es-latest__body">
+      <span class="es-chip">Latest</span>
+      <span class="es-latest__no">Assignment 07</span>
+      <span class="es-latest__title">A Maya exporter, depth buffering, vertex colors</span>
+      <span class="es-latest__summary">A Maya mesh exporter plug-in, meshes made in Maya, depth buffering, and vertex colors.</span>
+      <span class="es-latest__cta">Read the write-up <span aria-hidden="true">→</span></span>
+    </span>
+  </a>
+  
+
+  <h2 class="es-section-title">All assignments</h2>
+  <ol class="es-list">
+    
+    <li class="es-row">
+      <a class="es-row__link" href="/game-essay/assignment-07/index.html">
+        <span class="es-row__no">07</span>
+        <span class="es-row__body">
+          <span class="es-row__title">A Maya exporter, depth buffering, vertex colors</span>
+          <span class="es-row__summary">A Maya mesh exporter plug-in, meshes made in Maya, depth buffering, and vertex colors.</span>
+          <span class="es-row__meta"><time datetime="2026-10-06T18:30:00.000Z">2026.10.06</time><span>8 min read</span></span>
+        </span>
+        <span class="es-row__thumb"><img src="/images/assignment07/game.png" alt="" loading="lazy" decoding="async"></span>
+      </a>
+    </li>
+    
+    <li class="es-row">
+      <a class="es-row__link" href="/game-essay/assignment-06/index.html">
+        <span class="es-row__no">06</span>
+        <span class="es-row__body">
+          <span class="es-row__title">A human-readable mesh format and a MeshBuilder</span>
+          <span class="es-row__summary">A human-readable mesh file format, a MeshBuilder tool, and loading meshes from disk.</span>
+          <span class="es-row__meta"><time datetime="2026-10-06T17:30:00.000Z">2026.10.06</time><span>7 min read</span></span>
+        </span>
+        <span class="es-row__thumb"><img src="/images/assignment06/game.png" alt="" loading="lazy" decoding="async"></span>
+      </a>
+    </li>
+    
+    <li class="es-row">
+      <a class="es-row__link" href="/game-essay/assignment-05/index.html">
+        <span class="es-row__no">05</span>
+        <span class="es-row__body">
+          <span class="es-row__title">Cameras, game objects, platform-independent shaders</span>
+          <span class="es-row__summary">Cameras, game objects, and platform-independent shaders. The engine gets an actual world — meshes are authored in local space and placed by a local-to-world transform, a camera supplies world-to-camera and camera-to-projected matrices, and the game tracks game objects with a position and velocity. Shaders are also rewritten so that almost everything in them is written once for both HLSL and GLSL.</span>
+          <span class="es-row__meta"><time datetime="2026-09-29T06:00:00.000Z">2026.09.29</time><span>9 min read</span></span>
+        </span>
+        <span class="es-row__thumb"><img src="/images/assignment05/d3d_start.png" alt="" loading="lazy" decoding="async"></span>
+      </a>
+    </li>
+    
+    <li class="es-row">
+      <a class="es-row__link" href="/game-essay/assignment-04/index.html">
+        <span class="es-row__no">04</span>
+        <span class="es-row__body">
+          <span class="es-row__title">Reference-counted assets and render submission</span>
+          <span class="es-row__summary">Assignment 03 introduced cMesh/cEffect abstractions and a platform-independent Graphics.cpp. Assignment 04 turns cMesh and cEffect into reference-counted assets, adds SubmitMeshWithEffect / SubmitClearColor submission interfaces, and moves mesh/effect ownership from the Graphics project to the MyGame project.</span>
+          <span class="es-row__meta"><time datetime="2026-09-23T06:00:00.000Z">2026.09.23</time><span>9 min read</span></span>
+        </span>
+        <span class="es-row__thumb"><img src="/images/assignment04/screenshot_1_default.png" alt="" loading="lazy" decoding="async"></span>
+      </a>
+    </li>
+    
+    <li class="es-row">
+      <a class="es-row__link" href="/game-essay/assignment-03/index.html">
+        <span class="es-row__no">03</span>
+        <span class="es-row__body">
+          <span class="es-row__title">Removing per-platform Graphics files; index buffers</span>
+          <span class="es-row__summary">Assignment 02 introduced cMesh and cEffect but still had platform-specific Graphics.d3d.cpp and Graphics.gl.cpp files. Assignment 03 removes those two files completely by moving the remaining platform-specific frame work behind a small sContext abstraction. It also adds uint16_t index buffers to cMesh, makes both cMesh and cEffect initialize from caller-provided data, and renders two objects with two effects.</span>
+          <span class="es-row__meta"><time datetime="2026-09-15T06:00:00.000Z">2026.09.15</time><span>4 min read</span></span>
+        </span>
+        <span class="es-row__thumb"><img src="/images/assignment03/d3d_game_running.png" alt="" loading="lazy" decoding="async"></span>
+      </a>
+    </li>
+    
+    <li class="es-row">
+      <a class="es-row__link" href="/game-essay/assignment-02/index.html">
+        <span class="es-row__no">02</span>
+        <span class="es-row__body">
+          <span class="es-row__title">Platform-independent mesh and effect interfaces</span>
+          <span class="es-row__summary">Assignment 01 hard-coded all of the geometry and shading into the platform-specific Graphics.d3d.cpp and Graphics.gl.cpp files. Assignment 02 is about separating what from how: introduce a platform-independent cMesh (geometry) and cEffect (shading) interface, replace the hard-coded data in both renderers with instances of those abstractions, and add a second triangle so the two triangles together render a filled rectangle.</span>
+          <span class="es-row__meta"><time datetime="2026-09-08T06:00:00.000Z">2026.09.08</time><span>4 min read</span></span>
+        </span>
+        <span class="es-row__thumb"><img src="/images/assignment02/game_running.png" alt="" loading="lazy" decoding="async"></span>
+      </a>
+    </li>
+    
+    <li class="es-row">
+      <a class="es-row__link" href="/game-essay/assignment-01/index.html">
+        <span class="es-row__no">01</span>
+        <span class="es-row__body">
+          <span class="es-row__title">Graphics library, a second game project, the asset build</span>
+          <span class="es-row__summary">The assignment starts from a provided EAE6320-style engine and asks you to do a handful of things that sound small but expose a lot of how the engine is put together: introduce a new Graphics static library, split platform-specific rendering code correctly, create a second game project (MyGame) alongside the example game, hook up the asset build pipeline, and then make that game do something visible - an animated triangle - with a game-specific shader.</span>
+          <span class="es-row__meta"><time datetime="2026-09-01T06:00:00.000Z">2026.09.01</time><span>8 min read</span></span>
+        </span>
+        <span class="es-row__thumb"><img src="/images/assignment01/game-screenshot.png" alt="" loading="lazy" decoding="async"></span>
+      </a>
+    </li>
+    
+  </ol>
+</section>
+
+    </main>
+  </div>
+</div>
+
+<script src="/js/site.js?v=mux5y0wh" defer></script>
+<script src="/js/novel.js?v=mux5y0wh" defer></script>
+</body>
+
+</html>
