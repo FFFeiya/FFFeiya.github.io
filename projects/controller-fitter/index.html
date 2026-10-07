@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reference Controller Fitter（手感拟合器）— 从游戏录像拟合 2D 平台跳跃控制器 — 杨飞洋 Feiya Yang</title>
+<meta name="description" content="给几段平台跳跃游戏的录像，找出能复现全部片段的最简单控制器，可以直接试玩，并导出成 Unity / Godot 脚本。">
+<meta name="author" content="杨飞洋 Feiya Yang">
+<link rel="canonical" href="https://fffeiya.github.io/projects/controller-fitter/">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="杨飞洋 Feiya Yang">
+<meta property="og:title" content="Reference Controller Fitter（手感拟合器）— 从游戏录像拟合 2D 平台跳跃控制器">
+<meta property="og:description" content="给几段平台跳跃游戏的录像，找出能复现全部片段的最简单控制器，可以直接试玩，并导出成 Unity / Godot 脚本。">
+<meta property="og:url" content="https://fffeiya.github.io/projects/controller-fitter/">
+<meta property="og:image" content="https://fffeiya.github.io/images/work/controller-fitter/cover.webp">
+<meta property="og:locale" content="zh_CN">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#fbfbf9" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0e0e0d" media="(prefers-color-scheme: dark)">
+<link rel="icon" type="image/png" href="/brand/favicon.png">
+<link rel="preload" href="/fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<script>
+(function () {
+  try {
+    var t = localStorage.getItem('theme');
+    if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+  } catch (e) {}
+})();
+</script>
+<link rel="stylesheet" href="/css/site.css?v=muxm54y1">
+
+
+</head>
+
+
+<body class="layout-project">
+<!-- 如果你是在这里找东西：/novel/ -->
+<a class="skip-link" href="#main">跳到正文</a>
+<header class="site-header" data-header>
+  <div class="wrap site-header__inner">
+    <a class="brand" href="/" aria-label="杨飞洋 Feiya Yang 首页">
+      <img class="brand__mark brand__mark--light" src="/brand/fffeiya-mark.png" alt="" width="28" height="24">
+      <img class="brand__mark brand__mark--dark" src="/brand/fffeiya-mark-dark.png" alt="" width="28" height="24">
+      <span class="brand__name">Feiya Yang</span>
+    </a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" data-nav-toggle>
+      <span class="nav-toggle__label">菜单</span>
+      <span class="nav-toggle__icon" aria-hidden="true"></span>
+    </button>
+    <nav class="site-nav" id="site-nav" aria-label="主导航" data-nav>
+      <ul class="site-nav__list">
+        
+        <li><a class="site-nav__link is-active" href="/projects/" aria-current="page">作品<span class="site-nav__en">Work</span></a></li>
+        
+        <li><a class="site-nav__link" href="/#focus">方向<span class="site-nav__en">Focus</span></a></li>
+        
+        <li><a class="site-nav__link" href="/blog/">文章<span class="site-nav__en">Writing</span></a></li>
+        
+        <li><a class="site-nav__link" href="/about/">关于<span class="site-nav__en">About</span></a></li>
+        
+        <li><a class="site-nav__link" href="/resume/">简历<span class="site-nav__en">Resume</span></a></li>
+        
+      </ul>
+      <button class="theme-toggle" type="button" data-theme-toggle aria-label="切换深色 / 浅色模式">
+        <span class="theme-toggle__dot" aria-hidden="true"></span>
+        <span class="theme-toggle__text" data-theme-label>Dark</span>
+      </button>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+<article class="project">
+  <header class="project-head">
+    <div class="wrap">
+      <p class="label"><a href="/projects/">Work</a> / Game Feel Tool</p>
+      <h1 class="project-head__title">Reference Controller Fitter <span class="project-head__zh">手感拟合器：从游戏录像拟合 2D 平台跳跃控制器</span></h1>
+      <p class="project-head__summary">给几段平台跳跃游戏的录像，找出能复现全部片段的最简单控制器，可以直接试玩，并导出成 Unity / Godot 脚本。</p>
+      <dl class="facts">
+        <div><dt>Role</dt><dd>个人项目</dd></div>
+        <div><dt>Year</dt><dd>2026</dd></div>
+        <div><dt>Team</dt><dd>个人项目</dd></div>
+        <div><dt>Tech</dt><dd>Python · OpenCV · SciPy · PySide6 · Unity C# · Godot 4</dd></div>
+        <div><dt>Status</dt><dd><span class="work-card__status" data-status="已完成">已完成</span></dd></div>
+      </dl>
+      
+      <p class="project-head__links">
+        <a class="btn" target="_blank" href="https://github.com/FFFeiya/reference-controller-fitter" rel="noopener noopener">GitHub <span aria-hidden="true">↗</span></a>
+      </p>
+      
+    </div>
+    
+  </header>
+
+  <div class="wrap article-grid">
+    <div class="prose prose--numbered"><video class="bleed" controls muted playsinline preload="none" poster="/images/work/controller-fitter/poster.webp">
+<source src="/files/controller-fitter-demo.mp4" type="video/mp4">
+</video>
+<p class="caption">项目演示，4 分 45 秒，无声，带中文字幕：从导入录像到导出，接着在 Unity 6 和 Godot 4 里实际使用导出的脚本。工具画面是真实程序；跟踪和拟合做了快进，框选和按键由脚本执行。引擎里的运行画面按固定帧率逐帧录制，两个引擎用的是同一串按键。</p>
+
+<h2 id="概览"><a href="#概览" class="headerlink" title="概览"></a>概览</h2><p class="lede">平台跳跃游戏的手感，由最高速度、加速度、起跳速度、上升和下落重力、松键截断、空中控制这十来个参数决定。想做出“像某款游戏”的手感，通常只能对着录像一遍遍手调。这个工具把这一步自动化：给它几段录像，它找出能同时复现所有片段的最简单控制器，可以马上用键盘试玩，再导出成 Unity 或 Godot 脚本。</p>
+
+<p>它<strong>不还原</strong>原游戏的代码。它找的是一个行为相似、结构简单、参数可读、能直接运行的控制器，并且会说明匹配得多好，以及哪些参数录像确定不了。</p>
+<div class="stats">
+<div><b>8 / 8</b><span>个参数在合成测试中恢复到真实值的 5% 以内</span></div>
+<div><b>1.4–3.3%</b><span>真实录像每段片段的轨迹误差（SuperTux、Secret Maryo Chronicles）</span></div>
+<div><b>≤ 0.005</b><span>导出脚本在 Unity 里实际运行时，与模型的高度偏差（单位）</span></div>
+<div><b>45</b><span>个测试，包括从渲染视频开始的端到端基准</span></div>
+</div>
+
+<div class="notice"><strong>状态与声明。</strong>个人项目，<a target="_blank" rel="noopener" href="https://github.com/FFFeiya/reference-controller-fitter">代码在 GitHub 上以 MIT 协议开源</a>。范围是 2D 横版的跑、停、转身、可变高度跳跃、下落和空中控制。参考录像全部来自 Wikimedia Commons（GPL 或 CC BY-SA 3.0），作者与出处列在仓库的 <code>references/real/SOURCES.md</code>。SuperTux 关卡录像由 Dabmasterars 和 Dexxor 录制，SuperTux © SuperTux Development Team（GPL）。</div>
+
+<h2 id="一条管线"><a href="#一条管线" class="headerlink" title="一条管线"></a>一条管线</h2><figure class="highlight text"><table><tr><td class="code"><pre><code class="hljs text">游戏录像 → 跟踪角色 → 扣除镜头滚动 → 推断按键<br>        → 所有片段联合拟合 → 模型选择 → 试玩 / 导出 Unity · Godot<br></code></pre></td></tr></table></figure>
+
+<p><img src="/images/work/controller-fitter/gui.webp" alt="工具主界面：左侧是片段列表，中间是参考录像和拟合出的原型，下面是按键时间轴，右侧是参数和模型报告"></p>
+<p>所有长度都以<strong>角色身高</strong>为单位（每段视频用跟踪框高度的中位数作为一个比例尺），导出时再填入角色在引擎里的身高，把长度参数换算过去。</p>
+<h2 id="控制器模型：从简单到复杂"><a href="#控制器模型：从简单到复杂" class="headerlink" title="控制器模型：从简单到复杂"></a>控制器模型：从简单到复杂</h2><p>工具准备了五级模型，每一级在上一级的基础上加机制：</p>
+<table>
+<thead>
+<tr>
+<th>模型</th>
+<th>增加的机制</th>
+<th>参数数</th>
+<th>SuperTux 上的轨迹误差</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>A</td>
+<td>恒定重力，瞬间达到最高速度</td>
+<td>3</td>
+<td>9.1%</td>
+</tr>
+<tr>
+<td>B</td>
+<td>地面加速 &#x2F; 减速</td>
+<td>5</td>
+<td>8.3%</td>
+</tr>
+<tr>
+<td>C</td>
+<td>上升和下落用不同的重力</td>
+<td>6</td>
+<td>9.6%</td>
+</tr>
+<tr>
+<td><strong>D</strong></td>
+<td><strong>松开跳跃键时截断上升速度，空中控制</strong></td>
+<td><strong>8</strong></td>
+<td><strong>2.0%</strong></td>
+</tr>
+<tr>
+<td>D2</td>
+<td>改为松键后加大重力（马里奥式可变跳跃），空中控制</td>
+<td>8</td>
+<td>2.0%</td>
+</tr>
+<tr>
+<td>E</td>
+<td>D 再加顶点附近的重力倍率、最大下落速度和转身加速度</td>
+<td>11</td>
+<td>2.7%</td>
+</tr>
+</tbody></table>
+<p><strong>选择规则是“够用的最简单模型”。</strong> 每个模型按有效样本量计算 BIC（用残差的自相关修正样本数，误差下限设在跟踪噪声的水平），再加一条实用规则：误差不超过最好模型的 1.1 倍再加 0.2 个百分点，就算“一样好”，从中选最简单的。</p>
+<p>只靠 BIC 不够：一段片段有几百帧，BIC 会奖励那些只是在吸收跟踪偏差的参数。第一次端到端测试时，工具就因为 0.05% 的改进选了 E；加上实用规则后，才稳定地选回真实的 D。</p>
+<h2 id="诚实的报告"><a href="#诚实的报告" class="headerlink" title="诚实的报告"></a>诚实的报告</h2><p><img src="/images/work/controller-fitter/report.webp" alt="模型报告：各项误差、每个模型为什么被选中或被拒绝，以及哪些参数录像约束不足"></p>
+<p>拟合完的报告会写出：</p>
+<ul>
+<li><strong>每项误差</strong>：轨迹、速度曲线、顶点时刻、落地时刻、最大高度、水平位移；</li>
+<li><strong>模型比较</strong>：更简单的模型为什么被拒绝，更复杂的模型为什么不值得；</li>
+<li><strong>置信度和理由</strong>：比如 SuperTux 只给到 MEDIUM，因为 D 和 D2 拟合得一样好（录像分不清原游戏用的是哪种可变跳跃），跳跃截断系数和未知的松键时刻互相牵制，减速度约束很弱。</li>
+</ul>
+<p>录像里没有出现的动作，对应的参数会被固定并写明原因：没有一短一长两次跳跃，就定不了跳跃截断；空中没有改变过方向，就定不了空中控制。拟合后不确定度超过 100% 的修饰参数会被设回中性值再重拟合，避免导出一个手感奇怪的控制器。</p>
+<p>解释不了的片段也会被标出来。SuperTux 速通录像里有一段看起来像小跳，工具报告它无法解释（落地时刻误差 140%）。检查后发现是 Tux 跑过了一个平滑的斜坡，而斜坡不在模型范围内，这段就被移除了，没有硬拟合。</p>
+<h2 id="从画面到运动轨迹"><a href="#从画面到运动轨迹" class="headerlink" title="从画面到运动轨迹"></a>从画面到运动轨迹</h2><p><img src="/images/work/controller-fitter/tracking.webp" alt="跟踪结果：橙色线是角色脚底在游戏世界里的轨迹，镜头滚动已经扣除"></p>
+<p>跟踪器和镜头估计的选择，都是在合成基准上实测后决定的。合成基准用一个已知参数的控制器渲染出 7 段视频，带镜头跟随、视差背景、HUD、挤压拉伸的角色和 H.264 压缩：</p>
+<table>
+<thead>
+<tr>
+<th>跟踪器</th>
+<th>脚底位置平均误差</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>模板匹配（最终选用）</strong></td>
+<td><strong>0.41 px</strong></td>
+</tr>
+<tr>
+<td>光流</td>
+<td>0.54 px</td>
+</tr>
+<tr>
+<td>CSRT</td>
+<td>1.07 px</td>
+</tr>
+<tr>
+<td>MIL</td>
+<td>1.99 px（一次跳到 24 px）</td>
+</tr>
+<tr>
+<td>KCF</td>
+<td>2.06 px</td>
+</tr>
+</tbody></table>
+<p>真实录像暴露的问题比合成数据多，每一个都记录在 DEVLOG 里：</p>
+<ul>
+<li><strong>挤压拉伸</strong>：固定大小的跟踪框让脚底位置偏了最多 3.5 px，拟合用重力偏差去补偿，结果选错了模型。加入纵向缩放搜索后，误差从 0.41 降到 0.15 px，模型也选回了正确的 D。</li>
+<li><strong>镜头估计</strong>：合成录像开头镜头每帧平移 30 px，关键帧法因此出现 60–150 px 的错误。改成只在预期偏移小于 16 px 时使用关键帧，并和逐帧估计交叉检查，最大误差 0.21 px。</li>
+<li><strong>视差层</strong>：Secret Maryo Chronicles 里缓慢移动的背景山丘占据了大部分特征点，估出的镜头位移只有真实值的四成。改为优先参考角色脚下那一层。</li>
+<li><strong>15 fps 录像</strong>：一开始 89% 的帧跟丢。按帧率放大搜索范围，加上外观库和颜色直方图兜底，降到 5.9%。</li>
+</ul>
+<h2 id="推断按键"><a href="#推断按键" class="headerlink" title="推断按键"></a>推断按键</h2><p><img src="/images/work/controller-fitter/timeline.webp" alt="按键时间轴：绿色是按住右，蓝色是左，橙色是跳跃；橙点是录像轨迹，青线是控制器轨迹"></p>
+<p>录像里看不到按键，只能从运动推断。用阈值判断时，SuperTux 一段 9 秒的录像被判出 70 次左右切换，因为掉帧和动画会让速度抖动。改成带切换惩罚的三状态 Viterbi 解码后，整段变成“一直按右”，合成数据上的按键时刻误差在 1–3 帧以内。</p>
+<p>推断出的按键只是一个可信的解释，不是真实的按键，所以：</p>
+<ul>
+<li>时间轴上可以右键增删、拖动修改，也可以锁定某段的按键，不让拟合器调整；</li>
+<li>拟合时，每段片段的按键时刻也是优化变量（方向键 ±0.12 s，跳跃 ±0.05 s，加上松键时刻）。</li>
+</ul>
+<h2 id="拟合"><a href="#拟合" class="headerlink" title="拟合"></a>拟合</h2><p>所有片段共用一套控制器参数，每段片段有自己的按键时刻，一起用 <code>scipy.optimize.least_squares</code> 求解：带边界的信赖域方法，soft-L1 鲁棒损失，稀疏雅可比矩阵（一段片段的按键只影响它自己）。</p>
+<ul>
+<li><strong>“够得着平台”残差</strong>：落地是离散事件，一条弧线如果顶点差一点没到平台，就得不到有用的梯度。对观测到落在高处的跳跃，额外加一项“顶点比平台低了多少”。</li>
+<li><strong>多起点</strong>：精确复现上一级模型的解（所以 D 不会比 C 差）、按跳跃高度排序的松键时刻初值，加几次随机扰动；最后用最好模型的参数把每个模型再拟合一遍。在这之前，SuperTux 上 D 的误差会因为数据的微小变化在 1.9%、5.7%、2.5% 之间跳动。</li>
+</ul>
+<h2 id="精确积分器"><a href="#精确积分器" class="headerlink" title="精确积分器"></a>精确积分器</h2><p>运动模型的积分是<strong>精确</strong>的：每一步里找出加速度下一次改变的时刻（达到目标速度、竖直速度过零、进入顶点区、达到最大下落速度、落地），分段用解析式积分。</p>
+<p>这样结果不依赖步长：拟合器按视频帧采样，试玩原型按 60 Hz 运行，Unity 按 <code>fixedDeltaTime</code> 运行，三者都一致。轨迹对参数和按键时刻也是连续的，适合用梯度法求解。同样的约 60 行代码移植到了 C# 和 GDScript。</p>
+<h2 id="导出到-Unity-和-Godot"><a href="#导出到-Unity-和-Godot" class="headerlink" title="导出到 Unity 和 Godot"></a>导出到 Unity 和 Godot</h2><p><img src="/images/work/controller-fitter/unity.webp" alt="Unity 6：添加 FittedPlatformerController 组件后，Inspector 里就是拟合出的参数"></p>
+<p><strong>Unity C#</strong> 是一个完整的组件：</p>
+<ul>
+<li>Kinematic Rigidbody2D，用 <code>Physics2D.BoxCast</code> 自己处理碰撞。每一步先自由移动，再处理墙（X），再从新的 X 位置探测地面或天花板；碰到地面就用那个高度重算这一步，让落地发生在精确的时刻；</li>
+<li>同时支持旧的 Input Manager 和 Input System；也可以由外部脚本输入，用于 AI、回放和测试；</li>
+<li>可选的土狼时间和跳跃缓冲（默认关闭，以保证行为和拟合一致）；</li>
+<li>参数都是 Inspector 字段，也可以用导出的 JSON 在启动时覆盖。</li>
+</ul>
+<p>验证方式：对 Unity 2022.3.51、2022.3.62、6000.3.8 的程序集编译，0 错误 0 警告；在 2022.3.62 和 6000.3.8 的批处理模式里，分别用两种输入后端跑“跑动 + 长跳 + 短跳”，x 和模型完全一致，y 误差 ≤ 0.005 单位，顶点相同。</p>
+<p><img src="/images/work/controller-fitter/unity-godot.webp" alt="同一个控制器、同一串按键，在 Unity 和 Godot 里的运动并排对比"></p>
+<p><strong>Godot 4 GDScript</strong>：在 Godot 4.7.2 里无界面运行，没有脚本错误，跑动速度一致，顶点误差在 0.002 单位以内。不同的是落地发生在物理帧边界（<code>move_and_slide</code>），所以最多晚一帧，实测正好一帧。</p>
+<h2 id="结果"><a href="#结果" class="headerlink" title="结果"></a>结果</h2><p><strong>合成测试（真实参数已知）。</strong> 真实控制器是：最高速度 8，加速度 40，减速度 55，起跳速度 12，上升重力 38，下落重力 52，空中控制 0.55，跳跃截断 0.45。7 段渲染视频经过跟踪和拟合后：</p>
+<ul>
+<li>选中模型 D；</li>
+<li>8 个参数都在真实值的 5% 以内，大部分在 2% 以内；</li>
+<li>在真实按键下，与真实控制器的行为误差为 0.05–0.44%；在拟合时没见过的按键序列上为 0.35–0.61%（目标 ≤ 5%）。</li>
+</ul>
+<p><strong>真实录像。</strong></p>
+<table>
+<thead>
+<tr>
+<th>素材</th>
+<th>模型与置信度</th>
+<th>每段轨迹误差（目标 ≤ 8%）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>SuperTux：两位玩家的 2 段录像，4 个片段</td>
+<td>D，MEDIUM</td>
+<td>1.4%、1.6%、1.9%、3.1%</td>
+</tr>
+<tr>
+<td>Secret Maryo Chronicles：15 fps 录像，2 个片段</td>
+<td>B，HIGH</td>
+<td>2.6%、3.3%</td>
+</tr>
+</tbody></table>
+<h2 id="范围与局限"><a href="#范围与局限" class="headerlink" title="范围与局限"></a>范围与局限</h2><ul>
+<li>只支持 2D 横版。蹬墙跳、攀边、冲刺、二段跳、游泳、斜坡和移动平台都不在模型里，含有这些动作的片段会被标为 LOW（无法解释）。</li>
+<li>没有关卡几何模型：工具知道角色落在了哪个高度，但不知道天花板和墙，所以选片段时要避开顶头和撞墙。</li>
+<li>只有一个最高速度。有“走 &#x2F; 跑”两档的游戏，要把走和跑的片段分开拟合。</li>
+<li>可变跳跃实现了“松键截断速度”（D）和“松键加大重力”（D2）两种，“松键限制速度”和“按住维持计时”两种还没有，用 D &#x2F; D2 近似。</li>
+<li>自动识别角色不可靠，只是辅助按钮。手动框选是主要方式。</li>
+<li>镜头补偿假设镜头只平移，不处理缩放、旋转和大幅震屏。</li>
+</ul>
+</div>
+    
+    <aside class="article-aside">
+      
+      <nav class="toc" aria-label="本页目录">
+        <p class="label">On this page</p>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A6%82%E8%A7%88"><span class="toc-text">概览</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E6%9D%A1%E7%AE%A1%E7%BA%BF"><span class="toc-text">一条管线</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8E%A7%E5%88%B6%E5%99%A8%E6%A8%A1%E5%9E%8B%EF%BC%9A%E4%BB%8E%E7%AE%80%E5%8D%95%E5%88%B0%E5%A4%8D%E6%9D%82"><span class="toc-text">控制器模型：从简单到复杂</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AF%9A%E5%AE%9E%E7%9A%84%E6%8A%A5%E5%91%8A"><span class="toc-text">诚实的报告</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%8E%E7%94%BB%E9%9D%A2%E5%88%B0%E8%BF%90%E5%8A%A8%E8%BD%A8%E8%BF%B9"><span class="toc-text">从画面到运动轨迹</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8E%A8%E6%96%AD%E6%8C%89%E9%94%AE"><span class="toc-text">推断按键</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8B%9F%E5%90%88"><span class="toc-text">拟合</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B2%BE%E7%A1%AE%E7%A7%AF%E5%88%86%E5%99%A8"><span class="toc-text">精确积分器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AF%BC%E5%87%BA%E5%88%B0-Unity-%E5%92%8C-Godot"><span class="toc-text">导出到 Unity 和 Godot</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%93%E6%9E%9C"><span class="toc-text">结果</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%8C%83%E5%9B%B4%E4%B8%8E%E5%B1%80%E9%99%90"><span class="toc-text">范围与局限</span></a></li></ol>
+      </nav>
+      
+    </aside>
+    
+  </div>
+
+  
+  <section class="section section--tight" aria-labelledby="rel-title">
+    <div class="wrap">
+      <header class="section__head">
+        <p class="label">Read by Focus</p>
+        <h2 class="section__title" id="rel-title">这个项目和哪些方向相关</h2>
+      </header>
+      <div class="rel-grid">
+        
+        <a class="rel" href="/focus/technical-design/">
+          <span class="rel__no">01</span>
+          <span class="rel__title">Technical Design · 技术策划</span>
+          <span class="rel__why">“手感”通常只能凭感觉描述。这个工具从录像里把它量成 8 个可读参数，选能解释所有片段的最简单模型，并说清楚哪些参数录像确定不了。</span>
+        </a>
+        
+        <a class="rel" href="/focus/client/">
+          <span class="rel__no">02</span>
+          <span class="rel__title">Client Engineering · 客户端开发</span>
+          <span class="rel__why">导出的 Unity 角色控制器是一个完整组件，运动和工具里的模型逐行对应，并在真实的 Unity 编辑器里跑过验证。</span>
+        </a>
+        
+        <a class="rel" href="/focus/tools/">
+          <span class="rel__no">03</span>
+          <span class="rel__title">Tools &amp; Pipeline · 客户端工具 / 编辑器</span>
+          <span class="rel__why">从录像到引擎的一条完整管线：跟踪、镜头补偿、按键推断、联合拟合、导出，每一步都有实测数字和在真实素材上修过的失败。</span>
+        </a>
+        
+      </div>
+    </div>
+  </section>
+  
+
+  <nav class="wrap pager" aria-label="其他项目">
+    
+    <a class="pager__all" href="/projects/">← 全部作品</a>
+    <a class="pager__next" href="/projects/aktracker/"><span class="label">Next</span>黑流树海记牌器 →</a>
+  </nav>
+</article>
+
+</main>
+<footer class="site-footer">
+  <div class="wrap site-footer__inner">
+    <div class="site-footer__lead">
+      <p class="label">Contact</p>
+      <a class="site-footer__mail" href="mailto:fffeiya@foxmail.com">fffeiya@foxmail.com</a>
+    </div>
+    <ul class="site-footer__links">
+      <li><a target="_blank" href="https://github.com/FFFeiya" rel="noopener noopener">GitHub</a></li>
+      <li><a href="/resume/">简历</a></li>
+      <li><a href="/projects/">全部作品</a></li>
+      <li><a href="/blog/">文章</a></li>
+    </ul>
+    <p class="site-footer__meta">© 2026 杨飞洋 Feiya Yang · 文章采用 <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener noopener">CC BY-NC-SA 4.0</a> <a class="site-footer__dot" href="/novel/" aria-label="Writing Arc">·</a></p>
+  </div>
+</footer>
+
+<script src="/js/site.js?v=muxm54y1" defer></script>
+</body>
+
+</html>
