@@ -3,6 +3,34 @@
 
   var root = document.documentElement;
 
+  // Freshness: GitHub Pages lets browsers reuse HTML for 10 minutes. If /build.json (fetched uncached)
+  // names a newer build than this page's <meta name="build">, reload once with ?v=<build>, which the
+  // browser and the CDN have never cached. The ?v= is stripped from the address bar afterwards.
+  function initFresh() {
+    var meta = document.querySelector('meta[name="build"]');
+    if (!meta || !window.fetch || !window.URL) return;
+    var mine = parseInt(meta.getAttribute('content'), 36);
+    var here = new URL(window.location.href);
+    if (here.searchParams.has('v')) {
+      here.searchParams.delete('v');
+      try { window.history.replaceState(window.history.state, '', here.pathname + here.search + here.hash); } catch (e) {}
+    }
+    fetch('/build.json?t=' + Date.now(), { cache: 'no-store' })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (b) {
+        if (!b || !b.v || !(parseInt(b.v, 36) > mine)) return;
+        var key = 'build-reload-' + b.v;
+        try {
+          if (window.sessionStorage.getItem(key)) return; // reload at most once per build
+          window.sessionStorage.setItem(key, '1');
+        } catch (e) { return; }
+        var next = new URL(window.location.href);
+        next.searchParams.set('v', b.v);
+        window.location.replace(next.toString());
+      })
+      .catch(function () {});
+  }
+
   function currentTheme() {
     var set = root.getAttribute('data-theme');
     if (set) return set;
@@ -199,6 +227,7 @@
   }
 
   function init() {
+    initFresh();
     initTheme();
     initNav();
     initHeader();
