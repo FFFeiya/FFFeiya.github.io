@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>当 AI 来描述「你」：一个用户画像产品的八条规则 — 杨飞洋 Feiya Yang</title>
+<meta name="description" content="V-Culture Atlas 的产品规则：AI 生成关于用户本人的文字时，哪些可以写、哪些不能写，以及为什么要把“不知道”如实告诉用户。">
+<meta name="author" content="杨飞洋 Feiya Yang">
+<link rel="canonical" href="https://fffeiya.github.io/projects/vatlas/design/">
+<meta name="robots" content="noindex">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="杨飞洋 Feiya Yang">
+<meta property="og:title" content="当 AI 来描述「你」：一个用户画像产品的八条规则">
+<meta property="og:description" content="V-Culture Atlas 的产品规则：AI 生成关于用户本人的文字时，哪些可以写、哪些不能写，以及为什么要把“不知道”如实告诉用户。">
+<meta property="og:url" content="https://fffeiya.github.io/projects/vatlas/design/">
+<meta property="og:image" content="https://fffeiya.github.io/images/work/ui-showcase/character_16x9_zh.webp">
+<meta property="og:locale" content="zh_CN">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#fbfbf9" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0e0e0d" media="(prefers-color-scheme: dark)">
+<link rel="icon" type="image/png" href="/brand/favicon.png">
+<link rel="preload" href="/fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<script>
+(function () {
+  try {
+    var t = localStorage.getItem('theme');
+    if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+  } catch (e) {}
+})();
+</script>
+<link rel="stylesheet" href="/css/site.css?v=muxhzpo8">
+
+
+</head>
+
+
+<body class="layout-post">
+<!-- 如果你是在这里找东西：/novel/ -->
+<a class="skip-link" href="#main">跳到正文</a>
+<header class="site-header" data-header>
+  <div class="wrap site-header__inner">
+    <a class="brand" href="/" aria-label="杨飞洋 Feiya Yang 首页">
+      <img class="brand__mark brand__mark--light" src="/brand/fffeiya-mark.png" alt="" width="28" height="24">
+      <img class="brand__mark brand__mark--dark" src="/brand/fffeiya-mark-dark.png" alt="" width="28" height="24">
+      <span class="brand__name">Feiya Yang</span>
+    </a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" data-nav-toggle>
+      <span class="nav-toggle__label">菜单</span>
+      <span class="nav-toggle__icon" aria-hidden="true"></span>
+    </button>
+    <nav class="site-nav" id="site-nav" aria-label="主导航" data-nav>
+      <ul class="site-nav__list">
+        
+        <li><a class="site-nav__link is-active" href="/projects/" aria-current="page">作品<span class="site-nav__en">Work</span></a></li>
+        
+        <li><a class="site-nav__link" href="/#focus">方向<span class="site-nav__en">Focus</span></a></li>
+        
+        <li><a class="site-nav__link" href="/blog/">文章<span class="site-nav__en">Writing</span></a></li>
+        
+        <li><a class="site-nav__link" href="/about/">关于<span class="site-nav__en">About</span></a></li>
+        
+        <li><a class="site-nav__link" href="/resume/">简历<span class="site-nav__en">Resume</span></a></li>
+        
+      </ul>
+      <button class="theme-toggle" type="button" data-theme-toggle aria-label="切换深色 / 浅色模式">
+        <span class="theme-toggle__dot" aria-hidden="true"></span>
+        <span class="theme-toggle__text" data-theme-label>Dark</span>
+      </button>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+<article class="post">
+  <header class="post-head">
+    <div class="wrap">
+      <p class="label"><a href="/blog/">Writing</a></p>
+      <h1 class="post-head__title">当 AI 来描述「你」：一个用户画像产品的八条规则</h1>
+      <p class="post-head__meta">
+        <time datetime="2026-10-06T06:00:00.000Z">2026.10.06</time>
+        
+      </p>
+    </div>
+  </header>
+  <div class="wrap article-grid">
+    <div class="prose"><div class="notice"><strong>草稿。</strong>这是 <a href="/projects/vatlas/">V-Culture Atlas</a> 的策划篇占位初版。下面的八条规则都已经写进项目的流水线或检查里，不只是设想；它们背后的产品思考还会继续补充。</div>
+
+<p>过去的用户画像是给平台看的：标签、分群、推荐。生成式 AI 让另一种东西变得可行：<strong>直接写给用户本人看的、关于他自己的一段话。</strong></p>
+<p>V-Culture Atlas 做的就是这件事。它读一个人在直播间被记录下来的观看和发言，写一段以「感觉你是那种，……」开头的白描。它和传统画像最大的不同是：<strong>读的人就是被写的人</strong>。被写的人比任何人都清楚真相，一句编造就足以让整段文字失去信任。下面是项目里因此定下的规则。</p>
+<h2 id="1-每一句都要能追溯"><a href="#1-每一句都要能追溯" class="headerlink" title="1. 每一句都要能追溯"></a>1. 每一句都要能追溯</h2><p>用户读到的每一句话，都必须能对应到流水线核实过的事实。模型不能决定事实，只能引用事实的编号。</p>
+<p>验收也按这个标准：盲评时，只要出现一个事实错误，“事实”这一项直接记最低分。fallback 为 0、读起来通顺，都不能抵消一个事实错误。</p>
+<h2 id="2-只写行为，不替你解释动机"><a href="#2-只写行为，不替你解释动机" class="headerlink" title="2. 只写行为，不替你解释动机"></a>2. 只写行为，不替你解释动机</h2><p>数据里有的是“来过几场、说过多少话、什么时候出现”，没有的是“为什么”。所以四类话是禁区：</p>
+<ul>
+<li><strong>因果</strong>：因为、导致、受……影响、被……吸引；</li>
+<li><strong>连续性</strong>：一直、始终、从未缺席、逐渐淡出；</li>
+<li><strong>喜好</strong>：喜欢、忠实、亲近、陪伴感；</li>
+<li><strong>心理</strong>：任何关于情绪和动机的推测。</li>
+</ul>
+<p>语义裁判看到的事实清单里有一行明确写着“数据里没有：动机、情绪……”。规则的意思很简单：<strong>AI 可以描述你做了什么，不能替你说你为什么这么做。</strong></p>
+<h2 id="3-原话不是素材"><a href="#3-原话不是素材" class="headerlink" title="3. 原话不是素材"></a>3. 原话不是素材</h2><p>用户的弹幕只用于内部核实和审计。写手和修复模型都看不到原话，正文禁止复读原话，也禁止围绕某一条弹幕做象征化的解读（“你说过的那句话，像一个锚点……”）。网页上原话默认隐藏。</p>
+<p>这条规则是做到一半才加上的。早期选出的最佳画像（质量分 7，比之后的版本还高）引用了用户原话。规则加上之后，它被归档，换成了不引用原话的版本：宁可分数低一点，也不把一个人随口说的话变成文学道具。</p>
+<h2 id="4-承认看不见的部分"><a href="#4-承认看不见的部分" class="headerlink" title="4. 承认看不见的部分"></a>4. 承认看不见的部分</h2><p>数据只是第三方站点记录到的那部分，不是完整历史。所以：</p>
+<ul>
+<li>每年的观测覆盖度单独标注，没有记录的年份不等于“那一年没来”；</li>
+<li>观测空白两端只能写成两端，不能写成“一直在”；</li>
+<li>近期有发言的频道不能被写成“近期沉默”。</li>
+</ul>
+<p>画像的可信度来自它知道自己看不见什么。</p>
+<h2 id="5-不知道，就说不知道"><a href="#5-不知道，就说不知道" class="headerlink" title="5. 不知道，就说不知道"></a>5. 不知道，就说不知道</h2><p>文化图谱至少需要 30 个真实样本才会计算，现在只有 1 个。系统不会用一个人的数据硬画一张图，状态如实显示为“样本不足”。</p>
+<p>将来有了图，社群也只用中性编号，不起名字。给一群人起名字，就是在替他们定义自己。</p>
+<h2 id="6-标签留在内部"><a href="#6-标签留在内部" class="headerlink" title="6. 标签留在内部"></a>6. 标签留在内部</h2><p>流水线里有“签名特征”，用来挑选叙事角度，但它<strong>只在内部使用，从不作为标签展示给用户</strong>。正文也禁止“观察者”“忠实粉丝”这类身份标签，以及“你并不是……而是……”这类下定义的句式。</p>
+<p>白描给的是画面，判断留给读的人。</p>
+<h2 id="7-说清楚样本是谁"><a href="#7-说清楚样本是谁" class="headerlink" title="7. 说清楚样本是谁"></a>7. 说清楚样本是谁</h2><p>当用户自愿查询时，系统只把一份匿名聚合数据加入样本：没有 uid、没有文字、没有精确时间，成员编号是加盐哈希，用户也可以选择不加入。</p>
+<p>所有样本都标注来源和抽样偏差。自愿查询的人天然偏向更活跃的观众，所以结果<strong>永远不能</strong>被说成“某个主播的全部观众”。</p>
+<p>还没做到的部分也写在文档里：明确的同意流程，以及按请求删除个人的聚合数据。</p>
+<h2 id="8-语气也是产品的一部分"><a href="#8-语气也是产品的一部分" class="headerlink" title="8. 语气也是产品的一部分"></a>8. 语气也是产品的一部分</h2><p>「感觉你是那种……」是第二人称的白描，不是一份报告。项目里把“报告腔”当作失败来处理：排序会给清单感、照抄输入标签、套话扣分，盲评里“非报告腔”是单独的一项。</p>
+<p>一个反直觉的发现是：Qwen3-8B、Qwen3.5-9B、开或关 thinking 的 DeepSeek，画像质量都停在 7 分左右。天花板可能不在模型，而在素材：在“不能推测动机”的约束下，可写的东西本来就有限。下一步是在现有数据里找更有质感的素材（分区、观看时段、发言主题的抽象概括），而不是放松规则或者引入新的数据源。</p>
+<h2 id="还在想的问题"><a href="#还在想的问题" class="headerlink" title="还在想的问题"></a>还在想的问题</h2><ul>
+<li>用户读完画像后，应该能看到每句话的依据吗？看到依据会更信任，还是会把一段白描拆回成数据？</li>
+<li>自己写的画像和 AI 写的画像，用户会怎么比较？项目里正在整理的 30 篇手写范文，也许能回答一部分。</li>
+<li>当样本足够、文化图谱可以计算时，“你和谁更近”这种定位要怎么呈现，才不会变成新的标签？</li>
+</ul>
+</div>
+    <aside class="article-aside">
+      
+      <nav class="toc" aria-label="本页目录">
+        <p class="label">On this page</p>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E6%AF%8F%E4%B8%80%E5%8F%A5%E9%83%BD%E8%A6%81%E8%83%BD%E8%BF%BD%E6%BA%AF"><span class="toc-text">1. 每一句都要能追溯</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%8F%AA%E5%86%99%E8%A1%8C%E4%B8%BA%EF%BC%8C%E4%B8%8D%E6%9B%BF%E4%BD%A0%E8%A7%A3%E9%87%8A%E5%8A%A8%E6%9C%BA"><span class="toc-text">2. 只写行为，不替你解释动机</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E5%8E%9F%E8%AF%9D%E4%B8%8D%E6%98%AF%E7%B4%A0%E6%9D%90"><span class="toc-text">3. 原话不是素材</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E6%89%BF%E8%AE%A4%E7%9C%8B%E4%B8%8D%E8%A7%81%E7%9A%84%E9%83%A8%E5%88%86"><span class="toc-text">4. 承认看不见的部分</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E4%B8%8D%E7%9F%A5%E9%81%93%EF%BC%8C%E5%B0%B1%E8%AF%B4%E4%B8%8D%E7%9F%A5%E9%81%93"><span class="toc-text">5. 不知道，就说不知道</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-%E6%A0%87%E7%AD%BE%E7%95%99%E5%9C%A8%E5%86%85%E9%83%A8"><span class="toc-text">6. 标签留在内部</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-%E8%AF%B4%E6%B8%85%E6%A5%9A%E6%A0%B7%E6%9C%AC%E6%98%AF%E8%B0%81"><span class="toc-text">7. 说清楚样本是谁</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-%E8%AF%AD%E6%B0%94%E4%B9%9F%E6%98%AF%E4%BA%A7%E5%93%81%E7%9A%84%E4%B8%80%E9%83%A8%E5%88%86"><span class="toc-text">8. 语气也是产品的一部分</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%98%E5%9C%A8%E6%83%B3%E7%9A%84%E9%97%AE%E9%A2%98"><span class="toc-text">还在想的问题</span></a></li></ol>
+      </nav>
+      
+    </aside>
+  </div>
+  <nav class="wrap pager" aria-label="其他文章">
+    <a class="pager__all" href="/blog/">← 全部文章</a>
+    
+  </nav>
+</article>
+
+</main>
+<footer class="site-footer">
+  <div class="wrap site-footer__inner">
+    <div class="site-footer__lead">
+      <p class="label">Contact</p>
+      <a class="site-footer__mail" href="mailto:fffeiya@foxmail.com">fffeiya@foxmail.com</a>
+    </div>
+    <ul class="site-footer__links">
+      <li><a target="_blank" href="https://github.com/FFFeiya" rel="noopener noopener">GitHub</a></li>
+      <li><a href="/resume/">简历</a></li>
+      <li><a href="/projects/">全部作品</a></li>
+      <li><a href="/blog/">文章</a></li>
+    </ul>
+    <p class="site-footer__meta">© 2026 杨飞洋 Feiya Yang · 文章采用 <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener noopener">CC BY-NC-SA 4.0</a> <a class="site-footer__dot" href="/novel/" aria-label="Writing Arc">·</a></p>
+  </div>
+</footer>
+
+<script src="/js/site.js?v=muxhzpo8" defer></script>
+</body>
+
+</html>

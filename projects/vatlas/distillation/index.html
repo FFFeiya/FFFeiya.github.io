@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>只让虚构用户出门：给本地小模型蒸馏一个“只写证据里有的事”的写手 — 杨飞洋 Feiya Yang</title>
+<meta name="description" content="V-Culture Atlas 的数据层与蒸馏：从被记录的观看历史到带范围的证据，再到用虚构用户、按条款选老师、靠筛选而不是生成来积累训练数据。">
+<meta name="author" content="杨飞洋 Feiya Yang">
+<link rel="canonical" href="https://fffeiya.github.io/projects/vatlas/distillation/">
+<meta name="robots" content="noindex">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="杨飞洋 Feiya Yang">
+<meta property="og:title" content="只让虚构用户出门：给本地小模型蒸馏一个“只写证据里有的事”的写手">
+<meta property="og:description" content="V-Culture Atlas 的数据层与蒸馏：从被记录的观看历史到带范围的证据，再到用虚构用户、按条款选老师、靠筛选而不是生成来积累训练数据。">
+<meta property="og:url" content="https://fffeiya.github.io/projects/vatlas/distillation/">
+<meta property="og:image" content="https://fffeiya.github.io/images/work/ui-showcase/character_16x9_zh.webp">
+<meta property="og:locale" content="zh_CN">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#fbfbf9" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0e0e0d" media="(prefers-color-scheme: dark)">
+<link rel="icon" type="image/png" href="/brand/favicon.png">
+<link rel="preload" href="/fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<script>
+(function () {
+  try {
+    var t = localStorage.getItem('theme');
+    if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+  } catch (e) {}
+})();
+</script>
+<link rel="stylesheet" href="/css/site.css?v=muxhzpo8">
+
+
+</head>
+
+
+<body class="layout-post">
+<!-- 如果你是在这里找东西：/novel/ -->
+<a class="skip-link" href="#main">跳到正文</a>
+<header class="site-header" data-header>
+  <div class="wrap site-header__inner">
+    <a class="brand" href="/" aria-label="杨飞洋 Feiya Yang 首页">
+      <img class="brand__mark brand__mark--light" src="/brand/fffeiya-mark.png" alt="" width="28" height="24">
+      <img class="brand__mark brand__mark--dark" src="/brand/fffeiya-mark-dark.png" alt="" width="28" height="24">
+      <span class="brand__name">Feiya Yang</span>
+    </a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" data-nav-toggle>
+      <span class="nav-toggle__label">菜单</span>
+      <span class="nav-toggle__icon" aria-hidden="true"></span>
+    </button>
+    <nav class="site-nav" id="site-nav" aria-label="主导航" data-nav>
+      <ul class="site-nav__list">
+        
+        <li><a class="site-nav__link is-active" href="/projects/" aria-current="page">作品<span class="site-nav__en">Work</span></a></li>
+        
+        <li><a class="site-nav__link" href="/#focus">方向<span class="site-nav__en">Focus</span></a></li>
+        
+        <li><a class="site-nav__link" href="/blog/">文章<span class="site-nav__en">Writing</span></a></li>
+        
+        <li><a class="site-nav__link" href="/about/">关于<span class="site-nav__en">About</span></a></li>
+        
+        <li><a class="site-nav__link" href="/resume/">简历<span class="site-nav__en">Resume</span></a></li>
+        
+      </ul>
+      <button class="theme-toggle" type="button" data-theme-toggle aria-label="切换深色 / 浅色模式">
+        <span class="theme-toggle__dot" aria-hidden="true"></span>
+        <span class="theme-toggle__text" data-theme-label>Dark</span>
+      </button>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+<article class="post">
+  <header class="post-head">
+    <div class="wrap">
+      <p class="label"><a href="/blog/">Writing</a></p>
+      <h1 class="post-head__title">只让虚构用户出门：给本地小模型蒸馏一个“只写证据里有的事”的写手</h1>
+      <p class="post-head__meta">
+        <time datetime="2026-10-06T06:00:00.000Z">2026.10.06</time>
+        
+      </p>
+    </div>
+  </header>
+  <div class="wrap article-grid">
+    <div class="prose"><div class="notice"><strong>草稿。</strong>这是 <a href="/projects/vatlas/">V-Culture Atlas</a> 的技术篇占位初版，蒸馏还在进行，数字截至 2026-10-06。文中所有例子都是虚构的。</div>
+
+<p>V-Culture Atlas 要让本地模型写一段关于某个用户的白描，而且每句话都必须有证据。难点有两个：一是<strong>证据本身要可靠、有边界</strong>，二是<strong>本地小模型写不好、也查不准</strong>。这篇讲数据层是怎么搭的，以及为什么、怎样用蒸馏来补模型的短板。</p>
+<h2 id="1-数据：只承认“被记录到的那部分”"><a href="#1-数据：只承认“被记录到的那部分”" class="headerlink" title="1. 数据：只承认“被记录到的那部分”"></a>1. 数据：只承认“被记录到的那部分”</h2><p>数据来自第三方直播弹幕记录站 Danmakus 上某个用户的公开历史。最重要的前提写在接口调研文档的第一段：<strong>这是 Danmakus 记录到的历史，不是这个用户在 B 站的完整历史</strong>。开发用的样本用户有 1316 个场次，但 2024–2025 年几乎是空白，这个空白要一路带到最后的文字里。</p>
+<p>采集规则是保守的：</p>
+<ul>
+<li>顺序请求，间隔至少 1.5 秒，缓存优先，已经缓存的页不会再请求；</li>
+<li>任何 HTTP 错误、非 200 的业务码或非 JSON 响应都会立即停止，并写一个 30 分钟的退避标记，不重试；</li>
+<li>不绕过 Cloudflare、验证码或任何访问控制；</li>
+<li>原始数据和派生数据都不进仓库。</li>
+</ul>
+<h2 id="2-规范化：先分清“这是不是一句话”"><a href="#2-规范化：先分清“这是不是一句话”" class="headerlink" title="2. 规范化：先分清“这是不是一句话”"></a>2. 规范化：先分清“这是不是一句话”</h2><p>原始记录会规范化成 <code>normalized/1.0</code> 的场次和事件：文字、房间表情、行内表情、进场、礼物、舰长、醒目留言等。未知的记录类型映射成 <code>UNKNOWN</code>，<strong>永远不会被当成文字</strong>。</p>
+<p>文字还要再判一次来源（<code>text_provenance</code>）：手打文字（<code>LIKELY_TYPED</code>）、可能是表情（<code>POSSIBLE_EMOTICON</code>）、行内表情（<code>INLINE_EMOJI</code>）。只有手打文字能作为语言证据。表情标签看起来像一句话，但它不是用户说的话。</p>
+<h2 id="3-证据：每一条都带范围"><a href="#3-证据：每一条都带范围" class="headerlink" title="3. 证据：每一条都带范围"></a>3. 证据：每一条都带范围</h2><p>证据引擎不调用 LLM，全是确定性计算：</p>
+<ul>
+<li><strong>出现度和参与度分开算</strong>：来过多少场是一回事，在场时说了多少话是另一回事。两者都用开平方缩放，避免一个高频频道压过其他所有频道。</li>
+<li><strong>时间分层</strong>：按年统计，每年的覆盖度标为 none &#x2F; low &#x2F; normal。没有观测的年份就是 none，不会被当成“这一年没看”。</li>
+<li><strong>签名特征、频道角色</strong>（长期、早期、近期）、分区和付费记录。</li>
+</ul>
+<p>证据包（0.2）里每条证据都带范围元数据：主体（用户 &#x2F; 某个频道 &#x2F; 多个频道 &#x2F; 某个时期）、频道、时期、证据类型和置信度。后面所有“张冠李戴”的检查都建立在这一层上：一句话说的是哪个频道、哪段时间，必须落在它引用的证据范围里。</p>
+<h2 id="4-先定事实，再让模型写字"><a href="#4-先定事实，再让模型写字" class="headerlink" title="4. 先定事实，再让模型写字"></a>4. 先定事实，再让模型写字</h2><p>模型不负责决定事实。流水线先生成 <code>GroundedClaim</code>（核实过的事实），由验证器把关：</p>
+<ul>
+<li>引用的证据必须存在，事实类型要和证据类型兼容；</li>
+<li>说某个频道的事实，只能引用覆盖这个频道的证据；</li>
+<li>时间范围必须被证据覆盖；</li>
+<li><strong>跨过观测空白的“连续性”永远不能通过验证</strong>：空白两端只能是两端，写不出“一直”；</li>
+<li>因果类事实在 schema 里存在，但没有任何证据类型能支撑它，所以永远不会通过。</li>
+</ul>
+<p>然后由确定性的 <code>NarrativePlan</code> 定下核心角度、反差、时间弧、落地场景和收尾方向。写手只负责措辞和抽象，并且只能引用事实的编号。</p>
+<h2 id="5-为什么要蒸馏"><a href="#5-为什么要蒸馏" class="headerlink" title="5. 为什么要蒸馏"></a>5. 为什么要蒸馏</h2><p>在这套约束下，生产版本 v1.1（Qwen3.5-9B，3 个候选，确定性检查，三票语义校验，局部修复）跑了 20 次：</p>
+<table>
+<thead>
+<tr>
+<th>指标</th>
+<th>结果</th>
+<th>目标（STABLE_V1）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>fallback 比例</td>
+<td>0%</td>
+<td>≤ 10%</td>
+</tr>
+<tr>
+<td>盲评中的事实错误</td>
+<td>2 &#x2F; 20</td>
+<td>0</td>
+</tr>
+<tr>
+<td>画像质量中位数</td>
+<td>5</td>
+<td>≥ 8</td>
+</tr>
+</tbody></table>
+<p>另外，每次运行约 70% 的时间（约 178 秒）花在三票 9B 裁判上。prompt 已经修订过三轮，第四版反而退步，剩下的差距是模型本身的写作能力。所以方向变成训练两个专用模型：</p>
+<ul>
+<li><strong>写手</strong>：在 Qwen3.5-9B 上训练 LoRA，学会项目特有的写法（用自己的话而不是照抄输入标签，一个意象只用一次，归属正确，没有元叙述），不需要每次在 prompt 里教。</li>
+<li><strong>裁判</strong>：一个 2B 的小模型，按现有语义裁判的输出格式逐句打标签，单票、温度 0，直接替换三票 9B。</li>
+</ul>
+<h2 id="6-只让虚构用户出门"><a href="#6-只让虚构用户出门" class="headerlink" title="6. 只让虚构用户出门"></a>6. 只让虚构用户出门</h2><p>蒸馏需要把输入发给外部的老师模型，而真实用户的观看历史不能离开本机。解决办法是虚构用户生成器：</p>
+<ul>
+<li>主播名、弹幕、uid 全部虚构，uid ≥ 9×10⁹；</li>
+<li>用六种频道角色（安静的常客、话多但少来、长期回归、只在早期、只在近期、路过）按五种模式混合，让叙事计划能产生不同的核心角度；</li>
+<li>虚构用户走一遍<strong>真实</strong>的流水线（适配器 → 证据 → 画像 → 事实 → 叙事计划 → 生产 prompt），所以训练输入和生产输入格式完全一致；</li>
+<li>老师模块有一个守卫：uid 不在虚构范围、或者缺少虚构标记的输入会直接报错（<code>NotSyntheticError</code>），有测试覆盖。</li>
+</ul>
+<p><strong>老师按条款选</strong>。用一个模型的输出训练另一个模型，受提供方条款约束：</p>
+<ul>
+<li>DeepSeek 开放平台条款（2026-04-29 生效）明确允许用于“训练其他模型（如模型蒸馏）”，所以它当老师，并核实了网关的上游是官方 API；</li>
+<li>Claude 的条款限制用输出训练模型，只用于评估；</li>
+<li>Gemini 不用作老师。</li>
+</ul>
+<h2 id="7-筛选比生成更重要"><a href="#7-筛选比生成更重要" class="headerlink" title="7. 筛选比生成更重要"></a>7. 筛选比生成更重要</h2><p>老师写出来的稿子大部分不能用。一篇稿子要成为训练样本，需要过这些关：</p>
+<ol>
+<li>生产模式下的 schema 和全部确定性检查（220–420 字，禁止复读原话）；</li>
+<li>没有泄露 prompt，没有近重复句；</li>
+<li>逐句语义标注全部通过；</li>
+<li>确定性排序分 ≥ 70；</li>
+<li>评分达到目标（目前定为事实和语气两项）。</li>
+</ol>
+<p>为什么排序分之外还要评分：确定性兜底文本能通过所有确定性检查，排序分 74–89，但盲评读起来像清单。<strong>排序能发现缺陷，不能衡量质量。</strong></p>
+<p>试跑中最有用的发现是<strong>照抄</strong>。报告腔的主要来源是照抄输入里的标签，而且和质量高度相关：“非报告腔”评分 ≤ 3 的稿子，照抄比例都 ≥ 0.20。照抄检测必须是模糊匹配，否则改一两个字就能绕过。加了一步“去照抄改写”之后，留存率才上来。</p>
+<table>
+<thead>
+<tr>
+<th>轮次</th>
+<th>规模</th>
+<th>花费（估算）</th>
+<th>留存</th>
+<th>主要发现</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>pilot A&#x2F;B</td>
+<td>25 人 × 2</td>
+<td>$5.31</td>
+<td>32–36%</td>
+<td>开 thinking 贵 9 倍，效果相当；角度单一；老师照抄</td>
+</tr>
+<tr>
+<td>pilot2</td>
+<td>40 人，按角度配额</td>
+<td>$1.79</td>
+<td>2.5%</td>
+<td>照抄闸门用 v1.0 盲评校准；老师写得太短</td>
+</tr>
+<tr>
+<td>pilot3</td>
+<td>40 + 10 人</td>
+<td>$2.00</td>
+<td>7.5%</td>
+<td>去照抄改写有效；老师质量上限约 7 分</td>
+</tr>
+<tr>
+<td>full_b1</td>
+<td>300 人</td>
+<td>$23.62</td>
+<td>17.7%</td>
+<td>得到 53 条写手样本，另有 300 条负样本</td>
+</tr>
+</tbody></table>
+<p>试跑也反过来修了生产流程：单侧反差读起来像排他、频道级和整体级的观测空白被混淆、用“她 &#x2F; 他”指代主播，这些都是在蒸馏试跑里发现的。</p>
+<h2 id="8-钱和机器"><a href="#8-钱和机器" class="headerlink" title="8. 钱和机器"></a>8. 钱和机器</h2><ul>
+<li><strong>预算闸门</strong>：每一步提交前，用最近一次同类运行实测的单请求成本估算，超出批准金额就拒绝提交，并且只对还没发出的请求计算。早期的估算器混用了 thinking &#x2F; 非 thinking 的单价，高估了 8 倍。全量上限是估算价 $100；按估算价到目前花了 $45.31，实际在非高峰时段跑，扣款约 $22–23。</li>
+<li><strong>训练</strong>：QLoRA（4-bit NF4，r&#x3D;16，全部线性层），只在助手回复上算 loss。合并时要把权重写回官方 checkpoint 的原始布局，否则官方转换脚本会因为缺少 MTP 层的张量而失败。之后走同一条官方路线：转换 GGUF → 量化 Q4_K_M。</li>
+<li><strong>可复现</strong>：9B 模型在两台机器上独立转换，结果逐字节一致（SHA256 相同）。</li>
+<li><strong>稳定性</strong>：旧显卡在持续负载下三次蓝屏或断电，之后加了 GPU 守卫：每个请求前空闲 6 秒，72°C 暂停、62°C 恢复，再没崩过。重计算迁到了新机器。</li>
+</ul>
+<h2 id="9-怎么判断蒸馏成功"><a href="#9-怎么判断蒸馏成功" class="headerlink" title="9. 怎么判断蒸馏成功"></a>9. 怎么判断蒸馏成功</h2><p>验收不看老师给自己打的分，只用和生产相同的标准：</p>
+<ul>
+<li><strong>小裁判</strong>：在同一个回归集上，至少达到三票 9B 裁判的水平（召回 0.901，严格合规通过率 0.878）才替换。</li>
+<li><strong>写手</strong>：用样本用户跑 20 次，加盲评，和 v1.1 对比。重点看事实错误是否为 0、报告腔是否明显减少、fallback 是否 ≤ 10%。</li>
+</ul>
+<p>结果出来后会补在这里。</p>
+</div>
+    <aside class="article-aside">
+      
+      <nav class="toc" aria-label="本页目录">
+        <p class="label">On this page</p>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E6%95%B0%E6%8D%AE%EF%BC%9A%E5%8F%AA%E6%89%BF%E8%AE%A4%E2%80%9C%E8%A2%AB%E8%AE%B0%E5%BD%95%E5%88%B0%E7%9A%84%E9%82%A3%E9%83%A8%E5%88%86%E2%80%9D"><span class="toc-text">1. 数据：只承认“被记录到的那部分”</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E8%A7%84%E8%8C%83%E5%8C%96%EF%BC%9A%E5%85%88%E5%88%86%E6%B8%85%E2%80%9C%E8%BF%99%E6%98%AF%E4%B8%8D%E6%98%AF%E4%B8%80%E5%8F%A5%E8%AF%9D%E2%80%9D"><span class="toc-text">2. 规范化：先分清“这是不是一句话”</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E8%AF%81%E6%8D%AE%EF%BC%9A%E6%AF%8F%E4%B8%80%E6%9D%A1%E9%83%BD%E5%B8%A6%E8%8C%83%E5%9B%B4"><span class="toc-text">3. 证据：每一条都带范围</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E5%85%88%E5%AE%9A%E4%BA%8B%E5%AE%9E%EF%BC%8C%E5%86%8D%E8%AE%A9%E6%A8%A1%E5%9E%8B%E5%86%99%E5%AD%97"><span class="toc-text">4. 先定事实，再让模型写字</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E8%92%B8%E9%A6%8F"><span class="toc-text">5. 为什么要蒸馏</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-%E5%8F%AA%E8%AE%A9%E8%99%9A%E6%9E%84%E7%94%A8%E6%88%B7%E5%87%BA%E9%97%A8"><span class="toc-text">6. 只让虚构用户出门</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-%E7%AD%9B%E9%80%89%E6%AF%94%E7%94%9F%E6%88%90%E6%9B%B4%E9%87%8D%E8%A6%81"><span class="toc-text">7. 筛选比生成更重要</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-%E9%92%B1%E5%92%8C%E6%9C%BA%E5%99%A8"><span class="toc-text">8. 钱和机器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-%E6%80%8E%E4%B9%88%E5%88%A4%E6%96%AD%E8%92%B8%E9%A6%8F%E6%88%90%E5%8A%9F"><span class="toc-text">9. 怎么判断蒸馏成功</span></a></li></ol>
+      </nav>
+      
+    </aside>
+  </div>
+  <nav class="wrap pager" aria-label="其他文章">
+    <a class="pager__all" href="/blog/">← 全部文章</a>
+    
+  </nav>
+</article>
+
+</main>
+<footer class="site-footer">
+  <div class="wrap site-footer__inner">
+    <div class="site-footer__lead">
+      <p class="label">Contact</p>
+      <a class="site-footer__mail" href="mailto:fffeiya@foxmail.com">fffeiya@foxmail.com</a>
+    </div>
+    <ul class="site-footer__links">
+      <li><a target="_blank" href="https://github.com/FFFeiya" rel="noopener noopener">GitHub</a></li>
+      <li><a href="/resume/">简历</a></li>
+      <li><a href="/projects/">全部作品</a></li>
+      <li><a href="/blog/">文章</a></li>
+    </ul>
+    <p class="site-footer__meta">© 2026 杨飞洋 Feiya Yang · 文章采用 <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener noopener">CC BY-NC-SA 4.0</a> <a class="site-footer__dot" href="/novel/" aria-label="Writing Arc">·</a></p>
+  </div>
+</footer>
+
+<script src="/js/site.js?v=muxhzpo8" defer></script>
+</body>
+
+</html>
