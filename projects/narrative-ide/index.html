@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="build" content="muyvyfnj">
+<title>Narrative Revision IDE — 给文案策划的剧情修订工作台 — 杨飞洋 Feiya Yang</title>
+<meta name="description" content="把剧情文本当成需要版本管理的母本：问题、计划、批准、局部补丁、自动检查和意图对比，AI 只能提议，改不坏设定和伏笔。">
+<meta name="author" content="杨飞洋 Feiya Yang">
+<link rel="canonical" href="https://fffeiya.github.io/projects/narrative-ide/">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="杨飞洋 Feiya Yang">
+<meta property="og:title" content="Narrative Revision IDE — 给文案策划的剧情修订工作台">
+<meta property="og:description" content="把剧情文本当成需要版本管理的母本：问题、计划、批准、局部补丁、自动检查和意图对比，AI 只能提议，改不坏设定和伏笔。">
+<meta property="og:url" content="https://fffeiya.github.io/projects/narrative-ide/">
+<meta property="og:image" content="https://fffeiya.github.io/images/work/narrative-ide/cover.webp">
+<meta property="og:locale" content="zh_CN">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#fbfbf9" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0e0e0d" media="(prefers-color-scheme: dark)">
+<link rel="icon" type="image/png" href="/brand/favicon.png">
+<link rel="preload" href="/fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<script>
+(function () {
+  try {
+    var t = localStorage.getItem('theme');
+    if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+  } catch (e) {}
+})();
+</script>
+<link rel="stylesheet" href="/css/site.css?v=muyvyfnj">
+
+
+</head>
+
+
+<body class="layout-project">
+<!-- 如果你是在这里找东西：/novel/ -->
+<a class="skip-link" href="#main">跳到正文</a>
+<header class="site-header" data-header>
+  <div class="wrap site-header__inner">
+    <a class="brand" href="/" aria-label="杨飞洋 Feiya Yang 首页">
+      <img class="brand__mark brand__mark--light" src="/brand/fffeiya-mark.png" alt="" width="28" height="24">
+      <img class="brand__mark brand__mark--dark" src="/brand/fffeiya-mark-dark.png" alt="" width="28" height="24">
+      <span class="brand__name">Feiya Yang</span>
+    </a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" data-nav-toggle>
+      <span class="nav-toggle__label">菜单</span>
+      <span class="nav-toggle__icon" aria-hidden="true"></span>
+    </button>
+    <nav class="site-nav" id="site-nav" aria-label="主导航" data-nav>
+      <ul class="site-nav__list">
+        
+        <li><a class="site-nav__link is-active" href="/projects/" aria-current="page">作品<span class="site-nav__en">Work</span></a></li>
+        
+        <li><a class="site-nav__link" href="/#focus">方向<span class="site-nav__en">Focus</span></a></li>
+        
+        <li><a class="site-nav__link" href="/blog/">文章<span class="site-nav__en">Writing</span></a></li>
+        
+        <li><a class="site-nav__link" href="/about/">关于<span class="site-nav__en">About</span></a></li>
+        
+        <li><a class="site-nav__link" href="/resume/">简历<span class="site-nav__en">Resume</span></a></li>
+        
+      </ul>
+      <button class="theme-toggle" type="button" data-theme-toggle aria-label="切换深色 / 浅色模式">
+        <span class="theme-toggle__dot" aria-hidden="true"></span>
+        <span class="theme-toggle__text" data-theme-label>Dark</span>
+      </button>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+<article class="project">
+  <header class="project-head">
+    <div class="wrap">
+      <p class="label"><a href="/projects/">Work</a> / Narrative Tooling</p>
+      <h1 class="project-head__title">Narrative Revision IDE <span class="project-head__zh">叙事修订 IDE：给文案策划的剧情修订工作台</span></h1>
+      <p class="project-head__summary">把剧情文本当成需要版本管理的母本：问题、计划、批准、局部补丁、自动检查和意图对比，AI 只能提议，改不坏设定和伏笔。</p>
+      <dl class="facts">
+        <div><dt>Role</dt><dd>个人项目</dd></div>
+        <div><dt>Year</dt><dd>2026</dd></div>
+        <div><dt>Team</dt><dd>个人项目</dd></div>
+        <div><dt>Tech</dt><dd>TypeScript · React · CodeMirror 6 · Tauri 2 · Git · Claude Code skill</dd></div>
+        <div><dt>Status</dt><dd><span class="work-card__status" data-status="开发中">开发中</span></dd></div>
+      </dl>
+      
+    </div>
+    
+  </header>
+
+  <div class="wrap article-grid article-grid--single">
+    <div class="prose prose--numbered"><video class="bleed" controls muted playsinline preload="none" poster="/images/work/narrative-ide/patch.webp">
+<source src="/files/narrative-ide-intro.mp4" type="video/mp4">
+</video>
+<p class="caption">介绍视频，约 6 分半，中文界面，带中文字幕，无声。一次完整的修订流程：从选中一段文字开始，到提出问题、批准计划、应用补丁、检查、查看意图对比、撤销，最后由 Claude Code 会话在终端里提问题。演示用的是工具内置的示例项目。</p>
+
+<h2 id="概览"><a href="#概览" class="headerlink" title="概览"></a>概览</h2><p class="lede">文案改剧情，难的往往不是写出新句子，而是改完之后前面立住的东西还在不在：设定有没有被改掉，伏笔还能不能成立，这句台词原本承担的作用还在不在。Narrative Revision IDE 把剧情文本当成需要做版本管理的“母本”：每一次修改都从一个问题出发，经过计划、批准、局部补丁，再自动检查，并说明这次改动碰到了什么。</p>
+
+<p>它不是续写工具。AI 只能<strong>分析、提议、写局部补丁</strong>；<strong>批准、应用、覆盖、撤销</strong>都只能由作者来做。</p>
+<div class="stats">
+<div><b>3 种</b><span>约束锁：字面（逐字保护）、语义（关键信息不能丢）、功能（这段的作用不能变）</span></div>
+<div><b>9 步</b><span>一次修订的闭环：问题 → 讨论 → 计划 → 批准 → 补丁 → 应用 → 检查 → 意图对比 → 历史</span></div>
+<div><b>±2 段</b><span>每次发给 AI 的上下文：选中的段落加前后各两段和相关设定，从不发整篇</span></div>
+<div><b>69 + 4</b><span>个单元测试和端到端测试，端到端测试包括真实的 Claude 调用</span></div>
+</div>
+
+<div class="notice"><strong>状态。</strong>个人项目，核心流程已经可以使用，有桌面应用（Tauri）和 Claude Code skill（浏览器）两种运行方式，界面默认中文，可以切换英文。工具最初按小说修订来设计，正文按章节存成 Markdown，剧情、任务文本和对白也可以照这个方式管理；它目前没有和任何游戏引擎或配表工具对接。代码暂未公开。</div>
+
+<h2 id="文案工作里的问题，在工具里对应什么"><a href="#文案工作里的问题，在工具里对应什么" class="headerlink" title="文案工作里的问题，在工具里对应什么"></a>文案工作里的问题，在工具里对应什么</h2><table>
+<thead>
+<tr>
+<th>文案工作里常见的情况</th>
+<th>工具里的做法</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>世界观和角色设定散在各个文档里，改剧情时很少有人逐条对照</td>
+<td><strong>设定（Canon）&#x2F; 角色 &#x2F; 场景</strong> 编辑器；创建问题时自动关联相关的设定和锁</td>
+</tr>
+<tr>
+<td>有些名字、台词、伏笔不能动</td>
+<td><strong>锁</strong>：字面锁在应用时直接拦截；语义锁和功能锁在修改后由 AI 做对比复查</td>
+</tr>
+<tr>
+<td>评审意见变成实际修改的过程中，原意容易走样</td>
+<td><strong>问题单</strong>锚定到具体段落，讨论、计划项逐条<strong>批准 &#x2F; 拒绝 &#x2F; 暂缓</strong>，补丁只能落在已批准的计划项上</td>
+</tr>
+<tr>
+<td>改完不知道影响了哪里</td>
+<td><strong>修订检查</strong>和<strong>意图对比</strong>：改了什么、为什么改、碰到哪些设定、线索和锁，回归测试改前改后各是什么结果</td>
+</tr>
+<tr>
+<td>需要能回退</td>
+<td>基于 Git 的<strong>修订历史</strong>：撤销某个补丁，或把章节恢复到任意版本（恢复前先保存当前状态）</td>
+</tr>
+<tr>
+<td>文风要统一</td>
+<td><strong>文风规则</strong>：禁用词、出现次数的警告阈值、正则，可以扫描全稿</td>
+</tr>
+<tr>
+<td>线索要在对的时候被读者注意到</td>
+<td><strong>主张与证据</strong>：标出读者应该在哪一段开始相信什么；补丁碰到证据段落时会在意图对比里标出来</td>
+</tr>
+</tbody></table>
+<p><img src="/images/work/narrative-ide/sidebar.webp" alt="左栏：锁、文风规则和回归测试。字面锁保护“玛恩纳大叔”“厨房纸”这类不能改的词，功能锁写的是“这段的主要作用：人物化宁宁”"></p>
+<h2 id="一次修订的完整流程"><a href="#一次修订的完整流程" class="headerlink" title="一次修订的完整流程"></a>一次修订的完整流程</h2><p><strong>1. 从一段文字开始。</strong> 在正文里选中有问题的句子，创建修订问题。问题会记下所在文件、段落 ID、内容哈希和上下文，所以前面的文字改了，它也能重新找到原来的位置。</p>
+<p><img src="/images/work/narrative-ide/issue.webp" alt="问题单：问题、目标、涉及的锁和设定，以及被锚定的原文"></p>
+<p><strong>2. 讨论和计划。</strong> 可以让 AI 编辑分析这个问题，也可以自己写。计划拆成若干条，每一条都要作者单独批准、拒绝或暂缓。被拒绝和暂缓的条目不会生成补丁。</p>
+<p><img src="/images/work/narrative-ide/plan.webp" alt="计划项：两条已批准，一条被拒绝（删除关键证据句太激进）"></p>
+<p><strong>3. 局部补丁。</strong> 补丁只能修改已批准计划项对应的段落，并且一次只替换一处文字。每个补丁都写明原文、建议、差异、理由、预期效果、可能的影响，以及对约束的预检查。“提议”“批准”“应用”是三个独立的步骤。</p>
+<p><img src="/images/work/narrative-ide/patch.webp" alt="补丁：“钥匙确实在那里”改成“钥匙在那里”，附理由、预期效果和可能影响"></p>
+<p><strong>4. 应用和检查。</strong> 应用前会核对原文哈希，如果原文已经被改过，就安全地重新定位，或者标记为冲突而不写入文件。写入后自动运行修订检查：文件完整性、三种锁、设定引用、文风规则、回归测试和场景功能，每项给出 通过 &#x2F; 警告 &#x2F; 失败。</p>
+<p><strong>5. 意图对比。</strong> 不只是文字差异，还会说明哪些约束保持了、哪些被破坏或需要复核，碰到了哪些设定、证据和场景，文风有什么变化，回归测试改前改后的结果，以及风险等级。</p>
+<p><img src="/images/work/narrative-ide/intent-diff.webp" alt="意图对比：保留了什么、改变了什么，五条锁全部保持，涉及的设定和场景，回归测试改前改后都是 4 项通过"></p>
+<p><strong>6. 历史和撤销。</strong> 每次应用都会生成一条“修订 N”的 Git 记录。撤销补丁后原文逐字恢复，撤销本身也会经过一次检查。</p>
+<p><img src="/images/work/narrative-ide/history.webp" alt="修订历史：撤销 PATCH-0001 之后，检查结果是 12 项通过、1 项警告、0 项失败"></p>
+<h2 id="和-AI-的分工"><a href="#和-AI-的分工" class="headerlink" title="和 AI 的分工"></a>和 AI 的分工</h2><ul>
+<li><strong>AI 能做的</strong>：分析问题、提计划、写局部补丁，在修改后做语义和功能层面的复查。</li>
+<li><strong>AI 不能做的</strong>：批准、应用、覆盖锁、撤销，也不能整篇重写。</li>
+<li><strong>发给 AI 的内容</strong>：只有选中的文字、所在段落、前后各两段，以及相关的锁、设定、场景和禁用词。问题面板会显示这次上下文的大致长度。</li>
+<li><strong>AI 可以关掉</strong>：问题单、手写计划、手写补丁、锁、检查和历史都照常工作。没有 AI 时，语义锁和功能锁会显示“未经机器验证”的警告，而不是假装通过。</li>
+</ul>
+<p>在 Claude Code skill 模式下，一句“用修订 IDE 打开这本小说”就会在本机启动一个只监听 127.0.0.1、带一次性令牌、限定在一个文件夹里的服务，并在浏览器里打开界面。Claude Code 会话通过一个<strong>只能提议</strong>的命令行工具 <code>nri</code> 担任编辑：它可以开问题、参与讨论、提计划和补丁，但没有批准、应用、撤销的命令。页面会实时显示它提交的内容。</p>
+<p><img src="/images/work/narrative-ide/claude-cli.webp" alt="终端里的 Claude Code 会话为第二章开了一个问题、加了讨论和一条计划，页面上随即出现，等作者决定"></p>
+<h2 id="工程"><a href="#工程" class="headerlink" title="工程"></a>工程</h2><ul>
+<li><strong>字节级保存</strong>：编辑器用 CodeMirror 6 直接编辑 Markdown 源码，保存后文件逐字节不变；写入是原子操作；外部修改会被检测出来，不会被悄悄覆盖。</li>
+<li><strong>领域逻辑全部在 TypeScript 里</strong>：段落稳定 ID、锚点重定位、补丁边界和哈希、锁、修订检查、依赖图和意图对比都可以直接在 Node 里做单元测试。Rust 只做很薄的一层：原子写入，以及 Git 命令白名单（拒绝破坏性命令）。</li>
+<li><strong>AI 输出必须符合结构</strong>：用 Zod 定义结构，解析失败会重试修复，并有超时和 JSON 模式的兜底。支持 Claude（通过本机 Claude Code，不需要 API key）、OpenAI 兼容接口和确定性的 Mock。</li>
+<li><strong>测试</strong>：69 个单元测试（领域逻辑、文件、临时 Git 仓库、AI 的异常输入和超时）；4 个 Playwright 端到端测试，在真实文件和真实 Git 上跑完整流程，其中包括真实的 Claude 调用；3 个 Rust 测试；以及对桌面版 exe 的冒烟测试。</li>
+<li><strong>独立审查</strong>：发现了 8 个问题，比如应用补丁时保存被覆盖、CRLF 换行导致偏移、删除型补丁无法撤销、恢复版本后补丁状态错误。全部已修复，并补上了回归测试。</li>
+</ul>
+<h2 id="局限与下一步"><a href="#局限与下一步" class="headerlink" title="局限与下一步"></a>局限与下一步</h2><ul>
+<li>一个补丁只能替换一个段落里的一处文字。多段改写需要拆成几个补丁，这是有意的设计。</li>
+<li>语义锁、功能锁和场景功能检查需要 AI；不接 AI 时，这几项只显示警告。</li>
+<li>还不能在界面里调整章节顺序或删除章节。</li>
+<li>计划中的功能：证据图（段落 → 证据 → 主张）、按不同读者类型模拟阅读并记录信念变化、线索功能识别（线索、红鲱鱼、人物塑造、氛围），以及在批准补丁前预览影响范围。</li>
+</ul>
+</div>
+    
+  </div>
+
+  
+  <section class="section section--tight" aria-labelledby="rel-title">
+    <div class="wrap">
+      <header class="section__head">
+        <p class="label">Read by Focus</p>
+        <h2 class="section__title" id="rel-title">这个项目和哪些方向相关</h2>
+      </header>
+      <div class="rel-grid">
+        
+        <a class="rel" href="/focus/technical-design/">
+          <span class="rel__no">01</span>
+          <span class="rel__title">Technical Design · 技术策划</span>
+          <span class="rel__why">文案改剧情时最怕把立住的设定、伏笔和台词功能改坏。这个工具把“这段不能改什么”写成可以检查的约束，每次修改都说明碰到了什么。</span>
+        </a>
+        
+        <a class="rel" href="/focus/tools/">
+          <span class="rel__no">03</span>
+          <span class="rel__title">Tools &amp; Pipeline · 客户端工具 / 编辑器</span>
+          <span class="rel__why">给文案用的修订工具：编辑器、数据模型、检查器和版本历史连成一条闭环，AI 只能提议，作者决定。</span>
+        </a>
+        
+      </div>
+    </div>
+  </section>
+  
+
+  <nav class="wrap pager" aria-label="其他项目">
+    
+    <a class="pager__all" href="/projects/">← 全部作品</a>
+    <a class="pager__next" href="/projects/aktracker/"><span class="label">Next</span>黑流树海记牌器 →</a>
+  </nav>
+</article>
+
+</main>
+<footer class="site-footer">
+  <div class="wrap site-footer__inner">
+    <div class="site-footer__lead">
+      <p class="label">Contact</p>
+      <a class="site-footer__mail" href="mailto:fffeiya@foxmail.com">fffeiya@foxmail.com</a>
+    </div>
+    <ul class="site-footer__links">
+      <li><a target="_blank" href="https://github.com/FFFeiya" rel="noopener noopener">GitHub</a></li>
+      <li><a href="/resume/">简历</a></li>
+      <li><a href="/projects/">全部作品</a></li>
+      <li><a href="/blog/">文章</a></li>
+    </ul>
+    <p class="site-footer__meta">© 2026 杨飞洋 Feiya Yang · 文章采用 <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener noopener">CC BY-NC-SA 4.0</a> <a class="site-footer__dot" href="/novel/" aria-label="Writing Arc">·</a></p>
+    
+  </div>
+</footer>
+
+<script src="/js/site.js?v=muyvyfnj" defer></script>
+</body>
+
+</html>

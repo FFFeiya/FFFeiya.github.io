@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="build" content="muxy3xjc">
+<meta name="build" content="muyvyfnj">
 <title>Tools &amp; Pipeline 客户端工具 / 编辑器 — 杨飞洋 Feiya Yang</title>
 <meta name="description" content="工具方向：Editor 工具、内容管线、校验与自动化。">
 <meta name="author" content="杨飞洋 Feiya Yang">
@@ -30,7 +30,7 @@
   } catch (e) {}
 })();
 </script>
-<link rel="stylesheet" href="/css/site.css?v=muxy3xjc">
+<link rel="stylesheet" href="/css/site.css?v=muyvyfnj">
 
 
 </head>
@@ -125,13 +125,28 @@
       </article>
       
       <article class="evidence__item">
+        <a class="evidence__media" href="/projects/narrative-ide/" tabindex="-1" aria-hidden="true">
+          <img src="/images/work/narrative-ide/cover.webp" alt="" loading="lazy" decoding="async">
+        </a>
+        <div class="evidence__body">
+          <p class="work-card__meta"><span class="work-card__index">03</span><span>Narrative Tooling</span><span class="work-card__status" data-status="开发中">开发中</span></p>
+          <h3 class="evidence__title"><a href="/projects/narrative-ide/">Narrative Revision IDE <span class="work-card__zh">叙事修订 IDE：给文案策划的剧情修订工作台</span></a></h3>
+          <p class="evidence__why">给文案用的修订工具：编辑器、数据模型、检查器和版本历史连成一条闭环，AI 只能提议，作者决定。</p>
+          <ul class="evidence__points">
+            <li>CodeMirror 6 字节级保存、原子写入、外部修改检测；段落稳定 ID 和锚点重定位</li><li>补丁应用前核对哈希，冲突时不写入；每次应用都提交 Git 并自动检查</li><li>Claude Code skill 模式：本地带令牌的服务 + 只能提议的命令行工具</li><li>69 个单元测试，4 个包含真实 Claude 调用的端到端测试</li>
+          </ul>
+          <p class="evidence__foot"><span class="evidence__tech">TypeScript · React · CodeMirror 6 · Tauri 2 · Git · Claude Code skill</span><a class="link-arrow" href="/projects/narrative-ide/">打开项目页 →</a></p>
+        </div>
+      </article>
+      
+      <article class="evidence__item">
         <a class="evidence__media evidence__media--text" href="/projects/tencent-production/" tabindex="-1" aria-hidden="true">
           <pre class="work-card__diagram">Excel  ⇄  Blueprint  ⇄  Unity Runtime
 PSD  →  Merge Plan  →  Prefab
 GM · Trace · Perf</pre>
         </a>
         <div class="evidence__body">
-          <p class="work-card__meta"><span class="work-card__index">03</span><span>Production Case</span><span class="work-card__status" data-status="实习项目">实习项目</span></p>
+          <p class="work-card__meta"><span class="work-card__index">04</span><span>Production Case</span><span class="work-card__status" data-status="实习项目">实习项目</span></p>
           <h3 class="evidence__title"><a href="/projects/tencent-production/">Production Engineering <span class="work-card__zh">腾讯 IEG《虚环》客户端实习</span></a></h3>
           <p class="evidence__why">面向策划与美术的生产工具：配置编辑器、PSD→Unity 管线、调试与验证工具。</p>
           <ul class="evidence__points">
@@ -146,7 +161,7 @@ GM · Trace · Perf</pre>
           <img src="/images/work/psd2ugui/page-edit.webp" alt="" loading="lazy" decoding="async" style="object-position: left top">
         </a>
         <div class="evidence__body">
-          <p class="work-card__meta"><span class="work-card__index">04</span><span>UI Tooling</span><span class="work-card__status" data-status="开发中">开发中</span></p>
+          <p class="work-card__meta"><span class="work-card__index">05</span><span>UI Tooling</span><span class="work-card__status" data-status="开发中">开发中</span></p>
           <h3 class="evidence__title"><a href="/projects/psd2ugui/">Psd2UGUI <span class="work-card__zh">PSD → Unity UGUI 界面转换工具</span></a></h3>
           <p class="evidence__why">一条有检查、有验收、有回退的 UI 内容管线，模型只在其中一步里做判断。</p>
           <ul class="evidence__points">
@@ -161,7 +176,7 @@ GM · Trace · Perf</pre>
           <img src="/images/work/ui-showcase/character_16x9_zh.webp" alt="" loading="lazy" decoding="async">
         </a>
         <div class="evidence__body">
-          <p class="work-card__meta"><span class="work-card__index">05</span><span>Technical UI</span><span class="work-card__status" data-status="已完成">已完成</span></p>
+          <p class="work-card__meta"><span class="work-card__index">06</span><span>Technical UI</span><span class="work-card__status" data-status="已完成">已完成</span></p>
           <h3 class="evidence__title"><a href="/projects/ui-showcase/">Driftglass UI Showcase <span class="work-card__zh">Unity UGUI 界面搭建作品</span></a></h3>
           <p class="evidence__why">界面是数据，Prefab 是生成物，规范由工具检查。</p>
           <ul class="evidence__points">
@@ -176,7 +191,7 @@ GM · Trace · Perf</pre>
           <img src="/images/work/aktracker/cover.webp" alt="" loading="lazy" decoding="async">
         </a>
         <div class="evidence__body">
-          <p class="work-card__meta"><span class="work-card__index">06</span><span>Game Companion Tool</span><span class="work-card__status" data-status="开发中">开发中</span></p>
+          <p class="work-card__meta"><span class="work-card__index">07</span><span>Game Companion Tool</span><span class="work-card__status" data-status="开发中">开发中</span></p>
           <h3 class="evidence__title"><a href="/projects/aktracker/">黑流树海记牌器 <span class="work-card__zh">明日方舟集成战略的战斗情报悬浮窗</span></a></h3>
           <p class="evidence__why">只靠截图做出一个可信的游戏内时钟，并把每个阶段的结果写成验收报告。</p>
           <ul class="evidence__points">
@@ -191,7 +206,7 @@ GM · Trace · Perf</pre>
           <img src="/images/P4ReviewBot/example.png" alt="" loading="lazy" decoding="async">
         </a>
         <div class="evidence__body">
-          <p class="work-card__meta"><span class="work-card__index">07</span><span>Pipeline Tool</span><span class="work-card__status" data-status="已完成">已完成</span></p>
+          <p class="work-card__meta"><span class="work-card__index">08</span><span>Pipeline Tool</span><span class="work-card__status" data-status="已完成">已完成</span></p>
           <h3 class="evidence__title"><a href="/tools/p4-review-bot/">P4 Review Bot <span class="work-card__zh">Perforce 提交审查机器人</span></a></h3>
           <p class="evidence__why">把“人肉检查 changelist”变成可复现的流水线。</p>
           <ul class="evidence__points">
@@ -206,7 +221,7 @@ GM · Trace · Perf</pre>
           <span class="evidence__placeholder">Pipeline Tool</span>
         </a>
         <div class="evidence__body">
-          <p class="work-card__meta"><span class="work-card__index">08</span><span>Pipeline Tool</span><span class="work-card__status" data-status="实习项目">实习项目</span></p>
+          <p class="work-card__meta"><span class="work-card__index">09</span><span>Pipeline Tool</span><span class="work-card__status" data-status="实习项目">实习项目</span></p>
           <h3 class="evidence__title"><a href="/2025/01/08/NXA_Pipeline_FTP_Tech_Blog/">FTP 资产交付 Pipeline <span class="work-card__zh">NXA Studios 实习</span></a></h3>
           <p class="evidence__why">第一份工具向实习：交付前把返工前置。</p>
           <ul class="evidence__points">
@@ -260,7 +275,7 @@ GM · Trace · Perf</pre>
   </div>
 </footer>
 
-<script src="/js/site.js?v=muxy3xjc" defer></script>
+<script src="/js/site.js?v=muyvyfnj" defer></script>
 </body>
 
 </html>
