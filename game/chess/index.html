@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="data:,">
+  <title>国际象棋对弈</title>
+  <link rel="stylesheet" href="vendor/cm-chessboard/assets/chessboard.css">
+  <link rel="stylesheet" href="vendor/cm-chessboard/assets/extensions/markers/markers.css">
+  <link rel="stylesheet" href="vendor/cm-chessboard/assets/extensions/promotion-dialog/promotion-dialog.css">
+  <link rel="stylesheet" href="../common/ui.css">
+</head>
+<body>
+  <header class="top">
+    <h1>国际象棋对弈</h1>
+    <a href="../gomoku/">五子棋</a>
+  </header>
+  <main class="game">
+    <div id="board"></div>
+    <aside id="panel"></aside>
+  </main>
+  <script src="../common/vendor/peerjs.min.js"></script>
+  <script type="module">
+    import { startRoom } from "../common/room.js"
+    import { createChessAdapter } from "./chess-game.js"
+    startRoom(createChessAdapter())
+  </script>
+</body>
+</html>
