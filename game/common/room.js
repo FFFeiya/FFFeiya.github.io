@@ -59,6 +59,7 @@ class Room {
     else if (room && /^[a-z0-9-]{4,20}$/.test(room)) this.joinOrResume(room)
     else this.showSetup()
     setInterval(() => this.tick(), 200)
+    armExtras(this)
   }
 
   storeKey() {
@@ -778,6 +779,49 @@ class Room {
       .join("")
     if (this.ui.clocks.innerHTML !== html) this.ui.clocks.innerHTML = html
   }
+}
+
+// ---------- extras ----------
+// Optional add-ons ship encrypted in room.dat and are unlocked with a passphrase: press "~",
+// or hold the clocks for 1.5 s on a touch screen. The same gesture later shows / hides them.
+
+let extras = null
+
+function armExtras(room) {
+  const trigger = () => (extras ? extras.toggle() : askPassphrase(room))
+  addEventListener("keydown", e => {
+    if ((e.key === "~" || e.key === "`") && !e.target.closest?.("input, textarea, select")) { e.preventDefault(); trigger() }
+  })
+  const clocks = room.ui.clocks
+  let since = 0
+  clocks.addEventListener("pointerdown", () => { since = Date.now() })
+  clocks.addEventListener("pointerup", () => { if (since && Date.now() - since > 1400) trigger(); since = 0 })
+  clocks.addEventListener("pointercancel", () => { since = 0 })
+  clocks.addEventListener("contextmenu", e => e.preventDefault())
+}
+
+function askPassphrase(room) {
+  if (document.querySelector(".pass-box")) return
+  const box = el(`<form class="pass-box"><input type="password" autocomplete="off" autocapitalize="off" aria-label="口令"></form>`)
+  const input = box.querySelector("input")
+  input.addEventListener("keydown", e => { if (e.key === "Escape") box.remove() })
+  input.addEventListener("blur", () => setTimeout(() => box.remove(), 150))
+  box.addEventListener("submit", async e => {
+    e.preventDefault()
+    box.remove()
+    try { extras = await unlock(room, input.value) } catch { /* wrong passphrase: stay quiet */ }
+  })
+  document.body.appendChild(box)
+  input.focus()
+}
+
+async function unlock(room, word) {
+  const buf = new Uint8Array(await (await fetch(new URL("./room.dat", import.meta.url))).arrayBuffer())
+  const base = await crypto.subtle.importKey("raw", new TextEncoder().encode(word), "PBKDF2", false, ["deriveKey"])
+  const key = await crypto.subtle.deriveKey({ name: "PBKDF2", salt: buf.slice(0, 16), iterations: 600000, hash: "SHA-256" }, base, { name: "AES-GCM", length: 256 }, false, ["decrypt"])
+  const code = await crypto.subtle.decrypt({ name: "AES-GCM", iv: buf.slice(16, 28) }, key, buf.slice(28))
+  const url = URL.createObjectURL(new Blob([code], { type: "text/javascript" }))
+  return (await import(url)).default(room, word, import.meta.url)
 }
 
 const OFFER_LABEL = { draw: "和棋", undo: "悔棋", rematch: "再来一局" }
