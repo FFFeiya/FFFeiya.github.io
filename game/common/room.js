@@ -44,6 +44,9 @@ class Room {
     this.incomingOffer = null
     this.outgoingOffer = null
     this.notice = ""
+    this.chat = []
+    this.lastChatAt = 0
+    this.unackedPly = null // guest: ply of our last move the host has not confirmed yet
   }
 
   // ---------- lifecycle ----------
@@ -246,6 +249,7 @@ class Room {
     this.clock.afterMove(turn)
     this.clearOffers()
     this.net.send({ type: "move", ply: s.moves.length, move: this.a.lastMove() })
+    this.unackedPly = s.moves.length
     const r = this.a.result()
     if (r) { s.result = r; s.phase = "over"; this.clock.stop() }
     this.persist()
@@ -336,6 +340,9 @@ class Room {
       case "syncReq":
         this.sendSync()
         break
+      case "chat":
+        this.receiveChat(msg.e)
+        break
     }
   }
 
@@ -356,11 +363,12 @@ class Room {
         }
         const prevGame = s.gameNo
         // A move made in the seconds before we noticed the host was gone never arrived.
-        if (prevGame === incoming.gameNo && incoming.moves.length < s.moves.length && s.phase === "playing") {
+        if (this.unackedPly && prevGame === incoming.gameNo && incoming.moves.length < this.unackedPly) {
           this.notice = "你的上一步没有送达对方，已撤回，请重新走"
         } else if (this.notice === "已确认，等待开局…" && incoming.phase !== "waiting") {
           this.notice = ""
         }
+        this.unackedPly = null
         this.state = { ...incoming, role: "guest" }
         delete this.state.clock
         this.clock = new Clock(incoming.rules.tcId)
@@ -381,6 +389,7 @@ class Room {
           this.net.send({ type: "syncReq" })
           return
         }
+        if (msg.ply === this.unackedPly) this.unackedPly = null // the host accepted our move
         if (msg.clock) this.clock.load(msg.clock)
         this.persist()
         break
@@ -389,6 +398,9 @@ class Room {
         break
       case "reply":
         this.receiveReply(msg.kind, msg.accept, null)
+        break
+      case "chat":
+        this.receiveChat(msg.e)
         break
     }
   }
@@ -527,6 +539,39 @@ class Room {
     else { input.select(); document.execCommand("copy"); done() }
   }
 
+  // ---------- emoji chat ----------
+
+  sendChat(emoji) {
+    if (!EMOJIS.includes(emoji)) return
+    const now = Date.now()
+    if (now - this.lastChatAt < CHAT_GAP_MS) return
+    if (!this.net || !this.net.send({ type: "chat", e: emoji })) {
+      this.notice = "对方不在线，消息没有发出"
+      this.render()
+      return
+    }
+    this.lastChatAt = now
+    this.addChat(true, emoji)
+  }
+
+  receiveChat(emoji) {
+    // Only the fixed emoji set is accepted, so nothing else can be injected into the page.
+    if (EMOJIS.includes(emoji)) this.addChat(false, emoji)
+  }
+
+  addChat(mine, emoji) {
+    this.chat.push({ mine, emoji })
+    if (this.chat.length > CHAT_KEEP) this.chat.shift()
+    const log = this.ui.chat.querySelector(".chat-log")
+    log.appendChild(el(`<div class="msg${mine ? " mine" : ""}"><span class="who">${mine ? "你" : "对手"}</span><span class="e">${emoji}</span></div>`))
+    while (log.children.length > CHAT_KEEP) log.firstElementChild.remove()
+    log.scrollTop = log.scrollHeight
+    // A short-lived bubble over the board so the emoji is noticed mid-game.
+    const bubble = el(`<div class="bubble ${mine ? "mine" : "theirs"}">${emoji}</div>`)
+    document.getElementById("board").appendChild(bubble)
+    setTimeout(() => bubble.remove(), 2600)
+  }
+
   // ---------- rendering ----------
 
   sideLabels() {
@@ -583,9 +628,20 @@ class Room {
         </section>`),
       notice: el(`<div class="notice" data-testid="notice"></div>`),
       moves: el(`<ol class="moves" data-testid="moves"></ol>`),
+      chat: el(`
+        <section class="card chat">
+          <h2>聊天</h2>
+          <div class="chat-log" data-testid="chat-log"></div>
+          <div class="emojis">${EMOJIS.map(e => `<button data-emoji="${e}" title="发送 ${e}">${e}</button>`).join("")}</div>
+        </section>`),
     }
-    for (const k of ["status", "net", "setup", "invite", "confirm", "clocks", "offer", "actions", "notice", "moves"]) panel.appendChild(this.ui[k])
+    for (const k of ["status", "net", "setup", "invite", "confirm", "clocks", "offer", "actions", "notice", "moves", "chat"]) panel.appendChild(this.ui[k])
     panel.addEventListener("click", e => {
+      const emoji = e.target.closest("[data-emoji]")?.dataset.emoji
+      if (emoji) {
+        this.sendChat(emoji)
+        return
+      }
       const act = e.target.closest("[data-act]")?.dataset.act
       if (!act) return
       this.notice = ""
@@ -692,6 +748,7 @@ class Room {
       ui.moves.scrollTop = ui.moves.scrollHeight
     }
     show(ui.moves, s && s.moves.length > 0)
+    show(ui.chat, online && s.rules && !["joining", "full"].includes(s.phase))
 
     if (s && s.rules) {
       const mine = this.mySide()
@@ -724,3 +781,6 @@ class Room {
 }
 
 const OFFER_LABEL = { draw: "和棋", undo: "悔棋", rematch: "再来一局" }
+const EMOJIS = ["👍", "👏", "😂", "😮", "😅", "🤔", "😎", "😭", "😡", "🙏", "🔥", "💀", "🎉", "🤝", "⏰", "👋"]
+const CHAT_KEEP = 50
+const CHAT_GAP_MS = 600

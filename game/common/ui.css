@@ -68,6 +68,7 @@ main.game {
   padding: 0 16px 24px;
 }
 #board {
+  position: relative;
   width: min(calc(100vw - 32px), calc(100vh - 90px), 680px);
   aspect-ratio: 1;
   flex: none;
@@ -135,6 +136,46 @@ button.primary { background: var(--accent); color: var(--accent-text); border-co
 
 .actions { display: flex; flex-wrap: wrap; gap: 6px; }
 .notice { font-size: 13px; color: var(--muted); }
+
+.chat .chat-log {
+  max-height: 150px;
+  min-height: 36px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+.chat .chat-log:empty::before { content: "点下面的表情发给对手"; color: var(--muted); font-size: 13px; }
+.chat .msg { display: flex; align-items: center; gap: 6px; }
+.chat .msg.mine { flex-direction: row-reverse; }
+.chat .msg .who { font-size: 12px; color: var(--muted); }
+.chat .msg .e { font-size: 22px; line-height: 1.2; }
+.chat .emojis { display: grid; grid-template-columns: repeat(8, 1fr); gap: 4px; }
+.chat .emojis button { font-size: 20px; line-height: 1; padding: 4px 0; }
+
+.bubble {
+  position: absolute;
+  left: 12px;
+  z-index: 20;
+  font-size: 44px;
+  line-height: 1;
+  pointer-events: none;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.35));
+  animation: bubble 2.6s ease-out forwards;
+}
+.bubble.mine { bottom: 12px; }
+.bubble.theirs { top: 12px; }
+@keyframes bubble {
+  0% { opacity: 0; transform: scale(0.4); }
+  12% { opacity: 1; transform: scale(1.15); }
+  20% { transform: scale(1); }
+  80% { opacity: 1; }
+  100% { opacity: 0; transform: translateY(-10px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .bubble { animation: none; }
+}
 
 .moves {
   margin: 0;
