@@ -7,6 +7,27 @@ const PING_MS = 3000
 const DEAD_MS = 10000
 const RETRY_MS = 3000
 
+// Relay (TURN) servers are needed when neither side can be reached directly (mobile data,
+// campus networks). Short-lived credentials come from a small Worker; without them we fall
+// back to STUN only, which still works on friendlier networks.
+const ICE_URL = "https://game-ice.fffeiya.workers.dev"
+const STUN = [{ urls: "stun:stun.cloudflare.com:3478" }, { urls: "stun:stun.l.google.com:19302" }]
+const ICE_FRESH_MS = 3600 * 1000
+let ice = null // { at, servers }
+
+async function iceServers() {
+  if (ice && Date.now() - ice.at < ICE_FRESH_MS) return ice.servers
+  try {
+    const res = await fetch(ICE_URL, { signal: AbortSignal.timeout(4000) })
+    const data = res.ok ? await res.json() : null
+    if (data && Array.isArray(data.iceServers) && data.iceServers.length) {
+      ice = { at: Date.now(), servers: [...data.iceServers, STUN[1]] }
+      return ice.servers
+    }
+  } catch {}
+  return STUN
+}
+
 export class Net extends EventTarget {
   constructor(game, room, isHost) {
     super()
@@ -28,7 +49,13 @@ export class Net extends EventTarget {
       return
     }
     this.setStatus("connecting")
-    this.peer = this.isHost ? new Peer(this.hostId) : new Peer()
+    iceServers().then(servers => {
+      if (!this.closed && !this.peer) this.open(Peer, { config: { iceServers: servers } })
+    })
+  }
+
+  open(Peer, options) {
+    this.peer = this.isHost ? new Peer(this.hostId, options) : new Peer(options)
     this.peer.on("open", () => {
       if (this.isHost) this.setStatus("waiting")
       else this.connectToHost()
