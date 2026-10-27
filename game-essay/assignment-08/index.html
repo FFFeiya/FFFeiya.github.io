@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="build" content="mvq6rx9v">
+<title>Game Engineering II - Assignment 08 — 杨飞洋 Feiya Yang</title>
+<meta name="description" content="MeshBuilder now writes binary mesh files, and the game loads them with four extractions and no parsing.">
+<meta name="author" content="杨飞洋 Feiya Yang">
+<link rel="canonical" href="https://fffeiya.github.io/game-essay/assignment-08/">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="杨飞洋 Feiya Yang">
+<meta property="og:title" content="Game Engineering II - Assignment 08">
+<meta property="og:description" content="MeshBuilder now writes binary mesh files, and the game loads them with four extractions and no parsing.">
+<meta property="og:url" content="https://fffeiya.github.io/game-essay/assignment-08/">
+<meta property="og:image" content="https://fffeiya.github.io/images/assignment08/game_d3d.png">
+<meta property="og:locale" content="zh_CN">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#fbfbf9" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0e0e0d" media="(prefers-color-scheme: dark)">
+<link rel="icon" type="image/png" href="/brand/favicon.png">
+<link rel="preload" href="/fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<script>
+(function () {
+  try {
+    var t = localStorage.getItem('theme');
+    if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+  } catch (e) {}
+})();
+</script>
+<link rel="stylesheet" href="/css/site.css?v=mvq6rx9v">
+
+<link rel="stylesheet" href="/css/essay.css?v=mvq6rx9v">
+</head>
+
+
+<body class="essay-app">
+
+<a class="skip-link" href="#es-main">Skip to content</a>
+<div class="es" data-nv>
+  <aside class="es-side" id="es-side" aria-label="Essays">
+    <div class="es-side__top">
+      <a class="es-brand" href="/game-essay/">
+        <img class="brand__mark brand__mark--light" src="/brand/fffeiya-mark.png" alt="" width="22" height="20">
+        <img class="brand__mark brand__mark--dark" src="/brand/fffeiya-mark-dark.png" alt="" width="22" height="20">
+        <span>Game Essays</span>
+      </a>
+      <button class="es-icon-btn es-close" type="button" data-nv-close aria-label="Close sidebar">
+        <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 5l10 10M15 5L5 15" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+
+    <nav class="es-nav" aria-label="Collection">
+      <a class="es-nav__item" href="/game-essay/">
+        <svg width="16" height="16" viewBox="0 0 20 20" aria-hidden="true"><rect x="3" y="3" width="6" height="6" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="11" y="3" width="6" height="6" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="3" y="11" width="6" height="6" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="11" y="11" width="6" height="6" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+        Overview
+      </a>
+
+      <p class="es-nav__label">GAMES 6320 · Game Engineering II</p>
+      <ol class="es-nav__list">
+        
+        <li><a href="/game-essay/assignment-01/index.html"><span class="es-nav__no">01</span><span class="es-nav__text">Graphics library, a second game project, the asset build</span></a></li>
+        
+        <li><a href="/game-essay/assignment-02/index.html"><span class="es-nav__no">02</span><span class="es-nav__text">Platform-independent mesh and effect interfaces</span></a></li>
+        
+        <li><a href="/game-essay/assignment-03/index.html"><span class="es-nav__no">03</span><span class="es-nav__text">Removing per-platform Graphics files; index buffers</span></a></li>
+        
+        <li><a href="/game-essay/assignment-04/index.html"><span class="es-nav__no">04</span><span class="es-nav__text">Reference-counted assets and render submission</span></a></li>
+        
+        <li><a href="/game-essay/assignment-05/index.html"><span class="es-nav__no">05</span><span class="es-nav__text">Cameras, game objects, platform-independent shaders</span></a></li>
+        
+        <li><a href="/game-essay/assignment-06/index.html"><span class="es-nav__no">06</span><span class="es-nav__text">A human-readable mesh format and a MeshBuilder</span></a></li>
+        
+        <li><a href="/game-essay/assignment-07/index.html"><span class="es-nav__no">07</span><span class="es-nav__text">A Maya exporter, depth buffering, vertex colors</span></a></li>
+        
+        <li><a href="/game-essay/assignment-08/index.html" class="is-active" aria-current="page"><span class="es-nav__no">08</span><span class="es-nav__text">Binary mesh files built by MeshBuilder</span></a></li>
+        
+      </ol>
+    </nav>
+
+    <div class="es-side__foot">
+      <button class="es-side__theme" type="button" data-theme-toggle aria-label="切换深色 / 浅色模式">
+        <span class="theme-toggle__dot" aria-hidden="true"></span><span data-theme-label>Dark</span>
+      </button>
+      <a class="es-side__home" href="/">杨飞洋 Feiya Yang ↗</a>
+    </div>
+  </aside>
+  <div class="es-scrim" data-nv-close></div>
+
+  <div class="es-main">
+    <header class="es-bar">
+      <button class="es-icon-btn es-open" type="button" data-nv-open aria-label="Open sidebar" aria-controls="es-side" aria-expanded="false">
+        <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M3.5 5.5h13M3.5 10h13M3.5 14.5h13" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+      </button>
+      <nav class="es-crumbs" aria-label="Breadcrumb">
+        <a href="/">Feiya Yang</a><span aria-hidden="true">/</span><a href="/game-essay/">Game Essays</a><span aria-hidden="true">/</span><span aria-current="page">Assignment 08</span>
+      </nav>
+    </header>
+    <main id="es-main" class="es-content">
+      
+<div class="es-doc">
+  <article class="es-article">
+    <header class="es-head">
+      <p class="es-eyebrow">GAMES 6320 · Assignment 08</p>
+      <h1 class="es-head__title">Binary mesh files built by MeshBuilder</h1>
+      <p class="es-head__lead">MeshBuilder now writes binary mesh files, and the game loads them with four extractions and no parsing.</p>
+      <p class="es-head__meta"><time datetime="2026-10-25T04:50:00.000Z">2026.10.24</time><span>14 min read</span><span>C++ · Direct3D · OpenGL</span></p>
+    </header>
+
+    <div class="prose es-prose"><p><strong>Course:</strong> GAMES 6320-001 — Game Engineering II (Fall 2026)</p>
+<blockquote>
+<p><strong>Download (one click, ZIP):</strong> <a href="/files/MyGame_Assignment08_Release_x64.zip">MyGame_Assignment08_Release_x64.zip</a></p>
+<p>The ZIP contains a <strong>Direct3D Release</strong> build (<code>x64</code>). Unzip it and run <code>MyGame.exe</code>.</p>
+<p><strong>Controls:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Arrow keys</td>
+<td>Move the sphere left &#x2F; right &#x2F; up &#x2F; down</td>
+</tr>
+<tr>
+<td><code>Space</code> (hold)</td>
+<td>The sphere becomes a cone</td>
+</tr>
+<tr>
+<td><code>A</code> &#x2F; <code>D</code></td>
+<td>Move the camera left &#x2F; right</td>
+</tr>
+<tr>
+<td><code>W</code> &#x2F; <code>S</code></td>
+<td>Move the camera forward &#x2F; back</td>
+</tr>
+<tr>
+<td><code>Esc</code></td>
+<td>Exit</td>
+</tr>
+</tbody></table>
+</blockquote>
+<hr>
+<h2 id="1-What-the-assignment-was-about"><a href="#1-What-the-assignment-was-about" class="headerlink" title="1. What the assignment was about"></a>1. What the assignment was about</h2><p>For the last two assignments my meshes were stored as Lua files: easy for a person to read, easy<br>for Maya to write, and easy to diff in git. But the game read those files the same way, which<br>means that every time it started it ran a Lua interpreter over half a megabyte of text for a<br>sphere and converted every number from text to a <code>float</code>.</p>
+<p>This assignment separates the two jobs. The <strong>human-readable file stays the source asset</strong>, and<br>the <strong>asset build turns it into a binary file</strong> that is exactly the bytes the GPU wants:</p>
+<ul>
+<li><strong>MeshBuilder</strong> (a tool that runs at build time) now does all of the Lua reading. It writes the<br>vertex count, the index count, the vertex array and the index array straight from memory to the<br>built file: four writes, no loops.</li>
+<li><strong>The game</strong> loads the built file into memory with one call and finds the four pieces in it with<br>a little pointer arithmetic. There is no parsing and not a single loop in the mesh loading code.</li>
+</ul>
+<p>All the slow, forgiving work (parsing, validation, helpful error messages, converting the winding<br>order) happens once on my machine during the build. The game only does the fast part.</p>
+<p>I also did the small optional challenge of giving built meshes their own extension: source files are<br>still <code>.mesh</code>, built files are <code>.meshbin</code>, so it is obvious which kind of file you are looking at.</p>
+<hr>
+<h2 id="2-Screenshots-of-the-game"><a href="#2-Screenshots-of-the-game" class="headerlink" title="2. Screenshots of the game"></a>2. Screenshots of the game</h2><p>The game looks exactly like it did last week, which is the point: only the file format changed.</p>
+<p><img src="/images/assignment08/game_d3d.png" alt="The floor, the sphere and the torus (Direct3D)"></p>
+<p>Holding <code>Space</code> turns the sphere into the cone:</p>
+<p><img src="/images/assignment08/game_d3d_cone.png" alt="The cone (Direct3D)"></p>
+<p>The OpenGL build renders the same scene (the sphere’s color is animated over time, which is why<br>its shade is a little different in each screenshot):</p>
+<p><img src="/images/assignment08/game_gl.png" alt="The OpenGL build"></p>
+<hr>
+<h2 id="3-A-built-binary-mesh-file"><a href="#3-A-built-binary-mesh-file" class="headerlink" title="3. A built binary mesh file"></a>3. A built binary mesh file</h2><p>The easiest mesh to explain is the floor: a plane with <strong>4 vertices and 2 triangles (6 indices)</strong>.<br>This is a hex view of the built file <code>data/meshes/floor.meshbin</code> from the Direct3D build, with<br>the four parts outlined in different colors:</p>
+<p><img src="/images/assignment08/hex_floor_d3d.png" alt="Hex view of floor.meshbin with the four parts outlined"></p>
+<p>How to read it (all numbers are little-endian, so the low byte comes first):</p>
+<ul>
+<li><span style="color:#d62728"><strong>Red, bytes 0–1:</strong></span> <code>04 00</code> &#x3D; <strong>4</strong>, the number of vertices (<code>uint16_t</code>).</li>
+<li><span style="color:#1f77b4"><strong>Blue, bytes 2–3:</strong></span> <code>06 00</code> &#x3D; <strong>6</strong>, the number of indices (<code>uint16_t</code>).</li>
+<li><span style="color:#2ca02c"><strong>Green, bytes 4–67:</strong></span> the 4 vertices, 16 bytes each (the dashed lines mark where one<br>vertex ends and the next begins). Each vertex is three <code>float</code>s for the position followed by four<br>bytes of color. For example the first vertex is <code>00 00 80 C0</code> &#x3D; −4.0, <code>00 00 00 00</code> &#x3D; 0.0,<br><code>00 00 80 40</code> &#x3D; 4.0, then <code>33 73 40 FF</code> &#x3D; the color (51, 115, 64, 255), a dark green.</li>
+<li><span style="color:#ff7f0e"><strong>Orange, bytes 68–79:</strong></span> the 6 indices (<code>uint16_t</code>): 0, 2, 1 and 2, 3, 1.</li>
+</ul>
+<p>The whole file is 2 + 2 + 4 × 16 + 6 × 2 &#x3D; <strong>80 bytes</strong>. The human-readable <code>floor.mesh</code> that it<br>was built from is 1,599 bytes.</p>
+<h3 id="The-order-and-why"><a href="#The-order-and-why" class="headerlink" title="The order, and why"></a>The order, and why</h3><p>I chose: <strong>vertex count, index count, vertex array, index array.</strong></p>
+<ul>
+<li><strong>The counts have to come before the arrays.</strong> To find the index array the game has to know how<br>big the vertex array is, and that needs the vertex count. Putting a count after its array would<br>be one of the wrong orders: the game couldn’t find it without already knowing it.</li>
+<li><strong>Both counts first makes a tiny fixed-size header.</strong> The first 4 bytes are always the two<br>counts, so the game reads them and can check right away that the file is exactly<br><code>4 + 16 × vertexCount + 2 × indexCount</code> bytes long, before it looks at any of the array data.<br>A truncated or corrupt file is caught with a single comparison.</li>
+<li><strong>Everything ends up naturally aligned, for free.</strong> The loaded file starts at an address from<br><code>malloc()</code>, which is aligned for anything. The vertex array starts at offset 4, which is a<br>multiple of 4 (what <code>float</code>s need), and the index array starts at <code>4 + 16 × vertexCount</code>, which<br>is even (what <code>uint16_t</code>s need). With the other “count, array, count, array” order the vertex<br>array would start at offset 2, which is <em>not</em> a multiple of 4. On x86 that still works, but it<br>isn’t how the data is supposed to be laid out. I didn’t need any padding to get this.</li>
+</ul>
+<hr>
+<h2 id="4-Why-binary-files"><a href="#4-Why-binary-files" class="headerlink" title="4. Why binary files?"></a>4. Why binary files?</h2><p>The two big advantages:</p>
+<ol>
+<li><strong>They are much smaller.</strong> A <code>float</code> is always 4 bytes in binary, while in text “-0.4045085”<br>is 10 characters plus a name, an <code>=</code> sign, a comma and spaces. On top of that, the built file<br>only has the data the engine actually uses, while the source file also keeps normals, tangents and<br>texture coordinates for the future. Less data means less to read from disk (or download).</li>
+<li><strong>They are much faster to load.</strong> The bytes in the file are already in the exact layout the<br>engine and the GPU use. Loading is “read the file into memory, point at the right places”. There<br>is no tokenizing, no Lua tables, no text-to-number conversion and no per-vertex work at all.</li>
+</ol>
+<p>(A third, smaller one: the game doesn’t need a parser, so the Lua library and all the error handling<br>for badly written files aren’t needed for meshes at run time any more.)</p>
+<h2 id="5-Binary-vs-human-readable"><a href="#5-Binary-vs-human-readable" class="headerlink" title="5. Binary vs. human-readable"></a>5. Binary vs. human-readable</h2><table>
+<thead>
+<tr>
+<th></th>
+<th>Human-readable (Lua)</th>
+<th>Binary</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Size</td>
+<td>Large</td>
+<td>Small</td>
+</tr>
+<tr>
+<td>Load speed</td>
+<td>Slow (parse everything)</td>
+<td>Fast (no parsing)</td>
+</tr>
+<tr>
+<td>Can a person read or fix it?</td>
+<td>Yes, in any text editor</td>
+<td>Only with a hex editor and the layout in mind</td>
+</tr>
+<tr>
+<td>Useful diffs and merges in git</td>
+<td>Yes, line by line</td>
+<td>No, git sees “binary file changed”</td>
+</tr>
+<tr>
+<td>Good error messages</td>
+<td>Yes (file and line number)</td>
+<td>No, a bad byte is just a wrong number</td>
+</tr>
+<tr>
+<td>Survives engine changes</td>
+<td>Yes, it’s independent of how the engine stores data</td>
+<td>No, it must match the engine exactly</td>
+</tr>
+<tr>
+<td>Can differ per platform</td>
+<td>No need</td>
+<td>Yes, can be tuned for each platform</td>
+</tr>
+</tbody></table>
+<p>That is why we use both, each where its advantages matter:</p>
+<ul>
+<li><strong>Source control stores the human-readable files.</strong> That’s where people work with the data:<br>reviewing changes, merging two people’s edits, fixing something by hand, finding out why a model<br>looks wrong. Those files are also the <em>real</em> source of truth: if I change the binary format next<br>week (say, add normals or 32-bit indices), I just rebuild, and every mesh comes out in the new<br>format. If only binary files were stored, changing the format would mean converting every one of<br>them by hand, or losing them.</li>
+<li><strong>The game uses binary files.</strong> The player never reads a mesh file, so readability is worth<br>nothing at run time, while size and speed matter every time the game starts. The binary files<br>are <em>generated</em> from the source files, so they don’t belong in source control at all (like<br><code>.obj</code> or <code>.exe</code> files); they are rebuilt whenever they’re needed.</li>
+</ul>
+<p>The asset build is the bridge: it is the one place that pays the price of parsing, and it pays it<br>on the developer’s machine, once, instead of on every player’s machine, every time.</p>
+<hr>
+<h2 id="6-Are-the-built-files-the-same-for-Direct3D-and-OpenGL"><a href="#6-Are-the-built-files-the-same-for-Direct3D-and-OpenGL" class="headerlink" title="6. Are the built files the same for Direct3D and OpenGL?"></a>6. Are the built files the same for Direct3D and OpenGL?</h2><p><strong>No. They differ in exactly one way: the order of the indices inside each triangle.</strong></p>
+<p>Here is the OpenGL build of the same floor:</p>
+<p><img src="/images/assignment08/hex_floor_gl.png" alt="Hex view of the OpenGL floor.meshbin"></p>
+<p>The first 68 bytes (the counts and all four vertices) are identical. Only the orange index array<br>is different:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Triangle 1</th>
+<th>Triangle 2</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Direct3D build</td>
+<td>0, 2, 1</td>
+<td>2, 3, 1</td>
+</tr>
+<tr>
+<td>OpenGL build</td>
+<td>0, 1, 2</td>
+<td>2, 1, 3</td>
+</tr>
+</tbody></table>
+<p>The human-readable file lists every triangle <strong>counter-clockwise</strong> (right-handed), which is what<br>OpenGL expects of a front face, and is also what Maya uses. Direct3D expects front faces to be<br><strong>clockwise</strong> (left-handed). Until now the game swapped the second and third index of every<br>triangle at run time on Direct3D. That was a loop over every triangle, and this assignment doesn’t<br>allow any loops in the loading code. More importantly, it was work the game repeated every time<br>it started, although the answer is always the same. So MeshBuilder now does the swap when it builds<br>the Direct3D version, and the game hands the indices to the GPU as they are:</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><code class="hljs cpp"><span class="hljs-comment">// The source file uses right-handed winding order (like OpenGL).</span><br><span class="hljs-comment">// Direct3D uses left-handed winding order, and so the order of each triangle&#x27;s indices is reversed here</span><br><span class="hljs-comment">// so that the game can give the built indices to the GPU without changing them.</span><br><span class="hljs-meta">#<span class="hljs-keyword">if</span> defined( EAE6320_PLATFORM_D3D )</span><br>	<span class="hljs-keyword">for</span> ( <span class="hljs-type">size_t</span> i = <span class="hljs-number">0</span>; i &lt; indices.<span class="hljs-built_in">size</span>(); i += <span class="hljs-number">3</span> )<br>	&#123;<br>		std::<span class="hljs-built_in">swap</span>( indices[i + <span class="hljs-number">1</span>], indices[i + <span class="hljs-number">2</span>] );<br>	&#125;<br><span class="hljs-meta">#<span class="hljs-keyword">endif</span></span><br></code></pre></td></tr></table></figure>
+
+<p>MeshBuilder is compiled once per platform (<code>x64</code> is Direct3D and <code>x86</code> is OpenGL in my solution),<br>so the <code>#if</code> picks the right behavior for the game it builds assets for.</p>
+<p>Everything else is identical on purpose. The vertex layout (<code>sVertex_mesh</code>: 3 <code>float</code>s + 4<br><code>uint8_t</code>s &#x3D; 16 bytes) is the same on both platforms, both run on little-endian x86 CPUs, and I<br>always write the counts and indices with explicit sizes (<code>uint16_t</code>) rather than <code>int</code> or <code>size_t</code>,<br>whose sizes depend on the platform. This is also why the binary files are a <em>build</em> product: it is<br>normal for built assets to be platform-specific (my shaders already are), while the source asset<br>is shared.</p>
+<hr>
+<h2 id="7-Extracting-the-four-pieces-at-run-time"><a href="#7-Extracting-the-four-pieces-at-run-time" class="headerlink" title="7. Extracting the four pieces at run time"></a>7. Extracting the four pieces at run time</h2><p>The game loads the whole file with <code>Platform::LoadBinaryFile()</code> and then extracts the four pieces.<br>This is the actual function (with its two error checks kept, because they show the idea of the<br>header nicely):</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">auto</span> currentOffset = <span class="hljs-built_in">reinterpret_cast</span>&lt;<span class="hljs-type">uintptr_t</span>&gt;( i_dataFromFile.data );<br><span class="hljs-type">const</span> <span class="hljs-keyword">auto</span> finalOffset = currentOffset + i_dataFromFile.size;<br><br><span class="hljs-type">uint16_t</span> vertexCount = <span class="hljs-number">0</span>;<br><span class="hljs-type">uint16_t</span> indexCount = <span class="hljs-number">0</span>;<br><span class="hljs-keyword">if</span> ( ( currentOffset + <span class="hljs-built_in">sizeof</span>( vertexCount ) + <span class="hljs-built_in">sizeof</span>( indexCount ) ) &gt; finalOffset )<br>&#123;<br>	<span class="hljs-comment">// ...the file is too small to contain the counts</span><br>	<span class="hljs-keyword">return</span> eae6320::Results::InvalidFile;<br>&#125;<br><span class="hljs-built_in">memcpy</span>( &amp;vertexCount, <span class="hljs-built_in">reinterpret_cast</span>&lt;<span class="hljs-type">const</span> <span class="hljs-type">void</span>*&gt;( currentOffset ), <span class="hljs-built_in">sizeof</span>( vertexCount ) );<br>currentOffset += <span class="hljs-built_in">sizeof</span>( vertexCount );<br><span class="hljs-built_in">memcpy</span>( &amp;indexCount, <span class="hljs-built_in">reinterpret_cast</span>&lt;<span class="hljs-type">const</span> <span class="hljs-type">void</span>*&gt;( currentOffset ), <span class="hljs-built_in">sizeof</span>( indexCount ) );<br>currentOffset += <span class="hljs-built_in">sizeof</span>( indexCount );<br><br><span class="hljs-type">const</span> <span class="hljs-keyword">auto</span> vertexArraySize = <span class="hljs-built_in">sizeof</span>( eae6320::Graphics::VertexFormats::sVertex_mesh ) * vertexCount;<br><span class="hljs-type">const</span> <span class="hljs-keyword">auto</span> indexArraySize = <span class="hljs-built_in">sizeof</span>( <span class="hljs-type">uint16_t</span> ) * indexCount;<br><span class="hljs-keyword">if</span> ( ( currentOffset + vertexArraySize + indexArraySize ) != finalOffset )<br>&#123;<br>	<span class="hljs-comment">// ...the file size doesn&#x27;t match the counts</span><br>	<span class="hljs-keyword">return</span> eae6320::Results::InvalidFile;<br>&#125;<br>o_meshData.vertexCount = vertexCount;<br>o_meshData.indexCount = indexCount;<br>o_meshData.vertexData = <span class="hljs-built_in">reinterpret_cast</span>&lt;<span class="hljs-type">const</span> eae6320::Graphics::VertexFormats::sVertex_mesh*&gt;( currentOffset );<br>currentOffset += vertexArraySize;<br>o_meshData.indexData = <span class="hljs-built_in">reinterpret_cast</span>&lt;<span class="hljs-type">const</span> <span class="hljs-type">uint16_t</span>*&gt;( currentOffset );<br></code></pre></td></tr></table></figure>
+
+<p>Four extractions, no loops. The counts are copied out with <code>memcpy()</code> (the standards-compliant way<br>to read a value from an arbitrary address), and the two arrays aren’t copied at all: the mesh data<br>just points into the loaded file. That memory only has to live until the vertex and index buffers<br>have been created on the GPU, which happens inside <code>cMesh::Load()</code> while the file data is still in<br>scope.</p>
+<p>For comparison, the writing side in MeshBuilder is the mirror image, four writes of whole blocks:</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><code class="hljs cpp">outputFile.<span class="hljs-built_in">write</span>( <span class="hljs-built_in">reinterpret_cast</span>&lt;<span class="hljs-type">const</span> <span class="hljs-type">char</span>*&gt;( &amp;vertexCount ), <span class="hljs-built_in">sizeof</span>( vertexCount ) );<br>outputFile.<span class="hljs-built_in">write</span>( <span class="hljs-built_in">reinterpret_cast</span>&lt;<span class="hljs-type">const</span> <span class="hljs-type">char</span>*&gt;( &amp;indexCount ), <span class="hljs-built_in">sizeof</span>( indexCount ) );<br>outputFile.<span class="hljs-built_in">write</span>( <span class="hljs-built_in">reinterpret_cast</span>&lt;<span class="hljs-type">const</span> <span class="hljs-type">char</span>*&gt;( i_vertices.<span class="hljs-built_in">data</span>() ),<br>	<span class="hljs-built_in">static_cast</span>&lt;std::streamsize&gt;( <span class="hljs-built_in">sizeof</span>( i_vertices[<span class="hljs-number">0</span>] ) * vertexCount ) );<br>outputFile.<span class="hljs-built_in">write</span>( <span class="hljs-built_in">reinterpret_cast</span>&lt;<span class="hljs-type">const</span> <span class="hljs-type">char</span>*&gt;( i_indices.<span class="hljs-built_in">data</span>() ),<br>	<span class="hljs-built_in">static_cast</span>&lt;std::streamsize&gt;( <span class="hljs-built_in">sizeof</span>( i_indices[<span class="hljs-number">0</span>] ) * indexCount ) );<br></code></pre></td></tr></table></figure>
+
+<h3 id="How-MeshBuilder-is-organized"><a href="#How-MeshBuilder-is-organized" class="headerlink" title="How MeshBuilder is organized"></a>How MeshBuilder is organized</h3><p>MeshBuilder is built around those four pieces of data. One self-contained part takes the path of<br>the Lua file and produces a <code>std::vector</code> of vertices and a <code>std::vector</code> of indices; that is<br>essentially last week’s loader moved out of the game. Then the Direct3D winding swap, and then a<br>function that writes the four pieces and doesn’t care where they came from. If I ever want to read<br>a different source format, only the first part changes.</p>
+<p>The error handling changed along with the move. In the game, errors went to the log file; in<br>MeshBuilder they go through <code>OutputErrorMessageWithFileInfo()</code>, which formats them the way Visual<br>Studio expects, so they show up in the <strong>Error List</strong> and double-clicking one opens the mesh file.<br>Typing <code>sdf</code> into <code>floor.mesh</code> now fails the build with:</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><code class="hljs text">...\MyGame_\Content\meshes/floor.mesh(10): error : attempt to call a nil value (global &#x27;sdf&#x27;)<br></code></pre></td></tr></table></figure>
+
+<p>The engine’s Lua library already puts the line number into its messages, so MeshBuilder picks it<br>out and passes it on as the line number. Visual Studio then jumps straight to line 10. Other problems are<br>reported the same way (with the file), for example “Triangle 3 refers to a vertex that doesn’t<br>exist (every index must be an integer from 0 to 3)” or “The mesh has 70000 vertices, but a mesh<br>can’t have more than 65535”.</p>
+<p>That last limit changed slightly: last week a mesh could have 65,536 vertices (every value a<br><code>uint16_t</code> index can hold). Now the <em>count</em> is also a <code>uint16_t</code>, and it can only go up to 65,535,<br>so that is the new maximum, for vertices and for indices.</p>
+<hr>
+<h2 id="8-Measuring-the-difference-with-a-big-helix"><a href="#8-Measuring-the-difference-with-a-big-helix" class="headerlink" title="8. Measuring the difference with a big helix"></a>8. Measuring the difference with a big helix</h2><p>To see the advantages with real numbers I made a <strong>helix</strong> in Maya: 5 coils, 109 subdivisions per<br>coil and 20 sides. That gives 21,836 triangles &#x3D; <strong>65,508 indices</strong>, which is as close to the<br>65,535 limit of a <code>uint16_t</code> index count as I could get with a helix (the triangle count has to<br>be even, and it depends on the coil and side counts). I exported it with my exporter from last week. It<br>turned out the exporter makes one vertex for every triangle corner on this shape, so it also has<br><strong>65,508 vertices</strong>. Both counts are just under their limit. I didn’t commit the helix; it was only<br>in the project for the measurements.</p>
+<p>All timings were done on a <strong>Release</strong> build (<code>x64</code>, Direct3D) with the <code>Time</code> functions, in<br>milliseconds, and repeated five times:</p>
+<ul>
+<li><strong>Human-readable:</strong> timing code in MeshBuilder, from just before the Lua file is loaded until<br>just before the binary file is written (loading, running and reading every vertex and triangle<br>out of the Lua tables).</li>
+<li><strong>Binary:</strong> timing code in <code>cMesh::Load()</code>, from just before <code>LoadBinaryFile()</code> until the four<br>pieces have been extracted, written to the log file. I started <code>MyGame.exe</code> directly from its<br>folder (not from Visual Studio), so no debugger was attached.</li>
+</ul>
+<p>The timing code was temporary and has been removed again.</p>
+<h3 id="Size-on-disk"><a href="#Size-on-disk" class="headerlink" title="Size on disk"></a>Size on disk</h3><table>
+<thead>
+<tr>
+<th>File</th>
+<th align="right">Size</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>helix.mesh</code> (human-readable)</td>
+<td align="right"><strong>23,960,033 bytes</strong> (about 24 MB)</td>
+</tr>
+<tr>
+<td><code>helix.meshbin</code> (binary)</td>
+<td align="right"><strong>1,179,148 bytes</strong> (about 1.2 MB)</td>
+</tr>
+</tbody></table>
+<p>The binary file is exactly 4 + 65,508 × 16 + 65,508 × 2 &#x3D; 1,179,148 bytes, as predicted, and it is<br><strong>about 20 times smaller</strong>. The human-readable file needs about 366 bytes per vertex; the binary one<br>needs 18 (16 for the vertex and 2 for its index).</p>
+<h3 id="Load-time"><a href="#Load-time" class="headerlink" title="Load time"></a>Load time</h3><table>
+<thead>
+<tr>
+<th>Run</th>
+<th align="right">Human-readable (MeshBuilder)</th>
+<th align="right">Binary (game)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td align="right">427.8 ms</td>
+<td align="right">0.476 ms</td>
+</tr>
+<tr>
+<td>2</td>
+<td align="right">420.8 ms</td>
+<td align="right">0.496 ms</td>
+</tr>
+<tr>
+<td>3</td>
+<td align="right">446.1 ms</td>
+<td align="right">0.469 ms</td>
+</tr>
+<tr>
+<td>4</td>
+<td align="right">448.8 ms</td>
+<td align="right">0.487 ms</td>
+</tr>
+<tr>
+<td>5</td>
+<td align="right">454.5 ms</td>
+<td align="right">0.550 ms</td>
+</tr>
+<tr>
+<td><strong>Median</strong></td>
+<td align="right"><strong>446.1 ms</strong></td>
+<td align="right"><strong>0.487 ms</strong></td>
+</tr>
+</tbody></table>
+<p>Loading the binary file is <strong>about 900 times faster</strong>.</p>
+<h3 id="What-the-numbers-mean"><a href="#What-the-numbers-mean" class="headerlink" title="What the numbers mean"></a>What the numbers mean</h3><p>The size difference shows up in the zipped game (smaller download), on disk and in how much data has<br>to be read when the game starts. It’s 20× here partly because text is bulky and partly because the<br>source file keeps data the engine doesn’t use yet. Both are fine for a source file and a waste for<br>the game.</p>
+<p>The speed difference is much larger than the size difference, and that is the interesting part: the<br>binary file is not 900 times faster because it is smaller. It is faster because there is <strong>no work to<br>do</strong>. Reading 1.2 MB into memory is close to free on a modern PC; what took almost half a second<br>for the Lua file was running it, building tables for 65,508 vertices and 21,836 triangles, and<br>looking up and converting every value one by one. The binary version does none of that. It costs<br>two <code>memcpy()</code>s of two bytes each and some pointer arithmetic, no matter how big the mesh is.</p>
+<p>To put half a second into perspective: a game running at 60 frames per second has about 16.7 ms per<br>frame. Parsing this one helix at load time would take as long as about 27 frames, while loading the<br>binary file fits into a frame 34 times over. A real level has hundreds of meshes, and loading<br>screens (or streaming meshes in while the player moves through the world) are exactly where this<br>matters. And all of that cost is now paid once, by the asset build on my machine, instead of every<br>time the game starts on every player’s machine.</p>
+<p>(Both measurements were taken with the file already in the operating system’s file cache, because<br>it had just been built or loaded. A cold read from a disk would add time to both, more to the 24 MB<br>file than to the 1.2 MB one.)</p>
+<hr>
+<h2 id="9-Build-test"><a href="#9-Build-test" class="headerlink" title="9. Build &#x2F; test"></a>9. Build &#x2F; test</h2><p>All four configurations (Debug&#x2F;Release × <code>x64</code>&#x2F;<code>x86</code>) build from scratch without errors or<br>warnings, and both platforms render the same scene. Building only the game project and running it<br>shows the “Initialization failed” message and exits; after building only <code>BuildMyGameAssets</code> the<br>game runs. Adding a typo like <code>sdf</code> to a mesh file makes the asset build fail with the error in the<br>Error List, as shown above.</p>
+<hr>
+<h2 id="10-Reflection"><a href="#10-Reflection" class="headerlink" title="10. Reflection"></a>10. Reflection</h2><p>The nicest part was how little the game’s code became. <code>cMesh::Load()</code> used to contain a whole Lua<br>reader with seven helper functions; now it is “load the file, extract four things, create the<br>buffers”. Because the reader was written as a separate piece last week (path in, vertices and<br>indices out), moving it into MeshBuilder was mostly a matter of changing where errors are reported.</p>
+<p>The decision I thought about most was the winding order. Converting at build time makes the<br>Direct3D and OpenGL files different. At first I didn’t like that, because one file for both<br>platforms is simpler. But the game was redoing the same conversion on every start, and shaders are<br>already built per platform. Once I thought of the built files as “data prepared for one specific<br>platform”, having them differ made sense.</p>
+<p>Something I hadn’t expected: my first attempt at turning Lua’s error messages into Visual Studio<br>errors didn’t find the line number at all, because the engine’s Lua library formats its messages<br>as <code>file(line) : error:</code> instead of the usual <code>file:line:</code>. Testing the <code>sdf</code> case in a real build,<br>instead of assuming it worked, is what caught it.</p>
+<p>The helix measurement also changed how I think about “loading”. I had expected binary to be faster<br>mostly because the file is smaller, but the size only explains a factor of 20. The other factor of<br>about 45 is simply not doing work.</p>
+<p>What I would do next, or in a real game:</p>
+<ul>
+<li><strong>Add the data the engine will need soon</strong> (normals for lighting, texture coordinates) to the binary<br>vertex format. The source files already contain it, so it’s just a rebuild.</li>
+<li><strong>Support 32-bit indices</strong> for meshes that need them, while still using 16-bit indices for<br>everything else, since most meshes are small.</li>
+<li><strong>Add a small header with a version number</strong> (and maybe a magic number) to the binary file, so that<br>the game could recognize a file from an older build instead of misreading it. With the asset build<br>always rebuilding everything this hasn’t been a problem yet, but it would be in a game that patches<br>files.</li>
+</ul>
+</div>
+
+    <nav class="es-pager" aria-label="Other assignments">
+      <a class="es-pager__link" href="/game-essay/assignment-07/index.html"><span class="es-pager__dir">← Previous · 07</span><span class="es-pager__title">A Maya exporter, depth buffering, vertex colors</span></a>
+      
+    </nav>
+  </article>
+
+  <aside class="es-aside">
+    
+    <nav class="toc es-toc" aria-label="On this page">
+      <p class="es-aside__label">On this page</p>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-What-the-assignment-was-about"><span class="toc-text">1. What the assignment was about</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-Screenshots-of-the-game"><span class="toc-text">2. Screenshots of the game</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-A-built-binary-mesh-file"><span class="toc-text">3. A built binary mesh file</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-Why-binary-files"><span class="toc-text">4. Why binary files?</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-Binary-vs-human-readable"><span class="toc-text">5. Binary vs. human-readable</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-Are-the-built-files-the-same-for-Direct3D-and-OpenGL"><span class="toc-text">6. Are the built files the same for Direct3D and OpenGL?</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-Extracting-the-four-pieces-at-run-time"><span class="toc-text">7. Extracting the four pieces at run time</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-Measuring-the-difference-with-a-big-helix"><span class="toc-text">8. Measuring the difference with a big helix</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-Build-test"><span class="toc-text">9. Build &#x2F; test</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10-Reflection"><span class="toc-text">10. Reflection</span></a></li></ol>
+    </nav>
+    
+  </aside>
+</div>
+
+    </main>
+  </div>
+</div>
+
+<script src="/js/site.js?v=mvq6rx9v" defer></script>
+<script src="/js/novel.js?v=mvq6rx9v" defer></script>
+</body>
+
+</html>
