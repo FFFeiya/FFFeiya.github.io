@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="build" content="mvqfe28f">
+<title>Game Engineering II - Engine System Proposal — 杨飞洋 Feiya Yang</title>
+<meta name="description" content="A static library for finite state machines in game AI: states, transitions and conditions in Lua, a builder that makes binary files, and a small run-time API.">
+<meta name="author" content="杨飞洋 Feiya Yang">
+<link rel="canonical" href="https://fffeiya.github.io/game-essay/engine-system-proposal/">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="杨飞洋 Feiya Yang">
+<meta property="og:title" content="Game Engineering II - Engine System Proposal">
+<meta property="og:description" content="A static library for finite state machines in game AI: states, transitions and conditions in Lua, a builder that makes binary files, and a small run-time API.">
+<meta property="og:url" content="https://fffeiya.github.io/game-essay/engine-system-proposal/">
+<meta property="og:image" content="https://fffeiya.github.io/images/engine-system/guard_fsm.svg">
+<meta property="og:locale" content="zh_CN">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#fbfbf9" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0e0e0d" media="(prefers-color-scheme: dark)">
+<link rel="icon" type="image/png" href="/brand/favicon.png">
+<link rel="preload" href="/fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<script>
+(function () {
+  try {
+    var t = localStorage.getItem('theme');
+    if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+  } catch (e) {}
+})();
+</script>
+<link rel="stylesheet" href="/css/site.css?v=mvqfe28f">
+
+<link rel="stylesheet" href="/css/essay.css?v=mvqfe28f">
+</head>
+
+
+<body class="essay-app">
+
+<a class="skip-link" href="#es-main">Skip to content</a>
+<div class="es" data-nv>
+  <aside class="es-side" id="es-side" aria-label="Essays">
+    <div class="es-side__top">
+      <a class="es-brand" href="/game-essay/">
+        <img class="brand__mark brand__mark--light" src="/brand/fffeiya-mark.png" alt="" width="22" height="20">
+        <img class="brand__mark brand__mark--dark" src="/brand/fffeiya-mark-dark.png" alt="" width="22" height="20">
+        <span>Game Essays</span>
+      </a>
+      <button class="es-icon-btn es-close" type="button" data-nv-close aria-label="Close sidebar">
+        <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 5l10 10M15 5L5 15" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+
+    <nav class="es-nav" aria-label="Collection">
+      <a class="es-nav__item" href="/game-essay/">
+        <svg width="16" height="16" viewBox="0 0 20 20" aria-hidden="true"><rect x="3" y="3" width="6" height="6" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="11" y="3" width="6" height="6" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="3" y="11" width="6" height="6" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="11" y="11" width="6" height="6" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+        Overview
+      </a>
+
+      <p class="es-nav__label">GAMES 6320 · Game Engineering II</p>
+      <ol class="es-nav__list">
+        
+        <li><a href="/game-essay/assignment-01/index.html"><span class="es-nav__no">01</span><span class="es-nav__text">Graphics library, a second game project, the asset build</span></a></li>
+        
+        <li><a href="/game-essay/assignment-02/index.html"><span class="es-nav__no">02</span><span class="es-nav__text">Platform-independent mesh and effect interfaces</span></a></li>
+        
+        <li><a href="/game-essay/assignment-03/index.html"><span class="es-nav__no">03</span><span class="es-nav__text">Removing per-platform Graphics files; index buffers</span></a></li>
+        
+        <li><a href="/game-essay/assignment-04/index.html"><span class="es-nav__no">04</span><span class="es-nav__text">Reference-counted assets and render submission</span></a></li>
+        
+        <li><a href="/game-essay/assignment-05/index.html"><span class="es-nav__no">05</span><span class="es-nav__text">Cameras, game objects, platform-independent shaders</span></a></li>
+        
+        <li><a href="/game-essay/assignment-06/index.html"><span class="es-nav__no">06</span><span class="es-nav__text">A human-readable mesh format and a MeshBuilder</span></a></li>
+        
+        <li><a href="/game-essay/assignment-07/index.html"><span class="es-nav__no">07</span><span class="es-nav__text">A Maya exporter, depth buffering, vertex colors</span></a></li>
+        
+        <li><a href="/game-essay/assignment-08/index.html"><span class="es-nav__no">08</span><span class="es-nav__text">Binary mesh files built by MeshBuilder</span></a></li>
+        
+        <li><a href="/game-essay/engine-system-proposal/index.html" class="is-active" aria-current="page"><span class="es-nav__no">ES</span><span class="es-nav__text">Engine System proposal: data-driven AI state machines</span></a></li>
+        
+      </ol>
+    </nav>
+
+    <div class="es-side__foot">
+      <button class="es-side__theme" type="button" data-theme-toggle aria-label="切换深色 / 浅色模式">
+        <span class="theme-toggle__dot" aria-hidden="true"></span><span data-theme-label>Dark</span>
+      </button>
+      <a class="es-side__home" href="/">杨飞洋 Feiya Yang ↗</a>
+    </div>
+  </aside>
+  <div class="es-scrim" data-nv-close></div>
+
+  <div class="es-main">
+    <header class="es-bar">
+      <button class="es-icon-btn es-open" type="button" data-nv-open aria-label="Open sidebar" aria-controls="es-side" aria-expanded="false">
+        <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M3.5 5.5h13M3.5 10h13M3.5 14.5h13" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+      </button>
+      <nav class="es-crumbs" aria-label="Breadcrumb">
+        <a href="/">Feiya Yang</a><span aria-hidden="true">/</span><a href="/game-essay/">Game Essays</a><span aria-hidden="true">/</span><span aria-current="page">Engine System Proposal</span>
+      </nav>
+    </header>
+    <main id="es-main" class="es-content">
+      
+<div class="es-doc">
+  <article class="es-article">
+    <header class="es-head">
+      <p class="es-eyebrow">GAMES 6320 · Engine System · Proposal</p>
+      <h1 class="es-head__title">Engine System proposal: data-driven AI state machines</h1>
+      <p class="es-head__lead">A static library for finite state machines in game AI: states, transitions and conditions in Lua, a builder that makes binary files, and a small run-time API.</p>
+      <p class="es-head__meta"><time datetime="2026-10-27T08:30:00.000Z">2026.10.27</time><span>6 min read</span><span>C++ · Direct3D · OpenGL</span></p>
+    </header>
+
+    <div class="prose es-prose"><p><strong>Course:</strong> GAMES 6320-001 — Game Engineering II (Fall 2026)</p>
+<h2 id="What-it-is"><a href="#What-it-is" class="headerlink" title="What it is"></a>What it is</h2><p>My engine system is a <strong>finite state machine (FSM) library for game AI</strong>.</p>
+<p>Most enemies and NPCs in small games end up as a hand-written <code>switch</code> on an enum:</p>
+<ul>
+<li>the guard is patrolling,</li>
+<li>it sees the player and starts chasing,</li>
+<li>it gets close enough and attacks,</li>
+<li>it loses the player and goes back.</li>
+</ul>
+<p>The logic for <em>when</em> to switch states gets mixed into the code for <em>what to do</em> in each state. Every change means recompiling and hunting through <code>if</code> statements.</p>
+<p>With my system, the shape of the behavior lives in a data file:</p>
+<ul>
+<li>which states exist;</li>
+<li>which transitions connect them;</li>
+<li>what conditions trigger each transition.</li>
+</ul>
+<p>The game code only does two things:</p>
+<ol>
+<li>It tells the state machine what the agent currently knows (distance to the player, can it see the player, how much health it has).</li>
+<li>It says what to do while the agent is in a given state.</li>
+</ol>
+<p>A designer (or you, wearing your designer hat) can then tune or add behavior in the Lua file and rebuild the assets without touching C++.</p>
+<p>I have written enemy AI like this by hand several times: in the AI for Games class and for the Martyr enemy in our studio game in Unreal. Every time, the transition logic was the part that got messy. That is the part I want to take out of the code.</p>
+<h2 id="Features"><a href="#Features" class="headerlink" title="Features"></a>Features</h2><ul>
+<li><strong>States and transitions written in Lua</strong>, in a human-readable <code>.fsm</code> file that follows the same rules as our <code>.mesh</code> files.</li>
+<li><strong>Named parameters.</strong> A machine declares float, bool and trigger parameters with default values. The game sets them each frame, for example <code>distanceToPlayer</code>, <code>canSeePlayer</code>, or a one-shot <code>wasHit</code> trigger.</li>
+<li><strong>Conditions on transitions.</strong><ul>
+<li>Comparisons of a parameter with a constant: <code>&lt;</code>, <code>&lt;=</code>, <code>&gt;</code>, <code>&gt;=</code>, <code>==</code>, <code>~=</code>.</li>
+<li>Several conditions on one transition all have to be true.</li>
+<li>A transition can also require a minimum time in the current state, e.g. “give up the chase after 3 seconds without seeing the player”.</li>
+</ul>
+</li>
+<li><strong>Transition priority.</strong> Transitions are checked in the order they are written, and the first one that passes wins. The result is deterministic and easy to reason about.</li>
+<li><strong>“Any state” transitions.</strong> These are checked from every state, for things like “health below 20 → Flee” or “wasHit → Stagger”, so the same transition doesn’t have to be copied into every state.</li>
+<li><strong>Enter &#x2F; update &#x2F; exit callbacks.</strong> The game registers functions per state, and the library calls them at the right time.</li>
+<li><strong>One definition, many agents.</strong> The built data (<code>cStateMachineDefinition</code>) is loaded once and shared, reference-counted like <code>cMesh</code> and <code>cEffect</code>. Each agent owns a small <code>cStateMachine</code> instance with its current state, timer and parameter values.</li>
+<li><strong>Build-time validation.</strong> The builder reports mistakes in the Visual Studio Error List, with the file and line where possible:<ul>
+<li>a transition to a state that doesn’t exist;</li>
+<li>an unknown parameter name;</li>
+<li>comparing a bool with <code>&lt;</code>;</li>
+<li>a missing initial state;</li>
+<li>duplicate names.</li>
+</ul>
+</li>
+<li><strong>Debug output.</strong> In Debug builds every state change can be logged with the agent’s name, the old and new state, and the transition that fired. Watching the log is often the fastest way to find out why an enemy is “stuck”.</li>
+</ul>
+<h2 id="How-you-would-use-it"><a href="#How-you-would-use-it" class="headerlink" title="How you would use it"></a>How you would use it</h2><h3 id="1-Write-a-data-file"><a href="#1-Write-a-data-file" class="headerlink" title="1. Write a data file"></a>1. Write a data file</h3><p><code>Content/StateMachines/guard.fsm</code>:</p>
+<figure class="highlight lua"><table><tr><td class="code"><pre><code class="hljs lua"><span class="hljs-keyword">return</span><br>&#123;<br>    initialState = <span class="hljs-string">&quot;Patrol&quot;</span>,<br><br>    parameters =<br>    &#123;<br>        &#123; name = <span class="hljs-string">&quot;distanceToPlayer&quot;</span>, <span class="hljs-built_in">type</span> = <span class="hljs-string">&quot;float&quot;</span>, default = <span class="hljs-number">1000.0</span> &#125;,<br>        &#123; name = <span class="hljs-string">&quot;canSeePlayer&quot;</span>,     <span class="hljs-built_in">type</span> = <span class="hljs-string">&quot;bool&quot;</span>,  default = <span class="hljs-literal">false</span> &#125;,<br>        &#123; name = <span class="hljs-string">&quot;health&quot;</span>,           <span class="hljs-built_in">type</span> = <span class="hljs-string">&quot;float&quot;</span>, default = <span class="hljs-number">100.0</span> &#125;,<br>        &#123; name = <span class="hljs-string">&quot;wasHit&quot;</span>,           <span class="hljs-built_in">type</span> = <span class="hljs-string">&quot;trigger&quot;</span> &#125;,<br>    &#125;,<br><br>    <span class="hljs-comment">-- Checked from every state, before the state&#x27;s own transitions</span><br>    anyState =<br>    &#123;<br>        &#123; to = <span class="hljs-string">&quot;Flee&quot;</span>, conditions = &#123; &#123; <span class="hljs-string">&quot;health&quot;</span>, <span class="hljs-string">&quot;&lt;&quot;</span>, <span class="hljs-number">20.0</span> &#125; &#125; &#125;,<br>    &#125;,<br><br>    states =<br>    &#123;<br>        Patrol =<br>        &#123;<br>            transitions =<br>            &#123;<br>                &#123; to = <span class="hljs-string">&quot;Chase&quot;</span>, conditions = &#123; &#123; <span class="hljs-string">&quot;canSeePlayer&quot;</span>, <span class="hljs-string">&quot;==&quot;</span>, <span class="hljs-literal">true</span> &#125; &#125; &#125;,<br>                &#123; to = <span class="hljs-string">&quot;Chase&quot;</span>, conditions = &#123; &#123; <span class="hljs-string">&quot;wasHit&quot;</span> &#125; &#125; &#125;,<br>            &#125;,<br>        &#125;,<br>        Chase =<br>        &#123;<br>            transitions =<br>            &#123;<br>                &#123; to = <span class="hljs-string">&quot;Attack&quot;</span>, conditions = &#123; &#123; <span class="hljs-string">&quot;distanceToPlayer&quot;</span>, <span class="hljs-string">&quot;&lt;&quot;</span>, <span class="hljs-number">2.0</span> &#125; &#125; &#125;,<br>                <span class="hljs-comment">-- Give up after 3 seconds without seeing the player</span><br>                &#123;<br>                    to = <span class="hljs-string">&quot;Patrol&quot;</span>,<br>                    conditions = &#123; &#123; <span class="hljs-string">&quot;canSeePlayer&quot;</span>, <span class="hljs-string">&quot;==&quot;</span>, <span class="hljs-literal">false</span> &#125; &#125;,<br>                    minimumTimeInState = <span class="hljs-number">3.0</span>,<br>                &#125;,<br>            &#125;,<br>        &#125;,<br>        Attack =<br>        &#123;<br>            transitions =<br>            &#123;<br>                &#123; to = <span class="hljs-string">&quot;Chase&quot;</span>, conditions = &#123; &#123; <span class="hljs-string">&quot;distanceToPlayer&quot;</span>, <span class="hljs-string">&quot;&gt;&quot;</span>, <span class="hljs-number">2.5</span> &#125; &#125; &#125;,<br>            &#125;,<br>        &#125;,<br>        Flee = &#123;&#125;,<br>    &#125;,<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>The same machine as a diagram:</p>
+<p><img src="/images/engine-system/guard_fsm.svg" alt="The guard state machine: Patrol, Chase, Attack and Flee"></p>
+<h3 id="2-Tell-the-build-system-about-it"><a href="#2-Tell-the-build-system-about-it" class="headerlink" title="2. Tell the build system about it"></a>2. Tell the build system about it</h3><p>Add the asset type to <code>AssetBuildFunctions.lua</code>, the same way <code>meshes</code> and <code>shaders</code> are registered:</p>
+<figure class="highlight lua"><table><tr><td class="code"><pre><code class="hljs lua">NewAssetTypeInfo( <span class="hljs-string">&quot;stateMachines&quot;</span>,<br>    &#123;<br>        GetBuilderRelativePath = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span></span><br>            <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;StateMachineBuilder.exe&quot;</span><br>        <span class="hljs-keyword">end</span><br>    &#125;<br>)<br></code></pre></td></tr></table></figure>
+
+<p>Then list your files in <code>AssetsToBuild.lua</code>:</p>
+<figure class="highlight lua"><table><tr><td class="code"><pre><code class="hljs lua">stateMachines =<br>&#123;<br>    <span class="hljs-string">&quot;StateMachines/guard.fsm&quot;</span>,<br>&#125;,<br></code></pre></td></tr></table></figure>
+
+<p>Your asset build project also needs a dependency on <code>StateMachineBuilder</code>, so that the builder gets built first. I will give exact steps for this in the README.</p>
+<h3 id="3-Use-it-in-the-game"><a href="#3-Use-it-in-the-game" class="headerlink" title="3. Use it in the game"></a>3. Use it in the game</h3><p>The public interface (namespace <code>eae6320::AI</code>, static library <code>Engine/StateMachine</code>) will look roughly like this:</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><code class="hljs cpp"><span class="hljs-comment">// Load the shared definition once (reference counted, like cMesh)</span><br>eae6320::AI::cStateMachineDefinition* guardDefinition = <span class="hljs-literal">nullptr</span>;<br>eae6320::AI::cStateMachineDefinition::<span class="hljs-built_in">Load</span>( <span class="hljs-string">&quot;data/statemachines/guard.fsm&quot;</span>, guardDefinition );<br><br><span class="hljs-comment">// Look up names once; use the small integer handles every frame</span><br><span class="hljs-type">const</span> <span class="hljs-keyword">auto</span> distanceParameter = guardDefinition-&gt;<span class="hljs-built_in">GetParameterHandle</span>( <span class="hljs-string">&quot;distanceToPlayer&quot;</span> );<br><span class="hljs-type">const</span> <span class="hljs-keyword">auto</span> canSeeParameter = guardDefinition-&gt;<span class="hljs-built_in">GetParameterHandle</span>( <span class="hljs-string">&quot;canSeePlayer&quot;</span> );<br><span class="hljs-type">const</span> <span class="hljs-keyword">auto</span> chaseState = guardDefinition-&gt;<span class="hljs-built_in">GetStateHandle</span>( <span class="hljs-string">&quot;Chase&quot;</span> );<br><br><span class="hljs-comment">// One instance per agent</span><br>eae6320::AI::cStateMachine guardBrain;<br>guardBrain.<span class="hljs-built_in">Initialize</span>( *guardDefinition, <span class="hljs-string">&quot;Guard 1&quot;</span> );   <span class="hljs-comment">// the name is only used for debug output</span><br>guardBrain.<span class="hljs-built_in">SetCallbacks</span>( chaseState, &#123; OnEnterChase, OnUpdateChase, OnExitChase &#125;, &amp;guardGameObject );<br><br><span class="hljs-comment">// In UpdateSimulationBasedOnTime():</span><br>guardBrain.<span class="hljs-built_in">SetFloat</span>( distanceParameter, <span class="hljs-built_in">DistanceBetween</span>( guard, player ) );<br>guardBrain.<span class="hljs-built_in">SetBool</span>( canSeeParameter, <span class="hljs-built_in">CanSee</span>( guard, player ) );<br>guardBrain.<span class="hljs-built_in">Update</span>( i_elapsedSecondCount_sinceLastUpdate );   <span class="hljs-comment">// evaluates transitions, calls callbacks</span><br><br><span class="hljs-keyword">if</span> ( guardBrain.<span class="hljs-built_in">GetCurrentState</span>() == chaseState ) &#123; <span class="hljs-comment">/* ... */</span> &#125;<br><span class="hljs-type">const</span> <span class="hljs-type">float</span> secondsInState = guardBrain.<span class="hljs-built_in">GetTimeInCurrentState</span>();<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>Callbacks</strong> are plain function pointers with a <code>void*</code> user-data pointer, so they work with any game object type without templates or virtual functions. The signature is <code>void (*)( cStateMachine&amp;, void* i_userData )</code>, and the update callback also gets the elapsed time.</li>
+<li><strong>Errors at load time</strong> come back as <code>cResult</code>, like everything else in the engine.</li>
+<li><strong>Run-time cost.</strong> Strings are only needed when you look up handles. At run time a state machine works on integer indices, and the definition is one contiguous block of memory.</li>
+</ul>
+<h2 id="What-I-expect-to-implement"><a href="#What-I-expect-to-implement" class="headerlink" title="What I expect to implement"></a>What I expect to implement</h2><p><strong>Run-time library (<code>Engine/StateMachine</code>):</strong></p>
+<ul>
+<li><code>cStateMachineDefinition</code>:<ul>
+<li>loads the binary file with <code>Platform::LoadBinaryFile()</code>;</li>
+<li>gets its arrays out with pointer offsets, the same way meshes do since Assignment 08 (no per-element loops);</li>
+<li>looks up names to handles;</li>
+<li>reference counting.</li>
+</ul>
+</li>
+<li><code>cStateMachine</code>:<ul>
+<li>parameter storage (floats, bools, triggers that reset after each <code>Update()</code>);</li>
+<li>transition evaluation in priority order, including the “any state” list;</li>
+<li>time-in-state tracking;</li>
+<li>enter &#x2F; update &#x2F; exit callbacks.</li>
+</ul>
+</li>
+<li>The platform-independent interface is in <code>.h</code> &#x2F; <code>.cpp</code> files. The only platform-specific code is a small <code>.win.cpp</code> for the debug output (<code>OutputDebugString</code>) in the Windows implementation, following the pattern of the Concurrency library.</li>
+</ul>
+<p><strong>Builder (<code>Tools/StateMachineBuilder</code>):</strong></p>
+<ul>
+<li>Reads the <code>.fsm</code> file with Lua, turns every state and parameter name into an index, and checks everything listed above.</li>
+<li>Writes a binary file:<ul>
+<li>a small header with counts;</li>
+<li>the parameter defaults;</li>
+<li>the states, each with the range of its transitions;</li>
+<li>the transitions, each with the range of its conditions;</li>
+<li>the conditions.</li>
+</ul>
+</li>
+<li>Also writes the names into a separate block, so that handles can be looked up and debug messages can print names.</li>
+</ul>
+<p><strong>Demo in MyGame:</strong></p>
+<ul>
+<li>An enemy with Patrol &#x2F; Chase &#x2F; Attack &#x2F; Flee states that reacts to the player object we already move with the arrow keys.</li>
+<li>Every state uses a different color or mesh, so you can see the state change on screen.</li>
+</ul>
+<p><strong>Documentation:</strong></p>
+<ul>
+<li>A README with the file format, the build setup and an API overview.</li>
+<li>Comments in the public headers.</li>
+</ul>
+<p><strong>Schedule:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Date</th>
+<th>Milestone</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Update #1 (Nov 3)</td>
+<td>File format final, builder working with validation, binary file loading into <code>cStateMachineDefinition</code>.</td>
+</tr>
+<tr>
+<td>Update #2 (Nov 10)</td>
+<td><code>cStateMachine</code> run time with callbacks and debug output; demo enemy in MyGame.</td>
+</tr>
+<tr>
+<td>Write-up (Nov 19)</td>
+<td>Cleanup, README, a second example machine, and support for anyone who wants to use it in their final project.</td>
+</tr>
+</tbody></table>
+<h2 id="Challenges-I-expect"><a href="#Challenges-I-expect" class="headerlink" title="Challenges I expect"></a>Challenges I expect</h2><ul>
+<li><strong>Making conditions expressive without a scripting language at run time.</strong> Running Lua at run time would make the conditions very flexible, but it goes against what we did this semester: Lua is for build time, and the run time loads binary data. A fixed set of comparisons, combined with AND, covers most of what game AI needs. OR is possible by writing two transitions to the same state. The difficult part is choosing a format that stays this simple and is still useful.</li>
+<li><strong>The binary layout.</strong> It has several variable-length arrays that refer to each other by index (states → transitions → conditions), plus the name strings. I want to load it without loops or per-element allocation, like the meshes. I’ll need to think about alignment, because the arrays mix 8-bit, 16-bit and 32-bit data.</li>
+<li><strong>An API that is pleasant to use from someone else’s game.</strong> My classmates’ games will have their own game-object classes. Function pointers plus <code>void*</code> user data keep the library independent from those classes, but it is easy to make that awkward to use. I’ll write the demo first, as a “user”, before I fix the interface.</li>
+<li><strong>Timing and determinism.</strong> <code>Update()</code> will be called from the fixed-rate simulation update, so transitions happen on simulation ticks and not on render frames. I need to define clearly when a transition that fires during <code>Update()</code> calls the exit and enter callbacks, and whether more than one transition can fire in a single tick (my plan is one per tick).</li>
+</ul>
+<h2 id="Stretch-goals"><a href="#Stretch-goals" class="headerlink" title="Stretch goals"></a>Stretch goals</h2><ul>
+<li><strong>Hierarchical states:</strong> a state can contain its own sub-machine, e.g. Combat &#x3D; { Approach, Strafe, Attack }, so that shared transitions like “lost the player” don’t need to be repeated.</li>
+<li><strong>Weighted random transitions,</strong> for idle variety (e.g. 70% LookAround, 30% Wander).</li>
+<li><strong>Event messages:</strong> one agent sends a named event to another agent’s state machine (an alarm that alerts every guard in a room).</li>
+<li><strong>Hot reload</strong> of <code>.fsm</code> files while the game is running, in Debug builds.</li>
+<li><strong>A Graphviz export</strong> in the builder, which draws the machine as a diagram. This would be nice to put in the README and the write-up.</li>
+</ul>
+</div>
+
+    <nav class="es-pager" aria-label="Other assignments">
+      <a class="es-pager__link" href="/game-essay/assignment-08/index.html"><span class="es-pager__dir">← Previous · 08</span><span class="es-pager__title">Binary mesh files built by MeshBuilder</span></a>
+      
+    </nav>
+  </article>
+
+  <aside class="es-aside">
+    
+    <nav class="toc es-toc" aria-label="On this page">
+      <p class="es-aside__label">On this page</p>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#What-it-is"><span class="toc-text">What it is</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Features"><span class="toc-text">Features</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#How-you-would-use-it"><span class="toc-text">How you would use it</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#What-I-expect-to-implement"><span class="toc-text">What I expect to implement</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Challenges-I-expect"><span class="toc-text">Challenges I expect</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Stretch-goals"><span class="toc-text">Stretch goals</span></a></li></ol>
+    </nav>
+    
+  </aside>
+</div>
+
+    </main>
+  </div>
+</div>
+
+<script src="/js/site.js?v=mvqfe28f" defer></script>
+<script src="/js/novel.js?v=mvqfe28f" defer></script>
+</body>
+
+</html>
