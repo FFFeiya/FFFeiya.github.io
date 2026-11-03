@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="build" content="mw0hk6va">
+<title>Game Engineering II - Engine System Update #1 — 杨飞洋 Feiya Yang</title>
+<meta name="description" content="The state machine file format is final, the builder checks it and reports errors with line numbers, and the game loads the binary file into a shared definition.">
+<meta name="author" content="杨飞洋 Feiya Yang">
+<link rel="canonical" href="https://fffeiya.github.io/game-essay/engine-system-update-1/">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="杨飞洋 Feiya Yang">
+<meta property="og:title" content="Game Engineering II - Engine System Update #1">
+<meta property="og:description" content="The state machine file format is final, the builder checks it and reports errors with line numbers, and the game loads the binary file into a shared definition.">
+<meta property="og:url" content="https://fffeiya.github.io/game-essay/engine-system-update-1/">
+<meta property="og:image" content="https://fffeiya.github.io/images/engine-system-update-1/guard_hex.png">
+<meta property="og:locale" content="zh_CN">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#fbfbf9" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0e0e0d" media="(prefers-color-scheme: dark)">
+<link rel="icon" type="image/png" href="/brand/favicon.png">
+<link rel="preload" href="/fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<script>
+(function () {
+  try {
+    var t = localStorage.getItem('theme');
+    if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+  } catch (e) {}
+})();
+</script>
+<link rel="stylesheet" href="/css/site.css?v=mw0hk6va">
+
+<link rel="stylesheet" href="/css/essay.css?v=mw0hk6va">
+</head>
+
+
+<body class="essay-app">
+
+<a class="skip-link" href="#es-main">Skip to content</a>
+<div class="es" data-nv>
+  <aside class="es-side" id="es-side" aria-label="Essays">
+    <div class="es-side__top">
+      <a class="es-brand" href="/game-essay/">
+        <img class="brand__mark brand__mark--light" src="/brand/fffeiya-mark.png" alt="" width="22" height="20">
+        <img class="brand__mark brand__mark--dark" src="/brand/fffeiya-mark-dark.png" alt="" width="22" height="20">
+        <span>Game Essays</span>
+      </a>
+      <button class="es-icon-btn es-close" type="button" data-nv-close aria-label="Close sidebar">
+        <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 5l10 10M15 5L5 15" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+
+    <nav class="es-nav" aria-label="Collection">
+      <a class="es-nav__item" href="/game-essay/">
+        <svg width="16" height="16" viewBox="0 0 20 20" aria-hidden="true"><rect x="3" y="3" width="6" height="6" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="11" y="3" width="6" height="6" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="3" y="11" width="6" height="6" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="11" y="11" width="6" height="6" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+        Overview
+      </a>
+
+      <p class="es-nav__label">GAMES 6320 · Game Engineering II</p>
+      <ol class="es-nav__list">
+        
+        <li><a href="/game-essay/assignment-01/index.html"><span class="es-nav__no">01</span><span class="es-nav__text">Graphics library, a second game project, the asset build</span></a></li>
+        
+        <li><a href="/game-essay/assignment-02/index.html"><span class="es-nav__no">02</span><span class="es-nav__text">Platform-independent mesh and effect interfaces</span></a></li>
+        
+        <li><a href="/game-essay/assignment-03/index.html"><span class="es-nav__no">03</span><span class="es-nav__text">Removing per-platform Graphics files; index buffers</span></a></li>
+        
+        <li><a href="/game-essay/assignment-04/index.html"><span class="es-nav__no">04</span><span class="es-nav__text">Reference-counted assets and render submission</span></a></li>
+        
+        <li><a href="/game-essay/assignment-05/index.html"><span class="es-nav__no">05</span><span class="es-nav__text">Cameras, game objects, platform-independent shaders</span></a></li>
+        
+        <li><a href="/game-essay/assignment-06/index.html"><span class="es-nav__no">06</span><span class="es-nav__text">A human-readable mesh format and a MeshBuilder</span></a></li>
+        
+        <li><a href="/game-essay/assignment-07/index.html"><span class="es-nav__no">07</span><span class="es-nav__text">A Maya exporter, depth buffering, vertex colors</span></a></li>
+        
+        <li><a href="/game-essay/assignment-08/index.html"><span class="es-nav__no">08</span><span class="es-nav__text">Binary mesh files built by MeshBuilder</span></a></li>
+        
+        <li><a href="/game-essay/engine-system-proposal/index.html"><span class="es-nav__no">ES</span><span class="es-nav__text">Engine System proposal: data-driven AI state machines</span></a></li>
+        
+        <li><a href="/game-essay/engine-system-update-1/index.html" class="is-active" aria-current="page"><span class="es-nav__no">U1</span><span class="es-nav__text">Engine System update: the .fsm format, a validating builder and binary loading</span></a></li>
+        
+      </ol>
+    </nav>
+
+    <div class="es-side__foot">
+      <button class="es-side__theme" type="button" data-theme-toggle aria-label="切换深色 / 浅色模式">
+        <span class="theme-toggle__dot" aria-hidden="true"></span><span data-theme-label>Dark</span>
+      </button>
+      <a class="es-side__home" href="/">杨飞洋 Feiya Yang ↗</a>
+    </div>
+  </aside>
+  <div class="es-scrim" data-nv-close></div>
+
+  <div class="es-main">
+    <header class="es-bar">
+      <button class="es-icon-btn es-open" type="button" data-nv-open aria-label="Open sidebar" aria-controls="es-side" aria-expanded="false">
+        <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M3.5 5.5h13M3.5 10h13M3.5 14.5h13" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+      </button>
+      <nav class="es-crumbs" aria-label="Breadcrumb">
+        <a href="/">Feiya Yang</a><span aria-hidden="true">/</span><a href="/game-essay/">Game Essays</a><span aria-hidden="true">/</span><span aria-current="page">Engine System Update #1</span>
+      </nav>
+    </header>
+    <main id="es-main" class="es-content">
+      
+<div class="es-doc">
+  <article class="es-article">
+    <header class="es-head">
+      <p class="es-eyebrow">GAMES 6320 · Engine System · Update #1</p>
+      <h1 class="es-head__title">Engine System update: the .fsm format, a validating builder and binary loading</h1>
+      <p class="es-head__lead">The state machine file format is final, the builder checks it and reports errors with line numbers, and the game loads the binary file into a shared definition.</p>
+      <p class="es-head__meta"><time datetime="2026-11-03T15:00:00.000Z">2026.11.03</time><span>9 min read</span><span>C++ · Direct3D · OpenGL</span></p>
+    </header>
+
+    <div class="prose es-prose"><p><strong>Course:</strong> GAMES 6320-001 Game Engineering II (Fall 2026)</p>
+<h2 id="1-What-the-system-is-and-where-it-stands"><a href="#1-What-the-system-is-and-where-it-stands" class="headerlink" title="1. What the system is, and where it stands"></a>1. What the system is, and where it stands</h2><p>My engine system is a finite state machine library for game AI. The states of an enemy, the transitions between them and the conditions that trigger each transition live in a human-readable <code>.fsm</code> file, and the game only sets parameters (like the distance to the player) and reacts to the current state.</p>
+<p>The proposal split the work into three steps. This is where Update #1 is:</p>
+<table>
+<thead>
+<tr>
+<th>Date</th>
+<th>Milestone</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Update #1 (Nov 3)</td>
+<td>File format final, builder working with validation, binary file loading into <code>cStateMachineDefinition</code></td>
+<td>Done</td>
+</tr>
+<tr>
+<td>Update #2 (Nov 10)</td>
+<td><code>cStateMachine</code> run time with callbacks and debug output; demo enemy in MyGame</td>
+<td>Not started</td>
+</tr>
+<tr>
+<td>Write-up (Nov 19)</td>
+<td>Cleanup, README, a second example machine, support for classmates</td>
+<td>Not started</td>
+</tr>
+</tbody></table>
+<p>What exists now:</p>
+<ul>
+<li>A new static library, <code>Engine/StateMachine</code>, with <code>cStateMachineDefinition</code> (namespace <code>eae6320::AI</code>). It loads a built file with <code>Platform::LoadBinaryFile()</code>, finds its arrays with pointer offsets, looks up names to handles and is reference counted like <code>cMesh</code>.</li>
+<li>A new tool, <code>Tools/StateMachineBuilder</code>, that reads <code>.fsm</code> files with Lua, checks them, turns every name into an index and writes the binary file.</li>
+<li>MyGame builds <code>guard.fsm</code> as part of its assets, loads it at startup and writes everything it loaded to the log.</li>
+<li>All four configurations (Debug&#x2F;Release, x64&#x2F;x86) build without warnings.</li>
+</ul>
+<p>The public interface is platform-independent. Right now the library has no platform-specific code at all; the only planned <code>.win.cpp</code> file is the debug output for state changes, which belongs to Update #2.</p>
+<hr>
+<h2 id="2-The-final-fsm-format"><a href="#2-The-final-fsm-format" class="headerlink" title="2. The final .fsm format"></a>2. The final <code>.fsm</code> format</h2><p>This is <code>MyGame_/Content/StateMachines/guard.fsm</code>:</p>
+<figure class="highlight lua"><table><tr><td class="code"><pre><code class="hljs lua"><span class="hljs-keyword">return</span><br>&#123;<br>	initialState = <span class="hljs-string">&quot;Patrol&quot;</span>,<br><br>	<span class="hljs-comment">-- The values that the game sets every update</span><br>	parameters =<br>	&#123;<br>		&#123; name = <span class="hljs-string">&quot;distanceToPlayer&quot;</span>, <span class="hljs-built_in">type</span> = <span class="hljs-string">&quot;float&quot;</span>, default = <span class="hljs-number">1000.0</span> &#125;,<br>		&#123; name = <span class="hljs-string">&quot;canSeePlayer&quot;</span>, <span class="hljs-built_in">type</span> = <span class="hljs-string">&quot;bool&quot;</span>, default = <span class="hljs-literal">false</span> &#125;,<br>		&#123; name = <span class="hljs-string">&quot;health&quot;</span>, <span class="hljs-built_in">type</span> = <span class="hljs-string">&quot;float&quot;</span>, default = <span class="hljs-number">100.0</span> &#125;,<br>		&#123; name = <span class="hljs-string">&quot;wasHit&quot;</span>, <span class="hljs-built_in">type</span> = <span class="hljs-string">&quot;trigger&quot;</span> &#125;,<br>	&#125;,<br><br>	<span class="hljs-comment">-- Checked from every state, before the state&#x27;s own transitions</span><br>	anyState =<br>	&#123;<br>		&#123; to = <span class="hljs-string">&quot;Flee&quot;</span>, conditions = &#123; &#123; <span class="hljs-string">&quot;health&quot;</span>, <span class="hljs-string">&quot;&lt;&quot;</span>, <span class="hljs-number">20.0</span> &#125; &#125; &#125;,<br>	&#125;,<br><br>	<span class="hljs-comment">-- Each state&#x27;s transitions are checked in the order they are written,</span><br>	<span class="hljs-comment">-- and the first one whose conditions are all true fires</span><br>	states =<br>	&#123;<br>		&#123;<br>			name = <span class="hljs-string">&quot;Patrol&quot;</span>,<br>			transitions =<br>			&#123;<br>				&#123; to = <span class="hljs-string">&quot;Chase&quot;</span>, conditions = &#123; &#123; <span class="hljs-string">&quot;canSeePlayer&quot;</span>, <span class="hljs-string">&quot;==&quot;</span>, <span class="hljs-literal">true</span> &#125; &#125; &#125;,<br>				&#123; to = <span class="hljs-string">&quot;Chase&quot;</span>, conditions = &#123; &#123; <span class="hljs-string">&quot;wasHit&quot;</span> &#125; &#125; &#125;,<br>			&#125;,<br>		&#125;,<br>		&#123;<br>			name = <span class="hljs-string">&quot;Chase&quot;</span>,<br>			transitions =<br>			&#123;<br>				&#123; to = <span class="hljs-string">&quot;Attack&quot;</span>, conditions = &#123; &#123; <span class="hljs-string">&quot;distanceToPlayer&quot;</span>, <span class="hljs-string">&quot;&lt;&quot;</span>, <span class="hljs-number">2.0</span> &#125; &#125; &#125;,<br>				<span class="hljs-comment">-- Give up after 3 seconds without seeing the player</span><br>				&#123;<br>					to = <span class="hljs-string">&quot;Patrol&quot;</span>,<br>					conditions = &#123; &#123; <span class="hljs-string">&quot;canSeePlayer&quot;</span>, <span class="hljs-string">&quot;==&quot;</span>, <span class="hljs-literal">false</span> &#125; &#125;,<br>					minimumTimeInState = <span class="hljs-number">3.0</span>,<br>				&#125;,<br>			&#125;,<br>		&#125;,<br>		&#123;<br>			name = <span class="hljs-string">&quot;Attack&quot;</span>,<br>			transitions =<br>			&#123;<br>				&#123; to = <span class="hljs-string">&quot;Chase&quot;</span>, conditions = &#123; &#123; <span class="hljs-string">&quot;distanceToPlayer&quot;</span>, <span class="hljs-string">&quot;&gt;&quot;</span>, <span class="hljs-number">2.5</span> &#125; &#125; &#125;,<br>			&#125;,<br>		&#125;,<br>		&#123;<br>			name = <span class="hljs-string">&quot;Flee&quot;</span>,<br>		&#125;,<br>	&#125;,<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>The rules:</p>
+<ul>
+<li><code>parameters</code> is a list. Each parameter has a <code>name</code>, a <code>type</code> (<code>&quot;float&quot;</code>, <code>&quot;bool&quot;</code> or <code>&quot;trigger&quot;</code>) and an optional <code>default</code> (0 or <code>false</code> if it is left out; a trigger can’t have one).</li>
+<li>A condition is <code>&#123; parameter, comparison, value &#125;</code> with one of <code>&lt;</code>, <code>&lt;=</code>, <code>&gt;</code>, <code>&gt;=</code>, <code>==</code>, <code>~=</code> (Lua’s spelling of “not equal”). For a trigger it is just <code>&#123; &quot;wasHit&quot; &#125;</code>, which means “the trigger was set”. The same short form on a bool means <code>== true</code>.</li>
+<li>All conditions of one transition have to be true. A transition can also have a <code>minimumTimeInState</code> in seconds.</li>
+<li><code>anyState</code> transitions are checked from every state, before the state’s own ones.</li>
+</ul>
+<h3 id="Changes-from-the-proposal"><a href="#Changes-from-the-proposal" class="headerlink" title="Changes from the proposal"></a>Changes from the proposal</h3><p><strong>States are a list with a <code>name</code> field instead of a table keyed by name.</strong> In the proposal I wrote <code>states = &#123; Patrol = &#123; ... &#125;, Chase = &#123; ... &#125; &#125;</code>. When I started on the builder I found two problems with that:</p>
+<ol>
+<li>If two states have the same key, Lua silently keeps the last one. The builder never sees the first one, so it can’t report the duplicate, which was one of the errors I promised to catch.</li>
+<li>Lua doesn’t keep the order of keys in a table. The state indices would depend on the hash order, so the same file could build into a different binary file, and “the first state is index 0” wouldn’t mean anything.</li>
+</ol>
+<p>With a list both problems go away: every state is seen, and the index of a state is its position in the file. It costs one extra line per state, which I think is fine.</p>
+<p><strong>The binary header has a version number.</strong> If I change the layout later and someone runs the game with an old built file, the loader reports “build the assets again” instead of reading garbage.</p>
+<hr>
+<h2 id="3-The-builder"><a href="#3-The-builder" class="headerlink" title="3. The builder"></a>3. The builder</h2><h3 id="Registering-it"><a href="#Registering-it" class="headerlink" title="Registering it"></a>Registering it</h3><p><code>StateMachineBuilder</code> is a normal builder like <code>MeshBuilder</code>. To use it in a game, three things are needed.</p>
+<p>In <code>Tools/AssetBuildLibrary/AssetBuildFunctions.lua</code>, a new asset type (built files get the extension <code>.fsmbin</code>, the same way built meshes are <code>.meshbin</code>):</p>
+<figure class="highlight lua"><table><tr><td class="code"><pre><code class="hljs lua">NewAssetTypeInfo( <span class="hljs-string">&quot;stateMachines&quot;</span>,<br>	&#123;<br>		ConvertSourceRelativePathToBuiltRelativePath = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">( i_sourceRelativePath )</span></span><br>			<span class="hljs-comment">-- Built state machines are binary, and so they get a different extension</span><br>			<span class="hljs-comment">-- than the human-readable source files</span><br>			<span class="hljs-keyword">local</span> relativeDirectory, file = i_sourceRelativePath:<span class="hljs-built_in">match</span>( <span class="hljs-string">&quot;(.-)([^/\\]+)$&quot;</span> )<br>			<span class="hljs-keyword">local</span> fileName = file:<span class="hljs-built_in">match</span>( <span class="hljs-string">&quot;([^%.]+)&quot;</span> )<br>			<span class="hljs-keyword">return</span> relativeDirectory .. fileName .. <span class="hljs-string">&quot;.fsmbin&quot;</span><br>		<span class="hljs-keyword">end</span>,<br>		GetBuilderRelativePath = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span></span><br>			<span class="hljs-keyword">return</span> <span class="hljs-string">&quot;StateMachineBuilder.exe&quot;</span><br>		<span class="hljs-keyword">end</span>,<br>	&#125;<br>)<br></code></pre></td></tr></table></figure>
+
+<p>In the game’s <code>Content/AssetsToBuild.lua</code>, the list of files:</p>
+<figure class="highlight lua"><table><tr><td class="code"><pre><code class="hljs lua">stateMachines =<br>&#123;<br>	<span class="hljs-string">&quot;StateMachines/guard.fsm&quot;</span>,<br>&#125;,<br></code></pre></td></tr></table></figure>
+
+<p>And in Visual Studio, the game’s asset build project (<code>BuildMyGameAssets</code>) gets a build dependency on <code>StateMachineBuilder</code> (right-click the project, <em>Build Dependencies &gt; Project Dependencies…</em>), so that the builder is always built before it runs. The game project itself references the <code>StateMachine</code> library.</p>
+<h3 id="Validation"><a href="#Validation" class="headerlink" title="Validation"></a>Validation</h3><p>The builder checks everything I listed in the proposal:</p>
+<ul>
+<li>a transition to a state that doesn’t exist,</li>
+<li>a condition on a parameter that doesn’t exist,</li>
+<li>an ordered comparison (<code>&lt;</code>, <code>&lt;=</code>, <code>&gt;</code>, <code>&gt;=</code>) on a bool, or any comparison on a trigger,</li>
+<li>a missing or unknown <code>initialState</code>,</li>
+<li>duplicate state names and duplicate parameter names,</li>
+</ul>
+<p>plus the smaller things: wrong types, unknown comparison strings, a negative <code>minimumTimeInState</code>, a default value on a trigger.</p>
+<p>It doesn’t stop at the first problem. Every error is reported, and the build fails at the end if there was any. Errors are written in the <code>file(line) : error : message</code> format, so they show up in the Visual Studio Error List and double-clicking one jumps to the line.</p>
+<p>To test this I made a copy of <code>guard.fsm</code> with six mistakes in it (a misspelled initial state, a duplicated parameter, <code>canSeePlayer &lt; true</code>, a misspelled trigger, a misspelled target state and a duplicated state) and added it to the asset list for a moment. This is the Error List after building:</p>
+<p><img src="/images/engine-system-update-1/error_list.png" alt="The Error List after building a broken .fsm file"></p>
+<p>Each of the six errors points at the right line. The first and last rows are the generic “the builder failed” messages from the asset build system.</p>
+<p>Getting line numbers was the interesting part. Lua syntax errors already come with a line, and I reused the code from my mesh builder for those. But a missing state isn’t a Lua error: by the time the builder sees the table, Lua has forgotten which line each value came from. So the builder also keeps the source text and searches it for the line that contains the name the error is about (for example a line with both <code>to</code> and <code>&quot;Atack&quot;</code>). The search only moves forward through the file, in the same order the builder reads the tables, so a duplicated name is reported on the line of the second copy and not the first. It is a heuristic, and if it can’t find the line it reports the error without one instead of guessing.</p>
+<hr>
+<h2 id="4-The-binary-format"><a href="#4-The-binary-format" class="headerlink" title="4. The binary format"></a>4. The binary format</h2><p>The built file is six parts, one after the other:</p>
+<table>
+<thead>
+<tr>
+<th>Part</th>
+<th>Size</th>
+<th>Contents</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Header</td>
+<td>16 bytes</td>
+<td>version, parameter &#x2F; state &#x2F; transition &#x2F; condition counts, initial state, number of “any state” transitions, name block size (8 × <code>uint16_t</code>)</td>
+</tr>
+<tr>
+<td>Parameters</td>
+<td>8 bytes each</td>
+<td>default value (<code>float</code>), name offset (<code>uint16_t</code>), type (<code>uint8_t</code>), padding</td>
+</tr>
+<tr>
+<td>States</td>
+<td>8 bytes each</td>
+<td>first transition, transition count, name offset, padding (4 × <code>uint16_t</code>)</td>
+</tr>
+<tr>
+<td>Transitions</td>
+<td>12 bytes each</td>
+<td>minimum time in state (<code>float</code>), target state, first condition, condition count, padding (4 × <code>uint16_t</code>)</td>
+</tr>
+<tr>
+<td>Conditions</td>
+<td>8 bytes each</td>
+<td>value (<code>float</code>), parameter (<code>uint16_t</code>), comparison (<code>uint8_t</code>), padding</td>
+</tr>
+<tr>
+<td>Names</td>
+<td>variable</td>
+<td>all names as null-terminated strings</td>
+</tr>
+</tbody></table>
+<p>Some decisions behind this:</p>
+<ul>
+<li><strong>Indices instead of names.</strong> A state refers to its transitions as a range (first index and count) in one shared transition array, and a transition refers to its conditions the same way. The “any state” transitions are simply the first ones in the transition array, so they need no extra list.</li>
+<li><strong>Alignment.</strong> The arrays mix <code>float</code>, <code>uint16_t</code> and <code>uint8_t</code>. I gave every struct a size that is a multiple of 4 (with explicit padding fields) and put the header first, so every array starts on a 4-byte boundary and the floats can be read in place. The name block is last because it is only chars and can have any length. The structs live in one header, <code>Engine/StateMachine/BinaryFormat.h</code>, which both the builder and the library include, with <code>static_assert</code>s on their sizes.</li>
+<li><strong>Bools are stored as floats</strong> (0 or 1) in defaults and conditions. That keeps every parameter and condition the same size, and the run time can compare everything as a number.</li>
+<li><strong>Names are kept</strong> even though the run time works with indices, because they are needed to look up handles and to print useful debug messages.</li>
+</ul>
+<p>Unlike the mesh files, the built file is identical on every platform: I checked that the Debug and Release builds for x64 and x86 produce byte-for-byte the same 269-byte file. There is nothing like the winding order that depends on the graphics API.</p>
+<p>This is the built <code>guard.fsmbin</code>, with each part outlined:</p>
+<p><img src="/images/engine-system-update-1/guard_hex.png" alt="A hex view of guard.fsmbin"></p>
+<p>A few things to find in it: the header starts with <code>01 00</code> (version 1) and <code>04 00 04 00 06 00 06 00</code> (4 parameters, 4 states, 6 transitions, 6 conditions). The first parameter’s default <code>00 00 7A 44</code> is 1000.0f. Transition 4 (Chase back to Patrol) starts with <code>00 00 40 40</code>, which is 3.0f, its minimum time in state. And the end of the file is the names, readable on the right.</p>
+<hr>
+<h2 id="5-Loading-it-in-the-game"><a href="#5-Loading-it-in-the-game" class="headerlink" title="5. Loading it in the game"></a>5. Loading it in the game</h2><p><code>cStateMachineDefinition::Load()</code> loads the whole file as one block of memory and keeps it. The arrays are found by adding the sizes of the parts before them, with no copying and no loop per element:</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><code class="hljs cpp">m_parameters = <span class="hljs-built_in">reinterpret_cast</span>&lt;<span class="hljs-type">const</span> BinaryFormat::sParameter*&gt;( currentOffset );<br>currentOffset += parameterArraySize;<br>m_states = <span class="hljs-built_in">reinterpret_cast</span>&lt;<span class="hljs-type">const</span> BinaryFormat::sState*&gt;( currentOffset );<br>currentOffset += stateArraySize;<br>m_transitions = <span class="hljs-built_in">reinterpret_cast</span>&lt;<span class="hljs-type">const</span> BinaryFormat::sTransition*&gt;( currentOffset );<br>currentOffset += transitionArraySize;<br>m_conditions = <span class="hljs-built_in">reinterpret_cast</span>&lt;<span class="hljs-type">const</span> BinaryFormat::sCondition*&gt;( currentOffset );<br>currentOffset += conditionArraySize;<br>m_names = <span class="hljs-built_in">reinterpret_cast</span>&lt;<span class="hljs-type">const</span> <span class="hljs-type">char</span>*&gt;( currentOffset );<br></code></pre></td></tr></table></figure>
+
+<p>Before that it checks that the file size matches the counts in the header exactly. After it, it checks once that every index and name offset is in range, so the run time in Update #2 can trust them without checking every frame.</p>
+<p>This is how MyGame uses it in <code>cMyGame::Initialize()</code>:</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><code class="hljs cpp"><span class="hljs-comment">// Load the guard&#x27;s state machine</span><br>&#123;<br>	<span class="hljs-keyword">if</span> ( !( result = AI::cStateMachineDefinition::<span class="hljs-built_in">Load</span>( s_path_stateMachine_guard, m_stateMachine_guard ) ) )<br>	&#123;<br>		<span class="hljs-built_in">EAE6320_ASSERTF</span>( <span class="hljs-literal">false</span>, <span class="hljs-string">&quot;Can&#x27;t initialize MyGame without the guard&#x27;s state machine&quot;</span> );<br>		<span class="hljs-keyword">return</span> result;<br>	&#125;<br>	<span class="hljs-built_in">LogStateMachineDefinition</span>( s_path_stateMachine_guard, *m_stateMachine_guard );<br><br>	<span class="hljs-comment">// Names are looked up once, and the game then only uses the handles</span><br>	<span class="hljs-type">const</span> <span class="hljs-keyword">auto</span> chaseState = m_stateMachine_guard-&gt;<span class="hljs-built_in">GetStateHandle</span>( <span class="hljs-string">&quot;Chase&quot;</span> );<br>	<span class="hljs-type">const</span> <span class="hljs-keyword">auto</span> distanceParameter = m_stateMachine_guard-&gt;<span class="hljs-built_in">GetParameterHandle</span>( <span class="hljs-string">&quot;distanceToPlayer&quot;</span> );<br>	<span class="hljs-type">const</span> <span class="hljs-keyword">auto</span> canSeeParameter = m_stateMachine_guard-&gt;<span class="hljs-built_in">GetParameterHandle</span>( <span class="hljs-string">&quot;canSeePlayer&quot;</span> );<br>	...<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>and in <code>CleanUp()</code> the game releases its reference with <code>DecrementReferenceCount()</code>, like it does for meshes and effects.</p>
+<p>The handles are small structs (<code>sStateHandle</code>, <code>sParameterHandle</code>) that wrap a <code>uint16_t</code> index. I made them two different types so that passing a state handle where a parameter is expected is a compile error.</p>
+<p><code>LogStateMachineDefinition()</code> only uses the public interface of the definition and prints what was loaded in the same words as the <code>.fsm</code> file. This is the log of the Direct3D Debug build (the OpenGL build prints the same):</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><code class="hljs text">Loaded the state machine data/statemachines/guard.fsmbin: 4 states, 4 parameters, 6 transitions (1 from any state), 6 conditions<br>	Initial state: &quot;Patrol&quot;<br>	Parameter 0 &quot;distanceToPlayer&quot;: float, default 1000<br>	Parameter 1 &quot;canSeePlayer&quot;: bool, default false<br>	Parameter 2 &quot;health&quot;: float, default 100<br>	Parameter 3 &quot;wasHit&quot;: trigger, default false<br>	Any state (1 stored at the start of the transition array):<br>		-&gt; &quot;Flee&quot; if health &lt; 20<br>	State 0 &quot;Patrol&quot; (transitions 1 to 2):<br>		-&gt; &quot;Chase&quot; if canSeePlayer == true<br>		-&gt; &quot;Chase&quot; if wasHit is set<br>	State 1 &quot;Chase&quot; (transitions 3 to 4):<br>		-&gt; &quot;Attack&quot; if distanceToPlayer &lt; 2<br>		-&gt; &quot;Patrol&quot; if canSeePlayer == false and 3 s in state<br>	State 2 &quot;Attack&quot; (transitions 5 to 5):<br>		-&gt; &quot;Chase&quot; if distanceToPlayer &gt; 2.5<br>	State 3 &quot;Flee&quot; (no transitions of its own)<br>Handle lookups: state &quot;Chase&quot; = 1, parameter &quot;distanceToPlayer&quot; = 0, parameter &quot;canSeePlayer&quot; = 1<br>MyGame initialized successfully<br></code></pre></td></tr></table></figure>
+
+<p>Comparing this with the <code>.fsm</code> file above is the round trip test: Lua file, builder, binary file, loader, and back to the same description.</p>
+<hr>
+<h2 id="6-What’s-next-and-what-was-hard"><a href="#6-What’s-next-and-what-was-hard" class="headerlink" title="6. What’s next, and what was hard"></a>6. What’s next, and what was hard</h2><h3 id="Update-2"><a href="#Update-2" class="headerlink" title="Update #2"></a>Update #2</h3><ul>
+<li><code>cStateMachine</code>, the per-agent instance: current state, time in state, parameter values (triggers reset after every update), <code>SetFloat</code> &#x2F; <code>SetBool</code> &#x2F; <code>SetTrigger</code>, and <code>Update()</code> that checks the “any state” transitions and then the current state’s transitions in order and fires at most one per update.</li>
+<li>Enter &#x2F; update &#x2F; exit callbacks as function pointers with a <code>void*</code> user-data pointer.</li>
+<li>The debug output of every state change, which will be the library’s only <code>.win.cpp</code> file (<code>OutputDebugString</code>).</li>
+<li>The demo: a guard in MyGame that reacts to the player object and changes its color or mesh with its state.</li>
+</ul>
+<p>One thing I noticed while writing <code>guard.fsm</code>: “give up after 3 seconds without seeing the player” is not quite what <code>minimumTimeInState = 3.0</code> means. It means “3 seconds since entering Chase”, so a guard that loses the player after 5 seconds of chasing would give up at once. For Update #2 I want to decide whether that is good enough or whether a condition needs a “for at least N seconds” option.</p>
+<h3 id="What-was-hard-and-decisions-I-made"><a href="#What-was-hard-and-decisions-I-made" class="headerlink" title="What was hard, and decisions I made"></a>What was hard, and decisions I made</h3><ul>
+<li><strong>Line numbers for errors that aren’t Lua errors.</strong> Lua tables don’t remember source lines, which I hadn’t thought about when I promised “with the file and line where possible” in the proposal. Searching the text was simple and works for every error in my test file.</li>
+<li><strong>The keyed <code>states</code> table.</strong> I liked how it read in the proposal, but it made duplicate detection impossible and the state order unstable. Changing it now, before anyone else uses the format, was the cheap moment to do it.</li>
+<li><strong>The header size.</strong> My first header had a 32-bit name block size plus a padding field and came out at 20 bytes instead of 16; the <code>static_assert</code> caught it on the first build. Since names are found by 16-bit offsets anyway, the block can’t be bigger than 64 KB, so the size became a <code>uint16_t</code> too.</li>
+<li><strong>Keeping the file in memory.</strong> A mesh can free its file once the GPU buffers exist. A definition can’t, because its arrays point into the file, so the loaded data is moved into the definition and freed in its destructor.</li>
+</ul>
+<p>Time spent so far: 3 hours</p>
+</div>
+
+    <nav class="es-pager" aria-label="Other assignments">
+      <a class="es-pager__link" href="/game-essay/engine-system-proposal/index.html"><span class="es-pager__dir">← Previous · ES</span><span class="es-pager__title">Engine System proposal: data-driven AI state machines</span></a>
+      
+    </nav>
+  </article>
+
+  <aside class="es-aside">
+    
+    <nav class="toc es-toc" aria-label="On this page">
+      <p class="es-aside__label">On this page</p>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-What-the-system-is-and-where-it-stands"><span class="toc-text">1. What the system is, and where it stands</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-The-final-fsm-format"><span class="toc-text">2. The final .fsm format</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-The-builder"><span class="toc-text">3. The builder</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-The-binary-format"><span class="toc-text">4. The binary format</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-Loading-it-in-the-game"><span class="toc-text">5. Loading it in the game</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-What%E2%80%99s-next-and-what-was-hard"><span class="toc-text">6. What’s next, and what was hard</span></a></li></ol>
+    </nav>
+    
+  </aside>
+</div>
+
+    </main>
+  </div>
+</div>
+
+<script src="/js/site.js?v=mw0hk6va" defer></script>
+<script src="/js/novel.js?v=mw0hk6va" defer></script>
+</body>
+
+</html>
