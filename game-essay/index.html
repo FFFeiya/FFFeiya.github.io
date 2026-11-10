@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="build" content="mw0hk6va">
+<meta name="build" content="mwb7040u">
 <title>Game Essays — Game Engineering II 课程作业合辑 — 杨飞洋 Feiya Yang</title>
 <meta name="description" content="Game Engineering II（GAMES 6320）课程作业合辑：C++ 引擎、Direct3D / OpenGL、资产管线与 Maya 导出插件，每篇附可运行的 Release 构建。">
 <meta name="author" content="杨飞洋 Feiya Yang">
@@ -30,9 +30,9 @@
   } catch (e) {}
 })();
 </script>
-<link rel="stylesheet" href="/css/site.css?v=mw0hk6va">
+<link rel="stylesheet" href="/css/site.css?v=mwb7040u">
 
-<link rel="stylesheet" href="/css/essay.css?v=mw0hk6va">
+<link rel="stylesheet" href="/css/essay.css?v=mwb7040u">
 </head>
 
 
@@ -81,6 +81,8 @@
         
         <li><a href="/game-essay/engine-system-update-1/index.html"><span class="es-nav__no">U1</span><span class="es-nav__text">Engine System update: the .fsm format, a validating builder and binary loading</span></a></li>
         
+        <li><a href="/game-essay/engine-system-update-2/index.html"><span class="es-nav__no">U2</span><span class="es-nav__text">Engine System update: the state machine run time, debug output and a guard demo</span></a></li>
+        
       </ol>
     </nav>
 
@@ -111,18 +113,18 @@
     <p class="es-hero__lead">C++ 引擎课程的每周作业记录。从一个 Direct3D / OpenGL 双平台的教学引擎出发，把硬编码的三角形一步步变成由资产管线构建、从 Maya 导出、经相机渲染的场景。每篇都附可下载的 Release 构建。</p>
     <dl class="es-facts">
       <div><dt>Course</dt><dd>GAMES 6320 · Game Engineering II</dd></div><div><dt>Term</dt><dd>Fall 2026 · University of Utah EAE</dd></div><div><dt>Stack</dt><dd>C++ · Direct3D · OpenGL · HLSL / GLSL · Lua · Maya</dd></div>
-      <div><dt>Essays</dt><dd>10 published · latest 2026.11.03</dd></div>
+      <div><dt>Essays</dt><dd>11 published · latest 2026.11.10</dd></div>
     </dl>
   </header>
 
   
-  <a class="es-latest" href="/game-essay/engine-system-update-1/index.html">
-    <span class="es-latest__media"><img src="/images/engine-system-update-1/guard_hex.png" alt="" decoding="async"></span>
+  <a class="es-latest" href="/game-essay/engine-system-update-2/index.html">
+    <span class="es-latest__media"><img src="/images/engine-system-update-2/u2_d3d_states.png" alt="" decoding="async"></span>
     <span class="es-latest__body">
       <span class="es-chip">Latest</span>
-      <span class="es-latest__no">Engine System · Update #1</span>
-      <span class="es-latest__title">Engine System update: the .fsm format, a validating builder and binary loading</span>
-      <span class="es-latest__summary">The state machine file format is final, the builder checks it and reports errors with line numbers, and the game loads the binary file into a shared definition.</span>
+      <span class="es-latest__no">Engine System · Update #2</span>
+      <span class="es-latest__title">Engine System update: the state machine run time, debug output and a guard demo</span>
+      <span class="es-latest__summary">Each agent now owns a small state machine that checks transitions once per simulation update and calls enter, update and exit callbacks. A guard in MyGame patrols, chases, attacks and flees, and every state change is logged.</span>
       <span class="es-latest__cta">Read the write-up <span aria-hidden="true">→</span></span>
     </span>
   </a>
@@ -130,6 +132,18 @@
 
   <h2 class="es-section-title">All assignments</h2>
   <ol class="es-list">
+    
+    <li class="es-row">
+      <a class="es-row__link" href="/game-essay/engine-system-update-2/index.html">
+        <span class="es-row__no">U2</span>
+        <span class="es-row__body">
+          <span class="es-row__title">Engine System update: the state machine run time, debug output and a guard demo</span>
+          <span class="es-row__summary">Each agent now owns a small state machine that checks transitions once per simulation update and calls enter, update and exit callbacks. A guard in MyGame patrols, chases, attacks and flees, and every state change is logged.</span>
+          <span class="es-row__meta"><time datetime="2026-11-10T22:00:00.000Z">2026.11.10</time><span>9 min read</span></span>
+        </span>
+        <span class="es-row__thumb"><img src="/images/engine-system-update-2/u2_d3d_states.png" alt="" loading="lazy" decoding="async"></span>
+      </a>
+    </li>
     
     <li class="es-row">
       <a class="es-row__link" href="/game-essay/engine-system-update-1/index.html">
@@ -258,8 +272,8 @@
   </div>
 </div>
 
-<script src="/js/site.js?v=mw0hk6va" defer></script>
-<script src="/js/novel.js?v=mw0hk6va" defer></script>
+<script src="/js/site.js?v=mwb7040u" defer></script>
+<script src="/js/novel.js?v=mwb7040u" defer></script>
 </body>
 
 </html>

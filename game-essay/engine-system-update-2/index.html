@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="build" content="mwb7040u">
+<title>Game Engineering II - Engine System Update #2 — 杨飞洋 Feiya Yang</title>
+<meta name="description" content="Each agent now owns a small state machine that checks transitions once per simulation update and calls enter, update and exit callbacks. A guard in MyGame patrols, chases, attacks and flees, and every state change is logged.">
+<meta name="author" content="杨飞洋 Feiya Yang">
+<link rel="canonical" href="https://fffeiya.github.io/game-essay/engine-system-update-2/">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="杨飞洋 Feiya Yang">
+<meta property="og:title" content="Game Engineering II - Engine System Update #2">
+<meta property="og:description" content="Each agent now owns a small state machine that checks transitions once per simulation update and calls enter, update and exit callbacks. A guard in MyGame patrols, chases, attacks and flees, and every state change is logged.">
+<meta property="og:url" content="https://fffeiya.github.io/game-essay/engine-system-update-2/">
+<meta property="og:image" content="https://fffeiya.github.io/images/engine-system-update-2/u2_d3d_states.png">
+<meta property="og:locale" content="zh_CN">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#fbfbf9" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0e0e0d" media="(prefers-color-scheme: dark)">
+<link rel="icon" type="image/png" href="/brand/favicon.png">
+<link rel="preload" href="/fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<script>
+(function () {
+  try {
+    var t = localStorage.getItem('theme');
+    if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+  } catch (e) {}
+})();
+</script>
+<link rel="stylesheet" href="/css/site.css?v=mwb7040u">
+
+<link rel="stylesheet" href="/css/essay.css?v=mwb7040u">
+</head>
+
+
+<body class="essay-app">
+
+<a class="skip-link" href="#es-main">Skip to content</a>
+<div class="es" data-nv>
+  <aside class="es-side" id="es-side" aria-label="Essays">
+    <div class="es-side__top">
+      <a class="es-brand" href="/game-essay/">
+        <img class="brand__mark brand__mark--light" src="/brand/fffeiya-mark.png" alt="" width="22" height="20">
+        <img class="brand__mark brand__mark--dark" src="/brand/fffeiya-mark-dark.png" alt="" width="22" height="20">
+        <span>Game Essays</span>
+      </a>
+      <button class="es-icon-btn es-close" type="button" data-nv-close aria-label="Close sidebar">
+        <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 5l10 10M15 5L5 15" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+
+    <nav class="es-nav" aria-label="Collection">
+      <a class="es-nav__item" href="/game-essay/">
+        <svg width="16" height="16" viewBox="0 0 20 20" aria-hidden="true"><rect x="3" y="3" width="6" height="6" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="11" y="3" width="6" height="6" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="3" y="11" width="6" height="6" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="11" y="11" width="6" height="6" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+        Overview
+      </a>
+
+      <p class="es-nav__label">GAMES 6320 · Game Engineering II</p>
+      <ol class="es-nav__list">
+        
+        <li><a href="/game-essay/assignment-01/index.html"><span class="es-nav__no">01</span><span class="es-nav__text">Graphics library, a second game project, the asset build</span></a></li>
+        
+        <li><a href="/game-essay/assignment-02/index.html"><span class="es-nav__no">02</span><span class="es-nav__text">Platform-independent mesh and effect interfaces</span></a></li>
+        
+        <li><a href="/game-essay/assignment-03/index.html"><span class="es-nav__no">03</span><span class="es-nav__text">Removing per-platform Graphics files; index buffers</span></a></li>
+        
+        <li><a href="/game-essay/assignment-04/index.html"><span class="es-nav__no">04</span><span class="es-nav__text">Reference-counted assets and render submission</span></a></li>
+        
+        <li><a href="/game-essay/assignment-05/index.html"><span class="es-nav__no">05</span><span class="es-nav__text">Cameras, game objects, platform-independent shaders</span></a></li>
+        
+        <li><a href="/game-essay/assignment-06/index.html"><span class="es-nav__no">06</span><span class="es-nav__text">A human-readable mesh format and a MeshBuilder</span></a></li>
+        
+        <li><a href="/game-essay/assignment-07/index.html"><span class="es-nav__no">07</span><span class="es-nav__text">A Maya exporter, depth buffering, vertex colors</span></a></li>
+        
+        <li><a href="/game-essay/assignment-08/index.html"><span class="es-nav__no">08</span><span class="es-nav__text">Binary mesh files built by MeshBuilder</span></a></li>
+        
+        <li><a href="/game-essay/engine-system-proposal/index.html"><span class="es-nav__no">ES</span><span class="es-nav__text">Engine System proposal: data-driven AI state machines</span></a></li>
+        
+        <li><a href="/game-essay/engine-system-update-1/index.html"><span class="es-nav__no">U1</span><span class="es-nav__text">Engine System update: the .fsm format, a validating builder and binary loading</span></a></li>
+        
+        <li><a href="/game-essay/engine-system-update-2/index.html" class="is-active" aria-current="page"><span class="es-nav__no">U2</span><span class="es-nav__text">Engine System update: the state machine run time, debug output and a guard demo</span></a></li>
+        
+      </ol>
+    </nav>
+
+    <div class="es-side__foot">
+      <button class="es-side__theme" type="button" data-theme-toggle aria-label="切换深色 / 浅色模式">
+        <span class="theme-toggle__dot" aria-hidden="true"></span><span data-theme-label>Dark</span>
+      </button>
+      <a class="es-side__home" href="/">杨飞洋 Feiya Yang ↗</a>
+    </div>
+  </aside>
+  <div class="es-scrim" data-nv-close></div>
+
+  <div class="es-main">
+    <header class="es-bar">
+      <button class="es-icon-btn es-open" type="button" data-nv-open aria-label="Open sidebar" aria-controls="es-side" aria-expanded="false">
+        <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M3.5 5.5h13M3.5 10h13M3.5 14.5h13" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+      </button>
+      <nav class="es-crumbs" aria-label="Breadcrumb">
+        <a href="/">Feiya Yang</a><span aria-hidden="true">/</span><a href="/game-essay/">Game Essays</a><span aria-hidden="true">/</span><span aria-current="page">Engine System Update #2</span>
+      </nav>
+    </header>
+    <main id="es-main" class="es-content">
+      
+<div class="es-doc">
+  <article class="es-article">
+    <header class="es-head">
+      <p class="es-eyebrow">GAMES 6320 · Engine System · Update #2</p>
+      <h1 class="es-head__title">Engine System update: the state machine run time, debug output and a guard demo</h1>
+      <p class="es-head__lead">Each agent now owns a small state machine that checks transitions once per simulation update and calls enter, update and exit callbacks. A guard in MyGame patrols, chases, attacks and flees, and every state change is logged.</p>
+      <p class="es-head__meta"><time datetime="2026-11-10T22:00:00.000Z">2026.11.10</time><span>9 min read</span><span>C++ · Direct3D · OpenGL</span></p>
+    </header>
+
+    <div class="prose es-prose"><p><strong>Course:</strong> GAMES 6320-001 Game Engineering II (Fall 2026)</p>
+<h2 id="1-Where-the-system-stands"><a href="#1-Where-the-system-stands" class="headerlink" title="1. Where the system stands"></a>1. Where the system stands</h2><p>My engine system is a finite state machine library for game AI. The states of an enemy, the transitions between them and the conditions for each transition are written in a human-readable <code>.fsm</code> file. A builder turns that file into a binary file, and at run time the game only sets parameters (like the distance to the player) and reacts to the state the machine is in.</p>
+<p>This is the schedule from the proposal, updated:</p>
+<table>
+<thead>
+<tr>
+<th>Date</th>
+<th>Milestone</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Update #1 (Nov 3)</td>
+<td>File format final, builder working with validation, binary file loading into <code>cStateMachineDefinition</code></td>
+<td>Done</td>
+</tr>
+<tr>
+<td>Update #2 (Nov 10)</td>
+<td><code>cStateMachine</code> run time with callbacks and debug output; demo enemy in MyGame</td>
+<td>Done</td>
+</tr>
+<tr>
+<td>Write-up (Nov 19)</td>
+<td>Cleanup, README, a second example machine, support for classmates</td>
+<td>Not started</td>
+</tr>
+</tbody></table>
+<p>What was added since Update #1:</p>
+<ul>
+<li><code>cStateMachine</code> (namespace <code>eae6320::AI</code>), the per-agent run time: current state, time in state, parameter values, <code>Update()</code> and enter &#x2F; update &#x2F; exit callbacks.</li>
+<li>Debug output of every state change. This is the library’s only platform-specific code, in <code>Windows/DebugOutput.win.cpp</code>.</li>
+<li>A guard in MyGame that is driven by <code>guard.fsm</code>: it patrols, chases the player, attacks, and flees when it has been hit too often. It looks different in every state.</li>
+<li>All four configurations (Debug&#x2F;Release, x64&#x2F;x86) still build without warnings, and the Direct3D and OpenGL builds behave the same.</li>
+</ul>
+<hr>
+<h2 id="2-The-cStateMachine-interface"><a href="#2-The-cStateMachine-interface" class="headerlink" title="2. The cStateMachine interface"></a>2. The <code>cStateMachine</code> interface</h2><p>A <code>cStateMachineDefinition</code> is the shared, read-only part (one per <code>.fsm</code> file). A <code>cStateMachine</code> is the small part that every agent owns. This is the main part of the public header, <code>Engine/StateMachine/cStateMachine.h</code>:</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><code class="hljs cpp"><span class="hljs-comment">// Called when a state is entered or exited.</span><br><span class="hljs-keyword">using</span> fStateCallback = <span class="hljs-built_in">void</span> (*)( cStateMachine&amp; io_stateMachine, <span class="hljs-type">void</span>* i_userData );<br><span class="hljs-comment">// Called once per Update() for the current state, with the same elapsed time that Update() received</span><br><span class="hljs-keyword">using</span> fStateUpdateCallback = <span class="hljs-built_in">void</span> (*)( cStateMachine&amp; io_stateMachine, <span class="hljs-type">void</span>* i_userData, <span class="hljs-type">const</span> <span class="hljs-type">float</span> i_elapsedSecondCount );<br><br><span class="hljs-comment">// Any of the three can be nullptr</span><br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">sCallbacks</span><br>&#123;<br>	fStateCallback onEnter = <span class="hljs-literal">nullptr</span>;<br>	fStateUpdateCallback onUpdate = <span class="hljs-literal">nullptr</span>;<br>	fStateCallback onExit = <span class="hljs-literal">nullptr</span>;<br>&#125;;<br><br><span class="hljs-comment">// Takes a reference on the definition (released in CleanUp()),</span><br><span class="hljs-comment">// sets every parameter to its default value, and starts in the definition&#x27;s initial state.</span><br><span class="hljs-function">cResult <span class="hljs-title">Initialize</span><span class="hljs-params">( cStateMachineDefinition&amp; i_definition, <span class="hljs-type">const</span> <span class="hljs-type">char</span>* <span class="hljs-type">const</span> i_debugName )</span></span>;<br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">CleanUp</span><span class="hljs-params">()</span></span>;<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">SetCallbacks</span><span class="hljs-params">( <span class="hljs-type">const</span> sStateHandle i_state, <span class="hljs-type">const</span> sCallbacks&amp; i_callbacks, <span class="hljs-type">void</span>* <span class="hljs-type">const</span> i_userData )</span></span>;<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">SetFloat</span><span class="hljs-params">( <span class="hljs-type">const</span> sParameterHandle i_parameter, <span class="hljs-type">const</span> <span class="hljs-type">float</span> i_value )</span></span>;<br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">SetBool</span><span class="hljs-params">( <span class="hljs-type">const</span> sParameterHandle i_parameter, <span class="hljs-type">const</span> <span class="hljs-type">bool</span> i_value )</span></span>;<br><span class="hljs-comment">// A trigger stays set until the end of the next Update()</span><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">SetTrigger</span><span class="hljs-params">( <span class="hljs-type">const</span> sParameterHandle i_parameter )</span></span>;<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">Update</span><span class="hljs-params">( <span class="hljs-type">const</span> <span class="hljs-type">float</span> i_elapsedSecondCount )</span></span>;<br><br><span class="hljs-function">sStateHandle <span class="hljs-title">GetCurrentState</span><span class="hljs-params">()</span> <span class="hljs-type">const</span></span>;<br><span class="hljs-function"><span class="hljs-type">float</span> <span class="hljs-title">GetTimeInCurrentState</span><span class="hljs-params">()</span> <span class="hljs-type">const</span></span>;<br></code></pre></td></tr></table></figure>
+
+<p>There are getters for the parameters too (<code>GetFloat()</code>, <code>GetBool()</code>, <code>IsTriggerSet()</code>). Every setter and getter checks the parameter’s type in the definition and asserts in Debug builds if it is wrong, so <code>SetBool()</code> on the <code>health</code> float stops right there instead of silently doing nothing.</p>
+<p>The callbacks are plain function pointers with a <code>void*</code> for the game’s own data. I thought about <code>std::function</code>, but a function pointer plus user data is what the rest of the engine uses, it can’t allocate, and it is easy to explain to someone who uses the library.</p>
+<h3 id="What-Update-does"><a href="#What-Update-does" class="headerlink" title="What Update() does"></a>What <code>Update()</code> does</h3><p><code>Update()</code> is meant to be called once per simulation update, after the game has set the parameters. In this order it:</p>
+<ol>
+<li>calls the initial state’s enter callback, but only the first time it is called;</li>
+<li>adds the elapsed time to the time in the current state;</li>
+<li>looks for a transition to fire: first the “any state” transitions, then the current state’s own transitions, each list in the order of the <code>.fsm</code> file. The first one whose conditions are all true, and whose <code>minimumTimeInState</code> has passed, fires. <strong>At most one transition fires per update</strong>, so a chain like Patrol to Chase to Attack takes two updates, and every state gets at least one update callback;</li>
+<li>if a transition fired: calls the old state’s exit callback, changes the state, resets the time in state to zero, and calls the new state’s enter callback;</li>
+<li>calls the current state’s update callback (so a state that was just entered is also updated in the same tick);</li>
+<li>resets all triggers to false.</li>
+</ol>
+<p>Because triggers are reset at the end of <code>Update()</code>, a trigger that the game sets is seen by exactly one round of transition checks. If no transition uses it in that update, it is gone, which is what I want for a one-shot event like “was hit”.</p>
+<p>The conditions are compared as floats. Bools and triggers are stored as 0 or 1 (like in the binary file), so the check is one <code>switch</code> on the comparison with no special cases per type.</p>
+<hr>
+<h2 id="3-Debug-output"><a href="#3-Debug-output" class="headerlink" title="3. Debug output"></a>3. Debug output</h2><p>Every time a transition fires the library writes one line:</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><code class="hljs text">&lt;agent name&gt;: &lt;old state&gt; -&gt; &lt;new state&gt; (transition: &lt;conditions&gt;)<br></code></pre></td></tr></table></figure>
+
+<p>The text is built in <code>DebugOutput.cpp</code>, which is platform-independent and reuses the same wording as the <code>.fsm</code> file. Writing it to the debugger is the only platform-specific part. It is declared in <code>DebugOutput.h</code> and implemented in <code>Windows/DebugOutput.win.cpp</code>:</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><code class="hljs cpp"><span class="hljs-type">void</span> eae6320::AI::DebugOutput::<span class="hljs-built_in">OutputToDebugger</span>( <span class="hljs-type">const</span> <span class="hljs-type">char</span>* <span class="hljs-type">const</span> i_line )<br>&#123;<br>	<span class="hljs-comment">// OutputDebugStringA() shows the text in Visual Studio&#x27;s Output window</span><br>	<span class="hljs-comment">// (and in tools like DebugView when no debugger is attached)</span><br>	<span class="hljs-built_in">OutputDebugStringA</span>( i_line );<br>	<span class="hljs-built_in">OutputDebugStringA</span>( <span class="hljs-string">&quot;\n&quot;</span> );<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>I followed the pattern of the Asserts library: a <code>Configuration.h</code> defines <code>EAE6320_AI_SHOULDOUTPUTSTATECHANGES</code> only in Debug builds, and everything in the debug output files is inside <code>#ifdef</code> of it. A game that wants to see the state changes in a Release build can define it there. The same line also goes to the engine’s log file, which is where the lines below come from.</p>
+<p>This is the log of one run of the Direct3D Debug build (the OpenGL Debug build printed exactly the same lines). I moved the player up to the guard, ran away to the right until the guard gave up, and then pressed H three times:</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><code class="hljs text">Guard: Patrol -&gt; Chase (transition: canSeePlayer == true)<br>Guard: Chase -&gt; Attack (transition: distanceToPlayer &lt; 1.1)<br>Guard: Attack -&gt; Chase (transition: distanceToPlayer &gt; 1.4)<br>Guard: Chase -&gt; Patrol (transition: canSeePlayer == false and 2 s in state)<br>The player hit the guard (health is now 70)<br>Guard: Patrol -&gt; Chase (transition: wasHit is set)<br>The player hit the guard (health is now 40)<br>The player hit the guard (health is now 10)<br>Guard: Chase -&gt; Flee (transition: any state, health &lt; 20)<br></code></pre></td></tr></table></figure>
+
+<p>The lines starting with “The player hit the guard” come from MyGame, not from the library. The Release build of the same run writes only those three lines.</p>
+<hr>
+<h2 id="4-The-demo"><a href="#4-The-demo" class="headerlink" title="4. The demo"></a>4. The demo</h2><p>The guard walks back and forth above the player. The player moves with the arrow keys, and <strong>H</strong> hits the guard. The guard’s mesh and color show its state:</p>
+<table>
+<thead>
+<tr>
+<th>State</th>
+<th>Looks like</th>
+<th>Moves</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Patrol</td>
+<td>white&#x2F;blue sphere</td>
+<td>between two points</td>
+</tr>
+<tr>
+<td>Chase</td>
+<td>orange cone</td>
+<td>towards the player, slower than the player</td>
+</tr>
+<tr>
+<td>Attack</td>
+<td>red cone that pulses twice per second</td>
+<td>stands still</td>
+</tr>
+<tr>
+<td>Flee</td>
+<td>green sphere</td>
+<td>away from the player, but stays on screen</td>
+</tr>
+</tbody></table>
+<p>The colors are three small new fragment shaders. The “attack” one makes the red pulse with the simulation time, which is my stand-in for an attack animation. These are the states in the Direct3D build (the two Attack pictures are the same state half a pulse apart):</p>
+<p><img src="/images/engine-system-update-2/u2_d3d_states.png" alt="The guard in each state, Direct3D"></p>
+<p>And in the OpenGL build:</p>
+<p><img src="/images/engine-system-update-2/u2_gl_states.png" alt="The guard in each state, OpenGL"></p>
+<h3 id="Setting-it-up"><a href="#Setting-it-up" class="headerlink" title="Setting it up"></a>Setting it up</h3><p>In <code>cMyGame::Initialize()</code>, after the definition is loaded and the handles are looked up, the guard gets its own state machine and the callbacks:</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><code class="hljs cpp"><span class="hljs-comment">// The guard gets its own instance of the state machine,</span><br><span class="hljs-comment">// and the callbacks change how it looks and moves</span><br><span class="hljs-keyword">if</span> ( !( result = m_guard.ai.<span class="hljs-built_in">Initialize</span>( *m_stateMachine_guard, <span class="hljs-string">&quot;Guard&quot;</span> ) ) )<br>&#123;<br>	<span class="hljs-built_in">EAE6320_ASSERTF</span>( <span class="hljs-literal">false</span>, <span class="hljs-string">&quot;Can&#x27;t initialize the guard&#x27;s state machine&quot;</span> );<br>	<span class="hljs-keyword">return</span> result;<br>&#125;<br>m_guard.ai.<span class="hljs-built_in">SetCallbacks</span>( patrolState, &#123; OnEnterPatrol, OnUpdatePatrol, <span class="hljs-literal">nullptr</span> &#125;, <span class="hljs-keyword">this</span> );<br>m_guard.ai.<span class="hljs-built_in">SetCallbacks</span>( chaseState, &#123; OnEnterChase, OnUpdateChase, <span class="hljs-literal">nullptr</span> &#125;, <span class="hljs-keyword">this</span> );<br>m_guard.ai.<span class="hljs-built_in">SetCallbacks</span>( attackState, &#123; OnEnterAttack, <span class="hljs-literal">nullptr</span>, <span class="hljs-literal">nullptr</span> &#125;, <span class="hljs-keyword">this</span> );<br>m_guard.ai.<span class="hljs-built_in">SetCallbacks</span>( fleeState, &#123; OnEnterFlee, OnUpdateFlee, <span class="hljs-literal">nullptr</span> &#125;, <span class="hljs-keyword">this</span> );<br></code></pre></td></tr></table></figure>
+
+<p>The callbacks are static member functions of <code>cMyGame</code>, so the <code>void*</code> is the game and they can use its meshes and effects. An enter callback changes the look, and an update callback sets the velocity:</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><code class="hljs cpp"><span class="hljs-type">void</span> eae6320::cMyGame::<span class="hljs-built_in">OnEnterChase</span>( AI::cStateMachine&amp;, <span class="hljs-type">void</span>* i_userData )<br>&#123;<br>	<span class="hljs-keyword">auto</span>&amp; game = *<span class="hljs-built_in">static_cast</span>&lt;cMyGame*&gt;( i_userData );<br>	game.m_guard.object.<span class="hljs-built_in">SetMesh</span>( game.m_mesh_cone );<br>	game.m_guard.object.<span class="hljs-built_in">SetEffect</span>( game.m_effect_guardChase );<br>&#125;<br><br><span class="hljs-type">void</span> eae6320::cMyGame::<span class="hljs-built_in">OnUpdateChase</span>( AI::cStateMachine&amp;, <span class="hljs-type">void</span>* i_userData, <span class="hljs-type">const</span> <span class="hljs-type">float</span> )<br>&#123;<br>	<span class="hljs-keyword">auto</span>&amp; game = *<span class="hljs-built_in">static_cast</span>&lt;cMyGame*&gt;( i_userData );<br>	<span class="hljs-type">const</span> <span class="hljs-keyword">auto</span> offset = <span class="hljs-built_in">GetOffsetInXyPlane</span>( game.m_guard.object.<span class="hljs-built_in">GetPosition</span>(), game.m_player.<span class="hljs-built_in">GetPosition</span>() );<br>	game.m_guard.object.<span class="hljs-built_in">SetVelocity</span>( ( offset.<span class="hljs-built_in">GetLength</span>() &gt; <span class="hljs-number">0.001f</span> ) ? ( offset.<span class="hljs-built_in">GetNormalized</span>() * s_guardSpeed_chase ) : Math::<span class="hljs-built_in">sVector</span>() );<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="Every-simulation-update"><a href="#Every-simulation-update" class="headerlink" title="Every simulation update"></a>Every simulation update</h3><p>In <code>UpdateSimulationBasedOnTime()</code> (the fixed-rate update) the game sets the parameters and then updates the state machine. The guard’s movement for this tick comes out of the update callback:</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><code class="hljs cpp"><span class="hljs-comment">// Tell the state machine what the guard knows about the world...</span><br><span class="hljs-type">const</span> <span class="hljs-keyword">auto</span> distanceToPlayer = <span class="hljs-built_in">GetOffsetInXyPlane</span>( m_guard.object.<span class="hljs-built_in">GetPosition</span>(), m_player.<span class="hljs-built_in">GetPosition</span>() ).<span class="hljs-built_in">GetLength</span>();<br>m_guard.ai.<span class="hljs-built_in">SetFloat</span>( m_guardParameters.distanceToPlayer, distanceToPlayer );<br>m_guard.ai.<span class="hljs-built_in">SetBool</span>( m_guardParameters.canSeePlayer, distanceToPlayer &lt; s_guardSightRadius );<br><span class="hljs-keyword">if</span> ( m_wasGuardHit )<br>&#123;<br>	m_wasGuardHit = <span class="hljs-literal">false</span>;<br>	m_guard.health = std::<span class="hljs-built_in">max</span>( m_guard.health - s_guardDamagePerHit, <span class="hljs-number">0.0f</span> );<br>	m_guard.ai.<span class="hljs-built_in">SetTrigger</span>( m_guardParameters.wasHit );<br>	Logging::<span class="hljs-built_in">OutputMessage</span>( <span class="hljs-string">&quot;The player hit the guard (health is now %g)&quot;</span>, <span class="hljs-built_in">static_cast</span>&lt;<span class="hljs-type">double</span>&gt;( m_guard.health ) );<br>&#125;<br>m_guard.ai.<span class="hljs-built_in">SetFloat</span>( m_guardParameters.health, m_guard.health );<br><span class="hljs-comment">// ...and then let it change state if it needs to.</span><br><span class="hljs-comment">// The current state&#x27;s update callback sets the guard&#x27;s velocity.</span><br>m_guard.ai.<span class="hljs-built_in">Update</span>( i_elapsedSecondCount_sinceLastUpdate );<br></code></pre></td></tr></table></figure>
+
+<p>The H key is read in <code>UpdateSimulationBasedOnInput()</code>, and only the moment it goes down counts as a hit, so holding it doesn’t hit the guard every tick.</p>
+<p>The guard is a little in front of the plane the player moves in, so that the two meshes never go through each other. Because of that the distance is measured in the XY plane only.</p>
+<h3 id="Changes-to-guard-fsm"><a href="#Changes-to-guard-fsm" class="headerlink" title="Changes to guard.fsm"></a>Changes to <code>guard.fsm</code></h3><p>The numbers in <code>guard.fsm</code> from Update #1 were guesses. With the real scene they didn’t work: an attack distance of 2 is most of the screen. I changed the attack distance to 1.1, the “back to Chase” distance to 1.4, and the give-up time from 3 to 2 seconds. The structure of the file is the same. Only the data changed, and I didn’t have to touch any code for it, which is the point of the system.</p>
+<hr>
+<h2 id="5-Decisions"><a href="#5-Decisions" class="headerlink" title="5. Decisions"></a>5. Decisions</h2><p><strong>When the initial state is entered.</strong> The initial state’s enter callback is called in the first <code>Update()</code>, not in <code>Initialize()</code>. In <code>Initialize()</code> no callbacks can be registered yet, so the guard would never get its “enter Patrol” call and would have no mesh. Calling it in the first update means the order “initialize, register callbacks, update” just works.</p>
+<p><strong>An “any state” transition to the state the machine is already in is skipped.</strong> The guard’s <code>anyState</code> transition goes to Flee when <code>health &lt; 20</code>. That stays true after the guard has started fleeing, so without a rule it would exit and re-enter Flee in every update, and the enter and exit callbacks would run in every simulation update. I decided that these transitions are skipped, and the next transitions in the list are still checked. A state’s own transitions are not affected, so a state can still have a transition to itself on purpose (for example to restart its timer).</p>
+<p><strong><code>minimumTimeInState</code> stays as it is.</strong> In Update #1 I noticed that “give up after 3 seconds without seeing the player” is not what <code>minimumTimeInState = 3.0</code> means. It means “at least 3 seconds since entering Chase, and right now the player isn’t visible”. I decided to keep it and document it instead of adding a “condition true for N seconds” option. In the demo it behaves well enough: the guard gives up 2 seconds after it started chasing if it can’t see the player at that moment. Doing it properly needs a timer per condition per agent, which makes the run time and the file format more complicated for one feature. A game that needs it can already do it with a float parameter, for example <code>timeSinceSawPlayer</code>, and a condition <code>&#123; &quot;timeSinceSawPlayer&quot;, &quot;&gt;&quot;, 3.0 &#125;</code>. I will put that example in the README.</p>
+<p><strong><code>Initialize()</code> takes a non-const reference.</strong> I wanted <code>const cStateMachineDefinition&amp;</code>, because the state machine never changes the definition. But the reference count is changed through <code>IncrementReferenceCount()</code>, which isn’t const in the engine’s macro. Instead of a <code>const_cast</code> the parameter is non-const, and the comment says why.</p>
+<p><strong>Wrong parameter types.</strong> In Debug builds <code>SetFloat()</code> on a bool asserts. In Release builds the call is ignored and nothing is written. I preferred this over writing the value anyway, because a float written into a bool parameter would make the conditions compare against values other than 0 and 1.</p>
+<h3 id="What-was-hard"><a href="#What-was-hard" class="headerlink" title="What was hard"></a>What was hard</h3><ul>
+<li>Making the demo show every transition in one run took more tuning than writing the library. The first runs never got back to Patrol, because the guard always saw the player again before its 2 seconds in Chase were over. I made the guard slower than the player and tuned the sight radius until running away really works.</li>
+<li>In the first version the guard was behind the player, and in Attack the player’s sphere covered the red cone, so the most important state was the hardest to see. Moving the guard in front fixed it.</li>
+<li>Deciding the order inside <code>Update()</code>. I went back and forth on whether the update callback should run before or after the transition check. After is better: the game then always updates the state that the machine is really in at the end of the tick, and a new state starts moving in the same tick it was entered.</li>
+</ul>
+<hr>
+<h2 id="6-What-is-left-for-the-final-week-Nov-19"><a href="#6-What-is-left-for-the-final-week-Nov-19" class="headerlink" title="6. What is left for the final week (Nov 19)"></a>6. What is left for the final week (Nov 19)</h2><ul>
+<li><strong>README</strong> for classmates: the <code>.fsm</code> format, how to add the builder and the library to their solution (asset type in <code>AssetBuildFunctions.lua</code>, build dependency, library reference), and the API with a short complete example, including the <code>timeSinceSawPlayer</code> pattern from above.</li>
+<li><strong>A second example machine</strong> that uses the system differently from the guard, probably a door or turret with only bools and triggers, so that the README doesn’t only show one use.</li>
+<li><strong>Cleanup:</strong> MyGame still has its own copy of the code that describes conditions as text for the definition log. The library now has the same code for the debug output, so the game should use the library’s version. I also want to look at the public header once more from the point of view of someone who hasn’t seen it.</li>
+<li><strong>Helping classmates</strong> who want to use the system, and fixing what they run into.</li>
+<li><strong>Stretch goal:</strong> let a game choose its own output function for the state changes (for example to show them on screen), with the debugger as the default. I think this is realistic because the output already goes through one function.</li>
+</ul>
+<p>Time spent since Update #1: 5 hours</p>
+</div>
+
+    <nav class="es-pager" aria-label="Other assignments">
+      <a class="es-pager__link" href="/game-essay/engine-system-update-1/index.html"><span class="es-pager__dir">← Previous · U1</span><span class="es-pager__title">Engine System update: the .fsm format, a validating builder and binary loading</span></a>
+      
+    </nav>
+  </article>
+
+  <aside class="es-aside">
+    
+    <nav class="toc es-toc" aria-label="On this page">
+      <p class="es-aside__label">On this page</p>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-Where-the-system-stands"><span class="toc-text">1. Where the system stands</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-The-cStateMachine-interface"><span class="toc-text">2. The cStateMachine interface</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-Debug-output"><span class="toc-text">3. Debug output</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-The-demo"><span class="toc-text">4. The demo</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-Decisions"><span class="toc-text">5. Decisions</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-What-is-left-for-the-final-week-Nov-19"><span class="toc-text">6. What is left for the final week (Nov 19)</span></a></li></ol>
+    </nav>
+    
+  </aside>
+</div>
+
+    </main>
+  </div>
+</div>
+
+<script src="/js/site.js?v=mwb7040u" defer></script>
+<script src="/js/novel.js?v=mwb7040u" defer></script>
+</body>
+
+</html>
