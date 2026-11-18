@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="build" content="mwmb15uc">
+<meta name="build" content="mwmb7vwf">
 <title>Game Engineering II - Engine System Presentation — 杨飞洋 Feiya Yang</title>
 <meta name="description" content="Feiyang Yang and Benjamin Yang present their engine systems for Game Engineering II: what each one does, how a game uses it, what was tricky, and how the two compare and could work together.">
 <meta name="author" content="杨飞洋 Feiya Yang">
@@ -30,9 +30,9 @@
   } catch (e) {}
 })();
 </script>
-<link rel="stylesheet" href="/css/site.css?v=mwmb15uc">
+<link rel="stylesheet" href="/css/site.css?v=mwmb7vwf">
 
-<link rel="stylesheet" href="/css/essay.css?v=mwmb15uc">
+<link rel="stylesheet" href="/css/essay.css?v=mwmb7vwf">
 </head>
 
 
@@ -121,15 +121,47 @@
 
     <div class="prose es-prose"><p><strong>Course:</strong> GAMES 6320-001 Game Engineering II (Fall 2026)</p>
 <p><strong>Presenters:</strong> Feiyang Yang (AI state machine library) and Benjamin Yang (collision system)</p>
-<h2 id="Video-English-subtitles"><a href="#Video-English-subtitles" class="headerlink" title="Video (English subtitles)"></a>Video (English subtitles)</h2><video controls playsinline preload="metadata" poster="/images/engine-system-presentation/cover.jpg" style="width:100%;height:auto">
-<source src="/files/engine-system-presentation-en.mp4" type="video/mp4">
-</video>
+<h2 id="Video"><a href="#Video" class="headerlink" title="Video"></a>Video</h2><style>
+.es-lang{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:0 0 12px}
+.es-lang span{font-size:14px;opacity:.7;margin-right:4px}
+.es-lang button{font:inherit;font-size:14px;color:inherit;background:transparent;border:1px solid currentColor;border-radius:999px;padding:4px 14px;cursor:pointer;opacity:.55}
+.es-lang button[aria-pressed="true"]{opacity:1;font-weight:600;border-width:2px}
+.es-lang button:focus-visible{outline:2px solid currentColor;outline-offset:2px}
+</style>
+<div class="es-lang" role="group" aria-label="Subtitle language">
+<span>Subtitles / 字幕:</span>
+<button type="button" data-lang="en" aria-pressed="true">English</button>
+<button type="button" data-lang="zh" aria-pressed="false">中文</button>
+</div>
+<video id="es-video" controls playsinline preload="metadata" poster="/images/engine-system-presentation/cover.jpg" style="width:100%;height:auto" src="/files/engine-system-presentation-en.mp4"></video>
+<script>
+(function () {
+  var v = document.getElementById('es-video');
+  var buttons = document.querySelectorAll('.es-lang button');
+  var src = { en: '/files/engine-system-presentation-en.mp4', zh: '/files/engine-system-presentation-zh.mp4' };
+  var cur = 'en';
+  function setLang(lang, keepPosition) {
+    if (!src[lang] || lang === cur) return;
+    var t = v.currentTime, wasPlaying = !v.paused;
+    cur = lang;
+    for (var i = 0; i < buttons.length; i++) buttons[i].setAttribute('aria-pressed', buttons[i].getAttribute('data-lang') === lang ? 'true' : 'false');
+    v.src = src[lang];
+    v.load();
+    if (keepPosition && t > 0) {
+      v.addEventListener('loadedmetadata', function once() {
+        v.removeEventListener('loadedmetadata', once);
+        v.currentTime = t;
+        if (wasPlaying) v.play();
+      });
+    }
+    if (location.hash !== '#' + lang) history.replaceState(null, '', '#' + lang);
+  }
+  for (var i = 0; i < buttons.length; i++) buttons[i].addEventListener('click', function () { setLang(this.getAttribute('data-lang'), true); });
+  if (location.hash === '#zh') setLang('zh', false);
+})();
+</script>
 
-<h2 id="Video-Chinese-subtitles-中文字幕"><a href="#Video-Chinese-subtitles-中文字幕" class="headerlink" title="Video (Chinese subtitles, 中文字幕)"></a>Video (Chinese subtitles, 中文字幕)</h2><video controls playsinline preload="none" poster="/images/engine-system-presentation/cover.jpg" style="width:100%;height:auto">
-<source src="/files/engine-system-presentation-zh.mp4" type="video/mp4">
-</video>
-
-<p>Both videos are the same recording, about 17 minutes long. Download: <a href="/files/engine-system-presentation-en.mp4">English subtitles (MP4)</a>, <a href="/files/engine-system-presentation-zh.mp4">Chinese subtitles (MP4)</a>.</p>
+<p>The video is about 17 minutes long. The English and Chinese versions are the same recording with different subtitles; switching keeps your place in the video. Download: <a href="/files/engine-system-presentation-en.mp4">English subtitles (MP4)</a>, <a href="/files/engine-system-presentation-zh.mp4">Chinese subtitles (MP4)</a>.</p>
 <h2 id="What-the-presentation-covers"><a href="#What-the-presentation-covers" class="headerlink" title="What the presentation covers"></a>What the presentation covers</h2><ol>
 <li>Both systems in one sentence each, and why we present them together.</li>
 <li>The AI state machine library: what it does, a live demo in MyGame, how a classmate adds it to their game, how it uses what we learned this semester, and something that was tricky.</li>
@@ -148,7 +180,7 @@
     
     <nav class="toc es-toc" aria-label="On this page">
       <p class="es-aside__label">On this page</p>
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Video-English-subtitles"><span class="toc-text">Video (English subtitles)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Video-Chinese-subtitles-%E4%B8%AD%E6%96%87%E5%AD%97%E5%B9%95"><span class="toc-text">Video (Chinese subtitles, 中文字幕)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#What-the-presentation-covers"><span class="toc-text">What the presentation covers</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Video"><span class="toc-text">Video</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#What-the-presentation-covers"><span class="toc-text">What the presentation covers</span></a></li></ol>
     </nav>
     
   </aside>
@@ -158,8 +190,8 @@
   </div>
 </div>
 
-<script src="/js/site.js?v=mwmb15uc" defer></script>
-<script src="/js/novel.js?v=mwmb15uc" defer></script>
+<script src="/js/site.js?v=mwmb7vwf" defer></script>
+<script src="/js/novel.js?v=mwmb7vwf" defer></script>
 </body>
 
 </html>
