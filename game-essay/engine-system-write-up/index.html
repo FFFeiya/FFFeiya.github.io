@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="build" content="mwmb15uc">
+<title>Game Engineering II - Engine System Write-Up — 杨飞洋 Feiya Yang</title>
+<meta name="description" content="A finite state machine library for game AI. States, transitions and conditions live in a readable .fsm file, a builder turns it into a binary file, and the game only sets parameters and reacts to state changes. Includes the code ZIP, installation steps and examples.">
+<meta name="author" content="杨飞洋 Feiya Yang">
+<link rel="canonical" href="https://fffeiya.github.io/game-essay/engine-system-write-up/">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="杨飞洋 Feiya Yang">
+<meta property="og:title" content="Game Engineering II - Engine System Write-Up">
+<meta property="og:description" content="A finite state machine library for game AI. States, transitions and conditions live in a readable .fsm file, a builder turns it into a binary file, and the game only sets parameters and reacts to state changes. Includes the code ZIP, installation steps and examples.">
+<meta property="og:url" content="https://fffeiya.github.io/game-essay/engine-system-write-up/">
+<meta property="og:image" content="https://fffeiya.github.io/images/engine-system-write-up/final_d3d_door_states.png">
+<meta property="og:locale" content="zh_CN">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#fbfbf9" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0e0e0d" media="(prefers-color-scheme: dark)">
+<link rel="icon" type="image/png" href="/brand/favicon.png">
+<link rel="preload" href="/fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<script>
+(function () {
+  try {
+    var t = localStorage.getItem('theme');
+    if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+  } catch (e) {}
+})();
+</script>
+<link rel="stylesheet" href="/css/site.css?v=mwmb15uc">
+
+<link rel="stylesheet" href="/css/essay.css?v=mwmb15uc">
+</head>
+
+
+<body class="essay-app">
+
+<a class="skip-link" href="#es-main">Skip to content</a>
+<div class="es" data-nv>
+  <aside class="es-side" id="es-side" aria-label="Essays">
+    <div class="es-side__top">
+      <a class="es-brand" href="/game-essay/">
+        <img class="brand__mark brand__mark--light" src="/brand/fffeiya-mark.png" alt="" width="22" height="20">
+        <img class="brand__mark brand__mark--dark" src="/brand/fffeiya-mark-dark.png" alt="" width="22" height="20">
+        <span>Game Essays</span>
+      </a>
+      <button class="es-icon-btn es-close" type="button" data-nv-close aria-label="Close sidebar">
+        <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 5l10 10M15 5L5 15" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+
+    <nav class="es-nav" aria-label="Collection">
+      <a class="es-nav__item" href="/game-essay/">
+        <svg width="16" height="16" viewBox="0 0 20 20" aria-hidden="true"><rect x="3" y="3" width="6" height="6" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="11" y="3" width="6" height="6" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="3" y="11" width="6" height="6" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="11" y="11" width="6" height="6" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+        Overview
+      </a>
+
+      <p class="es-nav__label">GAMES 6320 · Game Engineering II</p>
+      <ol class="es-nav__list">
+        
+        <li><a href="/game-essay/assignment-01/index.html"><span class="es-nav__no">01</span><span class="es-nav__text">Graphics library, a second game project, the asset build</span></a></li>
+        
+        <li><a href="/game-essay/assignment-02/index.html"><span class="es-nav__no">02</span><span class="es-nav__text">Platform-independent mesh and effect interfaces</span></a></li>
+        
+        <li><a href="/game-essay/assignment-03/index.html"><span class="es-nav__no">03</span><span class="es-nav__text">Removing per-platform Graphics files; index buffers</span></a></li>
+        
+        <li><a href="/game-essay/assignment-04/index.html"><span class="es-nav__no">04</span><span class="es-nav__text">Reference-counted assets and render submission</span></a></li>
+        
+        <li><a href="/game-essay/assignment-05/index.html"><span class="es-nav__no">05</span><span class="es-nav__text">Cameras, game objects, platform-independent shaders</span></a></li>
+        
+        <li><a href="/game-essay/assignment-06/index.html"><span class="es-nav__no">06</span><span class="es-nav__text">A human-readable mesh format and a MeshBuilder</span></a></li>
+        
+        <li><a href="/game-essay/assignment-07/index.html"><span class="es-nav__no">07</span><span class="es-nav__text">A Maya exporter, depth buffering, vertex colors</span></a></li>
+        
+        <li><a href="/game-essay/assignment-08/index.html"><span class="es-nav__no">08</span><span class="es-nav__text">Binary mesh files built by MeshBuilder</span></a></li>
+        
+        <li><a href="/game-essay/engine-system-proposal/index.html"><span class="es-nav__no">ES</span><span class="es-nav__text">Engine System proposal: data-driven AI state machines</span></a></li>
+        
+        <li><a href="/game-essay/engine-system-update-1/index.html"><span class="es-nav__no">U1</span><span class="es-nav__text">Engine System update: the .fsm format, a validating builder and binary loading</span></a></li>
+        
+        <li><a href="/game-essay/engine-system-update-2/index.html"><span class="es-nav__no">U2</span><span class="es-nav__text">Engine System update: the state machine run time, debug output and a guard demo</span></a></li>
+        
+        <li><a href="/game-essay/engine-system-presentation/index.html"><span class="es-nav__no">P</span><span class="es-nav__text">Joint presentation: an AI state machine library and a collision system</span></a></li>
+        
+        <li><a href="/game-essay/engine-system-write-up/index.html" class="is-active" aria-current="page"><span class="es-nav__no">W</span><span class="es-nav__text">Data-driven AI state machines: the run-time library, the builder and how to use them</span></a></li>
+        
+      </ol>
+    </nav>
+
+    <div class="es-side__foot">
+      <button class="es-side__theme" type="button" data-theme-toggle aria-label="切换深色 / 浅色模式">
+        <span class="theme-toggle__dot" aria-hidden="true"></span><span data-theme-label>Dark</span>
+      </button>
+      <a class="es-side__home" href="/">杨飞洋 Feiya Yang ↗</a>
+    </div>
+  </aside>
+  <div class="es-scrim" data-nv-close></div>
+
+  <div class="es-main">
+    <header class="es-bar">
+      <button class="es-icon-btn es-open" type="button" data-nv-open aria-label="Open sidebar" aria-controls="es-side" aria-expanded="false">
+        <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M3.5 5.5h13M3.5 10h13M3.5 14.5h13" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+      </button>
+      <nav class="es-crumbs" aria-label="Breadcrumb">
+        <a href="/">Feiya Yang</a><span aria-hidden="true">/</span><a href="/game-essay/">Game Essays</a><span aria-hidden="true">/</span><span aria-current="page">Engine System Write-Up</span>
+      </nav>
+    </header>
+    <main id="es-main" class="es-content">
+      
+<div class="es-doc">
+  <article class="es-article">
+    <header class="es-head">
+      <p class="es-eyebrow">GAMES 6320 · Engine System · Write-Up</p>
+      <h1 class="es-head__title">Data-driven AI state machines: the run-time library, the builder and how to use them</h1>
+      <p class="es-head__lead">A finite state machine library for game AI. States, transitions and conditions live in a readable .fsm file, a builder turns it into a binary file, and the game only sets parameters and reacts to state changes. Includes the code ZIP, installation steps and examples.</p>
+      <p class="es-head__meta"><time datetime="2026-11-18T16:30:00.000Z">2026.11.18</time><span>14 min read</span><span>C++ · Direct3D · OpenGL</span></p>
+    </header>
+
+    <div class="prose es-prose"><p><strong>Course:</strong> GAMES 6320-001 Game Engineering II (Fall 2026)<br><br><strong>Author:</strong> Feiyang Yang</p>
+<blockquote>
+<p><strong>Play the demo (one click, ZIP):</strong> <a href="/files/MyGame_EngineSystem_Release_x64.zip">MyGame_EngineSystem_Release_x64.zip</a></p>
+<p>A Direct3D Release build (x64). Unzip it and run <code>MyGame.exe</code>.<br><strong>Controls:</strong> arrow keys move the player (the colored sphere); <code>H</code> hits the guard; <code>L</code> locks or unlocks the door while it is closed; <code>Space</code> (held) turns the player into a cone; <code>W</code> <code>A</code> <code>S</code> <code>D</code> move the camera; <code>Esc</code> quits.</p>
+<p><strong>Use it in your own game (code, ZIP):</strong> <a href="/files/EngineSystem_StateMachine.zip">EngineSystem_StateMachine.zip</a>. The run-time library, the builder, two example files and a README with the installation steps. Sections 5 and 6 below repeat the important parts.</p>
+</blockquote>
+<hr>
+<h2 id="1-What-my-project-does"><a href="#1-What-my-project-does" class="headerlink" title="1. What my project does"></a>1. What my project does</h2><p>My engine system is a finite state machine library for game AI. You write the states of an agent, the transitions between them and the conditions for each transition in a human-readable <code>.fsm</code> file. A builder turns that file into a small binary file as part of the asset build. At run time the game loads the file once, gives every agent its own small state machine, sets a few parameters every simulation update (for example the distance to the player), and reacts to state changes in callbacks.</p>
+<p>The point is to move “when does this enemy change its mind” out of C++ and into data. Tuning the guard in my demo (how close before it attacks, how long before it gives up) only meant editing numbers in <code>guard.fsm</code>, and the asset build caught my typos before the game ran.</p>
+<p>The demo has two agents that use the system in different ways.</p>
+<p><strong>The guard</strong> (<code>guard.fsm</code>) patrols above the player, chases the player when it can see them, attacks when it is close, and flees when the player has hit it often enough. It uses float and bool parameters, a trigger for “was hit”, an <code>anyState</code> transition for fleeing, and a minimum time in state for giving up. Its mesh and color show its state:</p>
+<table>
+<thead>
+<tr>
+<th>State</th>
+<th>Looks like</th>
+<th>Moves</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Patrol</td>
+<td>white&#x2F;blue sphere</td>
+<td>back and forth between two points</td>
+</tr>
+<tr>
+<td>Chase</td>
+<td>orange cone</td>
+<td>towards the player, slower than the player</td>
+</tr>
+<tr>
+<td>Attack</td>
+<td>red cone that pulses</td>
+<td>stands still</td>
+</tr>
+<tr>
+<td>Flee</td>
+<td>green sphere</td>
+<td>away from the player, but stays on screen</td>
+</tr>
+</tbody></table>
+<p><img src="/images/engine-system-write-up/u2_d3d_states.png" alt="The guard in each state, Direct3D"></p>
+<p><img src="/images/engine-system-write-up/u2_gl_states.png" alt="The guard in each state, OpenGL"></p>
+<p>(These pictures are from Update #2. The guard hasn’t changed since then; the door was added to the left side of the scene for this write-up.)</p>
+<p><strong>The door</strong> (<code>door.fsm</code>) is the second example. It slides up when the player comes near it and closes again after the player has left. While it is closed, <code>L</code> locks it, and a locked door doesn’t open. It is deliberately different from the guard: it only has a bool and a trigger, two of its transitions have no conditions at all and just fire after one second, it uses exit callbacks, and its callbacks get the door itself as user data instead of the game.</p>
+<p>From left to right: Closed (the box’s own wood colors), Opening (the animated color effect, half way up), Open (green), and Locked (red):</p>
+<p><img src="/images/engine-system-write-up/final_d3d_door_states.png" alt="The door in each state, Direct3D"></p>
+<p><img src="/images/engine-system-write-up/final_gl_door_states.png" alt="The door in each state, OpenGL"></p>
+<p>Every state change is written to Visual Studio’s Output window and to the log in Debug builds. This is the log of one run of the Direct3D Debug build. I pressed <code>L</code> twice (lock, unlock), hit the guard three times with <code>H</code>, and then walked left to the door. The lines “The player hit the guard” come from MyGame; all the others come from the library:</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><code class="hljs text">Door: Closed -&gt; Locked (transition: toggleLock is set)<br>Door: Locked -&gt; Closed (transition: toggleLock is set)<br>The player hit the guard (health is now 70)<br>Guard: Patrol -&gt; Chase (transition: wasHit is set)<br>The player hit the guard (health is now 40)<br>The player hit the guard (health is now 10)<br>Guard: Chase -&gt; Flee (transition: any state, health &lt; 20)<br>Door: Closed -&gt; Opening (transition: isPlayerNear == true)<br>Door: Opening -&gt; Open (transition: 1 s in state)<br></code></pre></td></tr></table></figure>
+
+<p>The OpenGL Debug build printed exactly the same lines for the same input.</p>
+<hr>
+<h2 id="2-What-a-classmate-has-to-do-to-use-it"><a href="#2-What-a-classmate-has-to-do-to-use-it" class="headerlink" title="2. What a classmate has to do to use it"></a>2. What a classmate has to do to use it</h2><p>In short (the details are in section 5 and in the README inside the ZIP):</p>
+<ol>
+<li>Copy two folders from the ZIP into their solution: <code>Engine\StateMachine</code> (the run-time static library) and <code>Tools\StateMachineBuilder</code> (the builder executable).</li>
+<li>Add both projects to the solution, make their game reference <code>StateMachine</code>, and make their asset build project depend on <code>StateMachineBuilder</code>.</li>
+<li>Paste one <code>NewAssetTypeInfo( &quot;stateMachines&quot;, ... )</code> block into <code>AssetBuildFunctions.lua</code>.</li>
+<li>Put <code>.fsm</code> files in <code>Content\StateMachines\</code> and list them under <code>stateMachines</code> in <code>AssetsToBuild.lua</code>.</li>
+<li>In the game: load the definition, look up handles once, give each agent a <code>cStateMachine</code>, set parameters and call <code>Update()</code> every simulation update.</li>
+</ol>
+<p>No shared code has to change: nothing in Graphics, Application, the Assignment 01 code or the course’s asset build system, and the ZIP contains nothing from my game.</p>
+<p>I tested these steps the way a classmate would. I made a separate worktree of my repository at the Assignment 08 commit (before any Engine System work), followed the README using only what is in the ZIP, added the guard and a minimal use to that game, and built all four configurations. It worked on the first try: all four configurations built without warnings, <code>guard.fsm</code> was built by the new builder, the guard changed state in both the Direct3D and the OpenGL build, and a replacement output function received the state change lines. A deliberate mistake (<code>to = &quot;Nowhere&quot;</code>) failed the asset build with <code>guard.fsm(33): error : Transition #1 of state &quot;Patrol&quot; goes to the state &quot;Nowhere&quot;, which doesn&#39;t exist</code>. The things I fixed came from reading the README before that test: it didn’t say that the ZIP has one top folder, and it didn’t have the <code>timeSinceSawPlayer</code> example that I promised in Update #2.</p>
+<hr>
+<h2 id="3-How-I-used-what-we-learned-this-semester"><a href="#3-How-I-used-what-we-learned-this-semester" class="headerlink" title="3. How I used what we learned this semester"></a>3. How I used what we learned this semester</h2><p>The project requirements, and where each one is:</p>
+<table>
+<thead>
+<tr>
+<th>Requirement</th>
+<th>In my system</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Its own static library</td>
+<td><code>Engine/StateMachine</code> (project <code>StateMachine</code>), namespace <code>eae6320::AI</code>. The builder is a separate tool project, <code>Tools/StateMachineBuilder</code>, built like <code>MeshBuilder</code>.</td>
+</tr>
+<tr>
+<td>Intuitive interface</td>
+<td>Two classes: <code>cStateMachineDefinition</code> (shared, loaded from a file) and <code>cStateMachine</code> (one per agent). Names are looked up once and turned into small typed handles. Callbacks are function pointers with a <code>void*</code>, like the rest of the engine.</td>
+</tr>
+<tr>
+<td>Comments</td>
+<td>Every public header starts with what the class is for, how to use it, and a short example. <code>cStateMachine.h</code> lists exactly what <code>Update()</code> does, in order.</td>
+</tr>
+<tr>
+<td>Platform-independent interface, platform code in the implementation</td>
+<td>The headers have no platform code. The only platform-specific file is <code>Windows/DebugOutput.win.cpp</code> (<code>OutputDebugStringA</code>). Direct3D and OpenGL builds behave identically, and the built files are byte-for-byte the same on every platform.</td>
+</tr>
+<tr>
+<td>Human-readable format in Lua</td>
+<td><code>.fsm</code> files are Lua tables, validated by the builder with file and line numbers in the errors.</td>
+</tr>
+<tr>
+<td>Builder to binary</td>
+<td><code>StateMachineBuilder.exe</code> writes <code>.fsmbin</code> files during the normal asset build.</td>
+</tr>
+<tr>
+<td>Easy to load and use</td>
+<td>One <code>Load()</code> call. The binary file is loaded as one block and used in place with no parsing. The definition is reference counted like <code>cMesh</code> and <code>cEffect</code>.</td>
+</tr>
+</tbody></table>
+<h3 id="The-interface"><a href="#The-interface" class="headerlink" title="The interface"></a>The interface</h3><p>The two classes split the data the same way meshes do: the definition is the shared asset, the state machine is the per-agent instance.</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><code class="hljs cpp"><span class="hljs-comment">// cStateMachineDefinition (shared, reference counted)</span><br><span class="hljs-function"><span class="hljs-type">static</span> cResult <span class="hljs-title">Load</span><span class="hljs-params">( <span class="hljs-type">const</span> <span class="hljs-type">char</span>* <span class="hljs-type">const</span> i_path, cStateMachineDefinition*&amp; o_definition )</span></span>;<br><span class="hljs-function">sStateHandle <span class="hljs-title">GetStateHandle</span><span class="hljs-params">( <span class="hljs-type">const</span> <span class="hljs-type">char</span>* <span class="hljs-type">const</span> i_name )</span> <span class="hljs-type">const</span></span>;<br><span class="hljs-function">sParameterHandle <span class="hljs-title">GetParameterHandle</span><span class="hljs-params">( <span class="hljs-type">const</span> <span class="hljs-type">char</span>* <span class="hljs-type">const</span> i_name )</span> <span class="hljs-type">const</span></span>;<br><span class="hljs-function"><span class="hljs-type">const</span> <span class="hljs-type">char</span>* <span class="hljs-title">GetStateName</span><span class="hljs-params">( <span class="hljs-type">const</span> sStateHandle i_state )</span> <span class="hljs-type">const</span></span>;<br><br><span class="hljs-comment">// cStateMachine (one per agent)</span><br><span class="hljs-function">cResult <span class="hljs-title">Initialize</span><span class="hljs-params">( cStateMachineDefinition&amp; i_definition, <span class="hljs-type">const</span> <span class="hljs-type">char</span>* <span class="hljs-type">const</span> i_debugName )</span></span>;<br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">SetCallbacks</span><span class="hljs-params">( <span class="hljs-type">const</span> sStateHandle i_state, <span class="hljs-type">const</span> sCallbacks&amp; i_callbacks, <span class="hljs-type">void</span>* <span class="hljs-type">const</span> i_userData )</span></span>;<br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">SetFloat</span><span class="hljs-params">( <span class="hljs-type">const</span> sParameterHandle i_parameter, <span class="hljs-type">const</span> <span class="hljs-type">float</span> i_value )</span></span>;<br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">SetBool</span><span class="hljs-params">( <span class="hljs-type">const</span> sParameterHandle i_parameter, <span class="hljs-type">const</span> <span class="hljs-type">bool</span> i_value )</span></span>;<br><span class="hljs-comment">// A trigger stays set until the end of the next Update()</span><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">SetTrigger</span><span class="hljs-params">( <span class="hljs-type">const</span> sParameterHandle i_parameter )</span></span>;<br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">Update</span><span class="hljs-params">( <span class="hljs-type">const</span> <span class="hljs-type">float</span> i_elapsedSecondCount )</span></span>;<br><span class="hljs-function">sStateHandle <span class="hljs-title">GetCurrentState</span><span class="hljs-params">()</span> <span class="hljs-type">const</span></span>;<br><span class="hljs-function"><span class="hljs-type">float</span> <span class="hljs-title">GetTimeInCurrentState</span><span class="hljs-params">()</span> <span class="hljs-type">const</span></span>;<br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">CleanUp</span><span class="hljs-params">()</span></span>;<br></code></pre></td></tr></table></figure>
+
+<p><code>sStateHandle</code> and <code>sParameterHandle</code> are two different structs around a <code>uint16_t</code> index, so passing a state where a parameter is expected doesn’t compile. Using a parameter with the wrong setter (<code>SetBool()</code> on a float) asserts in Debug builds.</p>
+<p><code>Update()</code> does the same thing in the same order every time:</p>
+<ol>
+<li>The first time only, it calls the initial state’s enter callback. (Not in <code>Initialize()</code>, because no callbacks are registered yet at that point.)</li>
+<li>It adds the elapsed time to the time in the current state.</li>
+<li>It checks the <code>anyState</code> transitions, then the current state’s own transitions, each list in file order. The first one whose conditions are all true and whose minimum time has passed fires. At most one transition fires per update.</li>
+<li>If one fired: the old state’s exit callback, the state change, the debug line, the new state’s enter callback.</li>
+<li>The current state’s update callback.</li>
+<li>All triggers are reset.</li>
+</ol>
+<h3 id="The-format-and-the-builder"><a href="#The-format-and-the-builder" class="headerlink" title="The format and the builder"></a>The format and the builder</h3><p>A <code>.fsm</code> file returns a table with <code>initialState</code>, <code>parameters</code>, <code>anyState</code> and <code>states</code>. This is all of <code>door.fsm</code> without its comments:</p>
+<figure class="highlight lua"><table><tr><td class="code"><pre><code class="hljs lua"><span class="hljs-keyword">return</span><br>&#123;<br>	initialState = <span class="hljs-string">&quot;Closed&quot;</span>,<br>	parameters =<br>	&#123;<br>		&#123; name = <span class="hljs-string">&quot;isPlayerNear&quot;</span>, <span class="hljs-built_in">type</span> = <span class="hljs-string">&quot;bool&quot;</span>, default = <span class="hljs-literal">false</span> &#125;,<br>		&#123; name = <span class="hljs-string">&quot;toggleLock&quot;</span>, <span class="hljs-built_in">type</span> = <span class="hljs-string">&quot;trigger&quot;</span> &#125;,<br>	&#125;,<br>	states =<br>	&#123;<br>		&#123;<br>			name = <span class="hljs-string">&quot;Closed&quot;</span>,<br>			transitions =<br>			&#123;<br>				&#123; to = <span class="hljs-string">&quot;Locked&quot;</span>, conditions = &#123; &#123; <span class="hljs-string">&quot;toggleLock&quot;</span> &#125; &#125; &#125;,<br>				&#123; to = <span class="hljs-string">&quot;Opening&quot;</span>, conditions = &#123; &#123; <span class="hljs-string">&quot;isPlayerNear&quot;</span>, <span class="hljs-string">&quot;==&quot;</span>, <span class="hljs-literal">true</span> &#125; &#125; &#125;,<br>			&#125;,<br>		&#125;,<br>		&#123;<br>			name = <span class="hljs-string">&quot;Opening&quot;</span>,<br>			transitions =<br>			&#123;<br>				&#123; to = <span class="hljs-string">&quot;Closing&quot;</span>, conditions = &#123; &#123; <span class="hljs-string">&quot;isPlayerNear&quot;</span>, <span class="hljs-string">&quot;==&quot;</span>, <span class="hljs-literal">false</span> &#125; &#125; &#125;,<br>				&#123; to = <span class="hljs-string">&quot;Open&quot;</span>, minimumTimeInState = <span class="hljs-number">1.0</span> &#125;,<br>			&#125;,<br>		&#125;,<br>		&#123;<br>			name = <span class="hljs-string">&quot;Open&quot;</span>,<br>			transitions =<br>			&#123;<br>				&#123; to = <span class="hljs-string">&quot;Closing&quot;</span>, conditions = &#123; &#123; <span class="hljs-string">&quot;isPlayerNear&quot;</span>, <span class="hljs-string">&quot;==&quot;</span>, <span class="hljs-literal">false</span> &#125; &#125;, minimumTimeInState = <span class="hljs-number">1.5</span> &#125;,<br>			&#125;,<br>		&#125;,<br>		&#123;<br>			name = <span class="hljs-string">&quot;Closing&quot;</span>,<br>			transitions =<br>			&#123;<br>				&#123; to = <span class="hljs-string">&quot;Opening&quot;</span>, conditions = &#123; &#123; <span class="hljs-string">&quot;isPlayerNear&quot;</span>, <span class="hljs-string">&quot;==&quot;</span>, <span class="hljs-literal">true</span> &#125; &#125; &#125;,<br>				&#123; to = <span class="hljs-string">&quot;Closed&quot;</span>, minimumTimeInState = <span class="hljs-number">1.0</span> &#125;,<br>			&#125;,<br>		&#125;,<br>		&#123;<br>			name = <span class="hljs-string">&quot;Locked&quot;</span>,<br>			transitions = &#123; &#123; to = <span class="hljs-string">&quot;Closed&quot;</span>, conditions = &#123; &#123; <span class="hljs-string">&quot;toggleLock&quot;</span> &#125; &#125; &#125; &#125;,<br>		&#125;,<br>	&#125;,<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>The builder checks everything a person can get wrong (a transition to a state that doesn’t exist, a condition on a parameter that doesn’t exist, <code>&lt;</code> on a bool, a value compared with a trigger, duplicate names, a missing initial state, wrong types) and reports all errors at once in the <code>file(line) : error : message</code> format, so double-clicking one in Visual Studio’s Error List jumps to the line. Lua forgets which line a value came from, so for errors that aren’t Lua syntax errors the builder searches the source text for the name the error is about. This was the Error List for a test file with six mistakes in it (from Update #1):</p>
+<p><img src="/images/engine-system-write-up/error_list.png" alt="The Error List after building a broken .fsm file"></p>
+<h3 id="The-binary-file"><a href="#The-binary-file" class="headerlink" title="The binary file"></a>The binary file</h3><p>The built file is six parts, one after another:</p>
+<table>
+<thead>
+<tr>
+<th>Part</th>
+<th>Size</th>
+<th>Contents</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Header</td>
+<td>16 bytes</td>
+<td>version, the four counts, initial state, number of “any state” transitions, name block size</td>
+</tr>
+<tr>
+<td>Parameters</td>
+<td>8 bytes each</td>
+<td>default value (<code>float</code>), name offset, type</td>
+</tr>
+<tr>
+<td>States</td>
+<td>8 bytes each</td>
+<td>first transition and count, name offset</td>
+</tr>
+<tr>
+<td>Transitions</td>
+<td>12 bytes each</td>
+<td>minimum time in state (<code>float</code>), target state, first condition and count</td>
+</tr>
+<tr>
+<td>Conditions</td>
+<td>8 bytes each</td>
+<td>value (<code>float</code>), parameter, comparison</td>
+</tr>
+<tr>
+<td>Names</td>
+<td>variable</td>
+<td>null-terminated strings</td>
+</tr>
+</tbody></table>
+<p>Everything refers to everything else by index. A state owns a range of the transition array, and a transition owns a range of the condition array. The “any state” transitions are simply the first ones in the transition array, so they need no list of their own. Bools and triggers are stored as 0.0f or 1.0f, so every condition is one float comparison at run time. Every struct is a multiple of 4 bytes with explicit padding, so all arrays start 4-byte aligned and are used in place. The structs live in one header, <code>BinaryFormat.h</code>, that the builder and the run time both include, with <code>static_assert</code>s on their sizes.</p>
+<p>Loading is one <code>Platform::LoadBinaryFile()</code>, a check that the size matches the counts, pointer arithmetic to find each array, and one pass that checks every index is in range. After that the run time trusts the indices and never checks them again. <code>guard.fsm</code> builds into 269 bytes and <code>door.fsm</code> into 275.</p>
+<p>This is what MyGame logs for the door when it loads it. It only uses the public interface, so it is also a round trip test from the Lua file through the builder and the loader back to the same description:</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><code class="hljs text">Loaded the state machine data/statemachines/door.fsmbin: 5 states, 2 parameters, 8 transitions (0 from any state), 6 conditions<br>	Initial state: &quot;Closed&quot;<br>	Parameter 0 &quot;isPlayerNear&quot;: bool, default false<br>	Parameter 1 &quot;toggleLock&quot;: trigger, default false<br>	Any state (0 stored at the start of the transition array):<br>	State 0 &quot;Closed&quot; (transitions 0 to 1):<br>		-&gt; &quot;Locked&quot; if toggleLock is set<br>		-&gt; &quot;Opening&quot; if isPlayerNear == true<br>	State 1 &quot;Opening&quot; (transitions 2 to 3):<br>		-&gt; &quot;Closing&quot; if isPlayerNear == false<br>		-&gt; &quot;Open&quot; if 1 s in state<br>	State 2 &quot;Open&quot; (transitions 4 to 4):<br>		-&gt; &quot;Closing&quot; if isPlayerNear == false and 1.5 s in state<br>	State 3 &quot;Closing&quot; (transitions 5 to 6):<br>		-&gt; &quot;Opening&quot; if isPlayerNear == true<br>		-&gt; &quot;Closed&quot; if 1 s in state<br>	State 4 &quot;Locked&quot; (transitions 7 to 7):<br>		-&gt; &quot;Closed&quot; if toggleLock is set<br></code></pre></td></tr></table></figure>
+
+<h3 id="Other-things-from-class-that-I-used"><a href="#Other-things-from-class-that-I-used" class="headerlink" title="Other things from class that I used"></a>Other things from class that I used</h3><ul>
+<li><strong>Reference counting</strong> with the engine’s macros, like <code>cMesh</code> and <code>cEffect</code>. Each <code>cStateMachine</code> holds a reference to its definition while it is initialized.</li>
+<li><strong>The fixed-rate simulation update.</strong> The game sets parameters and calls <code>Update()</code> in <code>UpdateSimulationBasedOnTime()</code>, so the AI runs at the simulation rate, and the time in state uses the simulation’s elapsed time.</li>
+<li><strong><code>cResult</code> and asserts</strong> for everything that can fail at load time, with a message in the log, so a bad file stops the game deliberately.</li>
+<li><strong>Configuration headers</strong> like the Asserts library: <code>Configuration.h</code> turns the debug output on in Debug builds.</li>
+<li><strong>The asset build pipeline</strong>: a new asset type in <code>AssetBuildFunctions.lua</code>, a builder that uses <code>AssetBuildLibrary</code>, and a build dependency so the builder exists before it runs.</li>
+</ul>
+<hr>
+<h2 id="4-What-I-learned-and-struggled-with"><a href="#4-What-I-learned-and-struggled-with" class="headerlink" title="4. What I learned and struggled with"></a>4. What I learned and struggled with</h2><p><strong>Changing the file format early was cheap.</strong> In the proposal, states were a table keyed by name (<code>states = &#123; Patrol = &#123; ... &#125; &#125;</code>). When I wrote the builder I found that Lua silently keeps only the last of two equal keys, so duplicates could never be reported, and that Lua doesn’t keep key order, so state indices would depend on hash order. A list with a <code>name</code> field fixed both. It was one extra line per state, and nobody was using the format yet.</p>
+<p><strong>Line numbers for errors that aren’t Lua errors.</strong> I promised “file and line” in the proposal without thinking about how. Lua tables don’t remember source lines, so the builder keeps the source text and searches it for the line that contains the name the error is about. It is simple and works for every error I tried.</p>
+<p><strong>What <code>minimumTimeInState</code> really means.</strong> “Give up after 2 seconds without seeing the player” is not what <code>minimumTimeInState = 2.0</code> says. It says “at least 2 seconds since entering Chase, and right now the player isn’t visible”. I decided to keep it simple and document it instead of adding per-condition timers. A game that needs the other meaning can keep its own timer and pass it in as a float parameter; the README shows how.</p>
+<p><strong>“Any state” transitions to the current state.</strong> The guard’s <code>anyState</code> transition goes to Flee when <code>health &lt; 20</code>, and that stays true while it is fleeing. Without a rule it would exit and re-enter Flee every update. So an <code>anyState</code> transition that leads to the state the machine is already in is skipped. A state’s own transitions can still go to itself on purpose.</p>
+<p><strong>When the initial state is entered.</strong> At first the initial state’s enter callback ran in <code>Initialize()</code>, before any callbacks were registered, so the guard started with no mesh. Calling it in the first <code>Update()</code> made “initialize, register callbacks, update” just work.</p>
+<p><strong>The second example tested the parts the guard never used.</strong> The door uses transitions with no conditions, exit callbacks, and user data that is the agent instead of the game. All of it worked without changing the library, which was a relief, because those were the parts I had only tested in my head. The door is also where a trigger gets thrown away on purpose: <code>L</code> while the door is open sets <code>toggleLock</code>, no transition of the Open state checks it, and it is reset at the end of the update. That is the behavior I want, but it is easy to be surprised by, so it is in the README’s known limits.</p>
+<p><strong>Cleanup for other people.</strong> Reading my own headers as a newcomer, two things stood out. MyGame had its own copy of the code that turns a transition’s conditions into text, which the library also had (hidden inside the debug output). That code is now a public function, <code>cStateMachineDefinition::DescribeConditions()</code>, and both the debug output and MyGame use it. And the debug output could only go to the debugger and the log. Now a game can call <code>DebugOutput::SetOutputFunction()</code> once to send the lines anywhere, for example to an on-screen console, with the debugger and the log as the default. The function can be called in every configuration, so games don’t need <code>#ifdef</code>s.</p>
+<p><strong>Making the demo show every transition took longer than the library.</strong> The guard first never gave up chasing, because it always saw the player again before its two seconds were over; I made it slower than the player and tuned the sight radius. The guard was also behind the player at first, so in Attack the player covered the red cone. And the door was half off screen in the first screenshot.</p>
+<p><strong>Writing instructions is its own job.</strong> Following my own README in a clean copy of an older commit was the only real way to check it, because every step I skipped would have been obvious to me. In the end the steps held up, but the exercise changed how I wrote them: each step says exactly where a file goes and what to click, and the troubleshooting table lists the error you get when a step is missed, because those are the questions I expect to be asked.</p>
+<p>What I would do differently or add in a real game: hierarchical states (a “Combat” state with sub-states), a way to see the current state of every agent on screen (the new output function is a start), and hot reloading <code>.fsm</code> files while the game runs, which would make tuning much faster.</p>
+<p>Presentation video: <a href="https://fffeiya.github.io/game-essay/engine-system-presentation/">https://fffeiya.github.io/game-essay/engine-system-presentation/</a></p>
+<hr>
+<h2 id="5-Download-and-installation"><a href="#5-Download-and-installation" class="headerlink" title="5. Download and installation"></a>5. Download and installation</h2><p><a href="/files/EngineSystem_StateMachine.zip">EngineSystem_StateMachine.zip</a> contains:</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><code class="hljs text">EngineSystem_StateMachine/<br>    Engine/StateMachine/          the run-time static library (project &quot;StateMachine&quot;)<br>    Tools/StateMachineBuilder/    the builder (makes StateMachineBuilder.exe)<br>    Examples/guard.fsm            floats, a bool, a trigger, anyState, a minimum time in state<br>    Examples/door.fsm             a bool, a trigger, timed transitions without conditions<br>    README.md                     everything below in more detail, the full .fsm reference,<br>                                  the builder&#x27;s error messages, and a troubleshooting table<br></code></pre></td></tr></table></figure>
+
+<p>The library uses only engine projects that everybody has (Asserts, Logging, Platform, Results, Windows). The builder uses Asserts, Platform, Windows, Lua and AssetBuildLibrary.</p>
+<p><strong>1. Copy the folders</strong> so that you have <code>&lt;solution&gt;\Engine\StateMachine\StateMachine.vcxproj</code> and <code>&lt;solution&gt;\Tools\StateMachineBuilder\StateMachineBuilder.vcxproj</code>. The project files use relative paths, so the folders must be exactly there.</p>
+<p><strong>2. Add both projects to the solution</strong> (right-click the Engine &#x2F; Tools solution folder &gt; Add &gt; Existing Project…). They already have all four configurations.</p>
+<p><strong>3. Dependencies:</strong></p>
+<ul>
+<li>your game project &gt; Add &gt; Reference… &gt; check <strong>StateMachine</strong>;</li>
+<li>your asset build project (e.g. BuildMyGameAssets) &gt; Build Dependencies &gt; Project Dependencies… &gt; check <strong>StateMachineBuilder</strong> (like you did for MeshBuilder).</li>
+</ul>
+<p><strong>4. <code>Tools\AssetBuildLibrary\AssetBuildFunctions.lua</code>:</strong> add this after the <code>meshes</code> asset type:</p>
+<figure class="highlight lua"><table><tr><td class="code"><pre><code class="hljs lua">NewAssetTypeInfo( <span class="hljs-string">&quot;stateMachines&quot;</span>,<br>	&#123;<br>		ConvertSourceRelativePathToBuiltRelativePath = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">( i_sourceRelativePath )</span></span><br>			<span class="hljs-comment">-- Built state machines are binary, and so they get a different extension</span><br>			<span class="hljs-comment">-- than the human-readable source files</span><br>			<span class="hljs-keyword">local</span> relativeDirectory, file = i_sourceRelativePath:<span class="hljs-built_in">match</span>( <span class="hljs-string">&quot;(.-)([^/\\]+)$&quot;</span> )<br>			<span class="hljs-keyword">local</span> fileName = file:<span class="hljs-built_in">match</span>( <span class="hljs-string">&quot;([^%.]+)&quot;</span> )<br>			<span class="hljs-keyword">return</span> relativeDirectory .. fileName .. <span class="hljs-string">&quot;.fsmbin&quot;</span><br>		<span class="hljs-keyword">end</span>,<br>		GetBuilderRelativePath = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span></span><br>			<span class="hljs-keyword">return</span> <span class="hljs-string">&quot;StateMachineBuilder.exe&quot;</span><br>		<span class="hljs-keyword">end</span>,<br>	&#125;<br>)<br></code></pre></td></tr></table></figure>
+
+<p><strong>5. Your game’s <code>Content\AssetsToBuild.lua</code>:</strong> put your files in <code>Content\StateMachines\</code> and list them:</p>
+<figure class="highlight lua"><table><tr><td class="code"><pre><code class="hljs lua">stateMachines =<br>&#123;<br>	<span class="hljs-string">&quot;StateMachines/guard.fsm&quot;</span>,<br>&#125;,<br></code></pre></td></tr></table></figure>
+
+<p>The built file is <code>data/statemachines/guard.fsmbin</code> (the asset build writes lower-case paths).</p>
+<p><strong>6. Build.</strong> A mistake in a <code>.fsm</code> file fails the asset build with the file and line.</p>
+<p>Nothing else in your solution has to change.</p>
+<hr>
+<h2 id="6-Using-it-in-your-game"><a href="#6-Using-it-in-your-game" class="headerlink" title="6. Using it in your game"></a>6. Using it in your game</h2><p>These snippets are from my <code>cMyGame.cpp</code>. Include <code>&lt;Engine/StateMachine/cStateMachine.h&gt;</code> in your game’s header.</p>
+<p><strong>Members:</strong> one definition per <code>.fsm</code> file, one <code>cStateMachine</code> per agent, and the handles you need:</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><code class="hljs cpp">AI::cStateMachineDefinition* m_stateMachine_door = <span class="hljs-literal">nullptr</span>;<br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">sDoor</span><br>&#123;<br>	cGameObject object;<br>	AI::cStateMachine ai;<br>	<span class="hljs-comment">// ...</span><br>&#125; m_door;<br><span class="hljs-keyword">struct</span><br>&#123;<br>	AI::sParameterHandle isPlayerNear;<br>	AI::sParameterHandle toggleLock;<br>&#125; m_doorParameters;<br></code></pre></td></tr></table></figure>
+
+<p><strong>Load the definition and look up handles</strong> in <code>Initialize()</code>. A misspelled name returns an invalid handle (and asserts), so check them:</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">if</span> ( !( result = AI::cStateMachineDefinition::<span class="hljs-built_in">Load</span>( s_path_stateMachine_door, m_stateMachine_door ) ) )<br>&#123;<br>	<span class="hljs-built_in">EAE6320_ASSERTF</span>( <span class="hljs-literal">false</span>, <span class="hljs-string">&quot;Can&#x27;t initialize MyGame without the door&#x27;s state machine&quot;</span> );<br>	<span class="hljs-keyword">return</span> result;<br>&#125;<br><span class="hljs-type">const</span> <span class="hljs-keyword">auto</span> closedState = m_stateMachine_door-&gt;<span class="hljs-built_in">GetStateHandle</span>( <span class="hljs-string">&quot;Closed&quot;</span> );<br><span class="hljs-type">const</span> <span class="hljs-keyword">auto</span> openingState = m_stateMachine_door-&gt;<span class="hljs-built_in">GetStateHandle</span>( <span class="hljs-string">&quot;Opening&quot;</span> );<br><span class="hljs-comment">// ...</span><br>m_doorParameters.isPlayerNear = m_stateMachine_door-&gt;<span class="hljs-built_in">GetParameterHandle</span>( <span class="hljs-string">&quot;isPlayerNear&quot;</span> );<br>m_doorParameters.toggleLock = m_stateMachine_door-&gt;<span class="hljs-built_in">GetParameterHandle</span>( <span class="hljs-string">&quot;toggleLock&quot;</span> );<br></code></pre></td></tr></table></figure>
+
+<p><strong>Give the agent its state machine and register callbacks.</strong> <code>&#123; onEnter, onUpdate, onExit &#125;</code>, any of them can be <code>nullptr</code>, and the last argument is passed to every callback as <code>i_userData</code>:</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">if</span> ( !( result = m_door.ai.<span class="hljs-built_in">Initialize</span>( *m_stateMachine_door, <span class="hljs-string">&quot;Door&quot;</span> ) ) )<br>&#123;<br>	<span class="hljs-built_in">EAE6320_ASSERTF</span>( <span class="hljs-literal">false</span>, <span class="hljs-string">&quot;Can&#x27;t initialize the door&#x27;s state machine&quot;</span> );<br>	<span class="hljs-keyword">return</span> result;<br>&#125;<br>m_door.ai.<span class="hljs-built_in">SetCallbacks</span>( closedState, &#123; OnEnterDoorClosed, <span class="hljs-literal">nullptr</span>, <span class="hljs-literal">nullptr</span> &#125;, &amp;m_door );<br>m_door.ai.<span class="hljs-built_in">SetCallbacks</span>( openingState, &#123; OnEnterDoorMoving, OnUpdateDoorOpening, OnExitDoorMoving &#125;, &amp;m_door );<br></code></pre></td></tr></table></figure>
+
+<p>A callback casts the user data back:</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><code class="hljs cpp"><span class="hljs-type">void</span> eae6320::cMyGame::<span class="hljs-built_in">OnExitDoorMoving</span>( AI::cStateMachine&amp;, <span class="hljs-type">void</span>* i_userData )<br>&#123;<br>	<span class="hljs-comment">// Whichever state comes next, the door stops where it is</span><br>	<span class="hljs-keyword">auto</span>&amp; door = *<span class="hljs-built_in">static_cast</span>&lt;sDoor*&gt;( i_userData );<br>	door.object.<span class="hljs-built_in">SetVelocity</span>( Math::<span class="hljs-built_in">sVector</span>() );<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><strong>Every simulation update</strong>, in <code>UpdateSimulationBasedOnTime()</code>, set the parameters and then call <code>Update()</code>:</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><code class="hljs cpp"><span class="hljs-type">const</span> <span class="hljs-keyword">auto</span> distanceToPlayer = <span class="hljs-built_in">GetOffsetInXyPlane</span>( s_doorClosedPosition, m_player.<span class="hljs-built_in">GetPosition</span>() ).<span class="hljs-built_in">GetLength</span>();<br>m_door.ai.<span class="hljs-built_in">SetBool</span>( m_doorParameters.isPlayerNear, distanceToPlayer &lt; s_doorOpenRadius );<br><span class="hljs-keyword">if</span> ( m_wasLockKeyPressedThisUpdate )<br>&#123;<br>	m_wasLockKeyPressedThisUpdate = <span class="hljs-literal">false</span>;<br>	m_door.ai.<span class="hljs-built_in">SetTrigger</span>( m_doorParameters.toggleLock );<br>&#125;<br>m_door.ai.<span class="hljs-built_in">Update</span>( i_elapsedSecondCount_sinceLastUpdate );<br></code></pre></td></tr></table></figure>
+
+<p><strong>Ask about the state</strong> when you need it, instead of (or as well as) using callbacks:</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">if</span> ( m_guard.ai.<span class="hljs-built_in">GetCurrentState</span>() == attackState ) &#123; <span class="hljs-comment">/* ... */</span> &#125;<br><span class="hljs-type">const</span> <span class="hljs-type">char</span>* <span class="hljs-type">const</span> name = m_stateMachine_guard-&gt;<span class="hljs-built_in">GetStateName</span>( m_guard.ai.<span class="hljs-built_in">GetCurrentState</span>() );<br></code></pre></td></tr></table></figure>
+
+<p><strong>Clean up</strong> in <code>CleanUp()</code>: the state machine releases its reference to the definition, and the game releases the one <code>Load()</code> gave it:</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><code class="hljs cpp">m_door.ai.<span class="hljs-built_in">CleanUp</span>();<br><span class="hljs-keyword">if</span> ( m_stateMachine_door )<br>&#123;<br>	m_stateMachine_door-&gt;<span class="hljs-built_in">DecrementReferenceCount</span>();<br>	m_stateMachine_door = <span class="hljs-literal">nullptr</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><strong>Send the debug lines somewhere else</strong> (optional), once in <code>Initialize()</code>. Passing <code>nullptr</code> goes back to the debugger and the log:</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><code class="hljs cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;Engine/StateMachine/DebugOutput.h&gt;</span></span><br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">OutputStateChange</span><span class="hljs-params">( <span class="hljs-type">const</span> eae6320::AI::cStateMachine&amp; i_stateMachine, <span class="hljs-type">const</span> <span class="hljs-type">char</span>* <span class="hljs-type">const</span> i_line, <span class="hljs-type">void</span>* i_userData )</span></span><br><span class="hljs-function"></span>&#123;<br>	<span class="hljs-comment">// e.g. add the line to an on-screen console, then keep the default output too</span><br>	eae6320::AI::DebugOutput::<span class="hljs-built_in">OutputToDebuggerAndLog</span>( i_stateMachine, i_line, <span class="hljs-literal">nullptr</span> );<br>&#125;<br><br>AI::DebugOutput::<span class="hljs-built_in">SetOutputFunction</span>( OutputStateChange, <span class="hljs-keyword">this</span> );<br></code></pre></td></tr></table></figure>
+
+<p>The README in the ZIP also covers the full <code>.fsm</code> reference, how to read the debug output, the known limits (no nested states, one transition per update, conditions are only ANDed, triggers last one update) and a troubleshooting table.</p>
+<hr>
+<h2 id="Build-and-test"><a href="#Build-and-test" class="headerlink" title="Build and test"></a>Build and test</h2><ul>
+<li>All four configurations (Debug&#x2F;Release, x64 Direct3D &#x2F; x86 OpenGL) build with 0 errors and 0 warnings from a clean <code>temp</code> folder.</li>
+<li>The Debug builds of both platforms print the same state changes for the same input (the log in section 1).</li>
+<li>The two ZIPs contain only the files listed above: no game code from MyGame, no meshes or effects from Graphics, no logs.</li>
+</ul>
+<p>Time spent on the whole project: 8 hours</p>
+</div>
+
+    <nav class="es-pager" aria-label="Other assignments">
+      <a class="es-pager__link" href="/game-essay/engine-system-presentation/index.html"><span class="es-pager__dir">← Previous · P</span><span class="es-pager__title">Joint presentation: an AI state machine library and a collision system</span></a>
+      
+    </nav>
+  </article>
+
+  <aside class="es-aside">
+    
+    <nav class="toc es-toc" aria-label="On this page">
+      <p class="es-aside__label">On this page</p>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-What-my-project-does"><span class="toc-text">1. What my project does</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-What-a-classmate-has-to-do-to-use-it"><span class="toc-text">2. What a classmate has to do to use it</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-How-I-used-what-we-learned-this-semester"><span class="toc-text">3. How I used what we learned this semester</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-What-I-learned-and-struggled-with"><span class="toc-text">4. What I learned and struggled with</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-Download-and-installation"><span class="toc-text">5. Download and installation</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-Using-it-in-your-game"><span class="toc-text">6. Using it in your game</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Build-and-test"><span class="toc-text">Build and test</span></a></li></ol>
+    </nav>
+    
+  </aside>
+</div>
+
+    </main>
+  </div>
+</div>
+
+<script src="/js/site.js?v=mwmb15uc" defer></script>
+<script src="/js/novel.js?v=mwmb15uc" defer></script>
+</body>
+
+</html>
