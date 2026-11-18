@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="build" content="mwm81rfr">
+<title>Game Engineering II - Engine System Presentation — 杨飞洋 Feiya Yang</title>
+<meta name="description" content="Feiyang Yang and Benjamin Yang present their engine systems for Game Engineering II: what each one does, how a game uses it, what was tricky, and how the two compare and could work together.">
+<meta name="author" content="杨飞洋 Feiya Yang">
+<link rel="canonical" href="https://fffeiya.github.io/game-essay/engine-system-presentation/">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="杨飞洋 Feiya Yang">
+<meta property="og:title" content="Game Engineering II - Engine System Presentation">
+<meta property="og:description" content="Feiyang Yang and Benjamin Yang present their engine systems for Game Engineering II: what each one does, how a game uses it, what was tricky, and how the two compare and could work together.">
+<meta property="og:url" content="https://fffeiya.github.io/game-essay/engine-system-presentation/">
+<meta property="og:image" content="https://fffeiya.github.io/images/engine-system-presentation/cover.jpg">
+<meta property="og:locale" content="zh_CN">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#fbfbf9" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0e0e0d" media="(prefers-color-scheme: dark)">
+<link rel="icon" type="image/png" href="/brand/favicon.png">
+<link rel="preload" href="/fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<script>
+(function () {
+  try {
+    var t = localStorage.getItem('theme');
+    if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+  } catch (e) {}
+})();
+</script>
+<link rel="stylesheet" href="/css/site.css?v=mwm81rfr">
+
+<link rel="stylesheet" href="/css/essay.css?v=mwm81rfr">
+</head>
+
+
+<body class="essay-app">
+
+<a class="skip-link" href="#es-main">Skip to content</a>
+<div class="es" data-nv>
+  <aside class="es-side" id="es-side" aria-label="Essays">
+    <div class="es-side__top">
+      <a class="es-brand" href="/game-essay/">
+        <img class="brand__mark brand__mark--light" src="/brand/fffeiya-mark.png" alt="" width="22" height="20">
+        <img class="brand__mark brand__mark--dark" src="/brand/fffeiya-mark-dark.png" alt="" width="22" height="20">
+        <span>Game Essays</span>
+      </a>
+      <button class="es-icon-btn es-close" type="button" data-nv-close aria-label="Close sidebar">
+        <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 5l10 10M15 5L5 15" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+
+    <nav class="es-nav" aria-label="Collection">
+      <a class="es-nav__item" href="/game-essay/">
+        <svg width="16" height="16" viewBox="0 0 20 20" aria-hidden="true"><rect x="3" y="3" width="6" height="6" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="11" y="3" width="6" height="6" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="3" y="11" width="6" height="6" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="11" y="11" width="6" height="6" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+        Overview
+      </a>
+
+      <p class="es-nav__label">GAMES 6320 · Game Engineering II</p>
+      <ol class="es-nav__list">
+        
+        <li><a href="/game-essay/assignment-01/index.html"><span class="es-nav__no">01</span><span class="es-nav__text">Graphics library, a second game project, the asset build</span></a></li>
+        
+        <li><a href="/game-essay/assignment-02/index.html"><span class="es-nav__no">02</span><span class="es-nav__text">Platform-independent mesh and effect interfaces</span></a></li>
+        
+        <li><a href="/game-essay/assignment-03/index.html"><span class="es-nav__no">03</span><span class="es-nav__text">Removing per-platform Graphics files; index buffers</span></a></li>
+        
+        <li><a href="/game-essay/assignment-04/index.html"><span class="es-nav__no">04</span><span class="es-nav__text">Reference-counted assets and render submission</span></a></li>
+        
+        <li><a href="/game-essay/assignment-05/index.html"><span class="es-nav__no">05</span><span class="es-nav__text">Cameras, game objects, platform-independent shaders</span></a></li>
+        
+        <li><a href="/game-essay/assignment-06/index.html"><span class="es-nav__no">06</span><span class="es-nav__text">A human-readable mesh format and a MeshBuilder</span></a></li>
+        
+        <li><a href="/game-essay/assignment-07/index.html"><span class="es-nav__no">07</span><span class="es-nav__text">A Maya exporter, depth buffering, vertex colors</span></a></li>
+        
+        <li><a href="/game-essay/assignment-08/index.html"><span class="es-nav__no">08</span><span class="es-nav__text">Binary mesh files built by MeshBuilder</span></a></li>
+        
+        <li><a href="/game-essay/engine-system-proposal/index.html"><span class="es-nav__no">ES</span><span class="es-nav__text">Engine System proposal: data-driven AI state machines</span></a></li>
+        
+        <li><a href="/game-essay/engine-system-update-1/index.html"><span class="es-nav__no">U1</span><span class="es-nav__text">Engine System update: the .fsm format, a validating builder and binary loading</span></a></li>
+        
+        <li><a href="/game-essay/engine-system-update-2/index.html"><span class="es-nav__no">U2</span><span class="es-nav__text">Engine System update: the state machine run time, debug output and a guard demo</span></a></li>
+        
+        <li><a href="/game-essay/engine-system-presentation/index.html" class="is-active" aria-current="page"><span class="es-nav__no">P</span><span class="es-nav__text">Joint presentation: an AI state machine library and a collision system</span></a></li>
+        
+      </ol>
+    </nav>
+
+    <div class="es-side__foot">
+      <button class="es-side__theme" type="button" data-theme-toggle aria-label="切换深色 / 浅色模式">
+        <span class="theme-toggle__dot" aria-hidden="true"></span><span data-theme-label>Dark</span>
+      </button>
+      <a class="es-side__home" href="/">杨飞洋 Feiya Yang ↗</a>
+    </div>
+  </aside>
+  <div class="es-scrim" data-nv-close></div>
+
+  <div class="es-main">
+    <header class="es-bar">
+      <button class="es-icon-btn es-open" type="button" data-nv-open aria-label="Open sidebar" aria-controls="es-side" aria-expanded="false">
+        <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M3.5 5.5h13M3.5 10h13M3.5 14.5h13" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+      </button>
+      <nav class="es-crumbs" aria-label="Breadcrumb">
+        <a href="/">Feiya Yang</a><span aria-hidden="true">/</span><a href="/game-essay/">Game Essays</a><span aria-hidden="true">/</span><span aria-current="page">Engine System Presentation</span>
+      </nav>
+    </header>
+    <main id="es-main" class="es-content">
+      
+<div class="es-doc">
+  <article class="es-article">
+    <header class="es-head">
+      <p class="es-eyebrow">GAMES 6320 · Engine System · Presentation</p>
+      <h1 class="es-head__title">Joint presentation: an AI state machine library and a collision system</h1>
+      <p class="es-head__lead">Feiyang Yang and Benjamin Yang present their engine systems for Game Engineering II: what each one does, how a game uses it, what was tricky, and how the two compare and could work together.</p>
+      <p class="es-head__meta"><time datetime="2026-11-19T03:00:00.000Z">2026.11.18</time><span>1 min read</span><span>C++ · Direct3D · OpenGL</span></p>
+    </header>
+
+    <div class="prose es-prose"><p><strong>Course:</strong> GAMES 6320-001 Game Engineering II (Fall 2026)</p>
+<p><strong>Presenters:</strong> Feiyang Yang (AI state machine library) and Benjamin Yang (collision system)</p>
+<h2 id="Video-English-subtitles"><a href="#Video-English-subtitles" class="headerlink" title="Video (English subtitles)"></a>Video (English subtitles)</h2><video controls playsinline preload="metadata" poster="/images/engine-system-presentation/cover.jpg" style="width:100%;height:auto">
+<source src="/files/engine-system-presentation-en.mp4" type="video/mp4">
+</video>
+
+<h2 id="Video-Chinese-subtitles-中文字幕"><a href="#Video-Chinese-subtitles-中文字幕" class="headerlink" title="Video (Chinese subtitles, 中文字幕)"></a>Video (Chinese subtitles, 中文字幕)</h2><video controls playsinline preload="none" poster="/images/engine-system-presentation/cover.jpg" style="width:100%;height:auto">
+<source src="/files/engine-system-presentation-zh.mp4" type="video/mp4">
+</video>
+
+<p>Both videos are the same recording, about 17 minutes long. Download: <a href="/files/engine-system-presentation-en.mp4">English subtitles (MP4)</a>, <a href="/files/engine-system-presentation-zh.mp4">Chinese subtitles (MP4)</a>.</p>
+<h2 id="What-the-presentation-covers"><a href="#What-the-presentation-covers" class="headerlink" title="What the presentation covers"></a>What the presentation covers</h2><ol>
+<li>Both systems in one sentence each, and why we present them together.</li>
+<li>The AI state machine library: what it does, a live demo in MyGame, how a classmate adds it to their game, how it uses what we learned this semester, and something that was tricky.</li>
+<li>The collision system: the same questions, answered by Benjamin.</li>
+<li>A comparison of the two systems, and a sketch of how they could work together in one game.</li>
+</ol>
+</div>
+
+    <nav class="es-pager" aria-label="Other assignments">
+      <a class="es-pager__link" href="/game-essay/engine-system-update-2/index.html"><span class="es-pager__dir">← Previous · U2</span><span class="es-pager__title">Engine System update: the state machine run time, debug output and a guard demo</span></a>
+      
+    </nav>
+  </article>
+
+  <aside class="es-aside">
+    
+    <nav class="toc es-toc" aria-label="On this page">
+      <p class="es-aside__label">On this page</p>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Video-English-subtitles"><span class="toc-text">Video (English subtitles)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Video-Chinese-subtitles-%E4%B8%AD%E6%96%87%E5%AD%97%E5%B9%95"><span class="toc-text">Video (Chinese subtitles, 中文字幕)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#What-the-presentation-covers"><span class="toc-text">What the presentation covers</span></a></li></ol>
+    </nav>
+    
+  </aside>
+</div>
+
+    </main>
+  </div>
+</div>
+
+<script src="/js/site.js?v=mwm81rfr" defer></script>
+<script src="/js/novel.js?v=mwm81rfr" defer></script>
+</body>
+
+</html>
