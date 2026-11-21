@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="build" content="mwpzhv0m">
+<title>Game Engineering II - Final Project Proposal: Rooftop Run — 杨飞洋 Feiya Yang</title>
+<meta name="description" content="A side-view parkour course with wall jumps, crumbling platforms, a moving platform and a timed gate. My state machine library drives the player and the course, and Benjamin Yang&#39;s collision system handles floors, walls, ground checks and triggers.">
+<meta name="author" content="杨飞洋 Feiya Yang">
+<link rel="canonical" href="https://fffeiya.github.io/game-essay/final-project-proposal/">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="杨飞洋 Feiya Yang">
+<meta property="og:title" content="Game Engineering II - Final Project Proposal: Rooftop Run">
+<meta property="og:description" content="A side-view parkour course with wall jumps, crumbling platforms, a moving platform and a timed gate. My state machine library drives the player and the course, and Benjamin Yang&#39;s collision system handles floors, walls, ground checks and triggers.">
+<meta property="og:url" content="https://fffeiya.github.io/game-essay/final-project-proposal/">
+<meta property="og:image" content="https://fffeiya.github.io/images/final-project-proposal/course_layout.png">
+<meta property="og:locale" content="zh_CN">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#fbfbf9" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0e0e0d" media="(prefers-color-scheme: dark)">
+<link rel="icon" type="image/png" href="/brand/favicon.png">
+<link rel="preload" href="/fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<script>
+(function () {
+  try {
+    var t = localStorage.getItem('theme');
+    if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+  } catch (e) {}
+})();
+</script>
+<link rel="stylesheet" href="/css/site.css?v=mwpzhv0m">
+
+<link rel="stylesheet" href="/css/essay.css?v=mwpzhv0m">
+</head>
+
+
+<body class="essay-app">
+
+<a class="skip-link" href="#es-main">Skip to content</a>
+<div class="es" data-nv>
+  <aside class="es-side" id="es-side" aria-label="Essays">
+    <div class="es-side__top">
+      <a class="es-brand" href="/game-essay/">
+        <img class="brand__mark brand__mark--light" src="/brand/fffeiya-mark.png" alt="" width="22" height="20">
+        <img class="brand__mark brand__mark--dark" src="/brand/fffeiya-mark-dark.png" alt="" width="22" height="20">
+        <span>Game Essays</span>
+      </a>
+      <button class="es-icon-btn es-close" type="button" data-nv-close aria-label="Close sidebar">
+        <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 5l10 10M15 5L5 15" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+
+    <nav class="es-nav" aria-label="Collection">
+      <a class="es-nav__item" href="/game-essay/">
+        <svg width="16" height="16" viewBox="0 0 20 20" aria-hidden="true"><rect x="3" y="3" width="6" height="6" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="11" y="3" width="6" height="6" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="3" y="11" width="6" height="6" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="11" y="11" width="6" height="6" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+        Overview
+      </a>
+
+      <p class="es-nav__label">GAMES 6320 · Game Engineering II</p>
+      <ol class="es-nav__list">
+        
+        <li><a href="/game-essay/assignment-01/index.html"><span class="es-nav__no">01</span><span class="es-nav__text">Graphics library, a second game project, the asset build</span></a></li>
+        
+        <li><a href="/game-essay/assignment-02/index.html"><span class="es-nav__no">02</span><span class="es-nav__text">Platform-independent mesh and effect interfaces</span></a></li>
+        
+        <li><a href="/game-essay/assignment-03/index.html"><span class="es-nav__no">03</span><span class="es-nav__text">Removing per-platform Graphics files; index buffers</span></a></li>
+        
+        <li><a href="/game-essay/assignment-04/index.html"><span class="es-nav__no">04</span><span class="es-nav__text">Reference-counted assets and render submission</span></a></li>
+        
+        <li><a href="/game-essay/assignment-05/index.html"><span class="es-nav__no">05</span><span class="es-nav__text">Cameras, game objects, platform-independent shaders</span></a></li>
+        
+        <li><a href="/game-essay/assignment-06/index.html"><span class="es-nav__no">06</span><span class="es-nav__text">A human-readable mesh format and a MeshBuilder</span></a></li>
+        
+        <li><a href="/game-essay/assignment-07/index.html"><span class="es-nav__no">07</span><span class="es-nav__text">A Maya exporter, depth buffering, vertex colors</span></a></li>
+        
+        <li><a href="/game-essay/assignment-08/index.html"><span class="es-nav__no">08</span><span class="es-nav__text">Binary mesh files built by MeshBuilder</span></a></li>
+        
+        <li><a href="/game-essay/engine-system-proposal/index.html"><span class="es-nav__no">ES</span><span class="es-nav__text">Engine System proposal: data-driven AI state machines</span></a></li>
+        
+        <li><a href="/game-essay/engine-system-update-1/index.html"><span class="es-nav__no">U1</span><span class="es-nav__text">Engine System update: the .fsm format, a validating builder and binary loading</span></a></li>
+        
+        <li><a href="/game-essay/engine-system-update-2/index.html"><span class="es-nav__no">U2</span><span class="es-nav__text">Engine System update: the state machine run time, debug output and a guard demo</span></a></li>
+        
+        <li><a href="/game-essay/engine-system-presentation/index.html"><span class="es-nav__no">P</span><span class="es-nav__text">Joint presentation: an AI state machine library and a collision system</span></a></li>
+        
+        <li><a href="/game-essay/engine-system-write-up/index.html"><span class="es-nav__no">W</span><span class="es-nav__text">Data-driven AI state machines: the run-time library, the builder and how to use them</span></a></li>
+        
+        <li><a href="/game-essay/final-project-proposal/index.html" class="is-active" aria-current="page"><span class="es-nav__no">FP</span><span class="es-nav__text">Rooftop Run: a short parkour game built on a state machine library and a collision system</span></a></li>
+        
+      </ol>
+    </nav>
+
+    <div class="es-side__foot">
+      <button class="es-side__theme" type="button" data-theme-toggle aria-label="切换深色 / 浅色模式">
+        <span class="theme-toggle__dot" aria-hidden="true"></span><span data-theme-label>Dark</span>
+      </button>
+      <a class="es-side__home" href="/">杨飞洋 Feiya Yang ↗</a>
+    </div>
+  </aside>
+  <div class="es-scrim" data-nv-close></div>
+
+  <div class="es-main">
+    <header class="es-bar">
+      <button class="es-icon-btn es-open" type="button" data-nv-open aria-label="Open sidebar" aria-controls="es-side" aria-expanded="false">
+        <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M3.5 5.5h13M3.5 10h13M3.5 14.5h13" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+      </button>
+      <nav class="es-crumbs" aria-label="Breadcrumb">
+        <a href="/">Feiya Yang</a><span aria-hidden="true">/</span><a href="/game-essay/">Game Essays</a><span aria-hidden="true">/</span><span aria-current="page">Final Project Proposal</span>
+      </nav>
+    </header>
+    <main id="es-main" class="es-content">
+      
+<div class="es-doc">
+  <article class="es-article">
+    <header class="es-head">
+      <p class="es-eyebrow">GAMES 6320 · Final Project · Proposal</p>
+      <h1 class="es-head__title">Rooftop Run: a short parkour game built on a state machine library and a collision system</h1>
+      <p class="es-head__lead">A side-view parkour course with wall jumps, crumbling platforms, a moving platform and a timed gate. My state machine library drives the player and the course, and Benjamin Yang&#39;s collision system handles floors, walls, ground checks and triggers.</p>
+      <p class="es-head__meta"><time datetime="2026-11-21T01:00:00.000Z">2026.11.20</time><span>6 min read</span><span>C++ · Direct3D · OpenGL</span></p>
+    </header>
+
+    <div class="prose es-prose"><p><strong>Course:</strong> GAMES 6320-001 Game Engineering II (Fall 2026)<br><br><strong>Author:</strong> Feiyang Yang</p>
+<h2 id="1-What-the-game-will-be"><a href="#1-What-the-game-will-be" class="headerlink" title="1. What the game will be"></a>1. What the game will be</h2><p>Rooftop Run is a short parkour game. You run along one course of rooftops seen from the side, jump over gaps, wall-jump up a narrow shaft, and try to reach the goal as fast as you can. The 3D world is drawn with the camera to the side and a little above the player, and the player only moves left, right, up and down (no movement in depth), so it plays like a 2D platformer.</p>
+<p><img src="/images/final-project-proposal/course_layout.png" alt="Side view of the planned course"></p>
+<h3 id="What-it-will-do"><a href="#What-it-will-do" class="headerlink" title="What it will do"></a>What it will do</h3><ul>
+<li><strong>One player, one course.</strong> The player is a sphere. Left and right arrows (or A and D) run, and Space jumps. The camera follows the player.</li>
+<li><strong>Jumping that feels fair.</strong> You can only jump while standing on something. A short grace period after running off an edge still allows a jump, and letting go of Space early makes a lower jump.</li>
+<li><strong>Wall jumps.</strong> If you are in the air and pressing toward a wall, you slide down it slowly. Pressing Space then jumps up and away from the wall. This is how you climb the chimney in section 6.</li>
+<li><strong>The course</strong> (the numbers match the picture):<ol>
+<li>Start.</li>
+<li>A plain gap.</li>
+<li>Crumbling platforms: they shake for a moment after you land on them, then fall, and come back a few seconds later.</li>
+<li>A moving platform that carries you across a long gap.</li>
+<li>A timed gate that opens and closes on its own. You have to wait for it or time your run.</li>
+<li>A wall-jump chimney between two tall walls.</li>
+<li>The goal.</li>
+</ol>
+</li>
+<li><strong>Checkpoints and falling.</strong> Checkpoints sit along the course. Falling into the kill zone below the course puts you back at the last checkpoint you touched.</li>
+<li><strong>Time.</strong> The game measures the time from the start to the goal. When you reach the goal, the time and the best time of this session are written to the log, and the game resets so you can try again.</li>
+<li><strong>Showing state without text.</strong> The player’s color changes with its movement state (running, in the air, sliding on a wall, falling back to a checkpoint), the same way my Engine System demo colors the guard. Platforms and the gate also change color with their state.</li>
+<li>Direct3D x64 and OpenGL x86 builds, like every assignment.</li>
+</ul>
+<h3 id="What-it-won’t-do"><a href="#What-it-won’t-do" class="headerlink" title="What it won’t do"></a>What it won’t do</h3><ul>
+<li>No enemies, combat, health or lives. Falling only costs time.</li>
+<li>No text on screen: no HUD, menu, timer display or high score table. The time goes to the log.</li>
+<li>No sound and no animated characters. All meshes are simple shapes (spheres and boxes).</li>
+<li>Only one course, built in code and data files. No level editor and no level loading from a file.</li>
+<li>No rotating objects and no real physics (no mass, friction or bounce). Gravity and movement are done by the game.</li>
+<li>Single player only. No controller support unless there is time left at the end.</li>
+</ul>
+<h2 id="2-How-I-will-use-my-Engine-System"><a href="#2-How-I-will-use-my-Engine-System" class="headerlink" title="2. How I will use my Engine System"></a>2. How I will use my Engine System</h2><p>My Engine System is a data-driven state machine library (<a href="https://fffeiya.github.io/game-essay/engine-system-write-up/">write-up</a>). States, transitions and conditions live in <code>.fsm</code> files, StateMachineBuilder turns them into binary files during the asset build, and the game sets parameters and reacts in enter, update and exit callbacks.</p>
+<p>In Rooftop Run every moving part of the course and the player’s movement is a state machine:</p>
+<table>
+<thead>
+<tr>
+<th><code>.fsm</code> file</th>
+<th>States</th>
+<th>Parameters set by the game</th>
+<th>What the callbacks do</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>player.fsm</code></td>
+<td>Grounded, Airborne, WallSlide, Respawning</td>
+<td><code>isOnGround</code> (bool), <code>isAgainstWall</code> (bool), <code>verticalSpeed</code> (float), <code>jumpPressed</code> (trigger), <code>fellOut</code> (trigger)</td>
+<td>Enter Airborne from a jump sets the upward speed. Enter WallSlide limits the falling speed. Leaving WallSlide with a jump pushes the player away from the wall. Enter Respawning moves the player to the last checkpoint.</td>
+</tr>
+<tr>
+<td><code>crumble.fsm</code></td>
+<td>Solid, Shaking, Fallen, Returning</td>
+<td><code>playerLanded</code> (trigger)</td>
+<td>Shaking wobbles the platform. Fallen disables its collider and drops it out of view. Returning puts it back. The timed steps use <code>minimumTimeInState</code> with no conditions, like the door in my demo.</td>
+</tr>
+<tr>
+<td><code>mover.fsm</code></td>
+<td>MovingRight, WaitRight, MovingLeft, WaitLeft</td>
+<td><code>progress</code> (float, 0 to 1 along the path)</td>
+<td>The update callback moves the platform. The waits use <code>minimumTimeInState</code>.</td>
+</tr>
+<tr>
+<td><code>gate.fsm</code></td>
+<td>Closed, Opening, Open, Closing</td>
+<td>none</td>
+<td>Opening and closing move the gate. All four transitions are timed, so the gate runs by itself.</td>
+</tr>
+</tbody></table>
+<p>The crumbling platforms and the gate show what the library is for: three platforms share one definition, each gets its own <code>cStateMachine</code>, and tuning how long a platform shakes or how long the gate stays open is a change to a number in a data file. The player’s state machine is the most interesting one, because conditions like “on the ground and Space was pressed” or “in the air, against a wall and falling” are exactly what I don’t want spread across <code>if</code> statements in <code>cMyGame.cpp</code>.</p>
+<p>I expect to add small things to my library while doing this, for example a way for a callback to read how long the machine has been in its current state. Anything I add will go back into the library and its README so classmates get it too.</p>
+<h2 id="3-Which-other-Engine-System-I-will-use"><a href="#3-Which-other-Engine-System-I-will-use" class="headerlink" title="3. Which other Engine System I will use"></a>3. Which other Engine System I will use</h2><p>I will use <strong>Benjamin Yang’s Collision System</strong> (<a target="_blank" rel="noopener" href="https://game6320-website.netlify.app/engine-system/">his Engine System write-up</a>). It gives objects sphere and axis-aligned box colliders described in Lua files, has layers that say which kinds of objects touch, pushes moving colliders out of static ones (walls stop things and floors hold them up), sends <code>OnEnter</code>, <code>OnStay</code> and <code>OnExit</code> events with the contact normal, and supports raycasts. Benjamin and I also presented our two systems together, including a sketch of how they could work in one game (<a href="https://fffeiya.github.io/game-essay/engine-system-presentation/">presentation video</a>).</p>
+<p>What it will do in Rooftop Run:</p>
+<ul>
+<li><strong>Floors and walls.</strong> Every rooftop, wall and the chimney is a static box collider in a <code>world</code> layer. The player is a dynamic sphere in a <code>player</code> layer. The collision system keeps the player on top of floors and out of walls, so I don’t write any of that myself.</li>
+<li><strong>Ground check.</strong> A short raycast straight down from the player against the <code>world</code> layer sets <code>isOnGround</code> for my state machine. This is the same check Benjamin’s demo uses for jumping.</li>
+<li><strong>Wall check.</strong> While the player touches a wall, <code>OnStay</code> gives a contact normal that points mostly sideways. That sets <code>isAgainstWall</code>, and the normal also says which way the wall jump should push.</li>
+<li><strong>Triggers.</strong> Checkpoints, the goal and the kill zone are trigger colliders in their own layers. <code>OnEnter</code> on a checkpoint stores the respawn point, the goal stops the timer, and the kill zone sets the <code>fellOut</code> trigger in the player’s state machine.</li>
+<li><strong>Crumbling platforms.</strong> The player landing on one is an <code>OnEnter</code> with a normal pointing up, which sets <code>playerLanded</code>. When the platform falls, its collider is switched off with <code>SetEnabled( false )</code> and switched on again when it returns.</li>
+<li><strong>Moving platform and gate.</strong> Benjamin’s guide says to use a static collider and move its rigid body yourself for moving platforms and doors, so that is what my state machine callbacks will do.</li>
+</ul>
+<p>The order in every simulation update will be: read input and set velocities, update the rigid bodies, call <code>Collision::Update()</code>, set the state machine parameters from what the collision system reported, then update all state machines. That way every state machine sees this update’s contacts.</p>
+<p>Benjamin’s guide also warns about fast objects passing through thin colliders. I will follow his advice: thick floors and walls, a limit on falling speed, and a simulation rate of 60 updates per second.</p>
+<h2 id="4-Plan"><a href="#4-Plan" class="headerlink" title="4. Plan"></a>4. Plan</h2><table>
+<thead>
+<tr>
+<th>When</th>
+<th>What</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Week of Nov 23</td>
+<td>Add the Collision library and ColliderBuilder to my solution next to my state machine library. Player sphere on a floor with running, jumping and the ground raycast. First version of <code>player.fsm</code>.</td>
+</tr>
+<tr>
+<td>Week of Nov 30</td>
+<td>Wall slide and wall jump. The course: crumbling platforms, moving platform, timed gate, checkpoints, kill zone and goal. Camera follow and the timer in the log.</td>
+</tr>
+<tr>
+<td>Dec 3 to Dec 6</td>
+<td>Tuning, Direct3D and OpenGL builds with no warnings, the one-click ZIP and the final write-up.</td>
+</tr>
+</tbody></table>
+<p>If time runs short, the parts I would cut first are the moving platform and the shorter jump when Space is released early. The wall jump, crumbling platforms and timed gate stay, because they are where the two engine systems work together.</p>
+<h2 id="5-Credits"><a href="#5-Credits" class="headerlink" title="5. Credits"></a>5. Credits</h2><ul>
+<li><strong>Benjamin Yang</strong>: the Collision System (collision library, ColliderBuilder and user guide), <a target="_blank" rel="noopener" href="https://game6320-website.netlify.app/engine-system/">https://game6320-website.netlify.app/engine-system/</a>.</li>
+<li><strong>Feiyang Yang</strong> (me): the state machine library and StateMachineBuilder, <a href="https://fffeiya.github.io/game-essay/engine-system-write-up/">https://fffeiya.github.io/game-essay/engine-system-write-up/</a>, and the game itself.</li>
+</ul>
+</div>
+
+    <nav class="es-pager" aria-label="Other assignments">
+      <a class="es-pager__link" href="/game-essay/engine-system-write-up/index.html"><span class="es-pager__dir">← Previous · W</span><span class="es-pager__title">Data-driven AI state machines: the run-time library, the builder and how to use them</span></a>
+      
+    </nav>
+  </article>
+
+  <aside class="es-aside">
+    
+    <nav class="toc es-toc" aria-label="On this page">
+      <p class="es-aside__label">On this page</p>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-What-the-game-will-be"><span class="toc-text">1. What the game will be</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-How-I-will-use-my-Engine-System"><span class="toc-text">2. How I will use my Engine System</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-Which-other-Engine-System-I-will-use"><span class="toc-text">3. Which other Engine System I will use</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-Plan"><span class="toc-text">4. Plan</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-Credits"><span class="toc-text">5. Credits</span></a></li></ol>
+    </nav>
+    
+  </aside>
+</div>
+
+    </main>
+  </div>
+</div>
+
+<script src="/js/site.js?v=mwpzhv0m" defer></script>
+<script src="/js/novel.js?v=mwpzhv0m" defer></script>
+</body>
+
+</html>
