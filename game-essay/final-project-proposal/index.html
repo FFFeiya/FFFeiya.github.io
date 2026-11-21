@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="build" content="mwpzhv0m">
+<meta name="build" content="mwpzkogr">
 <title>Game Engineering II - Final Project Proposal: Rooftop Run — 杨飞洋 Feiya Yang</title>
 <meta name="description" content="A side-view parkour course with wall jumps, crumbling platforms, a moving platform and a timed gate. My state machine library drives the player and the course, and Benjamin Yang&#39;s collision system handles floors, walls, ground checks and triggers.">
 <meta name="author" content="杨飞洋 Feiya Yang">
@@ -30,9 +30,9 @@
   } catch (e) {}
 })();
 </script>
-<link rel="stylesheet" href="/css/site.css?v=mwpzhv0m">
+<link rel="stylesheet" href="/css/site.css?v=mwpzkogr">
 
-<link rel="stylesheet" href="/css/essay.css?v=mwpzhv0m">
+<link rel="stylesheet" href="/css/essay.css?v=mwpzkogr">
 </head>
 
 
@@ -118,14 +118,14 @@
       <p class="es-eyebrow">GAMES 6320 · Final Project · Proposal</p>
       <h1 class="es-head__title">Rooftop Run: a short parkour game built on a state machine library and a collision system</h1>
       <p class="es-head__lead">A side-view parkour course with wall jumps, crumbling platforms, a moving platform and a timed gate. My state machine library drives the player and the course, and Benjamin Yang&#39;s collision system handles floors, walls, ground checks and triggers.</p>
-      <p class="es-head__meta"><time datetime="2026-11-21T01:00:00.000Z">2026.11.20</time><span>6 min read</span><span>C++ · Direct3D · OpenGL</span></p>
+      <p class="es-head__meta"><time datetime="2026-11-21T01:00:00.000Z">2026.11.20</time><span>7 min read</span><span>C++ · Direct3D · OpenGL</span></p>
     </header>
 
     <div class="prose es-prose"><p><strong>Course:</strong> GAMES 6320-001 Game Engineering II (Fall 2026)<br><br><strong>Author:</strong> Feiyang Yang</p>
-<h2 id="1-What-the-game-will-be"><a href="#1-What-the-game-will-be" class="headerlink" title="1. What the game will be"></a>1. What the game will be</h2><p>Rooftop Run is a short parkour game. You run along one course of rooftops seen from the side, jump over gaps, wall-jump up a narrow shaft, and try to reach the goal as fast as you can. The 3D world is drawn with the camera to the side and a little above the player, and the player only moves left, right, up and down (no movement in depth), so it plays like a 2D platformer.</p>
+<h2 id="1-What-the-game-will-be"><a href="#1-What-the-game-will-be" class="headerlink" title="1. What the game will be"></a>1. What the game will be</h2><p>Rooftop Run is a short parkour game. You run along one course of rooftops seen from the side, jump over gaps, wall-jump up a narrow shaft, and try to reach the goal as fast as you can. The 3D world is drawn with the camera to the side and a little above the player, and the player only moves left, right, up and down (no movement in depth), so it plays like a 2D platformer. It will be a new game project in my solution, <code>RooftopRun</code>, next to ExampleGame and MyGame.</p>
 <p><img src="/images/final-project-proposal/course_layout.png" alt="Side view of the planned course"></p>
 <h3 id="What-it-will-do"><a href="#What-it-will-do" class="headerlink" title="What it will do"></a>What it will do</h3><ul>
-<li><strong>One player, one course.</strong> The player is a sphere. Left and right arrows (or A and D) run, and Space jumps. The camera follows the player.</li>
+<li><strong>One player, one course.</strong> Left and right arrows (or A and D) run, and Space jumps. The camera follows the player.</li>
 <li><strong>Jumping that feels fair.</strong> You can only jump while standing on something. A short grace period after running off an edge still allows a jump, and letting go of Space early makes a lower jump.</li>
 <li><strong>Wall jumps.</strong> If you are in the air and pressing toward a wall, you slide down it slowly. Pressing Space then jumps up and away from the wall. This is how you climb the chimney in section 6.</li>
 <li><strong>The course</strong> (the numbers match the picture):<ol>
@@ -140,15 +140,16 @@
 </li>
 <li><strong>Checkpoints and falling.</strong> Checkpoints sit along the course. Falling into the kill zone below the course puts you back at the last checkpoint you touched.</li>
 <li><strong>Time.</strong> The game measures the time from the start to the goal. When you reach the goal, the time and the best time of this session are written to the log, and the game resets so you can try again.</li>
+<li><strong>Meshes that are more fun than boxes.</strong> The player will be a small character mesh (a free model such as a robot or a fox, exported with my Maya exporter), and the rooftops get chimneys, vents and water tanks as decoration. The colliders behind them stay simple spheres and boxes, which is all the collision system needs.</li>
 <li><strong>Showing state without text.</strong> The player’s color changes with its movement state (running, in the air, sliding on a wall, falling back to a checkpoint), the same way my Engine System demo colors the guard. Platforms and the gate also change color with their state.</li>
 <li>Direct3D x64 and OpenGL x86 builds, like every assignment.</li>
 </ul>
 <h3 id="What-it-won’t-do"><a href="#What-it-won’t-do" class="headerlink" title="What it won’t do"></a>What it won’t do</h3><ul>
 <li>No enemies, combat, health or lives. Falling only costs time.</li>
 <li>No text on screen: no HUD, menu, timer display or high score table. The time goes to the log.</li>
-<li>No sound and no animated characters. All meshes are simple shapes (spheres and boxes).</li>
+<li>No sound and no character animation. The player mesh tilts and changes color, but it has no skeleton.</li>
 <li>Only one course, built in code and data files. No level editor and no level loading from a file.</li>
-<li>No rotating objects and no real physics (no mass, friction or bounce). Gravity and movement are done by the game.</li>
+<li>No rotating colliders and no real physics (no mass, friction or bounce). Gravity and movement are done by the game.</li>
 <li>Single player only. No controller support unless there is time left at the end.</li>
 </ul>
 <h2 id="2-How-I-will-use-my-Engine-System"><a href="#2-How-I-will-use-my-Engine-System" class="headerlink" title="2. How I will use my Engine System"></a>2. How I will use my Engine System</h2><p>My Engine System is a data-driven state machine library (<a href="https://fffeiya.github.io/game-essay/engine-system-write-up/">write-up</a>). States, transitions and conditions live in <code>.fsm</code> files, StateMachineBuilder turns them into binary files during the asset build, and the game sets parameters and reacts in enter, update and exit callbacks.</p>
@@ -210,7 +211,7 @@
 </thead>
 <tbody><tr>
 <td>Week of Nov 23</td>
-<td>Add the Collision library and ColliderBuilder to my solution next to my state machine library. Player sphere on a floor with running, jumping and the ground raycast. First version of <code>player.fsm</code>.</td>
+<td>Create the <code>RooftopRun</code> game project. Add the Collision library and ColliderBuilder to my solution next to my state machine library. Player sphere on a floor with running, jumping and the ground raycast. First version of <code>player.fsm</code>.</td>
 </tr>
 <tr>
 <td>Week of Nov 30</td>
@@ -248,8 +249,8 @@
   </div>
 </div>
 
-<script src="/js/site.js?v=mwpzhv0m" defer></script>
-<script src="/js/novel.js?v=mwpzhv0m" defer></script>
+<script src="/js/site.js?v=mwpzkogr" defer></script>
+<script src="/js/novel.js?v=mwpzkogr" defer></script>
 </body>
 
 </html>
